@@ -1,12 +1,15 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
+
+type Params = Promise<{ filename: string }>;
 
 export async function GET(
-  request: Request,
-  { params }: { params: { filename: string } }
+  request: NextRequest,
+  segmentData: { params: Params }
 ) {
-  const { filename } = await params;
+  const params = await segmentData.params;
+  const filename = params.filename;
 
   const assetPath = path.join(
     process.cwd(),
@@ -24,6 +27,7 @@ export async function GET(
       },
     });
   } catch (error) {
+    console.error(error)
     return new NextResponse("File not found", { status: 404 });
   }
 }

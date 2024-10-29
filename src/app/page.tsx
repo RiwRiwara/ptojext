@@ -1,7 +1,6 @@
 import LeftMenu from "@/components/common/LeftMenu";
 import RightMenu from "@/components/common/RightMenu";
-import { BiImageAlt, BiUpArrowAlt } from "react-icons/bi";
-import styles from "@/styles/text.module.css";
+import { BiImageAlt } from "react-icons/bi";
 
 export default function LandingPage() {
   return (
