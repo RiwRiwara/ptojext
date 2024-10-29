@@ -43,7 +43,7 @@ export default function LandingPage() {
             <div className="mb-4 text-gray-900 font-bold">All items</div>
             <div className="grid grid-cols-2 gap-4">
               {/* Inner card  */}
-              <a href="/image_pro">
+              <a href="/page/image_processing">
                 <div className="flex flex-col bg-red-300 rounded-2xl p-4 gap-4 shadow-inner group cursor-pointer hover:scale-95 duration-200">
                   <div className="flex flex-row justify-between items-center">
                     <div className="flex flex-row gap-2 items-center">

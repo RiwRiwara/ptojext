@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image processing</title>
+    <link rel="stylesheet" href="/page/css/image_processing/style">
+    <script src="/page/js/animejs/anime.min"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <main class="p-4 h-svh flex flex-col gap-4 bg-purple-50">
+
+        <div class="flex flex-row gap-4 justify-between items-center">
+            <a href="/"
+                class="shadow-inner rounded-md flex justify-center items-center bg-blue-100 p-2 hover:shadow-sm hover:shadow-gray-400 ease-in-out duration-400 hover:scale-95 hover:-rotate-6 ">
+                <span class="font-semibold text-xl text-blue-700"><- Back</span>
+            </a>
+
+            <h1 class="text-2xl font-extrabold uppercase text-gray-700">
+                Image processing
+            </h1>
+
+        </div>
+        <section class="shadow-inner rounded-md bg-gray-100 p-4 h-full flex flex-col gap-4">
+
+            <div class="grid grid-cols-8 gap-4">
+
+                <div class="flex items-center justify-start col-span-2 flex-col gap-4">
+                    <canvas id="originalCanvas"
+                        class="border-2 border-dashed border-blue-300 rounded-md w-[80%]"></canvas>
+                    <div class="text-lg font-semibold text-blue-900 text-start">Original image / New image</div>
+                    <canvas id="enhancedCanvas"
+                        class="border-2 border-dashed border-green-300 rounded-md w-[80%]"></canvas>
+                </div>
+
+                <div class="grid grid-cols-6 gap-4 col-span-6 w-full">
+
+                    <div class="rounded-md bg-white p-4 border-2 border-dashed border-gray-300 flex flex-col gap-2">
+                        <div class="bg-gray-200 rounded-md w-full p-1 text-center text-gray-600 font-bold text-xl">
+                            Enhancements
+                        </div>
+                        <label for="brightness" class="mt-2">Brightness:</label>
+                        <input type="range" id="brightness" min="-100" max="100" value="0" class="w-full" />
+                        <label for="contrast" class="mt-2">Contrast:</label>
+                        <input type="range" id="contrast" min="-100" max="100" value="0" class="w-full" />
+                        <label for="grayscale" class="mt-2">Grayscale:</label>
+                        <input type="checkbox" id="grayscale" class="mt-2" />
+                    </div>
+
+
+                    <div class="rounded-md bg-white p-4 border-2 border-dashed border-gray-300 flex flex-col gap-2">
+                        <div class="bg-gray-200 rounded-md w-full p-1 text-center text-gray-600 font-bold text-lg">
+                            3x3 Kernel
+                        </div>
+                        <div class="grid grid-cols-3 gap-1 mt-2 bg-slate-200 justify-center text-center">
+                            <input type="number" class="kernel-input text-center" value="0" />
+                            <input type="number" class="kernel-input text-center" value="0" />
+                            <input type="number" class="kernel-input text-center" value="0" />
+                            <input type="number" class="kernel-input text-center" value="0" />
+                            <input type="number" class="kernel-input text-center" value="1" />
+                            <input type="number" class="kernel-input text-center" value="0" />
+                            <input type="number" class="kernel-input text-center" value="0" />
+                            <input type="number" class="kernel-input text-center" value="0" />
+                            <input type="number" class="kernel-input text-center" value="0" />
+                        </div>
+                        <button id="resetKernel" class="mt-2 bg-red-500 text-white rounded p-2">Reset Kernel</button>
+                    </div>
+
+
+                    <div class="rounded-md bg-white p-4 border-2 border-dashed border-gray-300 flex flex-col gap-2">
+                        <div class="bg-gray-200 rounded-md w-full p-1 text-center text-gray-600 font-bold text-lg">
+                            Noise Control
+                        </div>
+                        <label for="noiseLevel" class="mt-2">Noise Intensity:</label>
+                        <input type="range" id="noiseLevel" min="0" max="100" value="10" class="w-full" />
+                        <button id="applyNoise" class="mt-2 bg-blue-500 text-white rounded p-2">Apply Noise</button>
+                        <button id="resetNoise" class="mt-2 bg-red-500 text-white rounded p-2">Reset Noise</button>
+                    </div>
+
+                    <div class="rounded-md bg-white p-4 border-2 border-dashed border-gray-300 flex flex-col gap-2">
+                        <div class="bg-gray-200 rounded-md w-full p-1 text-center text-gray-600 font-bold text-lg">
+                            RGB Color Adjustments
+                        </div>
+                        <label for="redRange" class="mt-2">Red:</label>
+                        <input type="range" id="redRange" min="-100" max="100" value="0" class="w-full" />
+                        <label for="greenRange" class="mt-2">Green:</label>
+                        <input type="range" id="greenRange" min="-100" max="100" value="0" class="w-full" />
+                        <label for="blueRange" class="mt-2">Blue:</label>
+                        <input type="range" id="blueRange" min="-100" max="100" value="0" class="w-full" />
+                    </div>
+
+
+                    <div class=" rounded-md bg-white p-4 border-2 border-dashed border-gray-300">
+
+
+                    </div>
+
+                    <div class=" rounded-md bg-white p-4 border-2 border-dashed border-gray-300">
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="shadow-inner bg-white p-4 h-full border-2 border-dashed border-gray-300 rounded-md">
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+    <script src="/page/js/image_processing/script-enchanted"></script>
+    <script src="/page/js/image_processing/script-kernel"></script>
+    <script src="/page/js/image_processing/script-noise"></script>
+    <script src="/page/js/image_processing/script-rgb"></script>
+</body>
+
+</html>

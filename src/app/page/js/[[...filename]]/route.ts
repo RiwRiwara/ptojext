@@ -2,20 +2,23 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse, NextRequest } from "next/server";
 
-type Params = Promise<{ filename: string }>;
+type Params = Promise<{ filename: string[] }>;
 
 export async function GET(
   request: NextRequest,
   segmentData: { params: Params }
 ) {
   const params = await segmentData.params;
-  const filename = params.filename;
+  const filename = params.filename?.length ? params.filename.join("/") : null;
+  if (!filename) {
+    return new NextResponse("No filename provided", { status: 400 });
+  }
 
   const assetPath = path.join(
     process.cwd(),
     "src",
-    "assets/css",
-    filename + ".css"
+    "assets/js",
+    `${filename}.js`
   );
 
   try {
@@ -23,11 +26,11 @@ export async function GET(
     return new NextResponse(fileContent, {
       status: 200,
       headers: {
-        "Content-Type": "text/css",
+        "Content-Type": "application/javascript",
       },
     });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return new NextResponse("File not found", { status: 404 });
   }
 }
