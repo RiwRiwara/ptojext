@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
+import { Anuphan } from 'next/font/google'
 import "./globals.css";
 
+const anuphan_font = Anuphan({
+  subsets: ['latin', 'thai'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: "Project Simulation",
@@ -13,10 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={anuphan_font.className}>
       <body
-        className="antialiased"
+        className="antialiased font-sans"
       >
+
         {children}
       </body>
     </html>

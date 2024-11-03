@@ -50,23 +50,6 @@
                     </div>
 
 
-                    <div class="rounded-md bg-white p-4 border-2 border-dashed border-gray-300 flex flex-col gap-2">
-                        <div class="bg-gray-200 rounded-md w-full p-1 text-center text-gray-600 font-bold text-lg">
-                            3x3 Kernel
-                        </div>
-                        <div class="grid grid-cols-3 gap-1 mt-2 bg-slate-200 justify-center text-center">
-                            <input type="number" class="kernel-input text-center" value="0" />
-                            <input type="number" class="kernel-input text-center" value="0" />
-                            <input type="number" class="kernel-input text-center" value="0" />
-                            <input type="number" class="kernel-input text-center" value="0" />
-                            <input type="number" class="kernel-input text-center" value="1" />
-                            <input type="number" class="kernel-input text-center" value="0" />
-                            <input type="number" class="kernel-input text-center" value="0" />
-                            <input type="number" class="kernel-input text-center" value="0" />
-                            <input type="number" class="kernel-input text-center" value="0" />
-                        </div>
-                        <button id="resetKernel" class="mt-2 bg-red-500 text-white rounded p-2">Reset Kernel</button>
-                    </div>
 
 
                     <div class="rounded-md bg-white p-4 border-2 border-dashed border-gray-300 flex flex-col gap-2">
@@ -89,6 +72,10 @@
                         <input type="range" id="greenRange" min="-100" max="100" value="0" class="w-full" />
                         <label for="blueRange" class="mt-2">Blue:</label>
                         <input type="range" id="blueRange" min="-100" max="100" value="0" class="w-full" />
+                    </div>
+
+                    <div class="rounded-md bg-white p-4 border-2 border-dashed border-gray-300 flex flex-col gap-2">
+
                     </div>
 
 
@@ -116,7 +103,6 @@
 
 
     <script src="/page/js/image_processing/script-enchanted"></script>
-    <script src="/page/js/image_processing/script-kernel"></script>
     <script src="/page/js/image_processing/script-noise"></script>
     <script src="/page/js/image_processing/script-rgb"></script>
 </body>
