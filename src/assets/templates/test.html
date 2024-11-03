@@ -1,16 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello World</title>
     <!-- Include CSS -->
     <link rel="stylesheet" href="/page/css/style">
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css" />
 </head>
+
 <body>
     <h1>Hello World</h1>
     <p>Welcome to my webpage!</p>
-    
-    <script src="/page/js/script"></script>
+    <p id="river">Hello tour</p>
+
+    <!-- <script src="/page/js/script"></script> -->
+
+    <script>
+        const driver = window.driver.js.driver;
+
+        const driverObj = driver();
+
+        driverObj.highlight({
+            element: "#river",
+            popover: {
+                title: "Title",
+                description: "Description"
+            }
+        });
+    </script>
 </body>
+
 </html>

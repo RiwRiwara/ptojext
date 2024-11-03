@@ -8,19 +8,35 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      keyframes: {
-        'bounce-in': {
-          '0%': { transform: 'scale(0.9)', opacity: '0' },
-          '50%': { transform: 'scale(1.05)', opacity: '0.5' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-      },
-      animation: {
-        'bounce-in': 'bounce-in 0.6s ease-in-out both',
+      fontFamily: {
+        sans: ['Anuphan', 'sans-serif'], 
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: {
+          white: "#FFFFFF",
+          "light-hover": "#DFDFE0",
+          "light-active": "#BCBDBE",
+          normal: "#272B2C",
+          "normal-active": "#1F2224",
+          black: "#000000",
+        },
+        functional: {
+          neutral: "#DFDFE0",
+          success: "#00D26A",
+          error: "#F8312F",
+        },
+        logo: {
+          pink: "#F5A2C9",
+          orange: "#F5C689",
+          blue: "#B6DBF5",
+          violet: "#C59BD8",
+        },
+        gradients: {
+          "pink": "linear-gradient(to right, #F5A2C9, #FFC2D6)",
+          "orange": "linear-gradient(to right, #F5C689, #FFD8A9)",
+          "blue": "linear-gradient(to right, #B6DBF5, #D0F0FF)",
+          "violet": "linear-gradient(to right, #C59BD8, #E0B0FF)",
+        },
       },
     },
   },

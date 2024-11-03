@@ -7,14 +7,5 @@
     "@typescript-eslint/no-unused-vars": "off", 
     "@next/next/no-html-link-for-pages": "off", 
     "no-unused-expressions": "off"
-  },
-  "overrides": [
-    {
-      "files": ["src/assets/js/**/*.js"],
-      "rules": {
-        "@typescript-eslint/no-unused-vars": "off",
-        "no-unused-expressions": "off"
-      }
-    }
-  ]
+  }
 }
