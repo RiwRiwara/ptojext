@@ -1,15 +1,17 @@
 import type { Config } from "tailwindcss";
+import { nextui } from "@nextui-org/theme";
 
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/components/(button|snippet|code|input).js",
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Anuphan', 'sans-serif'], 
+        sans: ["Anuphan", "sans-serif"],
       },
       colors: {
         primary: {
@@ -32,14 +34,14 @@ const config: Config = {
           violet: "#C59BD8",
         },
         gradients: {
-          "pink": "linear-gradient(to right, #F5A2C9, #FFC2D6)",
-          "orange": "linear-gradient(to right, #F5C689, #FFD8A9)",
-          "blue": "linear-gradient(to right, #B6DBF5, #D0F0FF)",
-          "violet": "linear-gradient(to right, #C59BD8, #E0B0FF)",
+          pink: "linear-gradient(to right, #F5A2C9, #FFC2D6)",
+          orange: "linear-gradient(to right, #F5C689, #FFD8A9)",
+          blue: "linear-gradient(to right, #B6DBF5, #D0F0FF)",
+          violet: "linear-gradient(to right, #C59BD8, #E0B0FF)",
         },
       },
     },
   },
-  plugins: [],
+  plugins: [nextui()],
 };
 export default config;

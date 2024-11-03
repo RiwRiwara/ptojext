@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Anuphan } from 'next/font/google'
+import { Anuphan } from "next/font/google";
+import { NextUIProvider } from "@nextui-org/system";
 import "./globals.css";
 
 const anuphan_font = Anuphan({
-  subsets: ['latin', 'thai'],
-  display: 'swap',
-})
+  subsets: ["latin", "thai"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Project Simulation",
@@ -19,11 +20,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={anuphan_font.className}>
-      <body
-        className="antialiased font-sans"
-      >
-
-        {children}
+      <body className="antialiased font-sans">
+        <NextUIProvider>{children}</NextUIProvider>
       </body>
     </html>
   );
