@@ -1,7 +1,8 @@
-import GrayScaleNode from "./GrayScaleNode";
-import ImageEnchantedNode from "./ImageEnchantedNode";
-import ImageOriginalNode from "./ImageOriginalNode";
-import NoiseNode from "./NoiseNode";
+import GrayScaleNode from "./nodes/GrayScaleNode";
+import ImageEnchantedNode from "./nodes/ImageEnchantedNode";
+import ImageOriginalNode from "./nodes/ImageOriginalNode";
+import SharpeningNode from "./nodes/SharpeningNode";
+import NoiseNode from "./nodes/NoiseNode";
 import { initialEdges, initialNodes } from "./flow_data";
 
 export {
@@ -11,4 +12,5 @@ export {
   NoiseNode,
   initialEdges,
   initialNodes,
+  SharpeningNode,
 };

@@ -1,24 +1,7 @@
 import { Node, Edge } from "@xyflow/react";
+import { grayScaleDataType, noiseDataType } from "./types";
 
-export interface grayScaleDataType {
-  label?: string;
-  isEnable?: boolean;
-  gray_scale?: number;
-}
-export interface noiseDataType {
-  label?: string;
-  isEnable?: boolean;
-  noise_level?: number;
-  noise_type?: string;
-}
-
-export enum NoiseType {
-  Gaussian = "Gaussian",
-  SaltAndPepper = "SaltAndPepper",
-  Speckle = "Speckle",
-}
-
-
+// ========== Connect data ========
 export const initialNodes: Node[] = [
   {
     id: "1",
@@ -41,7 +24,7 @@ export const initialNodes: Node[] = [
     data: {
       noise_level: 150,
       isEnable: false,
-      noise_type: "Gaussian", 
+      noise_type: "Gaussian",
     } as noiseDataType,
     type: "noise_node",
   } as Node,
@@ -52,6 +35,16 @@ export const initialNodes: Node[] = [
     position: { x: 600, y: 0 },
     type: "image_enchanted_node",
   } as Node,
+  // {
+  //   id: "5",
+  //   deletable: false,
+  //   position: { x: 250, y: 200 },
+  //   data: {
+  //     sharpening_amount: 1,
+  //     isEnable: true,
+  //   } as sharpeningDataType,
+  //   type: "sharpening_node",
+  // } as Node,
 ];
 export const initialEdges: Edge[] = [
   {
@@ -74,8 +67,20 @@ export const initialEdges: Edge[] = [
     deletable: false,
   } as Edge,
   {
+    id: "1-5",
+    source: "1",
+    target: "5",
+    deletable: false,
+  } as Edge,
+  {
     id: "4-3",
     source: "4",
+    target: "3",
+    deletable: false,
+  } as Edge,
+  {
+    id: "5-3",
+    source: "5",
     target: "3",
     deletable: false,
   } as Edge,

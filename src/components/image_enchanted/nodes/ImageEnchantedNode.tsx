@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { Handle, Position, useNodesData } from "@xyflow/react";
-import { applyGrayScale } from "./logic/gray_scale";
-import { applyNoise } from "./logic/noise";
-import { grayScaleDataType, noiseDataType, NoiseType } from "./flow_data";
+import { applyGrayScale } from "../logic/gray_scale";
+import { applyNoise } from "../logic/noise";
+import { grayScaleDataType, noiseDataType, NoiseType } from "../types";
+import useStore from "@/components/image_enchanted/states/store";
 
 function ImageEnchantedNode() {
+  const { setImagesEnchantedData } = useStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-  // Fetching grayScale and noise data
+
   const gray_scale_node = useNodesData("2");
   const noise_node = useNodesData("4");
 
@@ -36,16 +37,31 @@ function ImageEnchantedNode() {
       ctx.drawImage(img, 0, 0);
 
       if (grayScaleData.isEnable) {
-        await applyGrayScale(canvas, "/people.jpg", grayScaleData.gray_scale as number);
+        await applyGrayScale(
+          canvas,
+          "/people.jpg",
+          grayScaleData.gray_scale as number
+        );
       }
 
       if (noiseData.isEnable) {
-        await applyNoise(canvas, noiseData.noise_type as NoiseType, noiseData.noise_level as number);
+        await applyNoise(
+          canvas,
+          noiseData.noise_type as NoiseType,
+          noiseData.noise_level as number
+        );
       }
+
+      const imageDataUrl = canvas.toDataURL("image/png");
+      const EnchantedImageData = {
+        data: imageDataUrl,
+        name: "Image Enchanted",
+      };
+      setImagesEnchantedData(EnchantedImageData);
     };
 
     processImage();
-  }, [grayScaleData, noiseData]); 
+  }, [grayScaleData, noiseData, setImagesEnchantedData]);
 
   return (
     <>
