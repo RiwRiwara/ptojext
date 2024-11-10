@@ -58,10 +58,10 @@ function GrayScaleNode() {
         type="target"
         position={Position.Left}
       />
-      <div className="text-sm text-center font-medium bg-gray-700 text-white p-1 rounded-t-md" >
-        Gray Scale [{GrayScale}]
+      <div className="text-sm text-center font-medium bg-gradient-to-b from-slate-300 to-gray-400 text-white p-1 rounded-t-md uppercase" >
+        Gray Scale
       </div>
-      <div className="p-2 bg-gray-700  w-[200px] rounded-b-md" id="tour-feature">
+      <div className="p-2 bg-gradient-to-b from-slate-300 to-gray-500  w-[200px] rounded-b-md" id="tour-feature">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-2 w-full h-full max-w-md items-start justify-center">
             <div className="flex justify-between w-full">
@@ -76,7 +76,7 @@ function GrayScaleNode() {
                 {isEnabled ? (
                   <span className="text-white">Enable</span>
                 ) : (
-                  <span className="text-gray-300">Disable</span>
+                  <span className="text-white">Disable</span>
                 )}
               </div>
             </div>

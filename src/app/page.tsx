@@ -16,7 +16,7 @@ export default function LandingPage() {
         <div>
           <h1 className="mb-2 text-center text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl text-nowrap">
             <span className="text-transparent bg-clip-text bg-gradient-to-r to-gray-600 from-gray-400">
-              Final Project for
+              Ptojext {" "}
             </span>
             <span className="text-gray-600 hover:text-black duration-300 ease-in-out hover:bg-gray-200 rounded-md px-2 hover:shadow-inner">
               Simulation!

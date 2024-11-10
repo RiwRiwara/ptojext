@@ -6,6 +6,7 @@ import {
   NodeTypes,
   ReactFlowProvider,
   Panel,
+  Background,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import {
@@ -110,6 +111,7 @@ function Flow() {
             >
               {/* <Background /> */}
               <Controls showInteractive={false} showZoom={false} />
+              <Background  />
               <Panel position="bottom-right">
                 <BottomRight />
               </Panel>

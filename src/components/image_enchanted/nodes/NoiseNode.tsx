@@ -83,10 +83,10 @@ function NoiseNode() {
         type="target"
         position={Position.Left}
       />
-      <div className="text-sm text-center font-medium bg-blue-900 text-white p-1 rounded-t-md">
-        Noise Level [{noiseLevel}]
+      <div className="text-sm text-center font-medium bg-gradient-to-b from-slate-300 to-gray-400 text-white p-1 rounded-t-md uppercase">
+        Noise Level
       </div>
-      <div className="p-2 bg-blue-900 w-[200px] rounded-b-md">
+      <div className="p-2 bg-gradient-to-b from-slate-300 to-gray-600 w-[200px] rounded-b-md">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-2 w-full h-full max-w-md items-start justify-center">
             <div className="flex justify-between w-full">
