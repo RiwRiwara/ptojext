@@ -42,9 +42,9 @@ export const tour_steps: DriveStep[] = [
   {
     element: "#tour-feature",
     popover: {
-      title: "Start Tour",
+      title: "Feature",
       description:
-        "Call the drive method to start the tour and your tour will be started.",
+        "You can adjust or settting if you need.",
       side: "top",
       align: "start",
     },

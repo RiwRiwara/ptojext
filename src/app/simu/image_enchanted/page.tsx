@@ -84,24 +84,11 @@ function Flow() {
             </Link>
           </div>
           <div className="flex flex-row gap-2 items-center">
-            <Tooltip
-              showArrow={true}
-              content={
-                <div className="px-1 py-2 flex flex-col gap-2">
-                  <Button onClick={OnStartTour} size="sm">
-                    <div className="text-small font-bold">Start tour!</div>
-                  </Button>
-                  <div className="text-tiny">
-                    Click it for start tour of Image Enchanted.
-                  </div>
-                </div>
-              }
-            >
-              <FaInfoCircle
-                size={25}
-                className="hover:scale-110 duration-300 text-blue-900"
-              />
-            </Tooltip>
+            <FaInfoCircle
+              onClick={OnStartTour}
+              size={25}
+              className="hover:scale-110 duration-300 text-blue-900 cursor-pointer"
+            />
             <h1 className="font-semibold text-2xl uppercase text-gray-700">
               Image Enchanted
             </h1>
