@@ -58,10 +58,10 @@ function GrayScaleNode() {
         type="target"
         position={Position.Left}
       />
-      <div className="text-sm text-center font-medium bg-gray-700 text-white p-1 rounded-t-md">
+      <div className="text-sm text-center font-medium bg-gray-700 text-white p-1 rounded-t-md" >
         Gray Scale [{GrayScale}]
       </div>
-      <div className="p-2 bg-gray-700  w-[200px] rounded-b-md">
+      <div className="p-2 bg-gray-700  w-[200px] rounded-b-md" id="tour-feature">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-2 w-full h-full max-w-md items-start justify-center">
             <div className="flex justify-between w-full">

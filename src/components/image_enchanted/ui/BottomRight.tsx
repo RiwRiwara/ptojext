@@ -20,7 +20,7 @@ export default function BottomRight() {
   }
 
   return (
-    <ButtonGroup variant="shadow" color="success">
+    <ButtonGroup variant="shadow" color="success" id="tour-action">
       <Button onClick={OnAddImages}>
         <div className="font-bold">Save</div>
       </Button>

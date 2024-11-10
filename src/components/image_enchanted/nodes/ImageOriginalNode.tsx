@@ -4,9 +4,9 @@ import { Image } from "@nextui-org/image";
 
 function ImageOriginalNode() {
   return (
-    <>
+    < >
 
-      <div className="p-2 bg-gray-50  rounded-lg shadow-inner">
+      <div className="p-2 bg-gray-50  rounded-lg shadow-inner" id="tour-original">
         <div className="flex flex-col gap-2">
           <Image
             alt="original-node"

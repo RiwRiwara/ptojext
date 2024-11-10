@@ -72,7 +72,7 @@ function ImageEnchantedNode() {
         type="target"
         position={Position.Left}
       />
-      <div className="p-1 bg-gray-50 rounded-lg shadow-inner">
+      <div className="p-1 bg-gray-50 rounded-lg shadow-inner" id="tour-result">
         <div className="flex flex-col gap-2">
           <canvas
             ref={canvasRef}

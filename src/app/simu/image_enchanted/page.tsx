@@ -15,7 +15,7 @@ import {
   GrayScaleNode,
   SharpeningNode,
 } from "@/components/image_enchanted/index";
-
+import { Tooltip } from "@nextui-org/tooltip";
 import useStore from "@/components/image_enchanted/states/store";
 import BottomRight from "@/components/image_enchanted/ui/BottomRight";
 
@@ -23,6 +23,13 @@ import { getAllImages } from "@/components/image_enchanted/data/crud";
 import { EnchantedImage } from "@/components/image_enchanted/data/types";
 import Image from "next/image";
 import { Link } from "@nextui-org/link";
+import { FaInfoCircle } from "react-icons/fa";
+import { IoCaretBack } from "react-icons/io5";
+import { Button } from "@nextui-org/button";
+
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+import { tour_steps } from "@/components/image_enchanted/data/tour_steps";
 
 const nodeTypes = {
   image_enchanted_node: ImageEnchantedNode,
@@ -50,16 +57,59 @@ function Flow() {
     GetAllImagesShow();
   }, [trigger]);
 
+  // Driver tour =====
+
+  function OnStartTour() {
+    const driverObj = driver({
+      animate: false,
+      showProgress: false,
+      showButtons: ["next", "previous", "close"],
+      steps: tour_steps,
+    });
+
+    driverObj.drive();
+  }
+
   return (
     <ReactFlowProvider>
       <div className="p-6 bg-gray-300">
-        <div className="p-4 bg-white rounded-md border-2 border-gray-500 mb-4">
-          <Link color="secondary" href={"/"}>
-            Back
-          </Link>
+        {/* Header section */}
+        <div
+          className="p-2 bg-white rounded-md border-2 border-gray-500 mb-4 flex justify-between items-center"
+          id="tour-main"
+        >
+          <div className="flex flex-row gap-2 items-center test-tour">
+            <Link href={"/"}>
+              <IoCaretBack size={30} className="text-gray-800" />
+            </Link>
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <Tooltip
+              showArrow={true}
+              content={
+                <div className="px-1 py-2 flex flex-col gap-2">
+                  <Button onClick={OnStartTour} size="sm">
+                    <div className="text-small font-bold">Start tour!</div>
+                  </Button>
+                  <div className="text-tiny">
+                    Click it for start tour of Image Enchanted.
+                  </div>
+                </div>
+              }
+            >
+              <FaInfoCircle
+                size={25}
+                className="hover:scale-110 duration-300 text-blue-900"
+              />
+            </Tooltip>
+            <h1 className="font-semibold text-2xl uppercase text-gray-700">
+              Image Enchanted
+            </h1>
+          </div>
         </div>
+        {/* React flow conponents */}
         <div className="shadow-md rounded-md border-2 bg-white border-gray-500 max-h-[720px] md:max-h-[600px] h-[65vh] w-100 m-auto">
-          <div style={{ height: "100%" }}>
+          <div style={{ height: "100%" }} id="tour-canvas">
             <ReactFlow
               nodes={nodes}
               onNodesChange={onNodesChange}
@@ -80,7 +130,10 @@ function Flow() {
           </div>
         </div>
 
-        <div className="shadow-md rounded-md border-2 bg-white border-gray-500 mt-4 flex flex-row gap-4 p-2 flex-wrap">
+        <div
+          className="shadow-md rounded-md border-2 bg-white border-gray-500 mt-4 flex flex-row gap-4 p-2 flex-wrap"
+          id="tour-images"
+        >
           {images.length > 0 ? (
             images.map((image) => (
               <div key={image.id} className="p-2 border rounded mb-2">

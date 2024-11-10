@@ -1,5 +1,12 @@
 export interface EnchantedImage {
   id?: number;
   name?: string;
-  data?: string; // Base64 or binary string for image data
+  data?: string;
+
+  is_gray?: boolean;
+  gray_scale?: number;
+
+  is_noise?: boolean;
+  noise_level?: number;
+  noise_type?: string;
 }
