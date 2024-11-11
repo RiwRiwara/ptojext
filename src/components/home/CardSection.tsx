@@ -18,7 +18,7 @@ export default function CardSection() {
           <div className="flex flex-col bg-top rounded-2xl p-2 gap-2 md:gap-4 shadow-inner" style={{ backgroundImage: `url(${imp_img.src})` }}>
             <div className="flex flex-row justify-between items-center">
               <div className="flex flex-row gap-2 items-center">
-                <div className="w-12 h-12 rounded-full shadow-md flex justify-center items-center bg-sky-500">
+                <div className="w-12 h-12 rounded-full shadow-md flex justify-center items-center bg-sky-800">
                   <FaImages className="w-6 h-6 text-white" />
                 </div>
                 <span
@@ -32,12 +32,12 @@ export default function CardSection() {
             </div>
             <div className="w-full text-wrap text-gray-700 flex flex-row gap-2">
               <Link href="/simu/image_enchanted">
-                <div className="text-base bg-white px-2 rounded-full text-blue-800 cursor-pointer hover:scale-95 duration-200 text-center font-medium flex flex-row gap-2 items-center shadow-sm">
+                <div className="text-base bg-white px-2 rounded-full text-blue-800 cursor-pointer hover:scale-95 duration-200 text-center font-medium flex flex-row gap-2 items-center shadow-sm  ">
                   <DiAptana />
                   Enchanted
                 </div>
               </Link>
-              <Link href="/simu/image_enchanted">
+              <Link href="/simu/image_enchanted/convolution">
                 <div className="text-base bg-white px-2 rounded-full text-red-800 cursor-pointer hover:scale-95 duration-200 text-center font-medium flex flex-row gap-2 items-center shadow-sm">
                   <PiMatrixLogo />
                   Convolution
@@ -53,7 +53,7 @@ export default function CardSection() {
           <div className="flex flex-col bg-top rounded-2xl p-2 gap-2 md:gap-4 shadow-inner" style={{ backgroundImage: `url(${ml_img.src})` }}>
             <div className="flex flex-row justify-between items-center">
               <div className="flex flex-row gap-2 items-center">
-                <div className="w-12 h-12 rounded-full shadow-md flex justify-center items-center bg-blue-800">
+                <div className="w-12 h-12 rounded-full shadow-md flex justify-center items-center bg-blue-900 ">
                   <PiRobotBold className="w-6 h-6 text-white" />
                 </div>
                 <span

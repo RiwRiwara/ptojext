@@ -24,7 +24,7 @@
 
 /* Hover Effect for Scrollbar Handle */
 .cus-scroll::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(45deg, #746C70, #979797); 
+  background: linear-gradient(45deg, #746C70, #ad8ad6); 
 }
 
 
