@@ -73,10 +73,10 @@ function Flow() {
 
   return (
     <ReactFlowProvider>
-      <div className="p-6 bg-gray-300">
+      <div className="p-6 bg-gray-300 min-h-screen">
         {/* Header section */}
         <div
-          className="p-2 bg-white rounded-md border-2 border-gray-500 mb-4 flex justify-between items-center"
+          className="p-2 bg-white rounded-md mb-4 flex justify-between items-center"
           id="tour-main"
         >
           <div className="flex flex-row gap-2 items-center test-tour">
@@ -96,7 +96,7 @@ function Flow() {
           </div>
         </div>
         {/* React flow conponents */}
-        <div className="shadow-md rounded-md border-2 bg-white border-gray-500 max-h-[720px] md:max-h-[600px] h-[65vh] w-100 m-auto">
+        <div className="shadow-md rounded-md  bg-white  max-h-[720px] md:max-h-[600px] h-[65vh] w-100 m-auto">
           <div style={{ height: "100%" }} id="tour-canvas">
             <ReactFlow
               nodes={nodes}
@@ -111,7 +111,7 @@ function Flow() {
             >
               {/* <Background /> */}
               <Controls showInteractive={false} showZoom={false} />
-              <Background  />
+              <Background />
               <Panel position="bottom-right">
                 <BottomRight />
               </Panel>
@@ -120,7 +120,7 @@ function Flow() {
         </div>
 
         <div
-          className="shadow-md rounded-md border-2 bg-white border-gray-500 mt-4 flex flex-row gap-4 p-2 flex-wrap"
+          className="shadow-md rounded-md bg-white mt-4 flex flex-row gap-4 p-2 flex-wrap"
           id="tour-images"
         >
           {images.length > 0 ? (

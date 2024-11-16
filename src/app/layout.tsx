@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Anuphan } from "next/font/google";
 import { NextUIProvider } from "@nextui-org/system";
 import "./globals.css";
+import { AnimatePresence } from "framer-motion";
 
 const anuphan_font = Anuphan({
   subsets: ["latin", "thai"],
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={anuphan_font.className}>
       <body className="antialiased font-sans">
-        <NextUIProvider>{children}</NextUIProvider>
+        <AnimatePresence mode="wait" initial={false}>
+          <NextUIProvider>{children}</NextUIProvider>
+        </AnimatePresence>
       </body>
     </html>
   );

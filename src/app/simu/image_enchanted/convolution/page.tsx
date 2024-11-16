@@ -42,9 +42,9 @@ function ConvolutionPage() {
   };
 
   return (
-    <div className="p-6 bg-blue-100 min-h-screen">
+    <div className="p-6 bg-slate-100 min-h-screen">
       {/* Header section */}
-      <div className="p-2 bg-white rounded-md border-2 border-blue-800 mb-4 flex justify-between items-center">
+      <div className="p-2 bg-white shadow-md rounded-md mb-4 flex justify-between items-center ">
         <div className="flex flex-row gap-2 items-center test-tour">
           <Link href={"/"}>
             <IoCaretBack size={30} className="text-gray-800" />
@@ -62,8 +62,7 @@ function ConvolutionPage() {
       </div>
 
       {/* Image and Grid Canvas */}
-      <div className="shadow-md rounded-md border-2 bg-white border-blue-800 min-h-svh w-100 m-auto ">
-        <div className="bg-gray-100 rounded-md p-4 w-100 m-4"></div>
+      <div className="shadow-md rounded-md bg-white  min-h-svh w-100 m-auto ">
         <div className="p-2 px-4 flex flex-row justify-between">
           <div>
             <ImageCanvas kernel={kernel} />

@@ -8,10 +8,7 @@ const originalKernel = [
   [0, 0, 0],
 ];
 
-export default function ImageCanvasResult({
-  gridSize = 20,
-  kernel = originalKernel,
-}) {
+export default function ImageCanvasResult({ kernel = originalKernel }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const width = people_img.width;
   const height = people_img.height;
@@ -29,36 +26,21 @@ export default function ImageCanvasResult({
 
     // Draw image
     await processImageConvolution(canvas, people_img.src, kernel);
-    drawGrid(context);
-  }
-
-  function drawGrid(context: CanvasRenderingContext2D) {
-    context.strokeStyle = "#000";
-    context.lineWidth = 0.5;
-
-    for (let x = 0; x <= width; x += gridSize) {
-      context.beginPath();
-      context.moveTo(x, 0);
-      context.lineTo(x, height);
-      context.stroke();
-    }
-
-    for (let y = 0; y <= height; y += gridSize) {
-      context.beginPath();
-      context.moveTo(0, y);
-      context.lineTo(width, y);
-      context.stroke();
-    }
   }
 
   useEffect(() => {
     InitCanvas();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gridSize, kernel]);
+  }, [kernel]);
 
   return (
     <div className=" rounded-md p-2 w-fit">
-      <canvas className="rounded-sm shadow-md" ref={canvasRef} width={width} height={height} />
+      <canvas
+        className="rounded-sm shadow-md"
+        ref={canvasRef}
+        width={width}
+        height={height}
+      />
     </div>
   );
 }
