@@ -26,7 +26,7 @@ import Image from "next/image";
 import { Link } from "@nextui-org/link";
 import { FaInfoCircle } from "react-icons/fa";
 import { IoCaretBack } from "react-icons/io5";
-import { Button } from "@nextui-org/button";
+import CommonLayout from "@/components/layout/CommonLayout";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -72,8 +72,8 @@ function Flow() {
   }
 
   return (
-    <ReactFlowProvider>
-      <div className="p-6 bg-gray-300 min-h-screen">
+    <CommonLayout>
+      <ReactFlowProvider>
         {/* Header section */}
         <div
           className="p-2 bg-white rounded-md mb-4 flex justify-between items-center"
@@ -138,8 +138,8 @@ function Flow() {
             <p>You can save image</p>
           )}
         </div>
-      </div>
-    </ReactFlowProvider>
+      </ReactFlowProvider>
+    </CommonLayout>
   );
 }
 

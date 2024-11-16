@@ -3,7 +3,6 @@ import { Link } from "@nextui-org/link";
 import { FaInfoCircle } from "react-icons/fa";
 import { IoCaretBack } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
-import ControlledDot from "@/components/control/ControlledDot";
 
 function ReinforcementPage() {
   return (
@@ -27,7 +26,6 @@ function ReinforcementPage() {
       </div>
 
       <div className="shadow-md rounded-md bg-white  min-h-svh w-100 m-auto ">
-        <ControlledDot />
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ export default function ImageCanvas({ kernel = originalKernel }) {
 
   useEffect(() => {
     InitCanvas();
-  }, []);
+  });
 
   return (
     <div className="rounded-md p-2 w-fit">

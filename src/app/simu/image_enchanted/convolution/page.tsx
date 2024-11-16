@@ -5,6 +5,8 @@ import { Link } from "@nextui-org/link";
 import { FaInfoCircle } from "react-icons/fa";
 import { IoCaretBack } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
+import CommonLayout from "@/components/layout/CommonLayout";
+
 
 function ConvolutionPage() {
   const [kernel, setKernel] = useState<number[][]>([
@@ -42,7 +44,7 @@ function ConvolutionPage() {
   };
 
   return (
-    <div className="p-6 bg-slate-100 min-h-screen">
+    <CommonLayout>
       {/* Header section */}
       <div className="p-2 bg-white shadow-md rounded-md mb-4 flex justify-between items-center ">
         <div className="flex flex-row gap-2 items-center test-tour">
@@ -104,7 +106,7 @@ function ConvolutionPage() {
           </div>
         </div>
       </div>
-    </div>
+    </CommonLayout>
   );
 }
 

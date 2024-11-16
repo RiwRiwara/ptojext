@@ -5,7 +5,7 @@
 
 /* Scrollbar Width */
 .cus-scroll::-webkit-scrollbar {
-  width: 2px; /* Set the width for vertical scrollbar */
+  width: 5px; /* Set the width for vertical scrollbar */
   height: 6px; /* Set the height for horizontal scrollbar */
 }
 
@@ -18,13 +18,13 @@
 
 /* Scrollbar Handle */
 .cus-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #D3D3D3, #fff); 
+  background: linear-gradient(45deg, #fff, #746C70); 
   border-radius: 10px;
 }
 
 /* Hover Effect for Scrollbar Handle */
 .cus-scroll::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(45deg, #746C70, #ad8ad6); 
+  background: linear-gradient(45deg, #f1f1f1, #ad8ad6); 
 }
 
 
