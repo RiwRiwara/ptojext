@@ -7,7 +7,7 @@ const ClothSimulation = () => {
   const engineRef = useRef(Engine.create());
   const renderRef = useRef(null);
   const runnerRef = useRef(Runner.create());
-  const [size, setSize] = useState({ width: 380, height: 300 });
+  const [size, setSize] = useState({ width: 385, height: 320 });
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -49,7 +49,7 @@ const ClothSimulation = () => {
 
     Composite.add(world, [
       cloth,
-      Bodies.circle(300, 500, 80, { isStatic: true, render: { fillStyle: '#060a19' } }),
+      Bodies.rectangle(300, 500, 80,  50,{ isStatic: true, render: { fillStyle: '#f1f156' } }),
       Bodies.rectangle(500, 480, 80, 80, { isStatic: true, render: { fillStyle: '#060a19' } }),
       Bodies.rectangle(400, 609, 800, 50, { isStatic: true }),
     ]);
