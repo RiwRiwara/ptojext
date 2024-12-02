@@ -53,10 +53,10 @@ export default function CardSection() {
           className="flex flex-col  rounded-2xl p-2 gap-2 md:gap-4 border-2 border-white shadow-lg shadow-gray-400 row-span-3 bg-gray-900"
           style={
             {
-              // backgroundImage: `url(${ggg_img.src})`,
-              // backgroundSize: "cover", // Ensures the image covers the container
-              // backgroundPosition: "center", // Ensures the image is centered
-              // backgroundRepeat: "no-repeat", // Prevents the image from repeating
+              backgroundImage: `url(${ggg_img.src})`,
+              backgroundSize: "cover", // Ensures the image covers the container
+              backgroundPosition: "center", // Ensures the image is centered
+              backgroundRepeat: "no-repeat", // Prevents the image from repeating
             }
           }
         >
@@ -73,6 +73,7 @@ export default function CardSection() {
             </span>
           </div>
           <div className="md:flex justify-center items-center hidden">
+            {/* <Comp /> */}
           </div>
 
           {/* <div className="w-full text-wrap text-gray-700 flex flex-row gap-2">
