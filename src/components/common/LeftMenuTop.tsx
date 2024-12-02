@@ -1,5 +1,4 @@
 "use client";
-import PopoverButton from "@/components/common/PopoverButton";
 import Link from "next/link";
 import { BiMenu } from "react-icons/bi";
 import { FaInfo, FaArrowCircleLeft } from "react-icons/fa";
@@ -16,26 +15,7 @@ export default function LeftMenuTop() {
           >
             <FaArrowCircleLeft className="w-8 h-8 text-gray-800 " />
           </Link>
-          <PopoverButton
-            buttonText={
-              <div className="w-12 h-12 bg-white rounded-full shadow-md flex justify-center items-center hover:shadow-lg hover:rotate-12 hover:shadow-gray-400 duration-200 ease-in-out cursor-pointer">
-                <BiMenu className="w-8 h-8 text-gray-800 " />
-              </div>
-            }
-            content={
-              <div className="flex flex-row gap-2 flex-wrap w-fit">
-                <div className="p-2 rounded-md bg-gray-800 text-white">
-                  menu 1
-                </div>
-                <div className="p-2 rounded-md bg-gray-800 text-white">
-                  menu 2
-                </div>
-                <div className="p-2 rounded-md bg-gray-800 text-white">
-                  menu 3
-                </div>
-              </div>
-            }
-          />
+
         </div>
 
         <div className="flex flex-row  gap-2 ">
