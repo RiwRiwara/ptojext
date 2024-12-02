@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Anuphan } from "next/font/google";
+import { Comfortaa } from "next/font/google";
 import { NextUIProvider } from "@nextui-org/system";
 import "./globals.css";
 import { AnimatePresence } from "framer-motion";

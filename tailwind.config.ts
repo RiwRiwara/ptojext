@@ -11,6 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
+        default: ['Comfortaa', 'cursive'],
         sans: ["Anuphan", "sans-serif"],
       },
       colors: {

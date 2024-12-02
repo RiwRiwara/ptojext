@@ -1,7 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Newsreader:ital,opsz@0,6..72;1,6..72&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+.font-main-title{
+  font-weight: bold;
+  font-size: 144px;
+}
 
 /* Scrollbar Width */
 .cus-scroll::-webkit-scrollbar {
@@ -26,5 +31,6 @@
 .cus-scroll::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(45deg, #f1f1f1, #ad8ad6); 
 }
+
 
 
