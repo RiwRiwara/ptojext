@@ -3,28 +3,7 @@
 @tailwind utilities;
 
 
-/* Scrollbar Width */
-.cus-scroll::-webkit-scrollbar {
-  width: 5px; /* Set the width for vertical scrollbar */
-  height: 6px; /* Set the height for horizontal scrollbar */
+html {
+  scroll-behavior: smooth;
 }
-
-/* Scrollbar Track */
-.cus-scroll::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px white;
-  border-radius: 10px;
-  background-color: #f1f1f1; /* Optional: light background for track */
-}
-
-/* Scrollbar Handle */
-.cus-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #fff, #746C70); 
-  border-radius: 10px;
-}
-
-/* Hover Effect for Scrollbar Handle */
-.cus-scroll::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(45deg, #f1f1f1, #ad8ad6); 
-}
-
 

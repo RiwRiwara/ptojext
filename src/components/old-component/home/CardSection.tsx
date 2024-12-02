@@ -6,7 +6,6 @@ import { PiMatrixLogo, PiRobotBold } from "react-icons/pi";
 import ml_img from "@/assets/images/ml_img.jpg";
 import imp_img from "@/assets/images/bg_imgp.png";
 import ggg_img from "@/assets/images/ggg.gif";
-import Comp from "@/components/home/Comp";
 import { BiGrid } from "react-icons/bi";
 
 export default function CardSection() {
@@ -74,7 +73,6 @@ export default function CardSection() {
             </span>
           </div>
           <div className="md:flex justify-center items-center hidden">
-            <Comp />
           </div>
 
           {/* <div className="w-full text-wrap text-gray-700 flex flex-row gap-2">

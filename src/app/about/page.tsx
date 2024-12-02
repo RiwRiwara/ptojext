@@ -1,5 +1,5 @@
 "use client";
-import PopoverButton from "@/components/common/PopoverButton";
+import PopoverButton from "@/components/old-component/common/PopoverButton";
 import CommonLayout from "@/components/layout/CommonLayout";
 import Link from "next/link";
 import { BiMenu, BiSolidHome } from "react-icons/bi";
