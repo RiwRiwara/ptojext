@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { BiMenu } from "react-icons/bi";
 import { FaInfo, FaArrowCircleLeft } from "react-icons/fa";
 import { GiStairsGoal } from "react-icons/gi";
 

@@ -1,0 +1,36 @@
+[
+  {
+    "name": "AI PLAYGROUND",
+    "defaultOpen": true,
+    "children": [
+      {
+        "name": "Reinforcement Learning",
+        "children": [
+          { "name": "PAC-MAN (2008)" },
+          {
+            "name": "sub-subtree",
+            "children": [{ "name": "child 1", "style": { "color": "#37ceff" } }]
+          }
+        ]
+      },
+      {
+        "name": "Image processing",
+        "children": [
+          {
+            "name": "Image Convolution",
+            "link": "/playground/image-processing/image-convolution"
+          }
+        ]
+      },
+      {
+        "name": "Data Structure and Algorithms",
+        "children": [
+          { "name": "Sort" },
+          { "name": "Search" },
+          { "name": "Greedy" }
+        ]
+      },
+      { "name": "Neural Network" }
+    ]
+  }
+]
