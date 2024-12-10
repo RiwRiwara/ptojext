@@ -13,7 +13,7 @@ interface Section1Props {
 
 const menu_items = [
   {
-    name: "Reinforcement <br/> Learning",
+    name: "Reinforcement Learning",
     description: "Learn about Reinforcement Learning",
     icon: <FcCollect className="w-6 h-6 md:w-10 md:h-10" />,
   },
@@ -23,7 +23,7 @@ const menu_items = [
     icon: <FcStackOfPhotos className="w-6 h-6 md:w-10 md:h-10" />,
   },
   {
-    name: "Data Structure <br/>and Algorithms",
+    name: "Data Structure and Algorithms",
     description: "Learn about Data Structure and Algorithms",
     icon: <FcOrgUnit className="w-6 h-6 md:w-10 md:h-10" />,
   },
@@ -49,10 +49,10 @@ export default function Section1({ controls }: Section1Props) {
         animate={controls ? controls : "pageLoad"}
         variants={fadeInVariants}
       >
-        <h1 className="text-3xl md:text-7xl font-semibold mb-4 md:mb-16 text-center">
+        <h1 className="text-4xl md:text-7xl font-semibold mb-4 md:mb-16 text-center">
           AI PLAYGROUND
         </h1>
-        <div className="grid grid-cols-2 gap-6 md:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
           {menu_items.map((item, index) => (
             <div
               className="flex flex-row items-center gap-2 md:gap-6 hover:scale-105 duration-250 ease-soft-spring"
