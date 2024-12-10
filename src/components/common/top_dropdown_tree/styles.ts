@@ -25,7 +25,6 @@ export const Frame = styled('div')`
   white-space: nowrap;
   overflow-x: hidden;
   vertical-align: middle;
-  color: #24292e;
   fill: #24292e;
 `
 
@@ -55,4 +54,24 @@ export const ToggleIcon = styled('div')`
   display: inline-block;
   margin-right: 8px;
   cursor: pointer;
+`;
+
+export const SearchInput = styled('input')`
+  width: 100%;
+  max-width: 400px;
+  padding: 4px 8px;
+  margin-bottom: 2px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+  &:focus {
+    outline: none;
+    border-color: #f1f1f1;
+    box-shadow: 0 0 4px rgba(0, 122, 100, 0.5);
+  }
 `;

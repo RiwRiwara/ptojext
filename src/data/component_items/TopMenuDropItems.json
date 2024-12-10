@@ -2,35 +2,31 @@
   {
     "name": "AI PLAYGROUND",
     "defaultOpen": true,
+    "className": "playground-root",
     "children": [
       {
         "name": "Reinforcement Learning",
+        "className": "reinforcement-learning",
         "children": [
-          { "name": "PAC-MAN (2008)" },
+          { "name": "PAC-MAN (2008)", "className": "", "link": "/playground/reinforcement-learning/pac-man-2008" },
           {
             "name": "sub-subtree",
+            "className": "sub-subtree-class",
             "children": [{ "name": "child 1", "style": { "color": "#37ceff" } }]
           }
         ]
       },
       {
         "name": "Image processing",
+        "className": "image-processing",
         "children": [
           {
             "name": "Image Convolution",
-            "link": "/playground/image-processing/image-convolution"
+            "link": "/playground/image-processing/image-convolution",
+            "className": "image-convolution"
           }
         ]
-      },
-      {
-        "name": "Data Structure and Algorithms",
-        "children": [
-          { "name": "Sort" },
-          { "name": "Search" },
-          { "name": "Greedy" }
-        ]
-      },
-      { "name": "Neural Network" }
+      }
     ]
   }
 ]
