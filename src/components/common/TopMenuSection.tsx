@@ -17,28 +17,28 @@ export default function TopMenuSection() {
         >
           <TbHome className="w-8 h-8  " />
         </Link>
-        <div className=" text-gray-800 p-2 pl-2 bg-gray-50 rounded-r-full hover:bg-gray-200 hover:shadow-inner ease-soft-spring duration-300 hover:scale-95">
-          <Popover
-            classNames={{
-              base: ["before:bg-default-200"],
-              content: ["py-3 px-4 mt-4 border border-default-200", "bg-white"],
-            }}
-            isOpen={isOpen}
-            onOpenChange={(open) => setIsOpen(open)}
-            placement="bottom"
-          >
-            <PopoverTrigger>
+        <Popover
+          classNames={{
+            base: ["before:bg-default-200"],
+            content: ["py-3 px-4 mt-4 border border-default-200", "bg-white"],
+          }}
+          isOpen={isOpen}
+          onOpenChange={(open) => setIsOpen(open)}
+          placement="bottom"
+        >
+          <PopoverTrigger>
+            <div className=" text-gray-800 p-2 pl-2 bg-gray-50 rounded-r-full hover:bg-gray-200 hover:shadow-inner cursor-pointer">
               {isOpen ? (
-                <TbFolderOpen className="w-8 h-8 cursor-pointer" />
+                <TbFolderOpen className="w-8 h-8 ease-soft-spring duration-300 hover:scale-95" />
               ) : (
-                <TbFolder className="w-8 h-8 cursor-pointer" />
+                <TbFolder className="w-8 h-8 ease-soft-spring duration-300 hover:scale-95" />
               )}
-            </PopoverTrigger>
-            <PopoverContent>
-              <DropdownTree />
-            </PopoverContent>
-          </Popover>
-        </div>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent>
+            <DropdownTree />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

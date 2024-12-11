@@ -1,12 +1,10 @@
 "use client";
 import { useAnimation } from "framer-motion";
 import { useEffect, useCallback } from "react";
-import Section1 from "./Section1";
 import Section2 from "./Section2";
 import Section3 from "./Section3";
 
-export default function TopBodySection() {
-  const controlsSection1 = useAnimation();
+export default function LandingPageComponent() {
   const controlsSection2 = useAnimation();
   const controlsSection3 = useAnimation();
 
@@ -15,9 +13,7 @@ export default function TopBodySection() {
     const scrollY = window.scrollY + window.innerHeight;
 
     sections.forEach((section, index) => {
-      const controls = [controlsSection1, controlsSection2, controlsSection3][
-        index
-      ];
+      const controls = [controlsSection2, controlsSection3][index];
       const offsetTop = section.offsetTop;
       const offsetHeight = section.offsetHeight;
 
@@ -27,7 +23,7 @@ export default function TopBodySection() {
         controls.start("hidden");
       }
     });
-  }, [controlsSection1, controlsSection2, controlsSection3]);
+  }, [controlsSection2, controlsSection3]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -35,10 +31,9 @@ export default function TopBodySection() {
   }, [handleScroll]);
 
   return (
-    <main>
-      <Section1 controls={controlsSection1} />
+    <div>
       <Section2 controls={controlsSection2} />
       <Section3 controls={controlsSection3} />
-    </main>
+    </div>
   );
 }

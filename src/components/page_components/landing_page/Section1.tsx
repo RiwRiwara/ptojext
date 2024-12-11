@@ -1,15 +1,9 @@
-"use client";
-import { motion, AnimationControls } from "framer-motion";
 import {
   FcRadarPlot,
   FcStackOfPhotos,
   FcCollect,
   FcOrgUnit,
 } from "react-icons/fc";
-
-interface Section1Props {
-  controls: AnimationControls;
-}
 
 const menu_items = [
   {
@@ -34,22 +28,11 @@ const menu_items = [
   },
 ];
 
-const fadeInVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-  pageLoad: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-export default function Section1({ controls }: Section1Props) {
+export default function Section1() {
   return (
-    <section className="h-screen flex items-center justify-center">
-      <motion.div
-        className="text-start"
-        initial="hidden"
-        animate={controls ? controls : "pageLoad"}
-        variants={fadeInVariants}
-      >
-        <h1 className="text-4xl md:text-7xl font-semibold mb-4 md:mb-16 text-center">
+    <main className="h-screen flex items-center justify-center md:-mt-24 -mt-44">
+      <div className="text-start">
+        <h1 className="text-4xl md:text-7xl font-semibold mb-4 md:mb-16 text-start">
           AI PLAYGROUND
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
@@ -68,7 +51,7 @@ export default function Section1({ controls }: Section1Props) {
             </div>
           ))}
         </div>
-      </motion.div>
-    </section>
+      </div>
+    </main>
   );
 }

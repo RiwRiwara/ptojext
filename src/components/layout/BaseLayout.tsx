@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const BaseLayout: React.FC<LayoutProps> = ({ children, className = "" }) => {
   return (
-    <div className={` bg-white px-4 py-6 h-screen ${className}`}>
+    <div className={` bg-white h-screen mt-24 ${className}`}>
       <TopMenuSection />
       {children}
     </div>

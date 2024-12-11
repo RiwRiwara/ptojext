@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Artificial Intelligence Interactive Playground
 
-## Getting Started
+## Project Overview
+Artificial Intelligence Interactive Playground is an interactive learning platform designed to enhance the understanding of Artificial Intelligence (AI), data structures, and algorithms. By leveraging visualization and simulation techniques, this platform enables users to engage with and explore AI concepts through hands-on experimentation.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Team Members
+- **Ms. Punnapa Thianchai** (Student ID: 64090500405)  
+- **Mr. Awirut Phoosaensaart** (Student ID: 64090500409)  
+- **Mr. Jittapat Chanyarungroj** (Student ID: 64090500426)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Advisor
+- **Dr. Wittawin Susutti**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Keywords
+- Artificial Intelligence (AI)  
+- Visualization  
+- Simulation  
+- Interactive Learning  
+- Data Structure  
+- Algorithms
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Background and Significance
+Artificial Intelligence (AI) has revolutionized industries by enabling machines to simulate human intelligence, making complex decisions, and efficiently processing data. As AI continues to grow in prominence, understanding its principles is essential for students and professionals alike.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Interactive visual simulations have been shown to enhance the learning experience by providing users with tangible ways to experiment with systems and observe outcomes. According to research by Mouhib Alnoukari et al., such simulations help students better grasp technical content and improve their problem-solving accuracy.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project proposes an interactive AI learning playground where users can explore AI concepts, data structures, and algorithms through visual simulations. The platform aims to bridge the gap between theoretical knowledge and practical application.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Objectives
+1. Develop an interactive AI learning platform.
+2. Enable users to visualize and understand the functioning of AI, data structures, and algorithms step-by-step.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Expected Benefits
+- A functional and user-friendly interactive learning platform for AI concepts.
+- Enhanced comprehension of AI, data structures, and algorithms through real-time visualizations and interactions.
+
+---
+
+## Key Features
+1. **Interactive Simulations**: Users can manipulate inputs and parameters to see how AI algorithms respond.
+2. **Visualization Tools**: Step-by-step breakdown of data structures and algorithms in action.
+3. **Experiential Learning**: Hands-on environment for experimenting with AI models and their outcomes.
+
+---
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for more details.

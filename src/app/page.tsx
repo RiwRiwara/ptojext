@@ -1,10 +1,12 @@
 import BaseLayout from "@/components/layout/BaseLayout";
-import TopBodySection from "@/components/page_components/landing_page/TopBodySection";
+import LandingPageComponent from "@/components/page_components/landing_page/LandingPageComponent";
+import Section1 from "@/components/page_components/landing_page/Section1";
 
 export default function LandingPage() {
   return (
     <BaseLayout>
-      <TopBodySection />
+      <Section1 />
+      <LandingPageComponent />
     </BaseLayout>
   );
 }

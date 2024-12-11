@@ -12,7 +12,7 @@ export default function Section3({ controls }: Section3Props) {
   };
 
   return (
-    <section className="h-screen flex items-center justify-center">
+    <section className="h-screen flex items-center justify-center ">
       <motion.div
         className="text-center"
         initial="hidden"
