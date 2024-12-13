@@ -26,6 +26,7 @@
     "@react-three/fiber": "^8.17.10",
     "@types/three": "^0.170.0",
     "@xyflow/react": "^12.3.4",
+    "canvas": "^2.11.2",
     "dexie": "^4.0.9",
     "dexie-react-hooks": "^1.1.7",
     "driver.js": "^1.3.1",
