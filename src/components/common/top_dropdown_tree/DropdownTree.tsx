@@ -11,7 +11,7 @@ import {
   Content,
   ToggleIcon,
   SearchInput,
-} from "./styles"; 
+} from "./styles";
 import menuItems from "@/data/component_items/TopMenuDropItems.json";
 
 interface TreeItem {
@@ -123,7 +123,7 @@ const Tree: React.FC<{
           </Title>
         </Link>
       ) : (
-        <Title style={style} className="tree-title">
+        <Title style={style} className="tree-title" onClick={() => setOpen(!isOpen)}>
           {typeof name === "string" ? (
             <HighlightText text={name} query={searchQuery} />
           ) : (
@@ -176,10 +176,10 @@ const DropdownTree: React.FC = () => {
     <Container>
       <div className="flex flex-col gap-1">
         <SearchInput
-        type="text"
-        placeholder="Search..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         {renderTree(filteredItems, searchQuery)}
       </div>

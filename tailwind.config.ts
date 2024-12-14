@@ -40,6 +40,7 @@ const config: Config = {
           violet: "linear-gradient(to right, #C59BD8, #E0B0FF)",
         },
       },
+      
     },
   },
   plugins: [nextui()],
