@@ -123,7 +123,11 @@ const Tree: React.FC<{
           </Title>
         </Link>
       ) : (
-        <Title style={style} className="tree-title" onClick={() => setOpen(!isOpen)}>
+        <Title
+          style={style}
+          className="tree-title cursor-pointer"
+          onClick={() => setOpen(!isOpen)}
+        >
           {typeof name === "string" ? (
             <HighlightText text={name} query={searchQuery} />
           ) : (
@@ -177,7 +181,7 @@ const DropdownTree: React.FC = () => {
       <div className="flex flex-col gap-1">
         <SearchInput
           type="text"
-          placeholder="Search..."
+          placeholder="Search" 
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

@@ -56,7 +56,6 @@ const InputImageComponent: React.FC<InputImageComponentProps> = ({
 
       if (!ctx) return;
 
-      // Redraw the image to clear the previous hover highlight
       const scale = Math.max(
         targetWidth / img.width,
         targetHeight / img.height
@@ -77,7 +76,6 @@ const InputImageComponent: React.FC<InputImageComponentProps> = ({
         img.height * scale
       );
 
-      // Highlight a 3x3 pixel matrix
       ctx.strokeStyle = "red";
       ctx.lineWidth = 1;
       ctx.strokeRect(x - 1, y - 1, 3, 3);
@@ -97,6 +95,7 @@ const InputImageComponent: React.FC<InputImageComponentProps> = ({
       <canvas
         ref={canvasRef}
         id="canvas"
+        className="cursor-none"
         style={{ border: "1px solid black" }}
       />
     </div>
