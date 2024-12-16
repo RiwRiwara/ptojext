@@ -167,6 +167,7 @@ class GridManager {
 
       this.grids = [...this.grids];
     }
+
   }
 
   // Update grid by its position (x, y)

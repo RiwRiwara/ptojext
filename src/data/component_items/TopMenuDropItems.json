@@ -24,6 +24,11 @@
             "name": "Image Convolution",
             "link": "/playground/image-processing/image-convolution",
             "className": "image-convolution"
+          },
+          {
+            "name": "Image Enchanted",
+            "link": "/simu/image_enchanted",
+            "className": "image-enchanted"
           }
         ]
       }

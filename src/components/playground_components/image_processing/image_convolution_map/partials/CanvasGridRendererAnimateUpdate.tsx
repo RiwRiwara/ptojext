@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import GridConvolutionManager from "@/classes/GridConvolutionManager";
 
-interface CanvasGridRendererAnimateProps {
+interface CanvasGridRendererAnimateUpdateProps {
   rows: number;
   cols: number;
   cellSize: number;
@@ -11,7 +11,7 @@ interface CanvasGridRendererAnimateProps {
   gridManagerProvider?: GridConvolutionManager;
 }
 
-export default function CanvasGridRendererAnimate({
+export default function CanvasGridRendererAnimateUpdate({
   rows,
   cols,
   cellSize,
@@ -19,7 +19,7 @@ export default function CanvasGridRendererAnimate({
   data,
   isNotInteractive,
   gridManagerProvider,
-}: CanvasGridRendererAnimateProps) {
+}: CanvasGridRendererAnimateUpdateProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [gridManager] = useState<GridConvolutionManager>(
     gridManagerProvider ??
@@ -55,6 +55,8 @@ export default function CanvasGridRendererAnimate({
     gridManager.updateKernel(row, col, customKernel);
     gridManager.setKernelPosition(row, col);
   };
+
+
 
   // Animate the convolution process
   useEffect(() => {
@@ -115,13 +117,9 @@ export default function CanvasGridRendererAnimate({
       {!isNotInteractive && (
         <button
           onClick={toggleAnimation}
+          className="text-white rounded-full px-4 py-2 font-normal mt-2"
           style={{
-            marginTop: "10px",
-            padding: "8px 16px",
             background: isAnimating ? "red" : "green",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
           }}
         >
           {isAnimating ? "Stop Animation" : "Start Animation"}

@@ -26,7 +26,7 @@ import Image from "next/image";
 import { Link } from "@nextui-org/link";
 import { FaInfoCircle } from "react-icons/fa";
 import { IoCaretBack } from "react-icons/io5";
-import CommonLayout from "@/components/layout/CommonLayout";
+import BaseLayout from "@/components/layout/BaseLayout";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -72,7 +72,7 @@ function Flow() {
   }
 
   return (
-    <CommonLayout>
+    <BaseLayout>
       <ReactFlowProvider>
         {/* Header section */}
         <div
@@ -139,7 +139,7 @@ function Flow() {
           )}
         </div>
       </ReactFlowProvider>
-    </CommonLayout>
+    </BaseLayout>
   );
 }
 
