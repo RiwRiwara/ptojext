@@ -56,8 +56,6 @@ export default function CanvasGridRendererAnimateUpdate({
     gridManager.setKernelPosition(row, col);
   };
 
-
-
   // Animate the convolution process
   useEffect(() => {
     if (!isAnimating) return;
@@ -107,7 +105,7 @@ export default function CanvasGridRendererAnimateUpdate({
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
       <canvas
         ref={canvasRef}
         width={cols * cellSize}
@@ -117,12 +115,14 @@ export default function CanvasGridRendererAnimateUpdate({
       {!isNotInteractive && (
         <button
           onClick={toggleAnimation}
-          className="text-white rounded-full px-4 py-2 font-normal mt-2"
+          className="text-white rounded-full px-2 py-1 font-normal absolute"
           style={{
             background: isAnimating ? "red" : "green",
+            top: "-20px", // Distance from the top of the canvas
+            right: "10px", // Distance from the right of the canvas
           }}
         >
-          {isAnimating ? "Stop Animation" : "Start Animation"}
+          {isAnimating ? "Stop " : "Start"}
         </button>
       )}
     </div>
