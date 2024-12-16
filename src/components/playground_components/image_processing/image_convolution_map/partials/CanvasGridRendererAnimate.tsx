@@ -105,7 +105,8 @@ export default function CanvasGridRendererAnimate({
       gridManager.renderGrid(ctx);
     }
     
-  }, [ cellSize, gridManager]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gridManager.getGrids(), cellSize, gridManager]);
 
   // Start/stop animation
   const toggleAnimation = () => {
