@@ -10,7 +10,12 @@
  * @param {number} x - The x-coordinate of the grid.
  * @param {number} y - The y-coordinate of the grid.
  * @param {number} rotation - The rotation angle of the grid.
- * @param {boolean} isDragging - A flag indicating whether the grid is being dragged.
+ * @param {string} fillColor - The fill color of the grid.
+ * @param {string} strokeColor - The stroke color of the grid.
+ * @param {number} strokeWidth - The stroke width of the grid.
+ * @param {string} text - The text to be displayed on the grid.
+ * @param {string} font - The font of the text.
+ * @param {string} textColor - The color of the text.
  * @returns {Grid} An object representing a grid.
  *
  * @example
@@ -19,7 +24,6 @@
  *   x: 100,
  *   y: 200,
  *   rotation: 45,
- *   isDragging: true,
  * };
  */
 
@@ -28,8 +32,11 @@ type Grid = {
   x: number;
   y: number;
   rotation: number;
-  isDragging: boolean;
   fillColor?: string;
   strokeColor?: string;
   strokeWidth?: number;
+  text?: string;
+  font?: string;
+  textColor?: string;
+  value?: number | number[]; 
 };

@@ -4,7 +4,7 @@ import InputImageComponent from "./InputImageComponent";
 import KernelImageComponent from "./KernelImageComponent";
 import OutputImageComponent from "./OutputImageComponent";
 
-export default function MainSection() {
+export default function ImageConvolution() {
   const [hoveredPosition, setHoveredPosition] = useState({ x: 0, y: 0 });
   const [kernel, setKernel] = useState<number[][]>([[1]]);
 
