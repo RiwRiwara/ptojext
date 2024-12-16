@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import GridConvolutionManager from "@/classes/GridConvolutionManager";
+import { FaPlayCircle, FaRegStopCircle } from "react-icons/fa";
 
 interface CanvasGridRendererAnimateProps {
   rows: number;
@@ -124,7 +125,15 @@ export default function CanvasGridRendererAnimate({
             borderRadius: "4px",
           }}
         >
-          {isAnimating ? "Stop Animation" : "Start Animation"}
+          {isAnimating ? (
+            <>
+              <FaRegStopCircle className="mr-2" />
+            </>
+          ) : (
+            <>
+              <FaPlayCircle className="mr-2" />
+            </>
+          )}
         </button>
       )}
     </div>

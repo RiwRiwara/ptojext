@@ -30,7 +30,7 @@ export default function ImageConvolutionMap() {
     <div className="w-full flex justify-center max-w-[1000px] mx-auto flex-col gap-6 p-4">
       {/* Section 1 */}
       <div className="flex flex-col md:flex-row gap-6 md:gap-10">
-        <div className="max-w-[500px] flex flex-row gap-10 justify-center">
+        <div className="max-w-[500px] flex flex-row gap-10 justify-center hidden">
           <CanvasGridRenderImage
             initialRows={160}
             initialCols={120}
@@ -65,7 +65,7 @@ export default function ImageConvolutionMap() {
       </div>
       {/* Section 2 */}
 
-      <div className="flex flex-row gap-6 items-center">
+      <div className="flex flex-row gap-6 items-center justify-center">
         <div>
           <CanvasGridRendererAnimateUpdate
             rows={gridManager.rows}
