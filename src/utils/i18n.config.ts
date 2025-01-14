@@ -12,7 +12,7 @@ const getSavedLanguage = () => {
 i18next
   .use(initReactI18next)
   .init({
-    debug: true,
+    debug: false,
     lng: getSavedLanguage(),  
     compatibilityJSON: 'v4',
     fallbackLng: 'en',

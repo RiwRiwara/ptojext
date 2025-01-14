@@ -1,6 +1,6 @@
 [
   {
-    "name": "All conent",
+    "name": "All content",
     "defaultOpen": true,
     "className": "playground-root",
     "children": [
@@ -29,6 +29,22 @@
             "name": "Image Enchanted",
             "link": "/simu/image_enchanted",
             "className": "image-enchanted"
+          }
+        ]
+      },
+      {
+        "name": "information",
+        "className": "information",
+        "children": [
+          {
+            "name": "About Us",
+            "link": "/about",
+            "className": "information-about"
+          },
+          {
+            "name": "Support",
+            "link": "/supportus",
+            "className": "information-support"
           }
         ]
       }

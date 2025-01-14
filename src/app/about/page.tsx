@@ -1,6 +1,6 @@
 "use client";
-import '@/utils/i18n.config';
 import BaseLayout from "@/components/layout/BaseLayout";
+import '@/utils/i18n.config';
 import { useTranslation } from "react-i18next";
 
 export default function About() {
