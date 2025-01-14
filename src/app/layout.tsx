@@ -4,6 +4,7 @@ import { NextUIProvider } from "@nextui-org/system";
 import "./globals.css";
 import { AnimatePresence } from "framer-motion";
 
+
 const anuphan_font = Anuphan({
   subsets: ["latin", "thai"],
   display: "swap",

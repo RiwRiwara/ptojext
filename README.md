@@ -6,8 +6,8 @@ Artificial Intelligence Interactive Playground is an interactive learning platfo
 ---
 
 ## Team Members
-- **Ms. Punnapa Thianchai** (Student ID: 64090500405)  
-- **Mr. Awirut Phoosaensaart** (Student ID: 64090500409)  
+- **Ms. Punnapa Thianchai** (Student ID: 64090500405)
+- **Mr. Awirut Phoosaensaart** (Student ID: 64090500409)
 - **Mr. Jittapat Chanyarungroj** (Student ID: 64090500426)
 
 ## Project Advisor
@@ -16,11 +16,11 @@ Artificial Intelligence Interactive Playground is an interactive learning platfo
 ---
 
 ## Keywords
-- Artificial Intelligence (AI)  
-- Visualization  
-- Simulation  
-- Interactive Learning  
-- Data Structure  
+- Artificial Intelligence (AI)
+- Visualization
+- Simulation
+- Interactive Learning
+- Data Structure
 - Algorithms
 
 ---

@@ -6,6 +6,7 @@ import {
 } from "react-icons/fc";
 import Image from "next/image";
 
+
 const menu_items = [
   {
     name: "Reinforcement Learning",
@@ -30,6 +31,7 @@ const menu_items = [
 ];
 
 export default function Section1() {
+
   return (
     <main className="h-screen flex items-center justify-center md:-mt-24 -mt-44">
       <div className="text-start">

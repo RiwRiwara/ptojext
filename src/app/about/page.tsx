@@ -1,60 +1,43 @@
+"use client";
+import '@/utils/i18n.config';
 import BaseLayout from "@/components/layout/BaseLayout";
+import { useTranslation } from "react-i18next";
 
 export default function About() {
+  const { t, i18n } = useTranslation("common");
+  const changeLanguageBox = () => {
+    const nextLanguage = i18n.language === "th" ? "en" : "th";
+    void i18n.changeLanguage(nextLanguage);
+  };
+
   return (
     <BaseLayout>
       <div>
-        <div className=" flex flex-col justify-start h-full gap-8">
-          <div className="max-h-[90vh] flex flex-col container mx-auto  max-w-[600px] bg-gradient-to-b from-slate-600 to-gray-400 rounded-[20px] rounded-t-[45px] p-4 text-white border-2 border-white shadow-lg shadow-gray-300">
-            {/* Content */}
-            <h1 className="uppercase text-3xl font-bold mb-3">About</h1>
-            <div className="uppercase text-lg cus-scroll overflow-auto">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed
-              asperiores facere, dolore architecto ipsum amet nemo ab
-              consectetur mollitia distinctio excepturi optio voluptas repellat
-              a quasi, cum, eaque perspiciatis quod? Lorem, ipsum dolor sit amet
-              consectetur adipisicing elit. Sed asperiores facere, dolore
-              architecto ipsum amet nemo ab consectetur mollitia distinctio
-              excepturi optio voluptas repellat a quasi, cum, eaque perspiciatis
-              quod? Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Sed asperiores facere, dolore architecto ipsum amet nemo ab
-              consectetur mollitia distinctio excepturi optio voluptas repellat
-              a quasi, cum, eaque perspiciatis quod? Lorem, ipsum dolor sit amet
-              consectetur adipisicing elit. Sed asperiores facere, dolore
-              architecto ipsum amet nemo ab consectetur mollitia distinctio
-              excepturi optio voluptas repellat a quasi, cum, eaque perspiciatis
-              quod? mollitia distinctio excepturi optio voluptas repellat a
-              quasi, cum, eaque perspiciatis quod? Lorem, ipsum dolor sit amet
-              consectetur amet nemo ab consectetur mollitia distinctio excepturi
-              optio consectetur adipisicing elit. Sed asperiores facere, dolore
-              architecto ipsum amet nemo ab consectetur mollitia distinctio
-              excepturi optio voluptas repellat a quasi, cum, eaque perspiciatis
-              quod? Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Sed asperiores facere, dolore architecto ipsum amet nemo ab
-              consectetur mollitia distinctio excepturi optio voluptas repellat
-              a quasi, cum, eaque perspiciatis quod? Lorem, ipsum dolor sit amet
-              consectetur adipisicing elit. Sed asperiores facere, dolore
-              architecto ipsum amet nemo ab consectetur mollitia distinctio
-              excepturi optio voluptas repellat a quasi, cum, eaque perspiciatis
-              quod? mollitia distinctio excepturi optio voluptas repellat a
-              quasi, cum, eaque perspiciatis quod? Lorem, ipsum dolor sit amet
-              consectetur amet nemo ab consectetur mollitia distinctio excepturi
-              optio consectetur adipisicing elit. Sed asperiores facere, dolore
-              architecto ipsum amet nemo ab consectetur mollitia distinctio
-              excepturi optio voluptas repellat a quasi, cum, eaque perspiciatis
-              quod? Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Sed asperiores facere, dolore architecto ipsum amet nemo ab
-              consectetur mollitia distinctio excepturi optio voluptas repellat
-              a quasi, cum, eaque perspiciatis quod? Lorem, ipsum dolor sit amet
-              consectetur adipisicing elit. Sed asperiores facere, dolore
-              architecto ipsum amet nemo ab consectetur mollitia distinctio
-              excepturi optio voluptas repellat a quasi, cum, eaque perspiciatis
-              quod? mollitia distinctio excepturi optio voluptas repellat a
-              quasi, cum, eaque perspiciatis quod? Lorem, ipsum dolor sit amet
-              consectetur amet nemo ab consectetur mollitia distinctio excepturi
-              optio
+
+
+        <div className="flex flex-col justify-start h-full gap-8">
+          <div className="max-h-[90vh] flex flex-col container mx-auto max-w-[600px]  rounded-md  p-4 text-gray-600 border-2 border-white shadow-md shadow-gray-300">
+            <div className="w-full flex flex-row justify-between">
+
+              <h1 className="uppercase text-3xl font-bold mb-3">
+                {t("ABOUT_TITLE")}
+              </h1>
+
+              <a
+                onClick={changeLanguageBox}
+                className="cursor-pointer text-black-600 hover:underline"
+              >
+                <div className="flex flex-row items-center gap-2">
+                  <div className="text-sm-bold">
+                    {i18n.language === "en" ? "ENG" : "ไทย"}
+                  </div>
+                </div>
+              </a>
             </div>
-            {/* COntent */}
+
+            <div className="uppercase text-lg cus-scroll overflow-auto">
+              {t("ABOUT_US")}
+            </div>
           </div>
         </div>
       </div>
