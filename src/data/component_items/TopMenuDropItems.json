@@ -5,17 +5,17 @@
     "className": "playground-root",
     "children": [
       {
-        "name": "Reinforcement Learning",
-        "className": "reinforcement-learning",
+        "name": "Algorithms",
+        "className": "algorithms",
         "children": [
-          { "name": "PAC-MAN (2008)", "className": "", "link": "/playground/reinforcement-learning/pac-man-2008" },
           {
-            "name": "sub-subtree",
-            "className": "sub-subtree-class",
-            "children": [{ "name": "child 1", "style": { "color": "#37ceff" } }]
+            "name": "Sorting",
+            "className": "",
+            "link": "/playground/algorithms/sorting"
           }
         ]
       },
+
       {
         "name": "Image processing",
         "className": "image-processing",

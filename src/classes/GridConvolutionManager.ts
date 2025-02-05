@@ -1,10 +1,13 @@
 import GridManager from "@/classes/GridManager";
 
-// extend GridManager
 class GridConvolutionManager extends GridManager {
-  // convolution state variables
-  defaultKernel: number[][] = [];
+  defaultKernel: number[][] = [
+    [0, 0, 0],
+    [0, 1, 0],
+    [0, 0, 0],
+  ];
   kernelPosition: { row: number; col: number };
+  animationInterval: NodeJS.Timeout | null = null;
 
   constructor(
     rows: number,
@@ -12,23 +15,19 @@ class GridConvolutionManager extends GridManager {
     cellSize: number,
     strokeWidth: number,
     IsGridLines: boolean = true,
-    data?: number[][] | number[][][]
+    data?: number[][] | number[][][],
+    kernelPosition: { row: number; col: number } = { row: 0, col: 0 }
   ) {
     super(rows, cols, cellSize, strokeWidth, IsGridLines, data);
-
-    this.defaultKernel = [
-      [0, 0, 0],
-      [0, 1, 0],
-      [0, 0, 0],
-    ];
-
-    this.kernelPosition = { row: 0, col: 0 };
+    this.kernelPosition = kernelPosition;
   }
 
+  // =========== Set kernel position ===========
   public setKernelPosition = (row: number, col: number) => {
     this.kernelPosition = { row, col };
   };
 
+  // =========== Update kernel ===========
   public updateKernel(row: number, col: number, customKernel: number[][]) {
     // Clear the previous kernel
     this.resetGrids();
@@ -44,19 +43,19 @@ class GridConvolutionManager extends GridManager {
           const y = gridRow * this.cellSize;
           const value = customKernel[r][c]; // Get the kernel value
 
-          // get the value from the grid manager
+          // Get the value from the grid manager
           const currentGridValue = this.getValueByPosition(x, y);
 
           // Update the grid using `updateGridByPosition`
           this.updateGridByPosition(x, y, {
             text: `${value}x${currentGridValue}`,
-            fillColor: "rgba(0, 0, 255, 0.2)",
+            fillColor: "rgba(0, 0, 255, 0.08)",
             font: `light ${this.cellSize / 4}px sans-serif`,
           });
         }
       }
     }
-    
   }
 }
+
 export default GridConvolutionManager;

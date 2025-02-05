@@ -34,6 +34,8 @@ class GridManager {
   strokeColor: string = "grey";
   strokeWidth: number = 0.5;
   textColor: string = "black";
+  IsGridLines: boolean = true;
+  private observers: (() => void)[] = [];
 
   constructor(
     rows: number,
@@ -48,6 +50,7 @@ class GridManager {
     this.cellSize = cellSize;
     this.strokeWidth = strokeWidth;
     this.data = data || [];
+    this.IsGridLines = IsGridLines;
 
     if (!IsGridLines) {
       this.strokeColor = "transparent";
@@ -57,7 +60,55 @@ class GridManager {
     this.grids = this.generateGrids();
   }
 
-  // Generate initial grids
+  // Add an observer (listener)
+  public addObserver(observer: () => void) {
+    this.observers.push(observer);
+  }
+
+  removeObserver(observer: () => void) {
+    this.observers = this.observers.filter((obs) => obs !== observer);
+  }
+
+  // Notify all observers (React component or other parts)
+  public notifyObservers() {
+    this.observers.forEach(observer => observer());
+  }
+
+  getState() {
+    return {
+      rows: this.rows,
+      cols: this.cols,
+      cellSize: this.cellSize,
+      data: this.data,
+    };
+  }
+
+  // =========== scale the grids ===========
+
+  public scaleUpGrids() {
+    this.rows += 1;
+    this.cols += 1;
+    this.data = Array(this.rows * this.cols)
+      .fill(0)
+      .map(() => Array(this.rows).fill(Math.floor(Math.random() * this.rows)));
+    this.grids = this.generateGrids(); // Update grids as well
+    this.notifyObservers(); // Notify observers of the update
+  }
+  public scaleDownGrids() {
+    if (this.rows - 1 < 3) {
+      return;
+    }
+    this.rows -= 1;
+    this.cols -= 1;
+    this.data = Array(this.rows * this.cols)
+      .fill(0)
+      .map(() => Array(this.rows).fill(Math.floor(Math.random() * this.rows)));
+    this.grids = this.generateGrids(); // Update grids as well
+    this.notifyObservers(); // Notify observers of the update
+  }
+
+
+  // =========== Generate initial grids =========== 
   private generateGrids(): Grid[] {
     const grids = [];
     if (this.data.length === 0) {
@@ -96,17 +147,17 @@ class GridManager {
     return grids;
   }
 
-  // Get grids
+  // =========== Get grids =========== 
   public getGrids(): Grid[] {
     return this.grids;
   }
 
-  // Set grids
+  // =========== Set grids =========== 
   public setGrids(grids: Grid[]): void {
     this.grids = grids;
   }
 
-  // public reset grids
+  // =========== public reset grids =========== 
   public resetGrids(): Grid[] {
     // reset to initial values
     this.grids = this.generateGrids();
@@ -114,7 +165,7 @@ class GridManager {
 
   }
 
-  // Get grid by position (x, y)
+  // =========== Get grid by position (x, y) =========== 
   public getGridByPosition(x: number, y: number): Grid | undefined {
     const row = Math.floor(y / this.cellSize);
     const col = Math.floor(x / this.cellSize);
@@ -122,7 +173,7 @@ class GridManager {
     return this.grids.find((g) => g.id === gridId.toString());
   }
 
-  // Handle grid click
+  // =========== Handle grid click =========== 
   public gridOnclick(grid: Grid): Grid[] {
     const updatedGrids = this.grids.map((g) =>
       g.id === grid.id
@@ -133,10 +184,18 @@ class GridManager {
     return updatedGrids;
   }
 
-  // Draw image onto each grid
+  // =========== Draw image onto each grid =========== 
   public drawImageToGrids(image: HTMLImageElement) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
+
+    if (!this.IsGridLines) {
+      this.strokeColor = "transparent";
+      this.strokeWidth = 0;
+    } else {
+      this.strokeColor = "grey";
+      this.strokeWidth = 0.5;
+    }
 
     if (ctx) {
       canvas.width = this.cols * this.cellSize;
@@ -158,19 +217,17 @@ class GridManager {
         const b = pixels[pixelIndex + 2];
         const grayscale = Math.round((r + g + b) / 3);
 
-        // Assign either RGB or grayscale value to the grid
-        grid.value = [r, g, b]; // RGB
-        // grid.value = grayscale; // Uncomment if you prefer grayscale
+        grid.value = [r, g, b]; // Assign RGB
+        grid.fillColor = `rgb(${r}, ${g}, ${b})`;
 
-        grid.fillColor = `rgb(${r}, ${g}, ${b})`; // Update grid color
       });
 
-      this.grids = [...this.grids];
+      this.notifyObservers(); // Ensure grid updates visually
     }
-
   }
 
-  // Update grid by its position (x, y)
+
+  // =========== Update grid by its position (x, y) =========== 
   public updateGridByPosition(
     x: number,
     y: number,
@@ -186,7 +243,7 @@ class GridManager {
     return this.grids;
   }
 
-  // Update grid by its ID
+  // =========== Update grid by its ID =========== 
   public updateGridById(gridId: string, newProperties: Partial<Grid>): Grid[] {
     this.grids = this.grids.map((grid) =>
       grid.id === gridId ? { ...grid, ...newProperties } : grid

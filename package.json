@@ -9,6 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroui/card": "^2.2.10",
+    "@heroui/dropdown": "^2.3.10",
+    "@heroui/radio": "^2.3.9",
+    "@heroui/react": "^2.6.14",
+    "@heroui/select": "^2.4.10",
+    "@heroui/slider": "^2.4.8",
+    "@heroui/switch": "^2.2.9",
+    "@heroui/system": "^2.4.7",
+    "@heroui/theme": "^2.4.6",
     "@nextui-org/accordion": "^2.0.40",
     "@nextui-org/button": "^2.0.38",
     "@nextui-org/image": "^2.0.32",
