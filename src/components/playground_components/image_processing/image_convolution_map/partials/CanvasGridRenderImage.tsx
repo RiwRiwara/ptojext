@@ -199,8 +199,8 @@ export default function CanvasGridRenderImage({
           <div
             className="absolute bg-black text-white p-1 text-sm rounded"
             style={{
-              top: hoverCell.y * cellSize + 10,
-              left: hoverCell.x * cellSize + 10,
+              top: hoverCell.y * cellSize + 20,
+              left: hoverCell.x * cellSize + 20,
               pointerEvents: "none",
             }}
           >

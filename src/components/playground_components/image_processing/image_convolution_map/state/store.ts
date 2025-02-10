@@ -35,10 +35,12 @@ const useStore = create<AppState>((set) => ({
       gridState: getGridState(),
     }));
   },
-
+  convolutionOutput: 0,
   applyConvolution: (row: number, col: number) => {
     set((state) => {
       state.gridConvolutionManager.updateKernel(row, col, state.convolutionData);
+      const result = gridConvolutionManager.computeConvolution(row, col);
+      set({ convolutionOutput: result });
       return { gridState: getGridState() };
     });
   },

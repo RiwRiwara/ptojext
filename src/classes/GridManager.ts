@@ -23,7 +23,10 @@
  *
  */
 
-class GridManager {
+import Observable from "@/classes/Observable";
+
+
+class GridManager extends Observable {
   rows: number;
   cols: number;
   cellSize: number;
@@ -35,7 +38,6 @@ class GridManager {
   strokeWidth: number = 0.5;
   textColor: string = "black";
   IsGridLines: boolean = true;
-  private observers: (() => void)[] = [];
 
   constructor(
     rows: number,
@@ -45,6 +47,7 @@ class GridManager {
     IsGridLines: boolean = true,
     data?: number[][] | number[][][]
   ) {
+    super();
     this.rows = rows;
     this.cols = cols;
     this.cellSize = cellSize;
@@ -60,19 +63,6 @@ class GridManager {
     this.grids = this.generateGrids();
   }
 
-  // Add an observer (listener)
-  public addObserver(observer: () => void) {
-    this.observers.push(observer);
-  }
-
-  removeObserver(observer: () => void) {
-    this.observers = this.observers.filter((obs) => obs !== observer);
-  }
-
-  // Notify all observers (React component or other parts)
-  public notifyObservers() {
-    this.observers.forEach(observer => observer());
-  }
 
   getState() {
     return {

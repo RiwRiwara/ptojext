@@ -33,7 +33,7 @@ export default function CanvasGridRendererAnimateInput() {
   };
 
   return (
-    <div className="p-4 relative">
+    <div className="p-4 relative cursor-none">
       <canvas
         ref={canvasRef}
         width={gridState.cols * gridState.cellSize}
