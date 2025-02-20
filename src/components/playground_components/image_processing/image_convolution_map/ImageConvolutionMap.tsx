@@ -60,7 +60,6 @@ export default function ImageConvolutionMap() {
           <CanvasGridConvolution />
         </div>
         <div>
-          <CanvasGridRendererAnimateOutput />
         </div>
       </div>
     </div>

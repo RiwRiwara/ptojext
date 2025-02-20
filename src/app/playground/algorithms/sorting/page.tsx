@@ -45,7 +45,7 @@ export default function Page() {
   useEffect(() => {
     // Initialize the sorting object with the initial array
     sorting.sort("bubble");
-  }, []);
+  }, [sorting]);
 
   return (
     <BaseLayout>
