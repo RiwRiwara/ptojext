@@ -13,6 +13,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      
       fontFamily: {
         sans: ["Anuphan", "sans-serif"],
       },

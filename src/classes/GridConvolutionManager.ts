@@ -24,12 +24,7 @@ class GridConvolutionManager extends GridManager {
     this.resultGrid = this.generateInitialResultGrid();
   }
 
-  private generateInitialResultGrid(): number[][] | number[][][] {
-    const initialGrid = Array.from({ length: this.rows }, () =>
-      Array(this.cols).fill(0)
-    );
-    return initialGrid;
-  }
+
 
   // =========== Set kernel position ===========
   public setKernelPosition = (row: number, col: number) => {
@@ -67,11 +62,7 @@ class GridConvolutionManager extends GridManager {
   }
 
   // =========== Compute the convolution ===========
-  public computeConvolution(
-    row: number,
-    col: number,
-    customKernel?: number[][]
-  ): number | number[] {
+  public computeConvolution(row: number, col: number, customKernel?: number[][]): number | number[] {
     const kernel = customKernel || this.defaultKernel;
     let sum: number | number[] = 0;
 
@@ -104,13 +95,32 @@ class GridConvolutionManager extends GridManager {
     }
 
     // Store the result in the resultGrid at the appropriate position
-    if (Array.isArray(sum)) {
-      this.resultGrid[row][col] = sum; // Storing RGB or multi-channel result
-    } else {
-      this.resultGrid[row][col] = sum; // Storing grayscale result
+    const outputRow = row; // No offset needed since resultGrid is already sized correctly
+    const outputCol = col;
+    if (outputRow < this.resultGrid.length && outputCol < this.resultGrid[0].length) {
+      if (Array.isArray(sum)) {
+        this.resultGrid[outputRow][outputCol] = sum; // Storing RGB or multi-channel result
+      } else {
+        this.resultGrid[outputRow][outputCol] = sum; // Storing grayscale result
+      }
     }
 
+    this.notifyObservers(); // Notify observers after updating resultGrid
     return sum;
+  }
+
+  // Getter for resultGrid
+  public getResultGrid(): number[][] | number[][][] {
+    return this.resultGrid;
+  }
+
+  // Ensure resultGrid is initialized and updated correctly
+  private generateInitialResultGrid(): number[][] {
+    // Output size: rows - kernelSize + 1, cols - kernelSize + 1
+    const kernelSize = 3; // Assuming 3x3 kernel
+    const outputRows = this.rows - kernelSize + 1;
+    const outputCols = this.cols - kernelSize + 1;
+    return Array.from({ length: outputRows }, () => Array(outputCols).fill(0));
   }
 
 

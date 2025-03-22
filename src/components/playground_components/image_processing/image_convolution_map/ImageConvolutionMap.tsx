@@ -6,8 +6,6 @@ import CanvasGridConvolution from "./partials/CanvasGridConvolution";
 import useStore from "./state/store";
 import '@/utils/i18n.config';
 import { useTranslation } from "react-i18next";
-import CanvasGridRendererAnimateOutput from "./partials/CanvasGridRendererAnimateOutput";
-
 
 
 export default function ImageConvolutionMap() {
