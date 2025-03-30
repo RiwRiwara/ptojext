@@ -1,8 +1,7 @@
 import BaseLayout from "@/components/layout/BaseLayout";
-import ImageConvolution from "@/components/playground_components/image_processing/image_convolution_res/ImageConvolution";
 import ImageConvolutionMap from "@/components/playground_components/image_processing/image_convolution_map/ImageConvolutionMap";
 
-export default function About() {
+export default function ImageConvolutionPage() {
   return (
     <BaseLayout>
       <div className="container mx-auto flex flex-col justify-start h-screen gap-8 p-2 pt-8 mb-10 ">

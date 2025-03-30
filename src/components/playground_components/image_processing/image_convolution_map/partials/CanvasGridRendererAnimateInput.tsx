@@ -2,11 +2,9 @@ import React, { useEffect, useRef } from "react";
 import useStore from "../state/store";
 
 export default function CanvasGridRendererAnimateInput() {
-  const { gridConvolutionManager, gridState, applyConvolution } = useStore();
+  const { gridConvolutionManager, gridState, applyConvolution, setHoverPosition } = useStore();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-
-  // Redraw grid when gridState updates
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
@@ -16,27 +14,22 @@ export default function CanvasGridRendererAnimateInput() {
     }
   }, [gridState, gridConvolutionManager]);
 
-  // Handle mouse move with improved precision
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
 
-    // Account for canvas scaling and offset
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
 
-    // Get precise mouse coordinates relative to canvas
     const x = (event.clientX - rect.left) * scaleX;
     const y = (event.clientY - rect.top) * scaleY;
 
-    // Calculate grid position with rounding for better precision
     const cellSize = gridState.cellSize;
     const row = Math.floor(y / cellSize);
     const col = Math.floor(x / cellSize);
 
-    // Validate bounds (assuming 3x3 kernel)
     const kernelSize = 3;
     if (
       row >= 0 &&
@@ -44,18 +37,24 @@ export default function CanvasGridRendererAnimateInput() {
       row <= gridState.rows - kernelSize &&
       col <= gridState.cols - kernelSize
     ) {
+      setHoverPosition({ row, col }); // Update hover position in store
       applyConvolution(row, col);
 
-      // Optional: Visual feedback for precision (highlight hovered cell)
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         gridConvolutionManager.renderGrid(ctx);
-        ctx.strokeStyle = "rgba(0, 255, 0, 0.5)"; // Green outline for feedback
+        ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
         ctx.lineWidth = 2;
         ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
       }
+    } else {
+      setHoverPosition(null); // Clear hover if outside bounds
     }
+  };
+
+  const handleMouseLeave = () => {
+    setHoverPosition(null); // Clear hover when mouse leaves
   };
 
   return (
@@ -67,6 +66,7 @@ export default function CanvasGridRendererAnimateInput() {
           height={gridState.rows * gridState.cellSize}
           className="w-full h-auto cursor-crosshair"
           onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
         />
 
         <div className="absolute top-4 left-4 flex space-x-3 pointer-events-none">
@@ -90,7 +90,7 @@ export default function CanvasGridRendererAnimateInput() {
       </div>
 
       <div className="mt-4 text-center text-gray-600 text-sm">
-        Use mouse to interact grid • Adjsut matrix size with buttons
+        Use mouse to interact with input grid • Adjust matrix size with buttons
       </div>
     </div>
   );

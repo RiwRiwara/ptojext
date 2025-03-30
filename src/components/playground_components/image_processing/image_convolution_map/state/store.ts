@@ -28,6 +28,7 @@ const useStore = create<AppState>((set) => ({
     [0, 0, 0],
   ],
   resultGrid: gridConvolutionManager.getResultGrid(), // Add resultGrid to the store
+  hoverPosition: null as { row: number; col: number } | null, // Track hover position
 
   updateGridState: () => {
     set(() => ({
@@ -36,6 +37,9 @@ const useStore = create<AppState>((set) => ({
     }));
   },
   convolutionOutput: 0,
+  setHoverPosition: (position: { row: number; col: number } | null) => {
+    set({ hoverPosition: position });
+  },
   applyConvolution: (row: number, col: number) => {
     set((state) => {
       state.gridConvolutionManager.updateKernel(row, col, state.convolutionData);

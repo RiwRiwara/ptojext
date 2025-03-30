@@ -123,6 +123,16 @@ class GridConvolutionManager extends GridManager {
     return Array.from({ length: outputRows }, () => Array(outputCols).fill(0));
   }
 
+  resizeGrid(newRows: number, newCols: number): void {
+    this.rows = newRows;
+    this.cols = newCols;
+    // Resize data array
+    this.data = Array.from({ length: newRows * newCols }, () =>
+      Array(newCols).fill(Math.floor(Math.random() * 8))
+    );
+    this.notifyObservers(); // Notify observers of the change
+  }
+
 
 
 }
