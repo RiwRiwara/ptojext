@@ -25,7 +25,7 @@ export default function CanvasGridResult() {
                 const x = col * cellSize;
                 const y = row * cellSize;
 
-                let fillColor = "white"; // Default color (you can adjust this)
+                const fillColor = "white"; // Default color (you can adjust this)
 
                 // Draw the cell
                 ctx.fillStyle = fillColor;

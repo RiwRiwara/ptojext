@@ -3843,6 +3843,11 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.16.tgz#94ae78fab4a38d73086e962d0b65c30d816bfb0a"
   integrity sha512-HX7Em5NYQAXKW+1T+FiuG27NGwzJfCX3s1GjOa7ujxZa52kjJLOr4FUxT+giF6Tgxv1e+/czV/iTtBw27WTU9g==
 
+"@types/matter-js@^0.19.8":
+  version "0.19.8"
+  resolved "https://registry.yarnpkg.com/@types/matter-js/-/matter-js-0.19.8.tgz#ce1a7f743b8520f58cda2c5b06434a46c6731fed"
+  integrity sha512-W2ZWG58Lijv/4v768NgpeyFqqiOyslmAU7qqM1Lhz4XBoUgGtZtPz4CjcOKYtqHIak14dvPldslQhltqLTWwsw==
+
 "@types/node@^20":
   version "20.17.28"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.17.28.tgz#c10436f3a3c996f535919a9b082e2c47f19c40a1"
@@ -6879,7 +6884,7 @@ simple-swizzle@^0.2.2:
     react-i18next "^15.4.0"
     react-icons "^5.3.0"
     react-use-measure "^2.1.1"
-    simu-proj "file:../../../Library/Caches/Yarn/v6/npm-simu-proj-0.1.2-945e0cb0-fd2d-4dbc-b8e9-34d99ec1824e-1743356503550/node_modules/simu-proj"
+    simu-proj "file:../../../Library/Caches/Yarn/v6/npm-simu-proj-0.1.2-fbd1b1de-f790-4862-8eea-ba1920a7aa78-1743361288441/node_modules/simu-proj"
     styled-components "^6.1.13"
     three "^0.171.0"
     zustand "^5.0.1"
