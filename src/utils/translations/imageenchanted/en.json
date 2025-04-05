@@ -1,0 +1,5 @@
+{
+  "whatisimageenchanted": "What is Image Enchanted?",
+  "mean": "Image enchanted is a mathematical operation that is used to manipulate images by applying a mathematical kernel to each pixel of the image. It is a fundamental operation in image processing and computer vision.",
+  "mean_sub": "Enchanted of an image is the process of viewing an image as a matrix of pixels arranged in a row. For example, we might have 1s for black and 0s for white. Then we would use something called a filter (a yellow square, which is a 3x3 matrix of filter values) to enchanted the image, and the result would be a red matrix."
+}
