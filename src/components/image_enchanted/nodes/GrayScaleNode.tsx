@@ -1,143 +1,4 @@
 
-// "use client";
-// import React, { useEffect, useRef, useState } from "react";
-// import { Slider } from "@nextui-org/slider";
-// import { Button } from "@nextui-org/button";
-
-// const GrayScaleNode = () => {
-//   const canvasRef = useRef<HTMLCanvasElement>(null);
-//   const imageRef = useRef<HTMLImageElement>(null);
-//   const [grayScale, setGrayScale] = useState(150);
-
-//   useEffect(() => {
-//     const image = imageRef.current;
-//     const canvas = canvasRef.current;
-//     const ctx = canvas?.getContext("2d");
-
-//     if (!canvas || !ctx || !image) return;
-
-//     image.onload = () => {
-//       canvas.width = image.width;
-//       canvas.height = image.height;
-//       ctx.drawImage(image, 0, 0);
-//       applyGrayScale();
-//     };
-
-//     if (image.complete) {
-//       image.onload?.(null as any);
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     applyGrayScale();
-//   }, [grayScale]);
-
-//   const applyGrayScale = () => {
-//     const canvas = canvasRef.current;
-//     const ctx = canvas?.getContext("2d");
-//     const image = imageRef.current;
-
-//     if (!canvas || !ctx || !image) return;
-
-//     // Draw the original image first before applying grayscale
-//     ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     ctx.drawImage(image, 0, 0);
-
-//     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-//     const data = imageData.data;
-
-//     const factor = grayScale / 255;
-
-//     for (let i = 0; i < data.length; i += 4) {
-//       const r = data[i];
-//       const g = data[i + 1];
-//       const b = data[i + 2];
-
-//       const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-
-//       data[i]     = r * (1 - factor) + gray * factor;
-//       data[i + 1] = g * (1 - factor) + gray * factor;
-//       data[i + 2] = b * (1 - factor) + gray * factor;
-//     }
-
-//     ctx.putImageData(imageData, 0, 0);
-//   };
-
-//   const handleSliderChange = (value: number | number[]) => {
-//     const val = Array.isArray(value) ? value[0] : value;
-//     setGrayScale(val);
-//   };
-
-//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const val = Math.max(0, Math.min(255, parseInt(e.target.value) || 0));
-//     setGrayScale(val);
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center gap-4 bg-gray-800 text-white p-4 rounded-xl shadow-md">
-//       <h2 className="text-xl font-bold">Grayscale Processor</h2>
-
-//       <canvas ref={canvasRef} className="rounded-md border-2 border-purple-300" />
-
-//       <img
-//         ref={imageRef}
-//         src="/people.jpg"
-//         alt="People"
-//         className="hidden"
-//         crossOrigin="anonymous"
-//       />
-
-//       <div className="flex flex-col gap-3 w-full max-w-[300px]">
-//         <Slider
-//           aria-label="Grayscale"
-//           size="sm"
-//           color="secondary"
-//           step={1}
-//           minValue={0}
-//           maxValue={255}
-//           value={grayScale}
-//           onChange={handleSliderChange}
-//           startContent={
-//             <Button
-//               size="sm"
-//               isIconOnly
-//               radius="full"
-//               variant="light"
-//               onPress={() => setGrayScale((v) => Math.max(0, v - 1))}
-//             >
-//               -
-//             </Button>
-//           }
-//           endContent={
-//             <Button
-//               size="sm"
-//               isIconOnly
-//               radius="full"
-//               variant="light"
-//               onPress={() => setGrayScale((v) => Math.min(255, v + 1))}
-//             >
-//               +
-//             </Button>
-//           }
-//         />
-//         <div className="flex items-center gap-2">
-//           <input
-//             type="number"
-//             min={0}
-//             max={255}
-//             value={grayScale}
-//             onChange={handleInputChange}
-//             className="p-1 rounded-md bg-gray-700 text-white text-center w-20"
-//           />
-//           <span>Grayscale Level</span>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default GrayScaleNode;
-
 import React, { useEffect, useRef, useState } from "react";
 import { Slider } from "@nextui-org/slider";
 import { Button } from "@nextui-org/button";
@@ -149,7 +10,7 @@ const noiseTypes = [
   { label: "Speckle Noise", value: "speckle" },
 ];
 
-const GrayScaleNode = () => {
+const GrayScaleNode = () =>  {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const [grayScale, setGrayScale] = useState(150);
@@ -171,7 +32,7 @@ const GrayScaleNode = () => {
     };
 
     if (image.complete) {
-      image.onload?.(null as any);
+      image.onload?.(new Event("load"));
     }
   }, []);
 
@@ -189,8 +50,8 @@ const GrayScaleNode = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(image, 0, 0);
 
-    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let data = imageData.data;
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
 
     const factor = grayScale / 255;
 

@@ -32,7 +32,7 @@ const EnchantedFilters = () => {
     };
 
     if (image.complete) {
-      image.onload?.(null as any);
+      if (image.onload) image.onload(new Event("load"));
     }
   }, []);
 
@@ -50,8 +50,8 @@ const EnchantedFilters = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(image, 0, 0);
 
-    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let data = imageData.data;
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
 
     const factor = grayScale / 255;
 
