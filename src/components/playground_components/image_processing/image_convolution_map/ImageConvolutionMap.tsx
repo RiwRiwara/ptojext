@@ -17,7 +17,7 @@ export default function ImageConvolutionMap() {
   return (
     <div className="w-full flex justify-center max-w-[1000px] mx-auto flex-col gap-6 p-4">
       {/* ================= Section 1 ================= */}
-      <div className="flex flex-col md:flex-row gap-6 md:gap-10">
+      <div className="flex flex-col md:flex-row gap-6 md:gap-10 border-5">
         <div>
           <h1 className="text-2xl font-semibold mb-2">
             {t("whatisimageconvolution")}

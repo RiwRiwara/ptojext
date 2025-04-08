@@ -10,7 +10,7 @@ const noiseTypes = [
   { label: "Speckle Noise", value: "speckle" },
 ];
 
-const GrayScaleNode = () =>  {
+const EnchantedFilters = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const [grayScale, setGrayScale] = useState(150);
@@ -32,7 +32,7 @@ const GrayScaleNode = () =>  {
     };
 
     if (image.complete) {
-      image.onload?.(new Event("load"));
+      if (image.onload) image.onload(new Event("load"));
     }
   }, []);
 
@@ -113,10 +113,11 @@ const GrayScaleNode = () =>  {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 bg-gray-800 text-white p-6 rounded-xl shadow-md">
+    <div className="flex flex-col items-center gap-6 bg-white p-6 rounded-xl">
       <h2 className="text-xl font-bold">Grayscale & Noise Filter</h2>
 
-      <canvas ref={canvasRef} className="rounded-md border-2 border-purple-300" />
+
+      <canvas ref={canvasRef} className="rounded-md border-2" />
 
       <img
         ref={imageRef}
@@ -195,4 +196,4 @@ const GrayScaleNode = () =>  {
   );
 };
 
-export default GrayScaleNode;
+export default EnchantedFilters;
