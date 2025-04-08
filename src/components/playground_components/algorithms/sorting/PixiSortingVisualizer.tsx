@@ -213,7 +213,7 @@ export default function PixiSortingVisualizer({
     
     // Update positions and colors
     barsRef.current.forEach((bar, index) => {
-      let targetIndex = index;
+      const targetIndex = index;
       
       // If this is part of the current animation step
       if (currentStep && (index === currentStep.from || index === currentStep.to)) {

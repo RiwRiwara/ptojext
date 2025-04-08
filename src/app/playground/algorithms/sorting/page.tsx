@@ -11,6 +11,12 @@ import { RiSortAsc, RiSortDesc } from "react-icons/ri";
 import { PiShuffleBold } from "react-icons/pi";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 
+// Define the AnimationStep interface to replace 'any' type
+interface AnimationStep {
+  from: number;
+  to: number;
+}
+
 // Algorithm definitions with improved descriptions and complexity information
 const sortingAlgorithms = [
   { 
@@ -100,7 +106,7 @@ export default function Page() {
   const [selectedAlgo, setSelectedAlgo] = useState<string>("bubble-sort");
   const [currentArray, setCurrentArray] = useState<number[]>([10, 45, 15, 7, 20, 30, 5, 35, 25, 40]);
   const [initialArray, setInitialArray] = useState<number[]>([10, 45, 15, 7, 20, 30, 5, 35, 25, 40]);
-  const [animationSteps, setAnimationSteps] = useState<any[]>([]);
+  const [animationSteps, setAnimationSteps] = useState<AnimationStep[]>([]);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [speed, setSpeed] = useState<number>(1);
   const [showComplexity, setShowComplexity] = useState<boolean>(false);
@@ -114,18 +120,13 @@ export default function Page() {
   // Find the selected algorithm data
   const selectedAlgoData = sortingAlgorithms.find((algo) => algo.key === selectedAlgo);
   
-  // Generate animation steps when algorithm changes
-  useEffect(() => {
-    resetArray();
-  }, [selectedAlgo]);
-  
   // Reset sorting algorithm and initial array
   const resetArray = useCallback(() => {
     setIsPlaying(false);
     if (sorting) {
       sorting.arr = [...initialArray];
       try {
-        const steps = sorting.sort(algorithmKey, true) as any[];
+        const steps = sorting.sort(algorithmKey, true) as AnimationStep[];
         setAnimationSteps(steps);
         setCurrentArray([...initialArray]);
       } catch (error) {
@@ -133,6 +134,11 @@ export default function Page() {
       }
     }
   }, [initialArray, sorting, algorithmKey]);
+  
+  // Generate animation steps when algorithm changes
+  useEffect(() => {
+    resetArray();
+  }, [selectedAlgo, resetArray]);
   
   // Generate random array of specified size
   const generateRandomArray = (size: number, min: number = 5, max: number = 50) => {
@@ -145,7 +151,7 @@ export default function Page() {
     if (sorting) {
       sorting.arr = [...newArray];
       try {
-        const steps = sorting.sort(algorithmKey, true) as any[];
+        const steps = sorting.sort(algorithmKey, true) as AnimationStep[];
         setAnimationSteps(steps);
       } catch (error) {
         console.error("Error generating animation steps:", error);
@@ -162,7 +168,7 @@ export default function Page() {
     if (sorting) {
       sorting.arr = [...sorted];
       try {
-        const steps = sorting.sort(algorithmKey, true) as any[];
+        const steps = sorting.sort(algorithmKey, true) as AnimationStep[];
         setAnimationSteps(steps);
       } catch (error) {
         console.error("Error generating animation steps:", error);
@@ -179,7 +185,7 @@ export default function Page() {
     if (sorting) {
       sorting.arr = [...sorted];
       try {
-        const steps = sorting.sort(algorithmKey, true) as any[];
+        const steps = sorting.sort(algorithmKey, true) as AnimationStep[];
         setAnimationSteps(steps);
       } catch (error) {
         console.error("Error generating animation steps:", error);
@@ -200,7 +206,7 @@ export default function Page() {
     if (sorting) {
       sorting.arr = [...shuffled];
       try {
-        const steps = sorting.sort(algorithmKey, true) as any[];
+        const steps = sorting.sort(algorithmKey, true) as AnimationStep[];
         setAnimationSteps(steps);
       } catch (error) {
         console.error("Error generating animation steps:", error);
@@ -219,7 +225,7 @@ export default function Page() {
     if (sorting) {
       sorting.arr = [...newArray];
       try {
-        const steps = sorting.sort(algorithmKey, true) as any[];
+        const steps = sorting.sort(algorithmKey, true) as AnimationStep[];
         setAnimationSteps(steps);
       } catch (error) {
         console.error("Error generating animation steps:", error);
@@ -237,7 +243,7 @@ export default function Page() {
     if (sorting) {
       sorting.arr = [...newArray];
       try {
-        const steps = sorting.sort(algorithmKey, true) as any[];
+        const steps = sorting.sort(algorithmKey, true) as AnimationStep[];
         setAnimationSteps(steps);
       } catch (error) {
         console.error("Error generating animation steps:", error);
