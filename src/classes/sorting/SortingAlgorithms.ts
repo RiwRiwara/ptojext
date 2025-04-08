@@ -1,38 +1,46 @@
-// SortingAlgorithms.ts
+// src/classes/sorting/SortingAlgorithms.ts
 import Observable from "@/classes/Observable";
 
+type AnimationStep = { from: number; to: number };
+
 class SortingAlgorithms extends Observable {
-    private arr: number[];
+    public arr: number[];
 
     constructor(arr: number[]) {
         super();
         this.arr = arr;
     }
 
-    // Utility to clone array
+    private swap(arr: number[], i: number, j: number, steps: AnimationStep[]): void {
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+        steps.push({ from: i, to: j });
+    }
+
     private cloneArray(): number[] {
         return [...this.arr];
     }
 
-    // Method for Bubble Sort
-    public bubbleSort(): number[] {
+    // Bubble Sort with steps
+    public bubbleSort(returnSteps: boolean = false): number[] | AnimationStep[] {
         const arr = this.cloneArray();
+        const steps: AnimationStep[] = [];
         const n = arr.length;
         for (let i = 0; i < n - 1; i++) {
             for (let j = 0; j < n - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {
-                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]; // Swap
+                    this.swap(arr, j, j + 1, steps);
                 }
             }
         }
         this.arr = arr;
-        this.notifyObservers(); // Notify with the sorted array
-        return arr;
+        this.notifyObservers();
+        return returnSteps ? steps : arr;
     }
 
-    // Method for Selection Sort
-    public selectionSort(): number[] {
+    // Selection Sort with steps
+    public selectionSort(returnSteps: boolean = false): number[] | AnimationStep[] {
         const arr = this.cloneArray();
+        const steps: AnimationStep[] = [];
         const n = arr.length;
         for (let i = 0; i < n - 1; i++) {
             let minIndex = i;
@@ -41,112 +49,118 @@ class SortingAlgorithms extends Observable {
                     minIndex = j;
                 }
             }
-            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]; // Swap
+            if (minIndex !== i) {
+                this.swap(arr, i, minIndex, steps);
+            }
         }
         this.arr = arr;
         this.notifyObservers();
-        return arr;
+        return returnSteps ? steps : arr;
     }
 
-    // Method for Insertion Sort
-    public insertionSort(): number[] {
+    // Insertion Sort with steps
+    public insertionSort(returnSteps: boolean = false): number[] | AnimationStep[] {
         const arr = this.cloneArray();
+        const steps: AnimationStep[] = [];
         const n = arr.length;
         for (let i = 1; i < n; i++) {
             const key = arr[i];
             let j = i - 1;
-
             while (j >= 0 && arr[j] > key) {
                 arr[j + 1] = arr[j];
+                steps.push({ from: j, to: j + 1 });
                 j--;
             }
             arr[j + 1] = key;
         }
         this.arr = arr;
         this.notifyObservers();
-        return arr;
+        return returnSteps ? steps : arr;
     }
 
-    // Method for Merge Sort
-    public mergeSort(): number[] {
+    // Merge Sort with steps
+    public mergeSort(returnSteps: boolean = false): number[] | AnimationStep[] {
         const arr = this.cloneArray();
-        if (arr.length <= 1) return arr;
-
-        const mid = Math.floor(arr.length / 2);
-        const left = this.mergeSortHelper(arr.slice(0, mid));
-        const right = this.mergeSortHelper(arr.slice(mid));
-
-        return this.merge(left, right);
+        const steps: AnimationStep[] = [];
+        this.mergeSortHelper(arr, 0, arr.length, steps);
+        this.arr = arr;
+        this.notifyObservers();
+        return returnSteps ? steps : arr;
     }
 
-    private mergeSortHelper(arr: number[]): number[] {
-        if (arr.length <= 1) return arr;
-        const mid = Math.floor(arr.length / 2);
-        const left = this.mergeSortHelper(arr.slice(0, mid));
-        const right = this.mergeSortHelper(arr.slice(mid));
-        return this.merge(left, right);
+    private mergeSortHelper(arr: number[], start: number, end: number, steps: AnimationStep[]): void {
+        if (end - start <= 1) return;
+        const mid = Math.floor((start + end) / 2);
+        this.mergeSortHelper(arr, start, mid, steps);
+        this.mergeSortHelper(arr, mid, end, steps);
+        this.merge(arr, start, mid, end, steps);
     }
 
-    private merge(left: number[], right: number[]): number[] {
-        const result: number[] = [];
-        let i = 0, j = 0;
-
+    private merge(arr: number[], start: number, mid: number, end: number, steps: AnimationStep[]): void {
+        const left = arr.slice(start, mid);
+        const right = arr.slice(mid, end);
+        let i = 0, j = 0, k = start;
         while (i < left.length && j < right.length) {
-            if (left[i] < right[j]) {
-                result.push(left[i]);
-                i++;
+            if (left[i] <= right[j]) {
+                arr[k++] = left[i++];
             } else {
-                result.push(right[j]);
-                j++;
+                arr[k++] = right[j++];
+                steps.push({ from: k - 1, to: mid + j - 1 });
             }
         }
-
-        return result.concat(left.slice(i), right.slice(j));
+        while (i < left.length) arr[k++] = left[i++];
+        while (j < right.length) arr[k++] = right[j++];
     }
 
-    // Method for Quick Sort
-    public quickSort(): number[] {
+    // Quick Sort with steps
+    public quickSort(returnSteps: boolean = false): number[] | AnimationStep[] {
         const arr = this.cloneArray();
-        return this.quickSortHelper(arr);
+        const steps: AnimationStep[] = [];
+        this.quickSortHelper(arr, 0, arr.length - 1, steps);
+        this.arr = arr;
+        this.notifyObservers();
+        return returnSteps ? steps : arr;
     }
 
-    private quickSortHelper(arr: number[]): number[] {
-        if (arr.length <= 1) return arr;
+    private quickSortHelper(arr: number[], low: number, high: number, steps: AnimationStep[]): void {
+        if (low < high) {
+            const pi = this.partition(arr, low, high, steps);
+            this.quickSortHelper(arr, low, pi - 1, steps);
+            this.quickSortHelper(arr, pi + 1, high, steps);
+        }
+    }
 
-        const pivot = arr[arr.length - 1];
-        const left = [];
-        const right = [];
-
-        for (let i = 0; i < arr.length - 1; i++) {
-            if (arr[i] < pivot) {
-                left.push(arr[i]);
-            } else {
-                right.push(arr[i]);
+    private partition(arr: number[], low: number, high: number, steps: AnimationStep[]): number {
+        const pivot = arr[high];
+        let i = low - 1;
+        for (let j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                this.swap(arr, i, j, steps);
             }
         }
-
-        return [...this.quickSortHelper(left), pivot, ...this.quickSortHelper(right)];
+        this.swap(arr, i + 1, high, steps);
+        return i + 1;
     }
 
-    // Generic sorting function
-    public sort(algorithm: string): number[] {
+    // Generic sort method
+    public sort(algorithm: string, returnSteps: boolean = false): number[] | AnimationStep[] {
         switch (algorithm) {
             case "bubble":
-                return this.bubbleSort();
+                return this.bubbleSort(returnSteps);
             case "selection":
-                return this.selectionSort();
+                return this.selectionSort(returnSteps);
             case "insertion":
-                return this.insertionSort();
+                return this.insertionSort(returnSteps);
             case "merge":
-                return this.mergeSort();
+                return this.mergeSort(returnSteps);
             case "quick":
-                return this.quickSort();
+                return this.quickSort(returnSteps);
             default:
                 throw new Error("Unsupported algorithm");
         }
     }
 
-    // Get the current array
     public getArray(): number[] {
         return this.arr;
     }

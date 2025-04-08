@@ -13,5 +13,8 @@ export type AppState = {
   convolutionData: number[][];
   convolutionOutput: number | number[];
   updateGridState: () => void;
-  applyConvolution :(row: number, col: number) => void;
+  applyConvolution: (row: number, col: number) => void;
+  setHoverPosition: (position: { row: number; col: number } | null) => void;
+  hoverPosition: { row: number; col: number } | null;
+  resultGrid: number[][] | number[][][];
 };

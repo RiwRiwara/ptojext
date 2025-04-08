@@ -2,9 +2,13 @@
 class Observable {
     private observers: (() => void)[] = [];
 
-    // Add an observer
-    public addObserver(observer: () => void): void {
+    // Add an observer and return an unsubscribe function
+    public addObserver(observer: () => void): () => void {
         this.observers.push(observer);
+        // Return a function that removes this observer when called
+        return () => {
+            this.removeObserver(observer);
+        };
     }
 
     // Remove an observer

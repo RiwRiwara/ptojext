@@ -78,6 +78,16 @@ class GridManager extends Observable {
   public scaleUpGrids() {
     this.rows += 1;
     this.cols += 1;
+    
+    if (this.rows > 10) {
+      this.rows = 10;
+    }
+
+    if (this.cols > 10) {
+      this.cols = 10;
+    }
+
+
     this.data = Array(this.rows * this.cols)
       .fill(0)
       .map(() => Array(this.rows).fill(Math.floor(Math.random() * this.rows)));
