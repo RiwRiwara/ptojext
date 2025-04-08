@@ -70,7 +70,7 @@ export default function CanvasGridConvolution({
     setGridManagerShow(new GridManager(
       localMatrix.length,
       localMatrix.length,
-      30,
+      40, // Increased cell size to accommodate wider values
       0,
       true,
       localMatrix
@@ -136,13 +136,12 @@ export default function CanvasGridConvolution({
   return (
     <div className="p-4">
       <div className="flex flex-col items-center">
-        <div className="mb-2 text-sm font-medium text-gray-700">Convolution Kernel</div>
-        <div className="relative" style={{ width: localMatrix[0].length * 30, height: localMatrix.length * 30 }}>
+        <div className="relative" style={{ width: localMatrix[0].length * 40, height: localMatrix.length * 40 }}>
           {/* Visual canvas representation */}
           <canvas
             ref={canvasRef}
-            width={localMatrix[0].length * 30}
-            height={localMatrix.length * 30}
+            width={localMatrix[0].length * 40}
+            height={localMatrix.length * 40}
             style={{ position: "absolute", top: 0, left: 0, border: "1px solid black" }}
           />
           
@@ -171,10 +170,11 @@ export default function CanvasGridConvolution({
                       onBlur={handleFinishEditing}
                       onKeyDown={(e) => e.key === 'Enter' && handleFinishEditing()}
                       className="w-full h-full text-center outline-none bg-white border border-blue-500"
-                      style={{ width: '28px', height: '28px' }}
+                      style={{ width: '38px', height: '28px' }}
+                      step="0.001"
                     />
                   ) : (
-                    <div className="text-sm font-medium bg-white bg-opacity-75 px-1 rounded">{cell}</div>
+                    <div className="text-xs font-medium bg-white bg-opacity-75 px-1 rounded whitespace-nowrap overflow-hidden" style={{ maxWidth: '38px', textOverflow: 'ellipsis' }}>{cell}</div>
                   )}
                 </div>
               ))
@@ -199,9 +199,9 @@ export default function CanvasGridConvolution({
           </button>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4 w-full">
           <h3 className="text-sm font-medium text-gray-700 mb-2">Kernel Presets</h3>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 justify-center w-full">
             <button 
               className="px-2 py-1 text-xs border border-gray-200 rounded hover:bg-gray-50 transition-colors"
               onClick={() => applyPreset(presets.identity)}

@@ -55,7 +55,7 @@ export default function ConvolutionEquation({ className = '' }: ConvolutionEquat
             ].map((row, rowIdx) => (
               <React.Fragment key={rowIdx}>
                 {row.map((val, colIdx) => (
-                  <div key={`${rowIdx}-${colIdx}`} className="w-8 h-8 flex items-center justify-center bg-green-50 border border-green-100">
+                  <div key={`${rowIdx}-${colIdx}`} className="w-8 h-8 flex items-center justify-center bg-gray-50 border border-gray-100">
                     {val}
                   </div>
                 ))}
@@ -153,12 +153,12 @@ export default function ConvolutionEquation({ className = '' }: ConvolutionEquat
             <div className="text-sm font-medium text-gray-700">Kernel Values:</div>
             <div className="text-xs text-gray-500">Filter Matrix</div>
           </div>
-          <div className="grid grid-cols-3 gap-1 border border-green-100 p-2 rounded bg-green-50">
+          <div className="grid grid-cols-3 gap-1 border border-gray-100 p-2 rounded bg-gray-50">
             {kernelValues.map((row, rowIdx) => (
               row.map((val, colIdx) => (
                 <div 
                   key={`kernel-${rowIdx}-${colIdx}`} 
-                  className="bg-white p-1 text-center text-sm rounded shadow-sm border border-green-100"
+                  className="bg-white p-1 text-center text-sm rounded shadow-sm border border-gray-100"
                 >
                   {val}
                 </div>

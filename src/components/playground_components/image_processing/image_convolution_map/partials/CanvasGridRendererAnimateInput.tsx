@@ -58,7 +58,7 @@ export default function CanvasGridRendererAnimateInput() {
   };
 
   return (
-    <div className="relative max-w-4xl mx-auto p-6 ">
+    <div className="relative max-w-4xl mx-auto p-4">
       <div className="relative overflow-hidden rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
         <canvas
           ref={canvasRef}
@@ -68,30 +68,9 @@ export default function CanvasGridRendererAnimateInput() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         />
-
-        <div className="absolute top-4 left-4 flex space-x-3 pointer-events-none">
-          <div className="pointer-events-auto flex gap-2 bg-white/90 p-1 rounded-lg shadow-md border border-gray-100 backdrop-blur-sm">
-            <button
-              onClick={() => gridConvolutionManager.scaleUpGrids()}
-              className="w-4 h-4 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
-              aria-label="Zoom In"
-            >
-              +
-            </button>
-            <button
-              onClick={() => gridConvolutionManager.scaleDownGrids()}
-              className="w-4 h-4 flex items-center justify-center rounded-full bg-gradient-to-r from-red-500 to-red-600 text-white font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
-              aria-label="Zoom Out"
-            >
-              -
-            </button>
-          </div>
-        </div>
       </div>
 
-      <div className="mt-4 text-center text-gray-600 text-sm">
-        Interact with input grid
-      </div>
+
     </div>
   );
 }

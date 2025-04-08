@@ -5,13 +5,14 @@ import CanvasGridRendererAnimateInput from "./partials/CanvasGridRendererAnimate
 import CanvasGridConvolution from "./partials/CanvasGridConvolution";
 import CanvasGridResult from "./partials/CanvasGridResult";
 import ConvolutionEquation from "./partials/ConvolutionEquation";
+import ImageUploader from "./partials/ImageUploader";
 import useStore from "./state/store";
 import "@/utils/i18n.config";
 import { useTranslation } from "react-i18next";
 
 export default function ImageConvolutionMap() {
   const { t } = useTranslation("imageprocessing");
-  const { gridState, convolutionOutput, hoverPosition } = useStore();
+  const { gridState, convolutionOutput, hoverPosition, gridConvolutionManager } = useStore();
 
   return (
     <div className="w-full flex justify-center max-w-[1000px] mx-auto flex-col gap-6 p-4">
@@ -49,8 +50,30 @@ export default function ImageConvolutionMap() {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start justify-center">
         <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h2 className="text-lg font-medium mb-2 text-center text-gray-800">Input Grid</h2>
-          <CanvasGridRendererAnimateInput />
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-medium text-gray-800">Input Grid</h2>
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1">
+                <button
+                  onClick={() => gridConvolutionManager.scaleUpGrids()}
+                  className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-600 text-white font-medium hover:from-gray-600 hover:to-gray-700 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
+                  aria-label="Zoom In"
+                >
+                  +
+                </button>
+                <button
+                  onClick={() => gridConvolutionManager.scaleDownGrids()}
+                  className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-400 text-white font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md"
+                  aria-label="Zoom Out"
+                >
+                  -
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className=" max-h-64">
+            <CanvasGridRendererAnimateInput />
+          </div>
           <div className="text-center text-sm text-gray-600 mt-2">
             {hoverPosition ? 
               `Selected position: (${hoverPosition.row}, ${hoverPosition.col})` : 
@@ -78,6 +101,14 @@ export default function ImageConvolutionMap() {
       {/* Real-time equation calculation display */}
       <div className="mt-8">
         <ConvolutionEquation className="max-w-2xl mx-auto" />
+      </div>
+
+      {/* New section for user image uploads */}
+      <div className="my-12 border-t pt-8">
+        <h2 className="text-2xl font-semibold mb-6 text-center">Try with Your Own Image</h2>
+        <div className="max-w-4xl mx-auto">
+          <ImageUploader />
+        </div>
       </div>
     </div>
   );

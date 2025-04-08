@@ -70,15 +70,17 @@ export default function CanvasGridResult() {
     const outputCols = resultGrid[0].length;
 
     return (
-        <div className="p-4">
-            <canvas
-                ref={canvasRef}
-                width={outputCols * gridState.cellSize}
-                height={outputRows * gridState.cellSize}
-                style={{ border: "1px solid black" }}
-            />
-            <div className="mt-2 text-center text-gray-600 text-sm">
-                Convolution Result Grid
+        <div className="p-4 flex flex-col items-center justify-center">
+            <div className="overflow-auto max-h-64 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                <canvas
+                    ref={canvasRef}
+                    width={outputCols * gridState.cellSize}
+                    height={outputRows * gridState.cellSize}
+                    className="mx-auto cursor-crosshair"
+                />
+            </div>
+            <div className="mt-2 text-center text-gray-600 text-sm w-full">
+                {hoverPosition ? `Result at (${hoverPosition.row}, ${hoverPosition.col})` : 'Result Grid'}
             </div>
         </div>
     );
