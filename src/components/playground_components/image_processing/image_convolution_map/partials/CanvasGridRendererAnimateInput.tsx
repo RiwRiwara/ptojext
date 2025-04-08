@@ -58,7 +58,7 @@ export default function CanvasGridRendererAnimateInput() {
   };
 
   return (
-    <div className="relative max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg">
+    <div className="relative max-w-4xl mx-auto p-6 ">
       <div className="relative overflow-hidden rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
         <canvas
           ref={canvasRef}
@@ -90,7 +90,7 @@ export default function CanvasGridRendererAnimateInput() {
       </div>
 
       <div className="mt-4 text-center text-gray-600 text-sm">
-        Use mouse to interact with input grid • Adjust matrix size with buttons
+        Interact with input grid
       </div>
     </div>
   );
