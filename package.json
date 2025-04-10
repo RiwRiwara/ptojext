@@ -36,6 +36,7 @@
     "@types/gsap": "^1.20.2",
     "@types/three": "^0.170.0",
     "@xyflow/react": "^12.3.4",
+    "animejs": "^4.0.1",
     "canvas": "^2.11.2",
     "dexie": "^4.0.9",
     "dexie-react-hooks": "^1.1.7",
