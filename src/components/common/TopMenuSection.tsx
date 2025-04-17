@@ -7,6 +7,8 @@ import DropdownTree from "@/components/common/top_dropdown_tree/DropdownTree";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
 import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
+import { FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
 
 const notify = (lang: string) => toast(`Now ${lang}!`, {
   icon: "💬",
@@ -29,6 +31,8 @@ export default function TopMenuSection() {
     notify(i18n.language === "th" ? "English" : "Thai");
     void i18n.changeLanguage(nextLanguage);
   };
+
+  const { user, login, logout } = useAuth();
 
   // Fallback content for server-side rendering
   if (!hydrated) {
@@ -94,6 +98,34 @@ export default function TopMenuSection() {
           </div>
         </a>
       </div>
+      {/* User section */}
+      {/* <div className="flex flex-row items-center gap-4">
+        {user ? (
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-300 to-pink-300 flex items-center justify-center shadow-md">
+              {user.avatarUrl ? (
+                <img src={user.avatarUrl} alt="avatar" className="w-9 h-9 rounded-full object-cover" />
+              ) : (
+                <FiUser className="w-6 h-6 text-white" />
+              )}
+            </div>
+            <span className="font-medium text-gray-800 hidden sm:block">{user.name}</span>
+            <button
+              onClick={logout}
+              className="px-3 py-1 ml-2 rounded-full bg-gray-200 hover:bg-red-400 hover:text-white transition-colors duration-200 flex items-center gap-1 text-sm"
+            >
+              <FiLogOut /> <span className="hidden sm:inline">Logout</span>
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={login}
+            className="px-4 py-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white shadow transition-all duration-200 flex items-center gap-2 font-semibold"
+          >
+            <FiLogIn /> Login
+          </button>
+        )}
+      </div> */}
       <Toaster position="top-right" reverseOrder={false} />
     </div>
   );

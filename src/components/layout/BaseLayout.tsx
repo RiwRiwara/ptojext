@@ -1,4 +1,5 @@
 import React from "react";
+import { AuthProvider } from "@/context/AuthContext";
 import TopMenuSection from "@/components/common/TopMenuSection";
 
 interface LayoutProps {
@@ -8,10 +9,14 @@ interface LayoutProps {
 
 const BaseLayout: React.FC<LayoutProps> = ({ children, className = "" }) => {
   return (
-    <div className={` bg-white max-h-screen mt-24 ${className}`}>
-      <TopMenuSection />
-      {children}
-    </div>
+    <AuthProvider>
+      <div className={`bg-white max-h-screen mt-24 ${className}`}>
+        <TopMenuSection />
+        <main className="flex-1 w-full mx-auto">
+          {children}
+        </main>
+      </div>
+    </AuthProvider>
   );
 };
 

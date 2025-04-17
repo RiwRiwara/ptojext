@@ -76,7 +76,7 @@ export default function About() {
       return Bodies.circle(
         Math.random() * window.innerWidth,
         Math.random() * window.innerHeight,
-        10, // Radius
+        20, // Radius
         {
           restitution: 0.8, // Slightly less bouncy
           friction: 0.001, // Almost no friction
@@ -123,6 +123,46 @@ export default function About() {
       });
     });
 
+    // --- ENHANCEMENT: Hover to scale up balls and change cursor ---
+    let lastHovered: Matter.Body | null = null;
+    let lastScale = 1;
+    const scaleUp = 1.4;
+
+    function handleMouseMove(event: MouseEvent) {
+      const rect = render.canvas.getBoundingClientRect();
+      const mousePos = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      };
+      // Find the topmost circle under the mouse
+      const found = Matter.Query.point(circles, mousePos)[0] || null;
+      if (found !== lastHovered) {
+        // Restore previous
+        if (lastHovered && lastScale !== 1) {
+          Matter.Body.scale(lastHovered, 1 / lastScale, 1 / lastScale);
+        }
+        if (found) {
+          Matter.Body.scale(found, scaleUp, scaleUp);
+          render.canvas.style.cursor = "grab";
+          lastScale = scaleUp;
+        } else {
+          render.canvas.style.cursor = "default";
+          lastScale = 1;
+        }
+        lastHovered = found;
+      }
+    }
+    render.canvas.addEventListener("mousemove", handleMouseMove);
+    render.canvas.addEventListener("mouseleave", () => {
+      if (lastHovered && lastScale !== 1) {
+        Matter.Body.scale(lastHovered, 1 / lastScale, 1 / lastScale);
+        lastHovered = null;
+        lastScale = 1;
+      }
+      render.canvas.style.cursor = "default";
+    });
+    // --- END ENHANCEMENT ---
+
     // Create and run the runner
     const runner = Runner.create();
     runnerRef.current = runner;
@@ -140,6 +180,11 @@ export default function About() {
         Engine.clear(engine);
         render.canvas.remove();
         if (mouseConstraint) World.remove(engine.world, mouseConstraint);
+      }
+      // Remove event listeners for hover
+      if (render && render.canvas) {
+        render.canvas.removeEventListener("mousemove", handleMouseMove);
+        render.canvas.removeEventListener("mouseleave", () => {});
       }
     };
   }, []);

@@ -1,0 +1,36 @@
+{
+  "id": "sorting-1",
+  "title": "Bubble Sort Basics",
+  "topic": "Sorting",
+  "difficulty": "Easy",
+  "survey": {
+    "completedHtml": "",
+    "elements": [
+      {
+        "type": "radiogroup",
+        "name": "bubble_sort_time",
+        "title": "What is the time complexity of Bubble Sort?",
+        "choices": ["O(n)", "O(n^2)", "O(log n)", "O(n log n)"],
+        "correctAnswer": "O(n^2)"
+      },
+      {
+        "type": "boolean",
+        "name": "bubble_sort_stable",
+        "title": "Bubble Sort is a stable sorting algorithm.",
+        "correctAnswer": true
+      },
+      {
+        "type": "text",
+        "name": "bubble_sort_fill",
+        "title": "Fill in the missing word: Bubble Sort is a ____ algorithm.",
+        "correctAnswer": "stable"
+      },
+      {
+        "type": "comment",
+        "name": "bubble_sort_code",
+        "title": "Write a JavaScript function to swap two variables. (Code will be reviewed manually)",
+        "correctAnswer": null
+      }
+    ]
+  }
+}

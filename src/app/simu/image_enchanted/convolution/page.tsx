@@ -5,7 +5,6 @@ import { Link } from "@nextui-org/link";
 import { FaInfoCircle } from "react-icons/fa";
 import { IoCaretBack } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
-import CommonLayout from "@/components/layout/CommonLayout";
 
 
 function ConvolutionPage() {
@@ -44,9 +43,9 @@ function ConvolutionPage() {
   };
 
   return (
-    <CommonLayout>
+    <>
       {/* Header section */}
-      <div className="p-2 bg-white shadow-md rounded-md mb-4 flex justify-between items-center ">
+      <div className="p-2 bg-white shadow-md rounded-md mb-4 flex justify-between items-center " >
         <div className="flex flex-row gap-2 items-center test-tour">
           <Link href={"/"}>
             <IoCaretBack size={30} className="text-gray-800" />
@@ -61,10 +60,10 @@ function ConvolutionPage() {
             Image Convolution
           </h1>
         </div>
-      </div>
+      </div >
 
       {/* Image and Grid Canvas */}
-      <div className="shadow-md rounded-md bg-white  min-h-svh w-100 m-auto ">
+      <div className="shadow-md rounded-md bg-white  min-h-svh w-100 m-auto " >
         <div className="p-2 px-4 flex flex-row justify-between">
           <div>
             <ImageCanvas kernel={kernel} />
@@ -105,8 +104,8 @@ function ConvolutionPage() {
             <ImageCanvasResult kernel={kernel} />
           </div>
         </div>
-      </div>
-    </CommonLayout>
+      </div >
+    </>
   );
 }
 
