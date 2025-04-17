@@ -3,6 +3,7 @@
   "version": "0.1.2",
   "private": true,
   "scripts": {
+    "prebuild": "rm -rf .next/cache",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
