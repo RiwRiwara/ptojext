@@ -10,9 +10,9 @@ interface PixiSortingVisualizerProps {
   animationSteps: AnimationStep[];
   isPlaying: boolean;
   speed: number;
-  currentStep?: number; // Current step for manual navigation
+  currentStep?: number;
   onSortingComplete: () => void;
-  onStepChange?: (step: number) => void; // Callback when step changes
+  onStepChange?: (step: number) => void;
   colorScheme?: {
     background: string;
     defaultBar: string;
@@ -34,7 +34,15 @@ const defaultColorScheme = {
   setValue: '#F56565',
 };
 
-const hexToNumber = (hex: string) => parseInt(hex.replace('#', '0x'));
+const hexToNumber = (hex?: string): number => {
+  if (!hex || typeof hex !== 'string') return 0x121212;
+  try {
+    return parseInt(hex.replace('#', '0x'));
+  } catch (error) {
+    console.warn('Error parsing color:', error);
+    return 0x121212;
+  }
+};
 
 export default function PixiSortingVisualizer({
   blocks,
@@ -71,18 +79,60 @@ export default function PixiSortingVisualizer({
 
     const width = containerSize.width;
     const height = containerSize.height;
-    const barWidth = Math.max((width / blocks.length) * 0.7, 10);
-    const spacing = Math.max((width / blocks.length) * 0.3, 5);
-    const maxHeight = height * 0.85;
+    const ratio = blocks.length <= 10 ? 0.8 : blocks.length <= 20 ? 0.7 : 0.6;
+    const barWidth = Math.max((width / blocks.length) * ratio, 10);
+    const spacing = Math.max((width / blocks.length) * (1 - ratio), 5);
+    const maxHeight = height * 0.8;
 
     return { barWidth, spacing, maxHeight };
   }, [blocks.length, containerSize]);
+
+  const createGradientTexture = (barWidth: number, barHeight: number, color: number): PIXI.Texture | null => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = barWidth;
+      canvas.height = barHeight;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+
+      const gradient = ctx.createLinearGradient(0, 0, barWidth, 0);
+      const hexColor = '#' + color.toString(16).padStart(6, '0');
+      gradient.addColorStop(0, hexColor);
+      gradient.addColorStop(0.5, lightenColor(hexColor, 15));
+      gradient.addColorStop(1, hexColor);
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, barWidth, barHeight);
+
+      return PIXI.Texture.from(canvas);
+    } catch (error) {
+      console.error('Error creating gradient texture:', error);
+      return null;
+    }
+  };
+
+  const lightenColor = (color: string, percent: number): string => {
+    const num = parseInt(color.replace('#', ''), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = (num >> 16) + amt;
+    const G = ((num >> 8) & 0x00ff) + amt;
+    const B = (num & 0x0000ff) + amt;
+
+    return `#${(
+      0x1000000 +
+      (R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
+      (G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
+      (B < 255 ? (B < 0 ? 0 : B) : 255)
+    )
+      .toString(16)
+      .slice(1)}`;
+  };
 
   useEffect(() => {
     if (containerSize) {
       setDimensions({
         width: containerSize.width,
-        height: Math.min(containerSize.width * 0.5, 500),
+        height: Math.min(Math.max(containerSize.width * 0.4, 300), 500),
       });
     }
   }, [containerSize]);
@@ -118,7 +168,7 @@ export default function PixiSortingVisualizer({
     };
 
     app.ticker.add(updateFPS);
-    pixiContainerRef.current.appendChild(app.view);
+    pixiContainerRef.current.appendChild(app.view as unknown as Node);
 
     blocks.forEach((value, index) => {
       valueMapRef.current.set(index, value);
@@ -129,8 +179,8 @@ export default function PixiSortingVisualizer({
     return () => {
       app.ticker.remove(updateFPS);
       app.destroy(true, { children: true, texture: true, baseTexture: true });
-      if (pixiContainerRef.current && app.view && pixiContainerRef.current.contains(app.view)) {
-        pixiContainerRef.current.removeChild(app.view);
+      if (pixiContainerRef.current && app.view && pixiContainerRef.current.contains(app.view as unknown as Node)) {
+        pixiContainerRef.current.removeChild(app.view as unknown as Node);
       }
       appRef.current = null;
       barsContainerRef.current = null;
@@ -156,16 +206,13 @@ export default function PixiSortingVisualizer({
     }
   }, [dimensions]);
 
-  // Control current step externally (for manual step navigation)
   useEffect(() => {
     if (!isPlaying && typeof currentStep === 'number' && currentStep >= 0) {
-      // Only update if not playing
       currentStepRef.current = Math.min(currentStep, animationSteps.length - 1);
       updateBarPositions();
     }
   }, [currentStep, animationSteps.length, isPlaying]);
 
-  // Control play/pause state
   useEffect(() => {
     if (isPlaying && !isSortingRef.current) {
       startSorting();
@@ -194,8 +241,22 @@ export default function PixiSortingVisualizer({
     barsRef.current = [];
     labelsRef.current = [];
 
+    const gridGraphics = new Graphics();
+    gridGraphics.lineStyle(1, 0xeeeeee, 0.3);
+    const gridLines = 5;
+    for (let i = 0; i < gridLines; i++) {
+      const y = dimensions.height - (i * (dimensions.height * 0.7) / (gridLines - 1)) - dimensions.height * 0.1;
+      gridGraphics.moveTo(0, y);
+      gridGraphics.lineTo(dimensions.width, y);
+    }
+    barsContainerRef.current.addChild(gridGraphics);
+
     const { barWidth, spacing, maxHeight } = getBarDimensions();
     const maxValue = Math.max(...blocks, 1);
+
+    const totalWidth = barWidth * blocks.length + spacing * (blocks.length - 1);
+    barsContainerRef.current.x = (dimensions.width - totalWidth) / 2;
+    barsContainerRef.current.y = dimensions.height * 0.05;
 
     blocks.forEach((value, index) => {
       const barHeight = Math.max((value / maxValue) * maxHeight, 5);
@@ -204,26 +265,34 @@ export default function PixiSortingVisualizer({
       barContainer.zIndex = index;
 
       const bar = new Graphics();
-      bar.beginFill(hexToNumber(sortingStateRef.current[index] === 'sorted'
-        ? colorScheme.sortedBar
-        : colorScheme.defaultBar));
-      bar.drawRect(0, 0, barWidth, barHeight);
+      const barColor = sortingStateRef.current[index] === 'sorted' ? colorScheme.sortedBar : colorScheme.defaultBar;
+      const gradient = createGradientTexture(barWidth, barHeight, hexToNumber(barColor));
+      if (gradient) {
+        bar.beginTextureFill({ texture: gradient });
+      } else {
+        bar.beginFill(hexToNumber(barColor));
+      }
+      bar.drawRoundedRect(0, 0, barWidth, barHeight, Math.min(barWidth / 4, 4));
       bar.endFill();
       bar.position.set(0, dimensions.height - barHeight - 30);
 
       barContainer.addChild(bar);
-      barsContainerRef.current.addChild(barContainer);
+      barsContainerRef.current?.addChild(barContainer);
       barsRef.current.push(bar);
 
       const label = new Text(value.toString(), {
         fontFamily: 'Arial',
         fontSize: Math.max(12, barWidth * 0.3),
-        fill: '#ffffff',
+        fontWeight: 'bold',
+        fill: 0x333333,
         align: 'center',
-        dropShadow: true,
-        dropShadowColor: '#000000',
-        dropShadowDistance: 1,
       });
+
+      const labelBg = new Graphics();
+      labelBg.beginFill(0xffffff, 0.7);
+      labelBg.drawRoundedRect(barWidth / 2 - label.width / 2 - 2, barHeight + 5 - 2, label.width + 4, label.height + 2, 3);
+      labelBg.endFill();
+      barContainer.addChild(labelBg);
 
       label.anchor.set(0.5, 0);
       label.position.set(barWidth / 2, barHeight + 5);
@@ -237,7 +306,6 @@ export default function PixiSortingVisualizer({
 
     const { barWidth, spacing, maxHeight } = getBarDimensions();
     const maxValue = Math.max(...blocks, 1);
-
     const currentStep = animationSteps[currentStepRef.current];
     if (!currentStep) return;
 
@@ -245,20 +313,27 @@ export default function PixiSortingVisualizer({
       const value = valueMapRef.current.get(index) || 0;
       const barHeight = Math.max((value / maxValue) * maxHeight, 5);
       bar.clear();
-      let fillColor = colorScheme.defaultBar;
 
+      let barColor = colorScheme.defaultBar;
       if (sortingStateRef.current[index] === 'sorted') {
-        fillColor = colorScheme.sortedBar;
-      } else if (currentStep.type === 'compare' && (index === currentStep.from || index === currentStep.to)) {
-        fillColor = colorScheme.comparingBar;
+        barColor = colorScheme.sortedBar;
       } else if (currentStep.type === 'swap' && (index === currentStep.from || index === currentStep.to)) {
-        fillColor = colorScheme.activeBar;
+        barColor = colorScheme.activeBar;
+      } else if (currentStep.type === 'compare' && (index === currentStep.from || index === currentStep.to)) {
+        barColor = colorScheme.comparingBar;
+      } else if (currentStep.type === 'select' && index === currentStep.from) {
+        barColor = colorScheme.selectBar || colorScheme.activeBar;
       } else if (currentStep.type === 'set' && index === currentStep.from) {
-        fillColor = colorScheme.setValue;
+        barColor = colorScheme.setValue || colorScheme.activeBar;
       }
 
-      bar.beginFill(hexToNumber(fillColor));
-      bar.drawRect(0, 0, barWidth, barHeight);
+      const gradient = createGradientTexture(barWidth, barHeight, hexToNumber(barColor));
+      if (gradient) {
+        bar.beginTextureFill({ texture: gradient });
+      } else {
+        bar.beginFill(hexToNumber(barColor));
+      }
+      bar.drawRoundedRect(0, 0, barWidth, barHeight, Math.min(barWidth / 4, 4));
       bar.endFill();
       bar.position.y = dimensions.height - barHeight - 30;
 
@@ -272,121 +347,118 @@ export default function PixiSortingVisualizer({
     });
   }, [blocks, dimensions, colorScheme, animationSteps]);
 
-  const animate = useCallback((timestamp: number) => {
-    if (!isSortingRef.current || !appRef.current) return;
+  const animate = useCallback(
+    (timestamp: number) => {
+      if (!isSortingRef.current || !appRef.current) return;
 
-    if (!lastTimestampRef.current) {
-      lastTimestampRef.current = timestamp;
-      animationFrameRef.current = requestAnimationFrame(animate);
-      return;
-    }
-
-    const deltaTime = timestamp - lastTimestampRef.current;
-    const baseDuration = 800 / speed;
-    let duration = baseDuration;
-
-    const currentStep = animationSteps[currentStepRef.current];
-    if (currentStep) {
-      switch (currentStep.type) {
-        case 'compare':
-          duration = baseDuration * 0.5;
-          break;
-        case 'swap':
-          duration = baseDuration * 1.2;
-          break;
-        case 'set':
-          duration = baseDuration * 0.8;
-          break;
-        default:
-          duration = baseDuration;
-      }
-    }
-
-    // Use GSAP's easing for a more natural animation feel
-    const progress = gsap.parseEase("power2.out")(Math.min(deltaTime / duration, 1));
-    animationProgressRef.current = Math.min(animationProgressRef.current + progress, 1);
-
-    if (animationProgressRef.current >= 1) {
-      animationProgressRef.current = 0;
-
-      if (currentStep) {
-        if (currentStep.type === 'set' && typeof currentStep.value !== 'undefined') {
-          valueMapRef.current.set(currentStep.from, currentStep.value);
-        } else if (currentStep.type === 'swap' || !currentStep.type) {
-          const { from, to } = currentStep;
-          const fromValue = valueMapRef.current.get(from);
-          const toValue = valueMapRef.current.get(to);
-
-          if (typeof fromValue !== 'undefined' && typeof toValue !== 'undefined') {
-            valueMapRef.current.set(from, toValue);
-            valueMapRef.current.set(to, fromValue);
-          }
-        }
-      }
-
-      if (currentStepRef.current < animationSteps.length - 1) {
-        currentStepRef.current++;
-        // Notify parent component about step change
-        onStepChange?.(currentStepRef.current);
-      } else {
-        barsRef.current.forEach((_, index) => {
-          sortingStateRef.current[index] = 'sorted';
-        });
-
-        updateBarPositions();
-
-        // Add a celebratory animation for completion
-        if (barsContainerRef.current) {
-          // Use GSAP for a bouncy celebratory animation
-          gsap.to(barsContainerRef.current.scale, {
-            x: 1.05,
-            y: 1.05,
-            duration: 0.3,
-            yoyo: true,
-            repeat: 1,
-            ease: "elastic.out(1, 0.3)",
-            onComplete: () => {
-              barsContainerRef.current?.scale.set(1, 1);
-            }
-          });
-          
-          // Add a subtle flash effect on the bars
-          barsRef.current.forEach((bar, index) => {
-            gsap.to(bar, {
-              alpha: 0.5,
-              duration: 0.2,
-              yoyo: true,
-              repeat: 1,
-              ease: "power2.inOut",
-              delay: index * 0.05 % 0.5 // Staggered effect with a wrap
-            });
-          });
-        }
-
-        isSortingRef.current = false;
-        onSortingComplete();
+      if (!lastTimestampRef.current) {
+        lastTimestampRef.current = timestamp;
+        animationFrameRef.current = requestAnimationFrame(animate);
         return;
       }
-    }
 
-    updateBarPositions();
-    lastTimestampRef.current = timestamp;
-    animationFrameRef.current = requestAnimationFrame(animate);
-  }, [animationSteps, speed, colorScheme, onSortingComplete, onStepChange, updateBarPositions]);
+      const deltaTime = timestamp - lastTimestampRef.current;
+      const baseDuration = 800 / speed;
+      let duration = baseDuration;
+
+      const currentStep = animationSteps[currentStepRef.current];
+      if (currentStep) {
+        switch (currentStep.type) {
+          case 'compare':
+            duration = baseDuration * 0.5;
+            break;
+          case 'swap':
+            duration = baseDuration * 1.2;
+            break;
+          case 'set':
+            duration = baseDuration * 0.8;
+            break;
+          default:
+            duration = baseDuration;
+        }
+      }
+
+      const progress = gsap.parseEase('power2.out')(Math.min(deltaTime / duration, 1));
+      animationProgressRef.current = Math.min(animationProgressRef.current + progress, 1);
+
+      if (animationProgressRef.current >= 1) {
+        animationProgressRef.current = 0;
+
+        if (currentStep) {
+          if (currentStep.type === 'set' && typeof currentStep.value !== 'undefined') {
+            valueMapRef.current.set(currentStep.from, currentStep.value);
+          } else if (currentStep.type === 'swap' || !currentStep.type) {
+            const { from, to } = currentStep;
+            const fromValue = valueMapRef.current.get(from);
+            const toValue = valueMapRef.current.get(to);
+
+            if (typeof fromValue !== 'undefined' && typeof toValue !== 'undefined') {
+              valueMapRef.current.set(from, toValue);
+              valueMapRef.current.set(to, fromValue);
+            }
+          }
+        }
+
+        if (currentStepRef.current < animationSteps.length - 1) {
+          currentStepRef.current++;
+          onStepChange?.(currentStepRef.current);
+        } else {
+          barsRef.current.forEach((_, index) => {
+            sortingStateRef.current[index] = 'sorted';
+          });
+
+          updateBarPositions();
+
+          if (barsContainerRef.current) {
+            gsap.to(barsContainerRef.current.scale, {
+              x: 1.05,
+              y: 1.05,
+              duration: 0.3,
+              yoyo: true,
+              repeat: 1,
+              ease: 'elastic.out(1, 0.3)',
+              onComplete: () => {
+                barsContainerRef.current?.scale.set(1, 1);
+              },
+            });
+
+            barsRef.current.forEach((bar, index) => {
+              gsap.to(bar, {
+                alpha: 0.5,
+                duration: 0.2,
+                yoyo: true,
+                repeat: 1,
+                ease: 'power2.inOut',
+                delay: (index * 0.05) % 0.5,
+              });
+            });
+          }
+
+          isSortingRef.current = false;
+          onSortingComplete();
+          return;
+        }
+      }
+
+      updateBarPositions();
+      lastTimestampRef.current = timestamp;
+      animationFrameRef.current = requestAnimationFrame(animate);
+    },
+    [animationSteps, speed, colorScheme, onSortingComplete, onStepChange, updateBarPositions]
+  );
 
   const startSorting = useCallback(() => {
     if (isSortingRef.current || animationSteps.length === 0) return;
 
     isSortingRef.current = true;
     animationFrameRef.current = requestAnimationFrame(animate);
-    
-    // Add a subtle start animation
+
     if (barsContainerRef.current) {
       gsap.from(barsContainerRef.current.scale, {
         x: 0.95,
         y: 0.95,
         duration: 0.3,
-        ease: "back.out(1.7)"
+        ease: 'back.out(1.7)',
       });
     }
   }, [animate]);
@@ -394,81 +466,118 @@ export default function PixiSortingVisualizer({
   const pauseSorting = useCallback(() => {
     isSortingRef.current = false;
     cancelAnimationFrame(animationFrameRef.current);
-    
-    // Add a subtle pause animation
+
     if (barsContainerRef.current) {
       gsap.to(barsContainerRef.current, {
         alpha: 0.9,
         duration: 0.2,
         yoyo: true,
-        repeat: 1
+        repeat: 1,
       });
     }
   }, []);
-  
-  // Function to manually move to a specific step (for external control)
-  const goToStep = useCallback((step: number) => {
-    if (step < 0 || step >= animationSteps.length || isSortingRef.current) return;
-    
-    // Reset the value map to match original blocks
-    valueMapRef.current.clear();
-    blocks.forEach((value, index) => {
-      valueMapRef.current.set(index, value);
-    });
-    
-    // Apply all steps up to the target step
-    for (let i = 0; i <= step; i++) {
-      const stepData = animationSteps[i];
-      if (!stepData) continue;
-      
-      if (stepData.type === 'set' && typeof stepData.value !== 'undefined') {
-        valueMapRef.current.set(stepData.from, stepData.value);
-      } else if (stepData.type === 'swap' || !stepData.type) {
-        const { from, to } = stepData;
-        const fromValue = valueMapRef.current.get(from);
-        const toValue = valueMapRef.current.get(to);
-        if (typeof fromValue !== 'undefined' && typeof toValue !== 'undefined') {
-          valueMapRef.current.set(from, toValue);
-          valueMapRef.current.set(to, fromValue);
+
+  const goToStep = useCallback(
+    (step: number) => {
+      if (step < 0 || step >= animationSteps.length || isSortingRef.current) return;
+
+      valueMapRef.current.clear();
+      blocks.forEach((value, index) => {
+        valueMapRef.current.set(index, value);
+      });
+
+      for (let i = 0; i <= step; i++) {
+        const stepData = animationSteps[i];
+        if (!stepData) continue;
+
+        if (stepData.type === 'set' && typeof stepData.value !== 'undefined') {
+          valueMapRef.current.set(stepData.from, stepData.value);
+        } else if (stepData.type === 'swap' || !stepData.type) {
+          const { from, to } = stepData;
+          const fromValue = valueMapRef.current.get(from);
+          const toValue = valueMapRef.current.get(to);
+          if (typeof fromValue !== 'undefined' && typeof toValue !== 'undefined') {
+            valueMapRef.current.set(from, toValue);
+            valueMapRef.current.set(to, fromValue);
+          }
+        }
+
+        if (stepData.type === 'done') {
+          sortingStateRef.current[stepData.from] = 'sorted';
         }
       }
-      
-      // Mark sorted states
-      if (stepData.type === 'done') {
-        sortingStateRef.current[stepData.from] = 'sorted';
-      }
-    }
-    
-    // Update current step
-    currentStepRef.current = step;
-    updateBarPositions();
-  }, [animationSteps, blocks, updateBarPositions]);
 
-  // Effect to apply external step control
+      currentStepRef.current = step;
+      updateBarPositions();
+    },
+    [animationSteps, blocks, updateBarPositions]
+  );
+
   useEffect(() => {
     if (!isPlaying && typeof currentStep === 'number' && animationSteps.length > 0) {
       goToStep(currentStep);
     }
   }, [currentStep, isPlaying, animationSteps.length, goToStep]);
-  
+
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full flex flex-col">
       <div
         ref={pixiContainerRef}
-        className="w-full h-full rounded-lg shadow-lg overflow-hidden"
+        className="w-full h-full rounded-xl shadow-md overflow-hidden border border-gray-200 bg-gradient-to-b from-gray-50 to-gray-100"
       />
-      <div className="absolute bottom-2 left-2 right-2 flex justify-between items-center">
-        {/* Array info */}
-        <div className="bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-          Array Size: {blocks.length}
-        </div>
-        
-        {/* FPS counter */}
-        {fps > 0 && (
-          <div className="bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-            {fps} FPS
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 px-2 py-1 bg-white rounded-lg shadow-sm text-xs">
+        <div className="flex gap-4">
+          <div className="flex items-center">
+            <span className="font-medium text-gray-700 mr-1">Size:</span>
+            <span className="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-md">{blocks.length}</span>
           </div>
-        )}
+          <div className="flex items-center">
+            <span className="font-medium text-gray-700 mr-1">Step:</span>
+            <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-md">
+              {currentStepRef.current + 1} / {animationSteps.length}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          {fps > 0 && (
+            <div className="flex items-center">
+              <div
+                className={`w-2 h-2 rounded-full mr-1 ${fps > 40 ? 'bg-green-500' : fps > 20 ? 'bg-yellow-500' : 'bg-red-500'
+                  }`}
+              ></div>
+              <span className="text-gray-600">{fps} FPS</span>
+            </div>
+          )}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center">
+              <div
+                className="w-3 h-3 rounded-sm mr-1"
+                style={{ backgroundColor: colorScheme?.comparingBar || '#4F46E5' }}
+              ></div>
+              <span>Compare</span>
+            </div>
+            <div className="flex items-center">
+              <div
+                className="w-3 h-3 rounded-sm mr-1"
+                style={{ backgroundColor: colorScheme?.activeBar || '#F59E0B' }}
+              ></div>
+              <span>Active</span>
+            </div>
+            <div className="flex items-center">
+              <div
+                className="w-3 h-3 rounded-sm mr-1"
+                style={{ backgroundColor: colorScheme?.sortedBar || '#10B981' }}
+              ></div>
+              <span>Sorted</span>
+            </div>
+            {colorScheme?.selectBar && (
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-sm mr-1" style={{ backgroundColor: colorScheme?.selectBar }}></div>
+                <span>Select</span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

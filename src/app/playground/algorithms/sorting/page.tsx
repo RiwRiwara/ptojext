@@ -356,15 +356,13 @@ export default function SortingVisualizerPage() {
                 colorScheme={selectedAlgoData?.colorScheme}
               />
             </section>
-            {showCode && (
-              <CodeDisplay
-                selectedAlgo={selectedAlgo}
-                customAlgorithm={customAlgorithm}
-                setCustomAlgorithm={setCustomAlgorithm}
-                isPlaying={isPlaying}
-                currentHighlightedLine={currentHighlightedLine}
-              />
-            )}
+            <CodeDisplay
+              selectedAlgo={selectedAlgo}
+              customAlgorithm={customAlgorithm}
+              setCustomAlgorithm={setCustomAlgorithm}
+              isPlaying={isPlaying}
+              currentHighlightedLine={currentHighlightedLine}
+            />
           </div>
         </main>
       </HeroUIProvider>
