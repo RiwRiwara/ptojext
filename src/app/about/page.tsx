@@ -1,5 +1,6 @@
 "use client";
 import BaseLayout from "@/components/layout/BaseLayout";
+import Breadcrumb from "@/components/common/Breadcrumb";
 import { useTranslation } from "react-i18next";
 import Matter, { Engine, Render, World, Bodies, Runner, Mouse, MouseConstraint, Body } from "matter-js";
 import { useEffect, useRef } from "react";
@@ -89,8 +90,24 @@ export default function About() {
       );
     });
 
-    // Add circles and boundaries to world
-    World.add(engine.world, [...circles, ...boundaries]);
+    // Add a bouncing square (distinct color)
+    const square = Bodies.rectangle(
+      Math.random() * window.innerWidth,
+      Math.random() * window.innerHeight,
+      40, 40,
+      {
+        restitution: 0.7,
+        friction: 0.002,
+        frictionAir: 0.002,
+        render: {
+          fillStyle: "rgba(251, 146, 60, 0.8)", // Orange
+        },
+        label: "special-square"
+      }
+    );
+
+    // Add circles, square, and boundaries to world
+    World.add(engine.world, [...circles, square, ...boundaries]);
 
     // Add mouse control for dragging (optional)
     const mouse = Mouse.create(render.canvas);
@@ -192,6 +209,13 @@ export default function About() {
     <BaseLayout>
       <div ref={sceneRef} className="absolute inset-0 pointer-events-auto z-0" />
       <div className="py-12 px-4 sm:px-6 lg:px-8 relative  ">
+        {/* Breadcrumb navigation */}
+        <div className="max-w-3xl mx-auto mb-4">
+          <Breadcrumb items={[
+            { label: "Home", href: "/" },
+            { label: "About Us" }
+          ]} />
+        </div>
         {/* Matter.js canvas container - positioned behind content */}
 
         <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-100 p-6 z-10 relative">
@@ -209,7 +233,7 @@ export default function About() {
           </div>
 
           <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed overflow-auto custom-scroll">
-            {t("ABOUT_US")}
+            {t("ABOUT_US", "Welcome to our AI Interactive Playground! Explore algorithms, data structures, and artificial intelligence with hands-on visualizations and engaging simulations. Our mission is to make complex concepts accessible and fun for everyone.")}
           </div>
         </div>
       </div>

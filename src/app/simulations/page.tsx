@@ -8,7 +8,6 @@ const simulations = [
     description: "Visualize how pathfinding algorithms work on a grid, like in Google Maps.",
     href: "/simulations/pathfinding"
   },
-  // Add more simulations here
 ];
 
 const SimulationsDashboard: React.FC = () => (
