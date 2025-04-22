@@ -231,7 +231,6 @@ export default function About() {
               {i18n.language === "en" ? "ไทย" : "ENG"}
             </button>
           </div>
-
           <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed overflow-auto custom-scroll">
             {t("ABOUT_US", "Welcome to our AI Interactive Playground! Explore algorithms, data structures, and artificial intelligence with hands-on visualizations and engaging simulations. Our mission is to make complex concepts accessible and fun for everyone.")}
           </div>

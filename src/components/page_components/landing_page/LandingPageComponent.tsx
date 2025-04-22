@@ -11,16 +11,20 @@ export default function LandingPageComponent() {
   const handleScroll = useCallback(() => {
     const sections = document.querySelectorAll("section");
     const scrollY = window.scrollY + window.innerHeight;
+    const controlsArray = [controlsSection2, controlsSection3];
 
     sections.forEach((section, index) => {
-      const controls = [controlsSection2, controlsSection3][index];
-      const offsetTop = section.offsetTop;
-      const offsetHeight = section.offsetHeight;
+      // Only process sections that have corresponding controls
+      if (index < controlsArray.length) {
+        const controls = controlsArray[index];
+        const offsetTop = section.offsetTop;
+        const offsetHeight = section.offsetHeight;
 
-      if (scrollY > offsetTop + offsetHeight / 2) {
-        controls.start("visible");
-      } else {
-        controls.start("hidden");
+        if (scrollY > offsetTop + offsetHeight / 2) {
+          controls.start("visible");
+        } else {
+          controls.start("hidden");
+        }
       }
     });
   }, [controlsSection2, controlsSection3]);

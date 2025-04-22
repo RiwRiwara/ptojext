@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+</head>
+
+<body>
+    <script>
+        class PlasmaMembrane {
+            constructor() {
+                this.thickness = 10;
+                this.permeability = 0.8;
+                this.description = "Flexible outer boundary of the cell.";
+                this.function = "Regulates substance movement.";
+            }
+            regulate() {
+                return this.permeability > Math.random() ? "Allow substance" : "Block substance";
+            }
+        }
+
+        class Cytoplasm {
+            constructor() {
+                this.viscosity = 0.5;
+                this.description = "Jelly-like substance inside the cell.";
+                this.function = "Medium for cellular processes.";
+            }
+            flow() {
+                return `Cytoplasm flows with viscosity ${this.viscosity}`;
+            }
+        }
+
+        class Nucleus {
+            constructor(x, y) {
+                this.position = { x, y };
+                this.baseRadius = 20;
+                this.pulse = 0;
+                this.dnaState = "stable";
+                this.description = "Contains genetic material (DNA).";
+                this.function = "Controls cellular activities.";
+            }
+            update() {
+                this.dnaState = Math.random() > 0.95 ? "replicating" : "stable";
+                this.pulse = this.dnaState === "replicating" ? sin(frameCount * 0.1) * 2 : 0;
+            }
+        }
+
+        class Pseudopodia {
+            constructor() {
+                this.maxLength = 60;
+                this.direction = { x: 0, y: 0 };
+                this.extensionRate = 1;
+                this.description = "Temporary cytoplasmic extensions.";
+                this.function = "Movement and engulfing food.";
+            }
+            extend(targetDirection, energyLevel, tempFactor) {
+                this.extensionRate = (energyLevel / 100) * tempFactor;
+                this.direction = targetDirection;
+                return `Extending pseudopodia by ${this.maxLength * this.extensionRate} pixels`;
+            }
+        }
+
+        class FoodVacuole {
+            constructor() {
+                this.baseSize = 15;
+                this.contents = "none";
+                this.digestionProgress = 0;
+                this.description = "Sacs for digesting food.";
+                this.function = "Digests engulfed particles.";
+            }
+            digest(pHFactor, tempFactor) {
+                if (this.contents === "food") {
+                    this.digestionProgress += 0.05 * pHFactor * tempFactor;
+                    if (this.digestionProgress >= 1) {
+                        this.contents = "digested";
+                        this.digestionProgress = 0;
+                    }
+                }
+            }
+            consume() {
+                this.contents = "food";
+                this.digestionProgress = 0;
+            }
+        }
+
+        class ContractileVacuole {
+            constructor() {
+                this.waterLevel = 0;
+                this.maxCapacity = 100;
+                this.description = "Expels excess water.";
+                this.function = "Maintains osmotic balance.";
+            }
+            expelWater(tempFactor, salinityFactor) {
+                this.waterLevel += 20 * tempFactor * salinityFactor;
+                if (this.waterLevel >= 70) {
+                    this.waterLevel = 0;
+                    return "Expelling water";
+                }
+                return "Accumulating water";
+            }
+        }
+
+        class Mitochondria {
+            constructor() {
+                this.count = 5;
+                this.energyOutput = 100;
+                this.description = "Generates energy.";
+                this.function = "Produces energy via respiration.";
+            }
+            produceEnergy(foodConsumed, digestionProgress, oxygenFactor, lightFactor, tempFactor) {
+                let baseOutput = foodConsumed ? 20 : (digestionProgress > 0 ? digestionProgress * 10 : -5);
+                this.energyOutput = Math.max(50, Math.min(150, this.energyOutput + baseOutput * oxygenFactor * lightFactor * tempFactor));
+                return this.energyOutput;
+            }
+        }
+
+        class EndoplasmicReticulum {
+            constructor() {
+                this.proteinSynthesisRate = 0.3;
+                this.description = "Network for synthesis.";
+                this.function = "Synthesizes proteins and lipids.";
+            }
+            synthesize() {
+                return `Synthesizing at rate ${this.proteinSynthesisRate}`;
+            }
+        }
+
+        class GolgiApparatus {
+            constructor() {
+                this.packagingCapacity = 10;
+                this.description = "Modifies and packages proteins.";
+                this.function = "Prepares proteins for transport.";
+            }
+            package() {
+                return `Packaging ${this.packagingCapacity} proteins`;
+            }
+        }
+
+        class Lysosomes {
+            constructor() {
+                this.enzymeCount = 100;
+                this.description = "Contains digestive enzymes.";
+                this.function = "Breaks down materials.";
+            }
+            digest() {
+                this.enzymeCount = Math.max(50, this.enzymeCount - 5);
+                return "Digesting materials";
+            }
+        }
+
+        class Ribosomes {
+            constructor() {
+                this.count = 200;
+                this.description = "Sites of protein synthesis.";
+                this.function = "Synthesizes proteins.";
+            }
+            synthesize() {
+                return `Synthesizing with ${this.count} ribosomes`;
+            }
+        }
+
+        class Cytoskeleton {
+            constructor() {
+                this.strength = 0.7;
+                this.description = "Protein fiber network.";
+                this.function = "Supports structure and movement.";
+            }
+            reinforce() {
+                this.strength = Math.min(1, this.strength + 0.1);
+            }
+        }
+
+        class FoodParticle {
+            constructor(x, y) {
+                this.position = { x, y };
+                this.radius = 5;
+            }
+            display() {
+                fill(255, 100, 100);
+                ellipse(this.position.x, this.position.y, this.radius * 2);
+            }
+        }
+
+        class Amoeba {
+            constructor(x, y) {
+                this.position = { x, y };
+                this.energy = 100;
+                this.baseRadius = 50;
+                this.vertices = [];
+                this.numVertices = 16;
+                this.velocity = { x: 0, y: 0 };
+                this.drag = 0.9;
+                for (let i = 0; i < this.numVertices; i++) {
+                    let angle = map(i, 0, this.numVertices, 0, TWO_PI);
+                    let r = this.baseRadius + random(-10, 10);
+                    this.vertices.push({
+                        offset: r,
+                        x: this.position.x + r * cos(angle),
+                        y: this.position.y + r * sin(angle),
+                        noiseOffset: random(1000),
+                        targetOffset: r
+                    });
+                }
+                this.components = {
+                    plasmaMembrane: new PlasmaMembrane(),
+                    cytoplasm: new Cytoplasm(),
+                    nucleus: new Nucleus(x, y),
+                    pseudopodia: new Pseudopodia(),
+                    foodVacuoles: new FoodVacuole(),
+                    contractileVacuole: new ContractileVacuole(),
+                    mitochondria: new Mitochondria(),
+                    endoplasmicReticulum: new EndoplasmicReticulum(),
+                    golgiApparatus: new GolgiApparatus(),
+                    lysosomes: new Lysosomes(),
+                    ribosomes: new Ribosomes(),
+                    cytoskeleton: new Cytoskeleton()
+                };
+            }
+            update(world, foodParticles, temperature, currentStrength, pH, oxygen, salinity, lightIntensity, nutrientDensity) {
+                let tempFactor = 0.1 + (temperature - 15) / 20 * 0.9;
+                let pHFactor = 1 - Math.abs(pH - 7.2) / 1.5;
+                let oxygenFactor = oxygen / 7.5;
+                let salinityFactor = 1 + salinity / 1; // Higher salinity increases water expulsion
+                let lightFactor = lightIntensity / 500; // Optimal at 500 lux
+
+                // AI: Seek nearest food particle
+                let closestFood = null;
+                let minDist = Infinity;
+                for (let food of foodParticles) {
+                    let d = dist(this.position.x, this.position.y, food.position.x, food.position.y);
+                    if (d < minDist) {
+                        minDist = d;
+                        closestFood = food;
+                    }
+                }
+
+                let foodConsumed = false;
+                if (closestFood && minDist < this.baseRadius + closestFood.radius) {
+                    this.components.foodVacuoles.consume();
+                    foodConsumed = true;
+                    let index = foodParticles.indexOf(closestFood);
+                    foodParticles.splice(index, 1);
+                }
+
+                // Nutrient density affects food spawning
+                if (random() < nutrientDensity / 1000) {
+                    foodParticles.push(new FoodParticle(random(50, world.width - 50), random(50, world.height - 50)));
+                    if (foodParticles.length > 10) {
+                        foodParticles.splice(0, 1); // Limit to 10 particles
+                    }
+                }
+
+                // Calculate desired direction
+                let desiredDirection = { x: 0, y: 0 };
+                if (closestFood) {
+                    desiredDirection.x = (closestFood.position.x - this.position.x) / minDist;
+                    desiredDirection.y = (closestFood.position.y - this.position.y) / minDist;
+                } else {
+                    desiredDirection = { x: random(-1, 1), y: random(-1, 1) };
+                }
+
+                // Amoeboid movement: Update vertices
+                let energyFactor = this.energy / 100;
+                let maxExtension = this.baseRadius * 0.5 * energyFactor * tempFactor;
+                for (let i = 0; i < this.numVertices; i++) {
+                    let v = this.vertices[i];
+                    let angle = map(i, 0, this.numVertices, 0, TWO_PI);
+                    let baseDist = this.baseRadius;
+                    let extension = 0;
+                    if (closestFood) {
+                        let vertexAngle = atan2(v.y - this.position.y, v.x - this.position.x);
+                        let targetAngle = atan2(desiredDirection.y, desiredDirection.x);
+                        let angleDiff = abs(vertexAngle - targetAngle);
+                        if (angleDiff < PI / 3) {
+                            extension = maxExtension * (1 - angleDiff / (PI / 3));
+                        }
+                    }
+                    v.targetOffset = baseDist + extension + noise(v.noiseOffset + frameCount * 0.03) * 20 - 10;
+                    v.offset = lerp(v.offset, v.targetOffset, 0.15);
+                    v.x = this.position.x + v.offset * cos(angle);
+                    v.y = this.position.y + v.offset * sin(angle);
+                }
+
+                // Move
+                this.components.pseudopodia.extend(desiredDirection, this.energy, tempFactor);
+                this.velocity.x += desiredDirection.x * 0.1 * energyFactor * tempFactor;
+                this.velocity.y += desiredDirection.y * 0.1 * energyFactor * tempFactor;
+                this.velocity.x += (noise(frameCount * 0.01 + this.position.x) - 0.5) * currentStrength;
+                this.velocity.y += (noise(frameCount * 0.01 + this.position.y) - 0.5) * currentStrength;
+                this.velocity.x *= this.drag;
+                this.velocity.y *= this.drag;
+                this.position.x += this.velocity.x;
+                this.position.y += this.velocity.y;
+                this.energy = Math.max(0, this.energy - 0.1 * (Math.abs(this.velocity.x) + Math.abs(this.velocity.y)));
+
+                // Boundary collision
+                if (this.position.x - this.baseRadius < 0) {
+                    this.position.x = this.baseRadius;
+                    this.velocity.x *= -0.5;
+                }
+                if (this.position.x + this.baseRadius > world.width) {
+                    this.position.x = world.width - this.baseRadius;
+                    this.velocity.x *= -0.5;
+                }
+                if (this.position.y - this.baseRadius < 0) {
+                    this.position.y = this.baseRadius;
+                    this.velocity.y *= -0.5;
+                }
+                if (this.position.y + this.baseRadius > world.height) {
+                    this.position.y = world.height - this.baseRadius;
+                    this.velocity.y *= -0.5;
+                }
+
+                // Update components
+                this.components.nucleus.update();
+                this.components.foodVacuoles.digest(pHFactor, tempFactor);
+                this.components.contractileVacuole.expelWater(tempFactor, salinityFactor);
+                let mitoEnergy = this.components.mitochondria.produceEnergy(
+                    foodConsumed,
+                    this.components.foodVacuoles.digestionProgress,
+                    oxygenFactor,
+                    lightFactor,
+                    tempFactor
+                );
+                this.energy = Math.min(100, this.energy + mitoEnergy * 0.01);
+                this.components.endoplasmicReticulum.synthesize();
+                this.components.golgiApparatus.package();
+                this.components.lysosomes.digest();
+                this.components.ribosomes.synthesize();
+                this.components.cytoskeleton.reinforce();
+
+                // Update nucleus position
+                this.components.nucleus.position = { x: this.position.x, y: this.position.y };
+            }
+            display() {
+                // Draw Amoeba body
+                fill(200, 200, 255, 150);
+                beginShape();
+                for (let v of this.vertices) {
+                    curveVertex(v.x, v.y);
+                }
+                for (let i = 0; i < 3; i++) {
+                    curveVertex(this.vertices[i].x, this.vertices[i].y);
+                }
+                endShape();
+                // Draw nucleus
+                fill(100, 100, 255);
+                ellipse(this.components.nucleus.position.x, this.components.nucleus.position.y,
+                    this.components.nucleus.baseRadius * 2 + this.components.nucleus.pulse);
+                // Draw pseudopodia direction
+                stroke(150, 150, 255);
+                line(
+                    this.position.x,
+                    this.position.y,
+                    this.position.x + this.components.pseudopodia.direction.x * this.components.pseudopodia.maxLength,
+                    this.position.y + this.components.pseudopodia.direction.y * this.components.pseudopodia.maxLength
+                );
+                noStroke();
+                // Draw contractile vacuole
+                fill(255, 255, 200);
+                let cvSize = map(this.components.contractileVacuole.waterLevel, 0, 100, 5, 20);
+                ellipse(this.position.x + 20, this.position.y + 20, cvSize);
+                // Draw food vacuole
+                fill(255, 200, 200);
+                let fvSize = map(this.components.foodVacuoles.digestionProgress, 0, 1, this.components.foodVacuoles.baseSize, this.components.foodVacuoles.baseSize * 1.5);
+                ellipse(this.position.x - 20, this.position.y - 20, fvSize);
+            }
+        }
+
+        // p5.js setup and draw
+        let amoeba;
+        let foodParticles = [];
+        let world = { width: 800, height: 600 };
+        let temperature = 25;
+        let currentStrength = 0.05;
+        let pH = 7.2;
+        let oxygen = 7.5;
+        let salinity = 1;
+        let lightIntensity = 500;
+        let nutrientDensity = 50;
+        const numFood = 10;
+
+        function setup() {
+            createCanvas(world.width, world.height);
+            amoeba = new Amoeba(world.width / 2, world.height / 2);
+            for (let i = 0; i < numFood; i++) {
+                foodParticles.push(new FoodParticle(random(50, world.width - 50), random(50, world.height - 50)));
+            }
+        }
+
+        function draw() {
+            // Update environment
+            temperature = 25 + sin(frameCount * 0.01) * 5;
+            pH = 7.2 + sin(frameCount * 0.005) * 0.5;
+            oxygen = 7.5 + sin(frameCount * 0.007) * 2.5;
+            salinity = 1 + sin(frameCount * 0.008) * 1;
+            lightIntensity = 500 + sin(frameCount * 0.006) * 500;
+            nutrientDensity = 50 + sin(frameCount * 0.009) * 50;
+
+            // Draw water-like background
+            let tempColorFactor = map(temperature, 20, 30, 0, 1);
+            let baseColor = lerpColor(color(100, 150, 255), color(150, 200, 255), tempColorFactor);
+            let deepColor = lerpColor(color(50, 100, 200), color(100, 150, 200), tempColorFactor);
+            for (let y = 0; y < world.height; y++) {
+                let c = lerpColor(baseColor, deepColor, y / world.height);
+                stroke(c);
+                line(0, y, world.width, y);
+            }
+
+            // Draw ripples
+            noFill();
+            stroke(255, 255, 255, 50);
+            let rippleSize = map(mag(amoeba.velocity.x, amoeba.velocity.y), 0, 5, 10, 40);
+            ellipse(amoeba.position.x, amoeba.position.y, rippleSize + (frameCount % 50), rippleSize + (frameCount % 50));
+
+            // Draw current-like noise
+            for (let i = 0; i < 10; i++) {
+                let x = random(world.width);
+                let y = random(world.height);
+                let n = noise(x * 0.01, y * 0.01, frameCount * 0.02);
+                ellipse(x, y, n * 20, n * 20);
+            }
+            noStroke();
+
+            // Draw world boundaries
+            stroke(0);
+            noFill();
+            rect(0, 0, world.width, world.height);
+            noStroke();
+
+            // Display environment values
+            fill(0);
+            textSize(14);
+            text(`Temperature: ${temperature.toFixed(1)}°C`, 10, 20);
+            text(`Drag: ${amoeba.drag.toFixed(2)}`, 10, 40);
+            text(`Current Strength: ${currentStrength.toFixed(3)}`, 10, 60);
+            text(`Energy: ${amoeba.energy.toFixed(1)}`, 10, 80);
+            text(`pH: ${pH.toFixed(1)}`, 10, 100);
+            text(`Oxygen: ${oxygen.toFixed(1)} mg/L`, 10, 120);
+            text(`Salinity: ${salinity.toFixed(1)} ppt`, 10, 140);
+            text(`Light Intensity: ${lightIntensity.toFixed(0)} lux`, 10, 160);
+            text(`Nutrient Density: ${nutrientDensity.toFixed(0)} units`, 10, 180);
+
+            // Update and display food particles
+            for (let food of foodParticles) {
+                food.display();
+            }
+
+            // Update and display Amoeba
+            amoeba.update(world, foodParticles, temperature, currentStrength, pH, oxygen, salinity, lightIntensity, nutrientDensity);
+            amoeba.display();
+        }
+    </script>
+</body>
+
+</html>

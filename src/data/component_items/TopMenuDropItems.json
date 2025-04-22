@@ -5,30 +5,29 @@
     "className": "playground-root",
     "children": [
       {
-        "name": "Algorithms",
-        "className": "algorithms",
+        "name": "Visualization",
+        "className": "visualization",
         "children": [
           {
             "name": "Sorting",
             "className": "",
             "link": "/playground/algorithms/sorting"
-          }
-        ]
-      },
-
-      {
-        "name": "Image processing",
-        "className": "image-processing",
-        "children": [
-          {
-            "name": "Image Convolution",
-            "link": "/playground/image-processing/image-convolution",
-            "className": "image-convolution"
           },
           {
-            "name": "Image Enchanted",
-            "link": "/simu/image_enchanted",
-            "className": "image-enchanted"
+            "name": "Image processing",
+            "className": "image-processing",
+            "children": [
+              {
+                "name": "Image Convolution",
+                "link": "/playground/image-processing/image-convolution",
+                "className": "image-convolution"
+              },
+              {
+                "name": "Image Enchanted",
+                "link": "/simu/image_enchanted",
+                "className": "image-enchanted"
+              }
+            ]
           }
         ]
       },
