@@ -42,3 +42,17 @@ next-env.d.ts
 # windsurf rules
 .windsurfrules
 node_modules/
+
+# yarn
+yarn.lock
+
+# npm
+package-lock.json
+
+# yarn cache
+.yarnrc
+.yarnrc.bak
+
+#npm cache
+.npmrc
+.npmrc.bak
