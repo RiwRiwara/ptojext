@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import useStore from "../state/store";
+import ConvolutionEquation from "./ConvolutionEquation";
 
 export default function CanvasGridRendererAnimateInput() {
-  const { gridConvolutionManager, gridState, applyConvolution, setHoverPosition } = useStore();
+  const { gridConvolutionManager, gridState, applyConvolution, setHoverPosition, hoverPosition } = useStore();
+  const [editing, setEditing] = React.useState<{ row: number, col: number } | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -30,14 +32,12 @@ export default function CanvasGridRendererAnimateInput() {
     const row = Math.floor(y / cellSize);
     const col = Math.floor(x / cellSize);
 
-    const kernelSize = 3;
+    // Allow convolution at any cell, including edges (partial kernel, including top/left)
     if (
-      row >= 0 &&
-      col >= 0 &&
-      row <= gridState.rows - kernelSize &&
-      col <= gridState.cols - kernelSize
+      row >= 0 && row < gridState.rows &&
+      col >= 0 && col < gridState.cols
     ) {
-      setHoverPosition({ row, col }); // Update hover position in store
+      setHoverPosition({ row, col });
       applyConvolution(row, col);
 
       const ctx = canvas.getContext("2d");
@@ -49,7 +49,7 @@ export default function CanvasGridRendererAnimateInput() {
         ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
       }
     } else {
-      setHoverPosition(null); // Clear hover if outside bounds
+      setHoverPosition(null);
     }
   };
 
@@ -70,7 +70,12 @@ export default function CanvasGridRendererAnimateInput() {
         />
       </div>
 
-
+      {/* Convolution Equation: only show when hovering or editing input grid */}
+      {(hoverPosition || editing) && (
+        <div className="mt-8">
+          <ConvolutionEquation />
+        </div>
+      )}
     </div>
   );
 }

@@ -59,10 +59,13 @@ class GridConvolutionManager extends GridManager {
         }
       }
     }
+    // Recompute the full resultGrid after kernel update
+    this.resultGrid = this.generateInitialResultGrid(customKernel);
+    this.notifyObservers();
   }
 
   // =========== Compute the convolution ===========
-  public computeConvolution(row: number, col: number, customKernel?: number[][]): number | number[] {
+  public computeConvolution(row: number, col: number, customKernel?: number[][], notify: boolean = true): number | number[] {
     const kernel = customKernel || this.defaultKernel;
     let sum: number | number[] = 0;
 
@@ -97,15 +100,14 @@ class GridConvolutionManager extends GridManager {
     // Store the result in the resultGrid at the appropriate position
     const outputRow = row; // No offset needed since resultGrid is already sized correctly
     const outputCol = col;
-    if (outputRow < this.resultGrid.length && outputCol < this.resultGrid[0].length) {
+    if (this.resultGrid && outputRow < this.resultGrid.length && outputCol < this.resultGrid[0].length) {
       if (Array.isArray(sum)) {
         this.resultGrid[outputRow][outputCol] = sum; // Storing RGB or multi-channel result
       } else {
         this.resultGrid[outputRow][outputCol] = sum; // Storing grayscale result
       }
     }
-
-    this.notifyObservers(); // Notify observers after updating resultGrid
+    if (notify) this.notifyObservers(); // Notify observers after updating resultGrid
     return sum;
   }
 
@@ -115,12 +117,17 @@ class GridConvolutionManager extends GridManager {
   }
 
   // Ensure resultGrid is initialized and updated correctly
-  private generateInitialResultGrid(): number[][] {
-    // Output size: rows - kernelSize + 1, cols - kernelSize + 1
-    const kernelSize = 3; // Assuming 3x3 kernel
-    const outputRows = this.rows - kernelSize + 1;
-    const outputCols = this.cols - kernelSize + 1;
-    return Array.from({ length: outputRows }, () => Array(outputCols).fill(0));
+  public generateInitialResultGrid(kernel: number[][] = this.defaultKernel): number[][] {
+    // Output size: same as input grid (for visualization, partial convolution at edges)
+    const outputRows = this.rows;
+    const outputCols = this.cols;
+    const result = Array.from({ length: outputRows }, () => Array(outputCols).fill(0));
+    for (let row = 0; row < outputRows; row++) {
+      for (let col = 0; col < outputCols; col++) {
+        result[row][col] = this.computeConvolution(row, col, kernel, false); // false disables notifyObservers
+      }
+    }
+    return result;
   }
 
   resizeGrid(newRows: number, newCols: number): void {

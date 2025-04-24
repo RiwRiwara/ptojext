@@ -9,6 +9,7 @@ import ArrayControls from "@/components/playground_components/algorithms/sorting
 import VisualizationControls from "@/components/playground_components/algorithms/sorting/VisualizationControls";
 import CodeDisplay from "@/components/playground_components/algorithms/sorting/CodeDisplay";
 import { AnimationStep, SortingAlgorithm } from "@/components/playground_components/algorithms/sorting/types";
+import Breadcrumb from "@/components/common/Breadcrumb";
 
 const sortingAlgorithms: SortingAlgorithm[] = [
   {
@@ -301,7 +302,14 @@ export default function SortingVisualizerPage() {
 
   return (
     <BaseLayout>
-      <HeroUIProvider className="min-h-screen bg-gray-50 font-sans">
+      <div className="container mx-auto flex flex-col justify-start h-screen gap-8 p-2 pt-8 mb-10 ">
+        <div className="max-w-3xl mx-auto mb-4">
+          <Breadcrumb items={[
+            { label: "Home", href: "/" },
+            { label: "Algorithms", href: "/playground/algorithms" },
+            { label: "Sorting" }
+          ]} />
+        </div>
         <header className="py-6 px-4 bg-white shadow-sm">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight text-center">
@@ -314,74 +322,74 @@ export default function SortingVisualizerPage() {
         </header>
 
         <main className="max-w-7xl mx-auto px-2 md:px-4 py-8 flex flex-col gap-8">
-  {/* Algorithm Selector */}
-  <div className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-100">
-    <h2 className="text-2xl font-semibold mb-4 text-center">Select Sorting Algorithm</h2>
-    <AlgorithmSelector
-      algorithms={sortingAlgorithms}
-      selectedAlgo={selectedAlgo}
-      onAlgoChange={handleSortChange}
-      algoData={selectedAlgoData}
-    />
-  </div>
+          {/* Algorithm Selector */}
+          <div className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-100">
+            <h2 className="text-2xl font-semibold mb-4 text-center">Select Sorting Algorithm</h2>
+            <AlgorithmSelector
+              algorithms={sortingAlgorithms}
+              selectedAlgo={selectedAlgo}
+              onAlgoChange={handleSortChange}
+              algoData={selectedAlgoData}
+            />
+          </div>
 
-  {/* Array Controls */}
-  <div className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-100">
-    <h2 className="text-xl font-medium mb-3 text-center">Array Controls</h2>
-    <ArrayControls
-      currentArray={currentArray}
-      isPlaying={isPlaying}
-      onGenerateRandom={generateRandomArray}
-      onShuffle={shuffleArray}
-      onSortAscending={sortAscending}
-      onSortDescending={sortDescending}
-      onAddElement={addElement}
-      onRemoveElement={removeElement}
-    />
-  </div>
+          {/* Array Controls */}
+          <div className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-100">
+            <h2 className="text-xl font-medium mb-3 text-center">Array Controls</h2>
+            <ArrayControls
+              currentArray={currentArray}
+              isPlaying={isPlaying}
+              onGenerateRandom={generateRandomArray}
+              onShuffle={shuffleArray}
+              onSortAscending={sortAscending}
+              onSortDescending={sortDescending}
+              onAddElement={addElement}
+              onRemoveElement={removeElement}
+            />
+          </div>
 
-  {/* Visualization and Code */}
-  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <section className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-100 lg:col-span-2 mb-8 flex flex-col">
-      <h2 className="text-xl font-semibold mb-4 text-center">Sorting Visualization</h2>
-      <VisualizationControls
-        isPlaying={isPlaying}
-        setIsPlaying={setIsPlaying}
-        currentStep={currentStep}
-        totalSteps={animationSteps.length}
-        speed={speed}
-        setSpeed={setSpeed}
-        showCode={true}
-        setShowCode={setShowCode}
-        onReset={resetArray}
-        onPrevStep={goToPrevStep}
-        onNextStep={goToNextStep}
-      />
-      <PixiSortingVisualizer
-        blocks={currentArray}
-        animationSteps={animationSteps}
-        isPlaying={isPlaying}
-        speed={speed}
-        currentStep={currentStep}
-        onStepChange={handleStepChange}
-        onSortingComplete={handleSortingComplete}
-        colorScheme={selectedAlgoData?.colorScheme}
-      />
-    </section>
-    <div className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-100">
-      <h2 className="text-xl font-semibold mb-4 text-center">Algorithm Code</h2>
-      <CodeDisplay
-        selectedAlgo={selectedAlgo}
-        customAlgorithm={customAlgorithm}
-        setCustomAlgorithm={setCustomAlgorithm}
-        isPlaying={isPlaying}
-        currentHighlightedLine={currentHighlightedLine}
-      />
-    </div>
-  </div>
+          {/* Visualization and Code */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <section className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-100 lg:col-span-2 mb-8 flex flex-col">
+              <h2 className="text-xl font-semibold mb-4 text-center">Sorting Visualization</h2>
+              <VisualizationControls
+                isPlaying={isPlaying}
+                setIsPlaying={setIsPlaying}
+                currentStep={currentStep}
+                totalSteps={animationSteps.length}
+                speed={speed}
+                setSpeed={setSpeed}
+                showCode={true}
+                setShowCode={setShowCode}
+                onReset={resetArray}
+                onPrevStep={goToPrevStep}
+                onNextStep={goToNextStep}
+              />
+              <PixiSortingVisualizer
+                blocks={currentArray}
+                animationSteps={animationSteps}
+                isPlaying={isPlaying}
+                speed={speed}
+                currentStep={currentStep}
+                onStepChange={handleStepChange}
+                onSortingComplete={handleSortingComplete}
+                colorScheme={selectedAlgoData?.colorScheme}
+              />
+            </section>
+            <div className="bg-gray-50 rounded-lg shadow-sm p-6 border border-gray-100">
+              <h2 className="text-xl font-semibold mb-4 text-center">Algorithm Code</h2>
+              <CodeDisplay
+                selectedAlgo={selectedAlgo}
+                customAlgorithm={customAlgorithm}
+                setCustomAlgorithm={setCustomAlgorithm}
+                isPlaying={isPlaying}
+                currentHighlightedLine={currentHighlightedLine}
+              />
+            </div>
+          </div>
 
-</main>
-      </HeroUIProvider>
+        </main>
+      </div>
     </BaseLayout>
   );
 }

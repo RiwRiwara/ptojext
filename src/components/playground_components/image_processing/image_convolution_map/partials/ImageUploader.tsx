@@ -13,13 +13,16 @@ export default function ImageUploader({ onImageUpload }: ImageUploaderProps) {
   const [userImage, setUserImage] = useState<string | null>(null);
   const [originalImage, setOriginalImage] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [imageError, setImageError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const [expanded, setExpanded] = useState(false);
   const [showOriginal, setShowOriginal] = useState(false);
+
+  // Grab latest convolution kernel from the store so we can re-render when it changes
+  const { convolutionData } = useStore();
 
   // Handle file selection for image upload
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +73,6 @@ export default function ImageUploader({ onImageUpload }: ImageUploaderProps) {
           onImageUpload(imageUrl);
         }
         setShowPreview(true);
-        setIsProcessing(false);
       };
       img.src = imageUrl;
     };
@@ -105,18 +107,6 @@ export default function ImageUploader({ onImageUpload }: ImageUploaderProps) {
       const { data } = imageData;
       
       // Get current convolution kernel from store
-      const { convolutionData } = useStore.getState();
-      
-      // Apply convolution (basic implementation - can be optimized)
-      const tempCanvas = document.createElement('canvas');
-      const tempCtx = tempCanvas.getContext('2d');
-      if (!tempCtx) return;
-      
-      tempCanvas.width = canvas.width;
-      tempCanvas.height = canvas.height;
-      tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
-      const tempData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-      
       const kernelSize = convolutionData.length;
       const kernelRadius = Math.floor(kernelSize / 2);
       
@@ -133,9 +123,9 @@ export default function ImageUploader({ onImageUpload }: ImageUploaderProps) {
               const pixelIndex = (pixelY * canvas.width + pixelX) * 4;
               const weight = convolutionData[ky][kx];
               
-              r += tempData.data[pixelIndex] * weight;
-              g += tempData.data[pixelIndex + 1] * weight;
-              b += tempData.data[pixelIndex + 2] * weight;
+              r += data[pixelIndex] * weight;
+              g += data[pixelIndex + 1] * weight;
+              b += data[pixelIndex + 2] * weight;
             }
           }
           
@@ -154,7 +144,16 @@ export default function ImageUploader({ onImageUpload }: ImageUploaderProps) {
     };
     img.src = userImage;
   };
-  
+
+  // === Auto-apply convolution whenever a new image is uploaded or the kernel changes ===
+  useEffect(() => {
+    if (userImage && showPreview && !showOriginal) {
+      // Slight delay allows canvas to mount/render before drawing
+      setTimeout(() => applyConvolutionToImage(), 0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userImage, showPreview, showOriginal, convolutionData]);
+
   // Toggle between original and processed image
   const toggleOriginal = () => {
     if (!canvasRef.current || !originalImage || !userImage) return;
