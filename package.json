@@ -20,6 +20,7 @@
     "@heroui/switch": "^2.2.9",
     "@heroui/system": "^2.4.7",
     "@heroui/theme": "^2.4.6",
+    "@lottiefiles/dotlottie-react": "^0.13.4",
     "@nextui-org/accordion": "^2.0.40",
     "@nextui-org/button": "^2.0.38",
     "@nextui-org/image": "^2.0.32",

@@ -15,7 +15,7 @@ const config: Config = {
     extend: {
       
       fontFamily: {
-        sans: ["Anuphan", "sans-serif"],
+        sans: ["Comfortaa", "sans-serif"],
       },
       colors: {
         primary: {

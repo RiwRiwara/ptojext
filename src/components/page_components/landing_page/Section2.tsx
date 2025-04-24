@@ -24,7 +24,7 @@ export default function Section2({ controls }: Section2Props) {
         variants={fadeInVariants}
         animate={controls ? controls : "pageLoad"}
       >
-        <h2 className="text-5xl font-bold mb-4">{t("LSECTION2")}</h2>
+        <h2 className="text-5xl font-bold mb-4">{t("SECTION2")}</h2>
         <p className="text-lg">Scroll down to explore more.</p>
       </motion.div>
     </section>

@@ -8,27 +8,38 @@ import {
   FcOrgUnit,
 } from "react-icons/fc";
 import Image from "next/image";
+import {
+  HiOutlineCubeTransparent,
+  HiOutlinePhoto,
+  HiOutlineSquare3Stack3D,
+} from "react-icons/hi2";
+import { Card, CardHeader, CardBody, CardFooter, Chip } from "@heroui/react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const menu_items = [
   {
     name: "Reinforcement Learning",
     description: "Learn about Reinforcement Learning",
-    icon: <FcCollect className="w-6 h-6 md:w-10 md:h-10" />,
+    icon: <HiOutlineCubeTransparent className="w-6 h-6 md:w-10 md:h-10" />,
+    topic: "Reinforcement Learning",
   },
   {
     name: "Image Processing",
     description: "Learn about Image Processing",
-    icon: <FcStackOfPhotos className="w-6 h-6 md:w-10 md:h-10" />,
+    icon: <HiOutlinePhoto className="w-6 h-6 md:w-10 md:h-10" />,
+    topic: "Convolution, Enchanted",
   },
   {
     name: "Data Structure and Algorithms",
     description: "Learn about Data Structure and Algorithms",
-    icon: <FcOrgUnit className="w-6 h-6 md:w-10 md:h-10" />,
+    icon: <HiOutlineSquare3Stack3D className="w-6 h-6 md:w-10 md:h-10" />,
+    topic: "Sorting Algorithms",
   },
   {
     name: "Neural Network",
     description: "Learn about Neural Network",
     icon: <FcRadarPlot className="w-6 h-6 md:w-10 md:h-10" />,
+    topic: "Neural Network",
   },
 ];
 
@@ -84,7 +95,7 @@ export default function Section1() {
   return (
     <AnimatePresence>
       <motion.main
-        className="h-screen flex items-center justify-center md:-mt-24 -mt-44"
+        className="h-screen flex items-center justify-center md:-mt-24 -mt-28"
         initial="hidden"
         animate="visible"
         exit="hidden"
@@ -99,7 +110,7 @@ export default function Section1() {
         >
           <h1 className="hidden">VISUALRIGHT</h1>
           <motion.h2
-            className="text-4xl md:text-7xl font-medium mb-4 md:mb-16 text-start flex flex-col md:flex-row gap-6 md:gap-10 items-center"
+            className="text-4xl md:text-7xl font-bold mb-10 md:mb-16 mt-4 md:mt-0 text-start flex flex-col md:flex-row items-center"
             variants={itemVariants}
           >
             <motion.div
@@ -107,24 +118,24 @@ export default function Section1() {
               variants={itemVariants}
               whileHover={{ scale: 1.1 }}
             >
-              <Image
-                src="/logo/logo-full.png"
-                width={100}
-                height={100}
-                alt="VISUALRIGHT logo"
-                className="animate-appearance-in"
-              />
+              <div id="visualright-logo" className="w-32 md:w-72 md:-ml-16">
+                <DotLottieReact
+                  src="https://lottie.host/602c34b3-8c02-4faf-aea8-35d05946190d/TCKE9ryBTl.lottie"
+                  loop
+                  autoplay
+                />
+              </div>
             </motion.div>
             <motion.div variants={itemVariants}>
               <motion.span
-                className="text-stone-500 flex flex-row gap-1"
+                className="default-blue flex flex-row gap-1 md:-ml-6"
                 variants={containerVariants}
               >
                 {["V", "I", "S", "U", "A", "L", "R", "I", "G", "H", "T"].map(
                   (letter, index) => (
                     <motion.span
                       key={index}
-                      className="hover:text-stone-700 duration-400 hover:text-8xl ease-soft-spring cursor-default"
+                      className="hover:text-sky-950 duration-400 hover:text-8xl ease-soft-spring cursor-default"
                       variants={letterVariants}
                       whileHover={{ scale: 1.2 }}
                     >
@@ -142,22 +153,28 @@ export default function Section1() {
             {menu_items.map((item, index) => (
               <motion.div
                 key={index}
-                className="flex flex-row items-center gap-2 md:gap-6"
-                variants={itemVariants}
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                <motion.div
-                  className="p-2 md:p-4 bg-white rounded-full shadow-lg"
-                >
-                  {item.icon}
-                </motion.div>
-                <motion.h2
-                  className="text-md md:text-xl font-medium text-stone-500"
-                  whileHover={{ color: "#666" }}
-                >
-                  <span dangerouslySetInnerHTML={{ __html: item.name }} />
-                </motion.h2>
+                <Card className="py-4">
+                  <CardHeader className="pb-0 pt-2 px-4 flex-col items-start gap-2">
+                    <h4 className="font-bold text-large">{item.name}</h4>
+                  </CardHeader>
+                  <CardBody className="overflow-visible py-2">
+                    <div>
+                      {item.topic.split(", ").map((topic, idx) => (
+                        <Chip
+                          key={idx}
+                          className="text-tiny font-bold mr-1"
+                          color="default"
+                          variant="bordered"
+                        >
+                          {topic}
+                        </Chip>
+                      ))}
+                    </div>
+                  </CardBody>
+                </Card>
               </motion.div>
             ))}
           </motion.div>
