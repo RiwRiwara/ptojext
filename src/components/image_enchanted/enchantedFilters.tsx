@@ -139,28 +139,6 @@ const EnchantedFilters = () => {
           maxValue={255}
           value={grayScale}
           onChange={(val) => setGrayScale(Array.isArray(val) ? val[0] : val)}
-          startContent={
-            <Button
-              size="sm"
-              isIconOnly
-              radius="full"
-              variant="light"
-              onPress={() => setGrayScale((v) => Math.max(0, v - 1))}
-            >
-              -
-            </Button>
-          }
-          endContent={
-            <Button
-              size="sm"
-              isIconOnly
-              radius="full"
-              variant="light"
-              onPress={() => setGrayScale((v) => Math.min(255, v + 1))}
-            >
-              +
-            </Button>
-          }
         />
       </div>
 

@@ -47,3 +47,23 @@ export enum NoiseType {
   SaltAndPepper = "SaltAndPepper",
   Speckle = "Speckle",
 }
+
+// types.ts
+export interface GrayScaleTypes {
+  key: "linear" | "log" | "power-law";
+  label: string;
+  description: string;
+  /** optional parameter controlled by slider */
+  param?: {
+    label: string;      // e.g. "γ"
+    min: number;
+    max: number;
+    step: number;
+    default: number;
+  };
+  /** formula written in plain‑text math */
+  formula: string;      // e.g. "G = 255 * (I / 255)^γ"
+}
+
+
+  
