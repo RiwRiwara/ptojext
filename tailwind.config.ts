@@ -1,4 +1,4 @@
-import {heroui} from '@heroui/theme';
+import { heroui } from '@heroui/theme';
 import type { Config } from "tailwindcss";
 import { nextui } from "@nextui-org/theme";
 
@@ -13,9 +13,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      
+
       fontFamily: {
-        sans: ["Anuphan", "sans-serif"],
+        sans: ["Comfortaa", "sans-serif"],
       },
       colors: {
         primary: {
@@ -44,9 +44,9 @@ const config: Config = {
           violet: "linear-gradient(to right, #C59BD8, #E0B0FF)",
         },
       },
-      
+
     },
   },
-  plugins: [nextui(),heroui()],
+  plugins: [nextui(), heroui()],
 };
 export default config;

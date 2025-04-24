@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --default-black: #272B2D;
+  --default-blue: #6AAEEF;
+}
 
 html {
   scroll-behavior: smooth;
@@ -31,4 +35,12 @@ html {
 
 .animate-pop-in {
   animation: pop-in 0.2s ease-out;
+}
+
+.default-blue {
+  color: var(--default-blue);
+}
+
+.default-black {
+  color: var(--default-black);
 }
