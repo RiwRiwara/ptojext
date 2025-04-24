@@ -4,7 +4,6 @@ import CanvasGridRenderImage from "./partials/CanvasGridRenderImage";
 import CanvasGridRendererAnimateInput from "./partials/CanvasGridRendererAnimateInput";
 import CanvasGridConvolution from "./partials/CanvasGridConvolution";
 import CanvasGridResult from "./partials/CanvasGridResult";
-import ConvolutionEquation from "./partials/ConvolutionEquation";
 import ImageUploader from "./partials/ImageUploader";
 import useStore from "./state/store";
 import "@/utils/i18n.config";
@@ -15,7 +14,7 @@ export default function ImageConvolutionMap() {
   const { gridState, convolutionOutput, hoverPosition, gridConvolutionManager } = useStore();
 
   return (
-    <div className="w-full flex justify-center max-w-[1000px] mx-auto flex-col gap-6 p-4">
+    <div className="w-full flex justify-center max-w-[1200px] mx-auto flex-col gap-6 p-4">
       {/* ================= Section 1 ================= */}
       <div className="flex flex-col md:flex-row gap-6 md:gap-10">
         <div>
@@ -73,11 +72,11 @@ export default function ImageConvolutionMap() {
           </div>
           <div className=" max-h-64">
             <CanvasGridRendererAnimateInput />
-          </div>
           <div className="text-center text-sm text-gray-600 mt-2">
             {hoverPosition ? 
               `Selected position: (${hoverPosition.row}, ${hoverPosition.col})` : 
               'Hover over grid to perform convolution'}
+          </div>
           </div>
         </div>
 
@@ -98,11 +97,6 @@ export default function ImageConvolutionMap() {
         </div>
       </div>
       
-      {/* Real-time equation calculation display */}
-      <div className="mt-8">
-        <ConvolutionEquation className="max-w-2xl mx-auto" />
-      </div>
-
       {/* New section for user image uploads */}
       <div className="my-12 border-t pt-8">
         <h2 className="text-2xl font-semibold mb-6 text-center">Try with Your Own Image</h2>

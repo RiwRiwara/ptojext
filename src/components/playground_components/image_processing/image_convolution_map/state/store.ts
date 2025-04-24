@@ -27,13 +27,17 @@ const useStore = create<AppState>((set) => ({
     [0, 5, 0],
     [0, 0, 0],
   ],
-  resultGrid: gridConvolutionManager.getResultGrid(), // Add resultGrid to the store
+  resultGrid: gridConvolutionManager.generateInitialResultGrid([
+    [0, 0, 0],
+    [0, 5, 0],
+    [0, 0, 0],
+  ]), // Fill with full convolution result initially
   hoverPosition: null as { row: number; col: number } | null, // Track hover position
 
   updateGridState: () => {
-    set(() => ({
+    set((state) => ({
       gridState: getGridState(),
-      resultGrid: gridConvolutionManager.getResultGrid(), // Update resultGrid too
+      resultGrid: gridConvolutionManager.generateInitialResultGrid(state.convolutionData), // Always recalc
     }));
   },
   convolutionOutput: 0,
@@ -43,11 +47,11 @@ const useStore = create<AppState>((set) => ({
   applyConvolution: (row: number, col: number) => {
     set((state) => {
       state.gridConvolutionManager.updateKernel(row, col, state.convolutionData);
-      const result = gridConvolutionManager.computeConvolution(row, col);
+      const result = gridConvolutionManager.computeConvolution(row, col, state.convolutionData);
       return {
         convolutionOutput: result,
         gridState: getGridState(),
-        resultGrid: gridConvolutionManager.getResultGrid(), // Update resultGrid
+        resultGrid: gridConvolutionManager.generateInitialResultGrid(state.convolutionData), // Always recalc full result grid
       };
     });
   },

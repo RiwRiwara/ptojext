@@ -70,17 +70,24 @@ export default function ConvolutionEquation({ className = '' }: ConvolutionEquat
   // Extract the grid values at the current convolution window
   const { row, col } = hoverPosition;
   const kernelSize = convolutionData.length;
-  const inputValues: number[][] = [];
-  const kernelValues = convolutionData;
+  const inputRows = gridState.rows;
+  const inputCols = gridState.cols;
+
+  // Calculate the valid window size (clip kernel if it overflows at the edge)
+  const maxWindowRows = Math.min(kernelSize, inputRows - row);
+  const maxWindowCols = Math.min(kernelSize, inputCols - col);
 
   // Get the values from the input grid at the current window
-  for (let i = 0; i < kernelSize; i++) {
+  const inputValues: number[][] = [];
+  const kernelValues: number[][] = [];
+  for (let i = 0; i < maxWindowRows; i++) {
     inputValues[i] = [];
-    for (let j = 0; j < kernelSize; j++) {
+    kernelValues[i] = [];
+    for (let j = 0; j < maxWindowCols; j++) {
       // Access the grid data safely
       if (
-        row + i < gridState.rows &&
-        col + j < gridState.cols &&
+        row + i < inputRows &&
+        col + j < inputCols &&
         Array.isArray(gridState.data) &&
         gridState.data[row + i] &&
         gridState.data[row + i][col + j] !== undefined
@@ -91,6 +98,8 @@ export default function ConvolutionEquation({ className = '' }: ConvolutionEquat
       } else {
         inputValues[i][j] = 0;
       }
+      // Always use the corresponding kernel value
+      kernelValues[i][j] = convolutionData[i][j];
     }
   }
 
@@ -98,8 +107,8 @@ export default function ConvolutionEquation({ className = '' }: ConvolutionEquat
   const terms: { inputValue: number; kernelValue: number; product: number }[] = [];
   let sum = 0;
 
-  for (let i = 0; i < kernelSize; i++) {
-    for (let j = 0; j < kernelSize; j++) {
+  for (let i = 0; i < maxWindowRows; i++) {
+    for (let j = 0; j < maxWindowCols; j++) {
       const inputValue = inputValues[i][j];
       const kernelValue = kernelValues[i][j];
       const product = inputValue * kernelValue;
@@ -132,9 +141,9 @@ export default function ConvolutionEquation({ className = '' }: ConvolutionEquat
         <div className="mb-3">
           <div className="flex justify-between items-center mb-2">
             <div className="text-sm font-medium text-gray-700">Input Values at ({row}, {col}):</div>
-            <div className="text-xs text-gray-500">3×3 Window</div>
+            <div className="text-xs text-gray-500">{maxWindowRows}×{maxWindowCols} Window</div>
           </div>
-          <div className="grid grid-cols-3 gap-1 border border-blue-100 p-2 rounded bg-blue-50">
+          <div className={`grid grid-cols-${maxWindowCols} gap-1 border border-blue-100 p-2 rounded bg-blue-50`}>
             {inputValues.map((row, rowIdx) => (
               row.map((val, colIdx) => (
                 <div 
@@ -151,9 +160,9 @@ export default function ConvolutionEquation({ className = '' }: ConvolutionEquat
         <div className="mb-3">
           <div className="flex justify-between items-center mb-2">
             <div className="text-sm font-medium text-gray-700">Kernel Values:</div>
-            <div className="text-xs text-gray-500">Filter Matrix</div>
+            <div className="text-xs text-gray-500">{maxWindowRows}×{maxWindowCols} Filter</div>
           </div>
-          <div className="grid grid-cols-3 gap-1 border border-gray-100 p-2 rounded bg-gray-50">
+          <div className={`grid grid-cols-${maxWindowCols} gap-1 border border-gray-100 p-2 rounded bg-gray-50`}>
             {kernelValues.map((row, rowIdx) => (
               row.map((val, colIdx) => (
                 <div 
@@ -170,10 +179,8 @@ export default function ConvolutionEquation({ className = '' }: ConvolutionEquat
 
       <div className="mb-4 mt-2">
         <div className="text-sm font-medium text-gray-700 mb-2">Multiplication (Element-wise):</div>
-        <div className="grid grid-cols-3 gap-1 border border-purple-100 p-2 rounded bg-purple-50">
+        <div className={`grid grid-cols-${maxWindowCols} gap-1 border border-purple-100 p-2 rounded bg-purple-50`}>
           {terms.map((term, idx) => {
-            const rowIdx = Math.floor(idx / 3);
-            const colIdx = idx % 3;
             return (
               <div 
                 key={`mult-${idx}`} 

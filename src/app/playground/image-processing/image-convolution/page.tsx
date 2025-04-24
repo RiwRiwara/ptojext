@@ -5,8 +5,8 @@ import ImageConvolutionMap from "@/components/playground_components/image_proces
 export default function ImageConvolutionPage() {
   return (
     <BaseLayout>
-      <div className="container mx-auto flex flex-col justify-start h-screen gap-8 p-2 pt-8 mb-10 ">
-        <div className="max-w-3xl mx-auto mb-4">
+      <div className="mx-auto flex flex-col justify-start h-screen gap-8 p-2 pt-8 mb-10">
+        <div className="max-w-6xl mx-auto mb-4">
           <Breadcrumb items={[
             { label: "Home", href: "/" },
             { label: "Image Convolution" }

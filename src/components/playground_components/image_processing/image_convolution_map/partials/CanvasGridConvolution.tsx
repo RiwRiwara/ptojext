@@ -5,14 +5,24 @@ import { FiEdit } from 'react-icons/fi';
 import { BiReset } from 'react-icons/bi';
 
 interface CanvasGridConvolutionProps {
-  [key: string]: unknown;
+  onHover?: (position: { row: number, col: number } | null) => void;
+  onEditing?: (position: { row: number, col: number } | null) => void;
 }
 
 export default function CanvasGridConvolution({
+  onHover,
+  onEditing,
 }: CanvasGridConvolutionProps) {
   const { convolutionData, applyConvolution, hoverPosition, setHoverPosition } = useStore();
-  const [localMatrix, setLocalMatrix] = useState<number[][]>(convolutionData);
+  // Always deep copy to avoid reference bugs
+  const [localMatrix, setLocalMatrix] = useState<number[][]>(convolutionData.map(row => [...row]));
   const [editing, setEditing] = useState<{row: number, col: number} | null>(null);
+
+  // Notify parent when editing changes
+  useEffect(() => {
+    if (onEditing) onEditing(editing);
+  }, [editing, onEditing]);
+
   const [GridManagerShow, setGridManagerShow] = useState<GridManager>(
     new GridManager(
       convolutionData.length,
@@ -24,13 +34,12 @@ export default function CanvasGridConvolution({
     )
   );
 
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
 
   // Update local matrix when convolutionData changes
   useEffect(() => {
-    setLocalMatrix(convolutionData);
+    setLocalMatrix(convolutionData.map(row => [...row]));
   }, [convolutionData]);
 
   // Focus input when editing
@@ -76,17 +85,6 @@ export default function CanvasGridConvolution({
       localMatrix
     ));
   }, [localMatrix]);
-
-  // Redraw the grid whenever the grids state updates
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (ctx && canvas) {
-      // Clear the entire canvas to prevent ghosting/duplication
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      GridManagerShow.renderGrid(ctx);
-    }
-  }, [GridManagerShow]);
 
 
 
@@ -136,50 +134,49 @@ export default function CanvasGridConvolution({
   return (
     <div className="p-4">
       <div className="flex flex-col items-center">
-        <div className="relative" style={{ width: localMatrix[0].length * 40, height: localMatrix.length * 40 }}>
-          {/* Visual canvas representation */}
-          <canvas
-            ref={canvasRef}
-            width={localMatrix[0].length * 40}
-            height={localMatrix.length * 40}
-            style={{ position: "absolute", top: 0, left: 0, border: "1px solid black" }}
-          />
-          
-          {/* Interactive matrix editor */}
-          <div 
-            className="absolute top-0 left-0 w-full h-full grid" 
-            style={{
-              gridTemplateColumns: `repeat(${localMatrix[0].length}, 1fr)`,
-              gridTemplateRows: `repeat(${localMatrix.length}, 1fr)`,
-              pointerEvents: "auto"
-            }}
-          >
-            {localMatrix.flatMap((row, rowIdx) =>
-              row.map((cell, colIdx) => (
-                <div 
-                  key={`${rowIdx}-${colIdx}`}
-                  className="flex items-center justify-center cursor-pointer hover:bg-blue-100 transition-colors relative z-10"
-                  onClick={() => handleCellClick(rowIdx, colIdx)}
-                >
-                  {editing && editing.row === rowIdx && editing.col === colIdx ? (
-                    <input
-                      ref={inputRef}
-                      type="number"
-                      value={cell}
-                      onChange={(e) => handleValueChange(rowIdx, colIdx, e.target.value)}
-                      onBlur={handleFinishEditing}
-                      onKeyDown={(e) => e.key === 'Enter' && handleFinishEditing()}
-                      className="w-full h-full text-center outline-none bg-white border border-blue-500"
-                      style={{ width: '38px', height: '28px' }}
-                      step="0.001"
-                    />
-                  ) : (
-                    <div className="text-xs font-medium bg-white bg-opacity-75 px-1 rounded whitespace-nowrap overflow-hidden" style={{ maxWidth: '38px', textOverflow: 'ellipsis' }}>{cell}</div>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
+
+        {/* Editable Input Grid below the canvas */}
+        <div className="w-fit mx-auto mt-4 mb-2 grid gap-0.5"
+          style={{
+            gridTemplateColumns: `repeat(${localMatrix[0].length}, 40px)`,
+            gridTemplateRows: `repeat(${localMatrix.length}, 32px)`
+          }}
+        >
+          {localMatrix.map((row, rowIdx) =>
+            row.map((cell, colIdx) => (
+              <div
+                key={`${rowIdx}-${colIdx}`}
+                className="flex items-center justify-center cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200 rounded"
+                onClick={() => handleCellClick(rowIdx, colIdx)}
+                onMouseEnter={() => onHover && onHover({ row: rowIdx, col: colIdx })}
+                onMouseLeave={() => onHover && onHover(null)}
+                style={{ width: '38px', height: '28px' }}
+              >
+                {editing && editing.row === rowIdx && editing.col === colIdx ? (
+                  <input
+                    ref={inputRef}
+                    type="number"
+                    value={cell}
+                    onChange={(e) => handleValueChange(rowIdx, colIdx, e.target.value)}
+                    onBlur={handleFinishEditing}
+                    onKeyDown={(e) => e.key === 'Enter' && handleFinishEditing()}
+                    className="w-full h-full text-center outline-none bg-white border border-blue-500"
+                    style={{ width: '38px', height: '28px' }}
+                  />
+                ) : (
+                  <div
+                    className="text-xs font-medium bg-white bg-opacity-75 px-1 rounded whitespace-nowrap overflow-hidden"
+                    style={{ maxWidth: '38px', textOverflow: 'ellipsis' }}
+                    title={typeof cell === 'number' && cell % 1 !== 0 ? cell.toPrecision(6) : String(cell)}
+                  >
+                    {typeof cell === 'number' && cell % 1 !== 0
+                      ? cell.toLocaleString(undefined, { maximumFractionDigits: 3 })
+                      : cell}
+                  </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
         
         <div className="flex gap-2 mt-3">
