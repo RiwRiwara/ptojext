@@ -13,7 +13,7 @@ const comfortaa_font = Comfortaa({
 
 // SEO & Social Metadata
 export const metadata: Metadata = {
-  title: "Project Simulation",
+  title: "VISUALRIGHT",
   description: "Simulation application for interactive.",
   keywords: [
     "simulation",
@@ -28,16 +28,16 @@ export const metadata: Metadata = {
   authors: [{ name: "Riwara", url: `${domain}` }],
   creator: "Riwara",
   openGraph: {
-    title: "Project Simulation",
+    title: "VISUALRIGHT",
     description: "Interactive web-based simulation application.",
     url: `${domain}`,
-    siteName: "Project Simulation",
+    siteName: "VISUALRIGHT",
     images: [
       {
         url: `${domain}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Project Simulation Demo",
+        alt: "VISUALRIGHT",
       },
     ],
     locale: "en_US",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Project Simulation",
+    title: "VISUALRIGHT",
     description: "Interactive web-based simulation application.",
     creator: "@yourtwitter",
     images: [`${domain}/og-image.png`],
