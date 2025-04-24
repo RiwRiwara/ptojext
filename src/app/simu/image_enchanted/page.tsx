@@ -3,68 +3,50 @@
 import { useEffect, useRef, useCallback, useState } from "react";
 import BaseLayout from "@/components/layout/BaseLayout";
 import { Button } from "@heroui/react";
+import { GrayScaleTypes } from "@/components/image_enchanted/types";
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  1.  Data model                                                           */
-/* ────────────────────────────────────────────────────────────────────────── */
 type GrayKey = "linear" | "log" | "power-law";
 
-interface TransformParam {
-  label: string;            // visible name, e.g. “γ”
-  min: number;
-  max: number;
-  step: number;
-  default: number;
-}
 
-interface GrayTransform {
-  key: GrayKey;
-  label: string;
-  description: string;
-  formula: string;          // plain‑text math string
-  param?: TransformParam;
-}
-
-const TRANSFORMS: GrayTransform[] = [
+const grayscaleTypes: GrayScaleTypes[] = [
   {
     key: "linear",
     label: "Linear (Identity)",
-    description: "Direct luminance mapping.",
+    description: "Keeps pixel intensity unchanged.",
     formula: "G = 0.299R + 0.587G + 0.114B"
   },
   {
     key: "log",
     label: "Logarithmic",
-    description: "Expands shadows, compresses highlights.",
-    formula: "G = c · log(1 + I)",
-    param: { label: "c", min: 10, max: 100, step: 1, default: 10 }
+    description: "Expands dark tones, compresses highlights.",
+    param: { label: "c", min: 50, max: 100, step: 1, default: 70 },
+    formula: "G = c · log(1 + I)"
   },
   {
     key: "power-law",
     label: "Power‑Law (Gamma)",
-    description: "Classic gamma correction.",
-    formula: "G = 255 · (I / 255)^γ",
-    param: { label: "γ", min: 0.1, max: 3, step: 0.05, default: 0.5 }
+    description: "Classic gamma correction for displays.",
+    param: { label: "γ", min: 0.1, max: 3, step: 0.05, default: 0.5 },
+    formula: "G = 255 · (I / 255)^γ"
   }
 ];
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  2.  Page component                                                       */
-/* ────────────────────────────────────────────────────────────────────────── */
+
 export default function GrayscaleTransformPage() {
   const [selected, setSelected] = useState<GrayKey>("linear");
   const [param, setParam] = useState<number | undefined>(
-    TRANSFORMS.find(t => t.key === "linear")?.param?.default
+    grayscaleTypes.find(g => g.key === selected)?.param?.default
   );
+  
 
   // reset parameter when transform changes
   useEffect(() => {
-    setParam(TRANSFORMS.find(t => t.key === selected)?.param?.default);
+    setParam(grayscaleTypes.find(t => t.key === selected)?.param?.default);
   }, [selected]);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  /* ----- transformation logic ------------------------------------------- */
+
   const applyTransform = useCallback(
     (img: HTMLImageElement) => {
       const canvas = canvasRef.current;
@@ -87,6 +69,7 @@ export default function GrayscaleTransformPage() {
           case "log": {
             const c = param ?? 10;
             gray = (c * Math.log1p(gray)) / Math.log(256);
+            gray = Math.min(255, gray);
             break;
           }
           case "power-law": {
@@ -112,16 +95,18 @@ export default function GrayscaleTransformPage() {
   }, [applyTransform]);
 
   /* ---------------------------------------------------------------------- */
-  const meta = TRANSFORMS.find(t => t.key === selected)!;
+  const meta = grayscaleTypes.find(t => t.key === selected)!;
 
   return (
     <BaseLayout>
       <div className="container mx-auto flex flex-col gap-8 p-4 pt-8">
-        <h1 className="text-2xl font-bold">Gray‑Level Transformations</h1>
+      <h1 className="text-2xl font-bold">
+  Gray‑Level Transformations: <span className="text-indigo-600">{meta.label}</span>
+</h1>
 
         {/* ── selector buttons ─────────────────────────────────────────── */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-          {TRANSFORMS.map(t => (
+          {grayscaleTypes.map(t => (
             <Button
               key={t.key}
               onClick={() => setSelected(t.key)}
@@ -141,8 +126,8 @@ export default function GrayscaleTransformPage() {
           <p className="text-sm text-gray-700">{meta.description}</p>
 
           {/* formula string */}
-          <code className="block bg-white border p-3 rounded text-indigo-700">
-            {meta.param
+          <code className="block bg-gray-100 text-gray-800 font-mono p-3 rounded border">
+          {meta.param
               ? meta.formula.replace(
                   meta.param.label,
                   `${meta.param.label}=${(param ?? meta.param.default).toFixed(2)}`
