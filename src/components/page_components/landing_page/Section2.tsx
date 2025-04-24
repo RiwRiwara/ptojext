@@ -61,7 +61,8 @@ export default function Section2({ controls }: Section2Props) {
 
     const clothWidth: number = 1100;
     const clothHeight: number = 700;
-    const particleSize: number = 12;
+    // Increase particle size to reduce total blocks (fewer particles = better performance)
+    const particleSize: number = 24;
     const rows: number = Math.floor(clothHeight / particleSize);
     const cols: number = Math.floor(clothWidth / particleSize);
     const particles: Body[][] = [];
