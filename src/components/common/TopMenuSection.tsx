@@ -101,7 +101,7 @@ export default function TopMenuSection() {
       <div className="rounded-full shadow-md flex flex-row gap-0 p-1 items-center border-1 border-gray-200 bg-white">
         <Link
           href="/"
-          className="text-gray-800 p-2 pr-2 bg-gray-100 shadow-inner rounded-l-full"
+          className="text-gray-800 p-2 pr-3 pl-3 bg-gray-100 shadow-inner rounded-l-full"
         >
           <TbHome className="w-8 h-8" />
         </Link>
@@ -116,7 +116,7 @@ export default function TopMenuSection() {
           placement="bottom"
         >
           <PopoverTrigger>
-            <div className="text-gray-800 p-2 pl-2 bg-gray-50 hover:bg-gray-200 hover:shadow-inner cursor-pointer">
+            <div className="text-gray-800 p-2 pr-3 pl-3 bg-gray-50 hover:bg-gray-200 hover:shadow-inner cursor-pointer">
               {isOpen ? (
                 <TbFolderOpen className="w-8 h-8 ease-soft spring duration-300 hover:scale-95" />
               ) : (
@@ -140,7 +140,7 @@ export default function TopMenuSection() {
           onOpenChange={handleSettingsOpenChange}>
           <PopoverTrigger>
             <button
-              className="text-gray-800 p-2 pl-2 bg-gray-50 rounded-r-full hover:bg-gray-200 hover:shadow-inner cursor-pointer flex items-center"
+              className="text-gray-800 p-2 pr-3 pl-3 bg-gray-50 rounded-r-full hover:bg-gray-200 hover:shadow-inner cursor-pointer flex items-center"
               aria-label="Settings"
             >
               <TbSettings className="w-8 h-8 ease-soft spring duration-300 hover:scale-95" />
