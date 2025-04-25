@@ -13,22 +13,54 @@ const menu_items = [
   {
     name: "Reinforcement Learning",
     description: "Learn about Reinforcement Learning",
-    icon: <FcCollect className="w-6 h-6 md:w-10 md:h-10" />,
+    icon: (
+      <Image
+        src="/icon/rl-icon.png"
+        alt="Reinforcement Learning Icon"
+        width={40}
+        height={40}
+        // className="w-6 h-6 md:w-10 md:h-10"
+      />
+    ),
   },
   {
     name: "Image Processing",
     description: "Learn about Image Processing",
-    icon: <FcStackOfPhotos className="w-6 h-6 md:w-10 md:h-10" />,
+    icon: (
+      <Image
+        src="/icon/image-icon.png"
+        alt="Image Processing Icon"
+        width={40}
+        height={40}
+        // className="w-6 h-6 md:w-10 md:h-10"
+      />
+    ),
   },
   {
     name: "Data Structure and Algorithms",
     description: "Learn about Data Structure and Algorithms",
-    icon: <FcOrgUnit className="w-6 h-6 md:w-10 md:h-10" />,
+    icon: (
+      <Image
+        src="/icon/tree-icon.png"
+        alt="Data Structure and Algorithms Icon"
+        width={40}
+        height={40}
+        className="mt-1"
+      />
+    ),
   },
   {
     name: "Neural Network",
     description: "Learn about Neural Network",
-    icon: <FcRadarPlot className="w-6 h-6 md:w-10 md:h-10" />,
+    icon: (
+      <Image
+        src="/icon/network-icon.png"
+        alt="Network Icon"
+        width={40}
+        height={40}
+        // className="w-6 h-6 md:w-10 md:h-10"
+      />
+    ),
   },
 ];
 
@@ -103,7 +135,7 @@ export default function Section1() {
             variants={itemVariants}
           >
             <motion.div
-              className="ease-soft-spring"
+              className="ease-soft-spring md:ml-4"
               variants={itemVariants}
               whileHover={{ scale: 1.1 }}
             >
@@ -117,14 +149,14 @@ export default function Section1() {
             </motion.div>
             <motion.div variants={itemVariants}>
               <motion.span
-                className="text-stone-500 flex flex-row gap-1"
+                className="default-blue font-bold flex flex-row gap-1 md:ml-10"
                 variants={containerVariants}
               >
                 {["V", "I", "S", "U", "A", "L", "R", "I", "G", "H", "T"].map(
                   (letter, index) => (
                     <motion.span
                       key={index}
-                      className="hover:text-stone-700 duration-400 hover:text-8xl ease-soft-spring cursor-default"
+                      className="hover:text-sky-950 duration-400 hover:text-8xl ease-soft-spring cursor-default"
                       variants={letterVariants}
                       whileHover={{ scale: 1.2 }}
                     >
@@ -148,7 +180,7 @@ export default function Section1() {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <motion.div
-                  className="p-2 md:p-4 bg-white rounded-full shadow-lg"
+                  className="w-10 h-10 md:w-16 md:h-16 p-2 md:p-4 bg-white rounded-full shadow-lg"
                 >
                   {item.icon}
                 </motion.div>

@@ -499,7 +499,7 @@ export default function Section3({ controls }: Section3Props) {
   }, [setupAStar, setupDijkstra, speed]);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center py-16 px-4">
+    <section className="min-h-screen flex flex-col items-center justify-center py-16 px-4 md:mt-28 bg-white">
       <motion.div
         className="text-center mb-12"
         initial="hidden"
@@ -509,12 +509,12 @@ export default function Section3({ controls }: Section3Props) {
         <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
           Pathfinder Versus: A* vs. Dijkstra
         </h2>
-        <p className="text-lg text-gray-600 max-w-3xl mx-auto font-medium">
+        <p className="text-md md:text-lg text-gray-600 max-w-3xl mx-auto font-medium">
           Visualize A* and Dijkstra{'\'s'} algorithms in action. Green marks the start, pink the end, gray represents walls, and indigo traces the optimal path.
         </p>
       </motion.div>
       <motion.div
-        className="w-full max-w-6xl p-8 flex flex-col gap-8"
+        className="w-fit md:w-full max-w-6xl p-8 flex flex-col gap-8"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}

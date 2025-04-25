@@ -190,20 +190,20 @@ export default function Section2({ controls }: Section2Props) {
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center bg-white py-12">
+    <section className="min-h-screen flex flex-col items-center justify-center bg-white py-12 md:mt-28">
       <motion.div
-        className="text-center mb-12"
+        className="text-center md:mb-12"
         initial="hidden"
         variants={fadeInVariants}
         animate={controls ? controls : "pageLoad"}
       >
         <h2 className="text-5xl font-extrabold text-gray-900 mb-4">{t("LSECTION2")}</h2>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-md md:text-xl text-gray-600 max-w-2xl mx-4 md:mx-auto">
           Interactive cloth simulation powered by Matter.js. Use the controls to manipulate the cloth.
         </p>
       </motion.div>
       <motion.div
-        className="flex flex-col items-center gap-4 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg max-w-4xl w-full"
+        className="flex flex-col items-center gap-4 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg max-w-4xl w-fit md:w-full"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
@@ -211,12 +211,7 @@ export default function Section2({ controls }: Section2Props) {
         <div className="rounded-lg overflow-hidden border border-gray-200">
           <canvas
             ref={canvasRef}
-            style={{
-              width: 800,
-              height: 533,
-              display: "block",
-            }}
-            className="bg-white"
+            className="bg-white w-72 h-56 md:w-[800px] md:h-[533px] block"
           />
         </div>
         <div className="flex gap-2 bg-gray-100 p-2 rounded-full shadow-sm flex-wrap justify-center">
