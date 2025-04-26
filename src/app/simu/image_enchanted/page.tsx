@@ -4,10 +4,10 @@ import GrayscaleTransformSection from "@/components/image_enchanted/grayscaleTra
 import SharpenSmoothTransformSection from "@/components/image_enchanted/sharpenSmoothTransform";
 export default function ImageEnhancementPage() {
 
-  return (
+  return ( 
     <BaseLayout>
       <GrayscaleTransformSection />
       <SharpenSmoothTransformSection />
     </BaseLayout>
-  );
+  ); 
 }

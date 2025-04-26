@@ -173,7 +173,7 @@ export default function SharpenSmoothTransformSection() {
         />
       </div>
 
-      <canvas ref={canvasRef} className="mx-auto border rounded shadow max-w-full" />
+      <canvas ref={canvasRef} className="rounded border shadow max-w-full" />
     </section>
   );
 }
