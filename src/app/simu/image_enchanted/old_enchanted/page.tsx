@@ -91,7 +91,7 @@ function Flow() {
               className="hover:scale-110 duration-300 text-blue-900 cursor-pointer"
             />
             <h1 className="font-semibold text-2xl uppercase text-gray-700">
-              Image Enchanted
+              Image Enhancement
             </h1>
           </div>
         </div>
