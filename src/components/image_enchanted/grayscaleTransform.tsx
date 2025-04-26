@@ -95,7 +95,11 @@ export default function GrayscaleTransformSection() {
         Gray‑Level Transformations:{" "}
         <span className="text-indigo-600">{meta.label}</span>
       </h1>
-
+          {/* ── img preview ─ */}
+          <canvas
+        ref={canvasRef}
+        className="mx-auto border rounded shadow max-w-full"
+      />
       {/* ── selector buttons ─ */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {grayscaleTypes.map(t => (
@@ -112,11 +116,6 @@ export default function GrayscaleTransformSection() {
           </Button>
         ))}
       </div>
-      {/* ── canvas preview ─ */}
-      <canvas
-        ref={canvasRef}
-        className="mx-auto border rounded shadow max-w-full"
-      />
       {/* ── info / slider panel ─ */}
       <div className="bg-gray-50 p-6 rounded-md space-y-4 shadow-sm">
         <p className="text-sm text-gray-700">{meta.description}</p>
@@ -148,8 +147,6 @@ export default function GrayscaleTransformSection() {
           </div>
         )}
       </div>
-
-
     </div>
   );
 }

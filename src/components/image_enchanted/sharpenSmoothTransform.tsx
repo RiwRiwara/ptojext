@@ -149,7 +149,8 @@ export default function SharpenSmoothTransformSection() {
   return (
     <section className="mt-10 container mx-auto p-4 space-y-6">
       <h2 className="text-xl font-bold">Sharpening & Smoothing</h2>
-
+      <canvas ref={canvasRef} className="mx-auto border rounded shadow max-w-full"
+      />
       <div className="flex gap-4 flex-wrap">
         {methods.map(m => (
           <button
@@ -168,8 +169,6 @@ export default function SharpenSmoothTransformSection() {
           </button>
         ))}
       </div>
-      <canvas ref={canvasRef} className="mx-auto border rounded shadow max-w-full"
-      />
       <div className="bg-gray-100 p-4 rounded shadow space-y-4">
         <p className="text-gray-700">{meta.description}</p>
         <label className="block mt-4 font-medium">
