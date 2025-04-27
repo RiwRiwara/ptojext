@@ -15,13 +15,13 @@ import {
   ImageEnchantedNode,
   GrayScaleNode,
   SharpeningNode,
-} from "@/components/image_enchanted/index";
+} from "@/components/image_enhancement/index";
 import { Tooltip } from "@nextui-org/tooltip";
-import useStore from "@/components/image_enchanted/states/store";
-import BottomRight from "@/components/image_enchanted/ui/BottomRight";
+import useStore from "@/components/image_enhancement/states/store";
+import BottomRight from "@/components/image_enhancement/ui/BottomRight";
 
-import { getAllImages } from "@/components/image_enchanted/data/crud";
-import { EnchantedImage } from "@/components/image_enchanted/data/types";
+import { getAllImages } from "@/components/image_enhancement/data/crud";
+import { EnchantedImage } from "@/components/image_enhancement/data/types";
 import Image from "next/image";
 import { Link } from "@nextui-org/link";
 import { FaInfoCircle } from "react-icons/fa";
@@ -30,7 +30,7 @@ import BaseLayout from "@/components/layout/BaseLayout";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import { tour_steps } from "@/components/image_enchanted/data/tour_steps";
+import { tour_steps } from "@/components/image_enhancement/data/tour_steps";
 
 const nodeTypes = {
   image_enchanted_node: ImageEnchantedNode,
@@ -91,7 +91,7 @@ function Flow() {
               className="hover:scale-110 duration-300 text-blue-900 cursor-pointer"
             />
             <h1 className="font-semibold text-2xl uppercase text-gray-700">
-              Image Enchanted
+              Image Enhancement
             </h1>
           </div>
         </div>

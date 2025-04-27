@@ -69,7 +69,7 @@ const categoryIcons: { [key: string]: JSX.Element } = {
 const childIcons: { [key: string]: JSX.Element } = {
   Sorting: <FaSort className="text-blue-500" size={16} />,
   "Image Convolution": <FaImage className="text-green-500" size={16} />,
-  "Image Enchanted": <FaMagic className="text-green-500" size={16} />,
+  "Image Enhancement": <FaMagic className="text-green-500" size={16} />,
   "About Us": <MdInfo className="text-purple-500" size={16} />,
   Support: <MdSupport className="text-purple-500" size={16} />,
 };

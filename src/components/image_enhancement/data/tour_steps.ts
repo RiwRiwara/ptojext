@@ -4,9 +4,9 @@ export const tour_steps: DriveStep[] = [
   {
     element: "#tour-main",
     popover: {
-      title: "Welcome to Image enchanted page tour",
+      title: "Welcome to Image enhancement page tour",
       description:
-        "This section can simulation image enchanted, But first let know about essential component of this page. Let's GOOO!!",
+        "This section can simulation image enhancement, But first let know about essential component of this page. Let's GOOO!!",
       side: "left",
       align: "start",
     },

@@ -4,7 +4,7 @@ import { Slider } from "@nextui-org/slider";
 import { Button } from "@nextui-org/button";
 import { Switch } from "@nextui-org/switch";
 import { Select, SelectItem } from "@nextui-org/select";
-import useStore from "@/components/image_enchanted/states/store";
+import useStore from "@/components/image_enhancement/states/store";
 
 const noiseTypes = [
   { key: "Gaussian", label: "Gaussian" },
