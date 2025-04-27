@@ -23,9 +23,9 @@
                 "className": "image-convolution"
               },
               {
-                "name": "Image Enchanted",
-                "link": "/simu/image_enchanted",
-                "className": "image-enchanted"
+                "name": "Image Enhancement",
+                "link": "/simu/image_enhancement",
+                "className": "image-enhancement"
               }
             ]
           }

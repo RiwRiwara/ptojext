@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import people_img from "@/assets/images/people.jpg";
-import { processImageConvolution } from "../image_enchanted/logic/process_image_convolution";
+import { processImageConvolution } from "../image_enhancement/logic/process_image_convolution";
 
 const originalKernel = [
   [0, 0, 0],

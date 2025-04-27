@@ -2,7 +2,7 @@
 import { Button, ButtonGroup } from "@nextui-org/button";
 import { addImage, removeAllImages } from "../data/crud";
 import { EnchantedImage } from "../data/types";
-import useStore from "@/components/image_enchanted/states/store";
+import useStore from "@/components/image_enhancement/states/store";
 
 export default function BottomRight() {
   const { images_enchanted_data, setTrigger, trigger } = useStore();

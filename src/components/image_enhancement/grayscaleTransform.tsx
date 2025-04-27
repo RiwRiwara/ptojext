@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import { Button } from "@heroui/react";
-import { GrayScaleTypes } from "@/components/image_enchanted/types";
+import { GrayScaleTypes } from "@/components/image_enhancement/types";
 
 type GrayKey = "linear" | "log" | "power-law";
 

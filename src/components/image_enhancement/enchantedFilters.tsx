@@ -194,14 +194,14 @@ const EnchantedFilters = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const link = document.createElement("a");
-    link.download = "enchanted-image.png";
+    link.download = "enhancement-image.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
   };
 
   return (
     <div className="flex flex-col items-center gap-6 bg-white p-6 rounded-xl">
-      <h2 className="text-xl font-bold">Enchanted Image Filters</h2>
+      <h2 className="text-xl font-bold">Enhancement Image Filters</h2>
 
       <canvas ref={canvasRef} className="rounded-md border-2 max-w-full" />
 
