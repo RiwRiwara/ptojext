@@ -8,15 +8,15 @@ const methods = [
     label: "Sharpen",
     description: "Enhances edges by emphasizing pixel intensity differences.",
     formula: `G = I + α(I - blurred(I))`,
-    param: { label: "α", min: 0.1, max: 10.0, step: 0.1, default: 1.0 }
+    param: { label: "α", min: 0.1, max: 10.0, step: 0.1, default: 1.0 },
   },
   {
     key: "smooth",
     label: "Smooth",
     description: "Reduces noise by averaging nearby pixel values.",
     formula: `G = 1/9 Σ I(x,y)`,
-    param: { label: "Kernel Size", min: 1, max: 10, step: 1, default: 3 }
-  }
+    param: { label: "Kernel Size", min: 1, max: 10, step: 1, default: 3 },
+  },
 ];
 
 export default function SharpenSmoothTransformSection() {
@@ -64,7 +64,9 @@ export default function SharpenSmoothTransformSection() {
 
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
-        let r = 0, g = 0, b = 0;
+        let r = 0,
+          g = 0,
+          b = 0;
 
         for (let ky = 0; ky < side; ky++) {
           for (let kx = 0; kx < side; kx++) {
@@ -144,15 +146,21 @@ export default function SharpenSmoothTransformSection() {
     img.onload = () => applyTransform(img);
   }, [applyTransform]);
 
-  const meta = methods.find(m => m.key === selected)!;
+  const meta = methods.find((m) => m.key === selected)!;
 
   return (
-    <section className="mt-10 container mx-auto p-4 space-y-6">
+    <section className="mt-10 container mx-auto p-4 flex flex-col items-center space-y-6">
       <h2 className="text-xl font-bold">Sharpening & Smoothing</h2>
-      <canvas ref={canvasRef} className="mx-auto border rounded shadow max-w-full"
+
+      {/* Center the Canvas */}
+      <canvas
+        ref={canvasRef}
+        className="mx-auto border rounded shadow max-w-full"
       />
-      <div className="flex gap-4 flex-wrap">
-        {methods.map(m => (
+
+      {/* Center the Method Buttons */}
+      <div className="flex gap-4 flex-wrap justify-center">
+        {methods.map((m) => (
           <button
             key={m.key}
             className={`px-4 py-2 rounded transition ${
@@ -169,7 +177,9 @@ export default function SharpenSmoothTransformSection() {
           </button>
         ))}
       </div>
-      <div className="bg-gray-100 p-4 rounded shadow space-y-4">
+
+      {/* Centered Control Panel */}
+      <div className="bg-gray-100 p-4 rounded shadow space-y-4 w-full max-w-xl">
         <p className="text-gray-700">{meta.description}</p>
         <label className="block mt-4 font-medium">
           {meta.param.label}: {param.toFixed(2)}
@@ -181,8 +191,9 @@ export default function SharpenSmoothTransformSection() {
           max={meta.param.max}
           step={meta.param.step}
           value={param}
-          onChange={e => setParam(parseFloat(e.target.value))}
+          onChange={(e) => setParam(parseFloat(e.target.value))}
         />
+
         {/* Visual Explanation */}
         <div className="bg-white p-4 rounded shadow-inner">
           {selected === "sharpen" ? (
@@ -191,15 +202,15 @@ export default function SharpenSmoothTransformSection() {
                 G = I + α (I - blurred(I))
               </div>
               <div className="text-gray-600">
-                α ={" "}
-                <span className="font-semibold">{param.toFixed(2)}</span>
+                α = <span className="font-semibold">{param.toFixed(2)}</span>
               </div>
               <div className="text-xs text-gray-500 italic">
-                Sharpening emphasizes edges by subtracting a blurred version from the original image and amplifying the difference using α.
+                Sharpening emphasizes edges by subtracting a blurred version
+                from the original image and amplifying the difference using α.
               </div>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col items-center">
               <div className="text-sm text-gray-700">
                 Averaging Kernel (size: {param}×{param}):
               </div>
@@ -207,8 +218,6 @@ export default function SharpenSmoothTransformSection() {
             </div>
           )}
         </div>
-
-       
       </div>
     </section>
   );
