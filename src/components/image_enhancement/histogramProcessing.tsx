@@ -1,112 +1,285 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Button } from "@heroui/react";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip } from "chart.js";
+
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip);
+
+type TransformMode = "linear" | "gamma" | "log";
 
 export default function HistogramProcessingSection() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [mode, setMode] = useState<"original" | "equalized">("original");
+  const originalCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const transformedCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const equalizedCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const applyHistogramProcessing = useCallback((img: HTMLImageElement) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+  const [originalHist, setOriginalHist] = useState<number[]>([]);
+  const [transformedHist, setTransformedHist] = useState<number[]>([]);
+  const [equalizedHist, setEqualizedHist] = useState<number[]>([]);
+  const [mode, setMode] = useState<TransformMode>("linear");
+  const [gammaValue, setGammaValue] = useState(1.0);
+  const [logC, setLogC] = useState(30);
+  const [grayOriginal, setGrayOriginal] = useState<number[]>([]);
 
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
+  const processImage = useCallback((img: HTMLImageElement) => {
+    if (!originalCanvasRef.current || !transformedCanvasRef.current || !equalizedCanvasRef.current) return;
+    const origCtx = originalCanvasRef.current.getContext("2d");
+    const transCtx = transformedCanvasRef.current.getContext("2d");
+    const eqCtx = equalizedCanvasRef.current.getContext("2d");
+    if (!origCtx || !transCtx || !eqCtx) return;
 
-    const imgData = ctx.getImageData(0, 0, img.width, img.height);
+    originalCanvasRef.current.width = transformedCanvasRef.current.width = equalizedCanvasRef.current.width = img.width;
+    originalCanvasRef.current.height = transformedCanvasRef.current.height = equalizedCanvasRef.current.height = img.height;
+
+    origCtx.drawImage(img, 0, 0);
+    transCtx.drawImage(img, 0, 0);
+    eqCtx.drawImage(img, 0, 0);
+
+    const imgData = origCtx.getImageData(0, 0, img.width, img.height);
     const data = imgData.data;
 
-    if (mode === "equalized") {
-      const gray = new Array(img.width * img.height);
+    const gray = new Array(img.width * img.height);
 
-      for (let i = 0, j = 0; i < data.length; i += 4, j++) {
-        gray[j] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-      }
-
-      const hist = new Array(256).fill(0);
-      gray.forEach(value => hist[Math.floor(value)]++);
-
-      const cdf = hist.map((_, i) =>
-        hist.slice(0, i + 1).reduce((sum, v) => sum + v, 0)
-      );
-      const cdfMin = cdf.find(c => c > 0) ?? 0;
-      const totalPixels = gray.length;
-
-      const equalized = gray.map(value => {
-        const val = Math.floor(value);
-        return Math.round(
-          ((cdf[val] - cdfMin) / (totalPixels - cdfMin)) * 255
-        );
-      });
-
-      for (let i = 0, j = 0; i < data.length; i += 4, j++) {
-        const eq = equalized[j];
-        data[i] = data[i + 1] = data[i + 2] = eq;
-      }
-
-      ctx.putImageData(imgData, 0, 0);
+    for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+      gray[j] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
     }
-  }, [mode]);
+
+    const hist = new Array(256).fill(0);
+    gray.forEach(value => hist[Math.floor(value)]++);
+    setOriginalHist(hist);
+    setGrayOriginal(gray);
+
+    applyTransformation(gray);
+    applyEqualization(gray);
+
+  }, []);
+
+  const applyTransformation = useCallback((gray: number[]) => {
+    if (!transformedCanvasRef.current) return;
+    const ctx = transformedCanvasRef.current.getContext("2d");
+    if (!ctx) return;
+
+    const width = transformedCanvasRef.current.width;
+    const height = transformedCanvasRef.current.height;
+    const imgData = ctx.getImageData(0, 0, width, height);
+    const data = imgData.data;
+
+    const minGray = gray.reduce((a, b) => Math.min(a, b), Infinity);
+    const maxGray = gray.reduce((a, b) => Math.max(a, b), -Infinity);
+
+    const transformed = gray.map(val => {
+      switch (mode) {
+        case "linear":
+          return ((val - minGray) * 255) / (maxGray - minGray);
+        case "gamma":
+          return 255 * Math.pow(val / 255, gammaValue);
+        case "log":
+          return (logC * Math.log1p(val)) / Math.log(256);
+        default:
+          return val;
+      }
+    });
+
+    for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+      const v = Math.min(255, Math.max(0, transformed[j]));
+      data[i] = data[i + 1] = data[i + 2] = v;
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+
+    const hist = new Array(256).fill(0);
+    transformed.forEach(v => hist[Math.floor(v)]++);
+    setTransformedHist(hist);
+
+  }, [mode, gammaValue, logC]);
+
+  const applyEqualization = useCallback((gray: number[]) => {
+    if (!equalizedCanvasRef.current) return;
+    const ctx = equalizedCanvasRef.current.getContext("2d");
+    if (!ctx) return;
+
+    const width = equalizedCanvasRef.current.width;
+    const height = equalizedCanvasRef.current.height;
+    const imgData = ctx.getImageData(0, 0, width, height);
+    const data = imgData.data;
+
+    const hist = new Array(256).fill(0);
+    gray.forEach(value => hist[Math.floor(value)]++);
+
+    const cdf = hist.map((_, i) => hist.slice(0, i + 1).reduce((sum, v) => sum + v, 0));
+    const cdfMin = cdf.find(c => c > 0) ?? 0;
+    const totalPixels = gray.length;
+
+    const equalized = gray.map(value => {
+      const val = Math.floor(value);
+      return Math.round(((cdf[val] - cdfMin) / (totalPixels - cdfMin)) * 255);
+    });
+
+    for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+      const eq = Math.min(255, Math.max(0, equalized[j]));
+      data[i] = data[i + 1] = data[i + 2] = eq;
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+
+    const eqHist = new Array(256).fill(0);
+    equalized.forEach(v => eqHist[Math.floor(v)]++);
+    setEqualizedHist(eqHist);
+
+  }, []);
 
   useEffect(() => {
     const img = new Image();
     img.src = "/mri.jpg";
-    img.onload = () => applyHistogramProcessing(img);
-  }, [applyHistogramProcessing]);
+    img.onload = () => processImage(img);
+  }, [processImage]);
+
+  useEffect(() => {
+    if (grayOriginal.length > 0) {
+      applyTransformation(grayOriginal);
+    }
+  }, [mode, gammaValue, logC, grayOriginal, applyTransformation]);
+
+  const histOptions = {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (context: any) => `Count: ${context.parsed.y}`
+        }
+      }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: "Pixel Intensity (0-255)",
+          color: "#4b5563",
+          font: {
+            size: 12
+          }
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Frequency",
+          color: "#4b5563",
+          font: {
+            size: 12
+          }
+        }
+      }
+    }
+  };
+
+  const createHistData = (histArray: number[]) => ({
+    labels: Array.from({ length: 256 }, (_, i) => i.toString()),
+    datasets: [
+      {
+        label: "Pixel Count",
+        data: histArray,
+        backgroundColor: "#6366f1"
+      }
+    ]
+  });
+
+  const dynamicFormula = () => {
+    switch (mode) {
+      case "linear":
+        return "s = (r - min) * (255 / (max - min))";
+      case "gamma":
+        return `s = 255 × (r / 255)^${gammaValue.toFixed(2)}`;
+      case "log":
+        return `s = ${logC} × log(1 + r) / log(256)`;
+      default:
+        return "";
+    }
+  };
 
   return (
     <div className="container mx-auto flex flex-col gap-8 p-4 pt-8">
-      <h1 className="text-2xl font-bold">
-        Histogram Processing:{" "}
-        <span className="text-indigo-600 capitalize">{mode}</span>
-      </h1>
+      <h1 className="text-2xl font-bold text-center">Dynamic Histogram Processing</h1>
 
-      {/* ── canvas image ─ */}
-      <canvas
-        ref={canvasRef}
-        className="mx-auto border rounded shadow max-w-full"
-      />
+      {/* Select Transform */}
+      <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+        <select
+          value={mode}
+          onChange={(e) => setMode(e.target.value as TransformMode)}
+          className="border rounded px-3 py-2 text-sm"
+        >
+          <option value="linear">Linear Stretch</option>
+          <option value="gamma">Gamma Correction</option>
+          <option value="log">Logarithmic Transform</option>
+        </select>
 
-      {/* ── button selector ─ */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-        <Button
-          onClick={() => setMode("original")}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition ${
-            mode === "original"
-              ? "bg-indigo-600 text-white shadow-md"
-              : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
-          }`}
-        >
-          Original
-        </Button>
-        <Button
-          onClick={() => setMode("equalized")}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition ${
-            mode === "equalized"
-              ? "bg-indigo-600 text-white shadow-md"
-              : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
-          }`}
-        >
-          Equalized
-        </Button>
+        {/* Dynamic Sliders */}
+        {mode === "gamma" && (
+          <div className="flex items-center gap-2">
+            <label className="text-sm">Gamma: {gammaValue.toFixed(2)}</label>
+            <input
+              type="range"
+              min="0.1"
+              max="5"
+              step="0.1"
+              value={gammaValue}
+              onChange={(e) => setGammaValue(parseFloat(e.target.value))}
+              className="accent-indigo-600"
+            />
+          </div>
+        )}
+        {mode === "log" && (
+          <div className="flex items-center gap-2">
+            <label className="text-sm">c: {logC}</label>
+            <input
+              type="range"
+              min="1"
+              max="100"
+              step="1"
+              value={logC}
+              onChange={(e) => setLogC(parseFloat(e.target.value))}
+              className="accent-indigo-600"
+            />
+          </div>
+        )}
       </div>
 
-      {/* ── explanation box ─ */}
-      <div className="bg-gray-50 p-6 rounded-md space-y-4 shadow-sm text-sm text-gray-700">
-        {mode === "original" ? (
-          <p>Original image without histogram modification.</p>
-        ) : (
-          <>
-            <p>Histogram Equalization enhances contrast by redistributing pixel intensities.</p>
-            <code className="block bg-gray-100 text-gray-800 font-mono p-3 rounded border">
-              S = (CDF(r) - CDF<sub>min</sub>) / (N - CDF<sub>min</sub>) × 255
-            </code>
-          </>
-        )}
+      {/* Dynamic Formula */}
+      <div className="text-center text-gray-700 font-mono text-sm">
+        Formula: {dynamicFormula()}
+      </div>
+
+      {/* Images and Histograms */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Original */}
+        <div className="flex flex-col items-center gap-4">
+          <h2 className="text-lg font-semibold text-gray-700">Original Image</h2>
+          <canvas ref={originalCanvasRef} className="border rounded shadow max-w-full" />
+          <h3 className="text-sm font-medium text-gray-600">Original Histogram</h3>
+          <div className="w-full">
+            <Bar options={histOptions} data={createHistData(originalHist)} height={150} />
+          </div>
+        </div>
+
+        {/* Transformed */}
+        <div className="flex flex-col items-center gap-4">
+          <h2 className="text-lg font-semibold text-gray-700 capitalize">{mode} Transformed</h2>
+          <canvas ref={transformedCanvasRef} className="border rounded shadow max-w-full" />
+          <h3 className="text-sm font-medium text-gray-600 capitalize">{mode} Histogram</h3>
+          <div className="w-full">
+            <Bar options={histOptions} data={createHistData(transformedHist)} height={150} />
+          </div>
+        </div>
+
+        {/* Equalized */}
+        <div className="flex flex-col items-center gap-4">
+          <h2 className="text-lg font-semibold text-gray-700">Equalized Image</h2>
+          <canvas ref={equalizedCanvasRef} className="border rounded shadow max-w-full" />
+          <h3 className="text-sm font-medium text-gray-600">Equalized Histogram</h3>
+          <div className="w-full">
+            <Bar options={histOptions} data={createHistData(equalizedHist)} height={150} />
+          </div>
+        </div>
       </div>
     </div>
   );

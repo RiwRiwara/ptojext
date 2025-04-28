@@ -13,29 +13,29 @@ export default function ImageEnhancementPage() {
   const [openPoint, setOpenPoint] = useState(false);
   const [openMask, setOpenMask] = useState(false);
   const { t } = useTranslation("imageenchanted");
-  
+
   return (
     <BaseLayout>
-        <div className="container mx-auto flex flex-col justify-start h-screen gap-8 p-2 pt-8 mb-10 ">
-          <div className="max-w-3xl mx-auto mb-4">
-            <Breadcrumb
-              items={[
-                { label: "Home", href: "/" },
-                { label: "Image Enhancement" },
-              ]}
-            />
-          </div>
+      <div className="container mx-auto flex flex-col justify-start h-screen gap-8 p-2 pt-8 mb-10 ">
+        <div className="max-w-3xl mx-auto mb-4">
+          <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Image Enhancement" },
+            ]}
+          />
+        </div>
         <h1 className="uppercase text-3xl font-bold text-center">
           Image Enhancement
         </h1>
         <div className="flex flex-col md:flex-row gap-6 md:gap-10">
-        <div>
-          <h1 className="text-2xl font-semibold mb-2">
-            {t("whatisimageenchanted")}
-          </h1>
-          <p className="text-lg">{t("mean")}</p>
+          <div>
+            <h1 className="text-2xl font-semibold mb-2">
+              {t("whatisimageenchanted")}
+            </h1>
+            <p className="text-lg">{t("mean")}</p>
+          </div>
         </div>
-      </div>
         {/* Tree Menu */}
         <div className="w-full max-w-md bg-white p-4 rounded-2xl shadow-md">
           <div className="flex flex-col gap-2 text-gray-700 text-sm">
@@ -60,7 +60,6 @@ export default function ImageEnhancementPage() {
               >
                 {openPoint ? "▼" : "▶"} Point Processing
               </button>
-              
 
               <div
                 className={`ml-4 overflow-hidden transition-all ${
@@ -79,7 +78,6 @@ export default function ImageEnhancementPage() {
                 >
                   Histogram Processing
                 </button>
-                
               </div>
 
               {/* Mask Processing */}
@@ -107,16 +105,14 @@ export default function ImageEnhancementPage() {
         </div>
 
         {/* Render Selected Section */}
-        <div className="w-full max-w-5xl mt-10">
-          {selectedSection === "grayscale" && (
-            <GrayscaleTransformSection />
-          )}
-          {selectedSection === "histogram" && (
-            <HistogramProcessingSection />
-          )}
-          {selectedSection === "sharpenSmooth" && (
-            <SharpenSmoothTransformSection />
-          )}
+        <div className="w-full flex justify-center mt-10">
+          <div className="max-w-5xl">
+            {selectedSection === "grayscale" && <GrayscaleTransformSection />}
+            {selectedSection === "histogram" && <HistogramProcessingSection />}
+            {selectedSection === "sharpenSmooth" && (
+              <SharpenSmoothTransformSection />
+            )}
+          </div>
         </div>
       </div>
     </BaseLayout>
