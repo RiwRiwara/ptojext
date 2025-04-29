@@ -3,7 +3,7 @@ import { Handle, Position, useNodesData } from "@xyflow/react";
 import { applyGrayScale } from "../logic/gray_scale";
 import { applyNoise } from "../logic/noise";
 import { grayScaleDataType, noiseDataType, NoiseType } from "../types";
-import useStore from "@/components/image_enchanted/states/store";
+import useStore from "@/components/image_enhancement/states/store";
 
 function ImageEnchantedNode() {
   const { setImagesEnchantedData } = useStore();
@@ -55,7 +55,7 @@ function ImageEnchantedNode() {
       const imageDataUrl = canvas.toDataURL("image/png");
       const EnchantedImageData = {
         data: imageDataUrl,
-        name: "Image Enchanted",
+        name: "Image Enhancement",
       };
       setImagesEnchantedData(EnchantedImageData);
     };

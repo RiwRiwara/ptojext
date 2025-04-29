@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 import { Slider } from "@nextui-org/slider";
 import { Switch } from "@nextui-org/switch";
-import useStore from "@/components/image_enchanted/states/store";
+import useStore from "@/components/image_enhancement/states/store";
 
 function SharpeningNode() {
   const { updateNodeData } = useStore();

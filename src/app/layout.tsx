@@ -3,7 +3,8 @@ import { Comfortaa } from "next/font/google";
 import { NextUIProvider } from "@nextui-org/system";
 import "./globals.css";
 import { AnimatePresence } from "framer-motion";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 const domain = "https://ptojext.vercel.app";
 // Font setup
 const comfortaa_font = Comfortaa({
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     "web demo",
     "Matter.js",
     "Next.js",
-    "project"
+    "project",
   ],
   authors: [{ name: "Riwara", url: `${domain}` }],
   creator: "Riwara",
@@ -81,6 +82,8 @@ export default function RootLayout({
         <AnimatePresence mode="wait" initial={false}>
           <NextUIProvider>{children}</NextUIProvider>
         </AnimatePresence>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
