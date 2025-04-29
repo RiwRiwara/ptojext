@@ -8,6 +8,7 @@ import {
   CategoryScale,
   LinearScale,
   Tooltip,
+  TooltipItem,
 } from "chart.js";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip);
@@ -164,7 +165,7 @@ export default function HistogramProcessingSection() {
     plugins: {
       tooltip: {
         callbacks: {
-          label: (context: any) => `Count: ${context.parsed.y}`,
+          label: (context: TooltipItem<"bar">) => `Count: ${context.parsed.y}`,
         },
       },
     },
