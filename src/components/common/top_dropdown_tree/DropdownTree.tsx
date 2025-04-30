@@ -2,10 +2,11 @@ import React, { useState, memo } from "react";
 import { useSpring, a } from "@react-spring/web";
 import useMeasure from "react-use-measure";
 import { IoSearch, IoClose, IoInformationCircleOutline, IoChevronDown } from "react-icons/io5";
-import { FaCode, FaImage, FaSort, FaMagic } from "react-icons/fa";
+import { FaCode, FaImage, FaSort, FaMagic, FaSearch } from "react-icons/fa";
 import { MdInfo, MdSupport } from "react-icons/md";
 import Link from "next/link";
 import menuItems from "@/data/component_items/TopMenuDropItems.json";
+import { FcSearch } from "react-icons/fc";
 
 interface TreeItem {
   name: string;
@@ -63,12 +64,14 @@ HighlightText.displayName = "HighlightText"; // Add displayName
 const categoryIcons: { [key: string]: JSX.Element } = {
   Algorithms: <FaCode className="text-blue-500" size={20} />,
   "Image processing": <FaImage className="text-green-500" size={20} />,
+
   information: <IoInformationCircleOutline className="text-purple-500" size={20} />,
 };
 
 // Child Icons Mapping
 const childIcons: { [key: string]: JSX.Element } = {
   Sorting: <FaSort className="text-blue-500" size={16} />,
+  Search: <FaSearch className="text-blue-500" size={16} />,
   "Image Convolution": <FaImage className="text-green-500" size={16} />,
   "Image Enhancement": <FaMagic className="text-green-500" size={16} />,
   "About Us": <MdInfo className="text-purple-500" size={16} />,

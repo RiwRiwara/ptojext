@@ -9,9 +9,20 @@
         "className": "visualization",
         "children": [
           {
-            "name": "Sorting",
+            "name": "Algorithms",
             "className": "",
-            "link": "/playground/algorithms/sorting"
+            "children": [
+              {
+                "name": "Sorting",
+                "link": "/playground/algorithms/sorting",
+                "className": "sorting"
+              },
+              {
+                "name": "Search",
+                "link": "/playground/algorithms/search",
+                "className": "search"
+              }
+            ]
           },
           {
             "name": "Image processing",

@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 
 // SEO & Social Metadata
 export const metadata: Metadata = {
-  title: "AI Playground: Simulations and Visualizations",
+  title: "Visual Right: AI Simulations and Visualizations",
   description: "Discover Many Simulations in an interactive AI playground. Master computer science with engaging visualizations.",
   keywords: [
     "pathfinding algorithms",

@@ -8,20 +8,32 @@ import { CiSquarePlus } from "react-icons/ci";
 import { CiSquareMinus } from "react-icons/ci";
 
 interface ArrayControlsProps {
-    currentArray: number[];
-    isPlaying: boolean;
-    onGenerateRandom: (size: number) => void;
-    onShuffle: () => void;
-    onSortAscending: () => void;
-    onSortDescending: () => void;
-    onAddElement: () => void;
-    onRemoveElement: () => void;
+    arraySize: number;
+    isPlaying?: boolean;
+    onArraySizeChange: (size: number) => void;
+    onRandomize: () => void;
+    onCustomArray?: (input: string) => void;
+    customArrayInput?: string;
+    setCustomArrayInput?: (input: string) => void;
+    inputError?: string;
+    currentArray?: number[];
+    onShuffle?: () => void;
+    onSortAscending?: () => void;
+    onSortDescending?: () => void;
+    onAddElement?: () => void;
+    onRemoveElement?: () => void;
 }
 
 export default function ArrayControls({
-    currentArray,
-    isPlaying,
-    onGenerateRandom,
+    arraySize,
+    isPlaying = false,
+    onArraySizeChange,
+    onRandomize,
+    onCustomArray,
+    customArrayInput = '',
+    setCustomArrayInput,
+    inputError,
+    currentArray = [],
     onShuffle,
     onSortAscending,
     onSortDescending,
@@ -29,66 +41,125 @@ export default function ArrayControls({
     onRemoveElement,
 }: ArrayControlsProps) {
     return (
-        <section className="mb-8 bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Array Controls
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                <Button
-                    onClick={() => onGenerateRandom(10)}
-                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-all disabled:opacity-50"
-                    disabled={isPlaying}
-                >
-                    <FaRandom />
-                    Random
-                </Button>
-                <Button
-                    onClick={onShuffle}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all disabled:opacity-50"
-                    disabled={isPlaying}
-                >
-                    <MdOutlineShuffle />
-                    Shuffle
-                </Button>
-                <Button
-                    onClick={onSortAscending}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all disabled:opacity-50"
-                    disabled={isPlaying}
-                >
-                    <GoSortAsc />
-                    Ascending
-                </Button>
-                <Button
-                    onClick={onSortDescending}
-                    className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-all disabled:opacity-50"
-                    disabled={isPlaying}
-                >
-                    <GoSortDesc />
-                    Descending
-                </Button>
-                <Button
-                    onClick={onAddElement}
-                    className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-all disabled:opacity-50"
-                    disabled={isPlaying || currentArray.length >= 20}
-                >
-                    <CiSquarePlus />
-                    Add
-                </Button>
-                <Button
-                    onClick={onRemoveElement}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all disabled:opacity-50"
-                    disabled={isPlaying || currentArray.length <= 3}
-                >
-                    <CiSquareMinus />
-                    Remove
-                </Button>
+        <div className="space-y-4">
+            <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-gray-700">Array Size</label>
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="range"
+                            min="5"
+                            max="50"
+                            value={arraySize}
+                            onChange={(e) => onArraySizeChange(parseInt(e.target.value))}
+                            disabled={isPlaying}
+                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        />
+                        <span className="text-sm font-medium text-gray-700 min-w-[30px] text-center">
+                            {arraySize}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                    <Button
+                        onPress={onRandomize}
+                        className="flex items-center justify-center gap-1 px-3 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-all disabled:opacity-50 text-sm"
+                        disabled={isPlaying}
+                    >
+                        <FaRandom size={14} />
+                        Randomize
+                    </Button>
+
+                    {onShuffle && (
+                        <Button
+                            onPress={onShuffle}
+                            className="flex items-center justify-center gap-1 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all disabled:opacity-50 text-sm"
+                            disabled={isPlaying}
+                        >
+                            <MdOutlineShuffle size={16} />
+                            Shuffle
+                        </Button>
+                    )}
+
+                    {onSortAscending && (
+                        <Button
+                            onPress={onSortAscending}
+                            className="flex items-center justify-center gap-1 px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all disabled:opacity-50 text-sm"
+                            disabled={isPlaying}
+                        >
+                            <GoSortAsc size={16} />
+                            Sort Asc
+                        </Button>
+                    )}
+
+                    {onSortDescending && (
+                        <Button
+                            onPress={onSortDescending}
+                            className="flex items-center justify-center gap-1 px-3 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-all disabled:opacity-50 text-sm"
+                            disabled={isPlaying}
+                        >
+                            <GoSortDesc size={16} />
+                            Sort Desc
+                        </Button>
+                    )}
+
+                    {onAddElement && (
+                        <Button
+                            onPress={onAddElement}
+                            className="flex items-center justify-center gap-1 px-3 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-all disabled:opacity-50 text-sm"
+                            disabled={isPlaying || arraySize >= 50}
+                        >
+                            <CiSquarePlus size={16} />
+                            Add
+                        </Button>
+                    )}
+
+                    {onRemoveElement && (
+                        <Button
+                            onPress={onRemoveElement}
+                            className="flex items-center justify-center gap-1 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all disabled:opacity-50 text-sm"
+                            disabled={isPlaying || arraySize <= 5}
+                        >
+                            <CiSquareMinus size={16} />
+                            Remove
+                        </Button>
+                    )}
+                </div>
             </div>
-            <div className="mt-4 p-3 bg-gray-100 rounded-md">
-                <h3 className="text-sm font-medium text-gray-600 mb-1">Current Array</h3>
-                <p className="font-mono text-sm text-gray-800 break-all">
-                    [{currentArray.join(", ")}]
-                </p>
-            </div>
-        </section>
+
+            {onCustomArray && setCustomArrayInput && (
+                <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Custom Array</label>
+                    <div className="flex gap-2">
+                        <input
+                            type="text"
+                            value={customArrayInput}
+                            onChange={(e) => setCustomArrayInput(e.target.value)}
+                            placeholder="e.g., 5, 2, 8, 1, 9"
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#83AFC9] text-sm"
+                            disabled={isPlaying}
+                        />
+                        <Button
+                            onPress={() => onCustomArray(customArrayInput)}
+                            className="px-3 py-2 bg-[#83AFC9] text-white rounded-md hover:bg-[#6da5c0] transition-all disabled:opacity-50 text-sm"
+                            disabled={isPlaying || !customArrayInput.trim()}
+                        >
+                            Apply
+                        </Button>
+                    </div>
+                    {inputError && <p className="mt-1 text-xs text-red-500">{inputError}</p>}
+                </div>
+            )}
+
+            {currentArray.length > 0 && (
+                <div className="mt-4 p-3 bg-gray-100 rounded-md">
+                    <h3 className="text-sm font-medium text-gray-600 mb-1">Current Array</h3>
+                    <p className="font-mono text-sm text-gray-800 break-all overflow-x-auto">
+                        [{currentArray.join(", ")}]
+                    </p>
+                </div>
+            )}
+        </div>
     );
 }

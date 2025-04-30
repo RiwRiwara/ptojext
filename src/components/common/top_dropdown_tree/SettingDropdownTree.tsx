@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { TbAlphabetThai, TbAlphabetLatin } from "react-icons/tb";
 import { FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from "@heroui/react";
+
 import Image from "next/image";
 
 interface SettingDropdownTreeProps {
