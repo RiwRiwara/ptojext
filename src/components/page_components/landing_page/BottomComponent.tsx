@@ -42,7 +42,7 @@ export default function BottomComponent() {
                             Explore the fascinating world of AI algorithms through interactive visualizations and simulations. Learn, experiment, and have fun!
                         </p>
                         <div className="flex space-x-4">
-                            <a href="https://github.com/yourusername/ai-playground" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-sky-600 transition-colors">
+                            <a href="https://github.com/RiwRiwara/ptojext.git" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-sky-600 transition-colors">
                                 <FaGithub size={20} />
                             </a>
 
@@ -105,14 +105,14 @@ export default function BottomComponent() {
                 {/* Bottom section with copyright */}
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <p className="text-gray-500 text-sm mb-4 md:mb-0">
-                        &copy; {new Date().getFullYear()} AI Playground. All rights reserved.
+                        &copy; {new Date().getFullYear()} Visual Right. All rights reserved.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500">
-                        <a href="#" className="hover:text-sky-600 transition-colors">Privacy Policy</a>
+                        <Link href="/about/privacy" className="hover:text-sky-600 transition-colors">Privacy Policy</Link>
                         <span className="hidden sm:inline">•</span>
-                        <a href="#" className="hover:text-sky-600 transition-colors">Terms of Service</a>
+                        <Link href="/about/terms" className="hover:text-sky-600 transition-colors">Terms of Service</Link>
                         <span className="hidden sm:inline">•</span>
-                        <a href="#" className="hover:text-sky-600 transition-colors">Cookie Policy</a>
+                        <Link href="/about" className="hover:text-sky-600 transition-colors">About Us</Link>
                     </div>
                 </div>
             </div>

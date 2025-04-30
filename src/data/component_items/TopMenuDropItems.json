@@ -36,6 +36,11 @@
         "className": "information",
         "children": [
           {
+            "name": "Changelog",
+            "link": "/roadmap",
+            "className": "information-changelog"
+          },
+          {
             "name": "About Us",
             "link": "/about",
             "className": "information-about"
