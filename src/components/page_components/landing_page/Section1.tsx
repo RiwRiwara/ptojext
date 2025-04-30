@@ -119,7 +119,7 @@ export default function Section1() {
 
         {/* Hero content */}
         <motion.div
-          className="text-center relative z-10"
+          className="text-center relative z-[5]"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

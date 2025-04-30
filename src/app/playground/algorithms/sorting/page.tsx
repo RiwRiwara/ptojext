@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import BaseLayout from "@/components/layout/BaseLayout";
-import { HeroUIProvider } from "@heroui/react";
 import SortingAlgorithms from "@/classes/sorting/SortingAlgorithms";
 import PixiSortingVisualizer from "@/components/playground_components/algorithms/sorting/PixiSortingVisualizer";
 import AlgorithmSelector from "@/components/playground_components/algorithms/sorting/AlgorithmSelector";
@@ -12,6 +11,7 @@ import { AnimationStep, SortingAlgorithm } from "@/components/playground_compone
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { motion } from "framer-motion";
 import { FaInfoCircle, FaLightbulb, FaRegClock, FaCode, FaChalkboardTeacher } from "react-icons/fa";
+import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 
 const sortingAlgorithms: SortingAlgorithm[] = [
   {
@@ -183,7 +183,7 @@ export default function SortingVisualizerPage() {
 
   // Define the type for animation step types to ensure proper TypeScript type checking
   type AnimationStepType = 'compare' | 'swap' | 'select' | 'set';
-  
+
   const codeHighlightMap = useMemo<Record<AnimationStepType, number>>(
     () => ({
       compare: 2,
@@ -228,14 +228,14 @@ export default function SortingVisualizerPage() {
     setCurrentArray([...arr]);
     setInitialArray([...arr]);
     setCurrentStep(0);
-    
+
     // Reset algorithm stats
     setAlgorithmStats({
       swaps: 0,
       comparisons: 0,
       runtime: 0
     });
-    
+
     // Generate animation steps for the new array
     const sorter = new SortingAlgorithms([...arr]);
     setAnimationSteps(sorter.getAnimationSteps(selectedAlgo));
@@ -298,7 +298,7 @@ export default function SortingVisualizerPage() {
     const sorter = new SortingAlgorithms([...initialArray]);
     setAnimationSteps(sorter.getAnimationSteps(selectedAlgo));
   }, []);
-  
+
   // Navigation functions
   const goToPrevStep = useCallback(() => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
@@ -307,7 +307,7 @@ export default function SortingVisualizerPage() {
   const goToNextStep = useCallback(() => {
     setCurrentStep((prev) => Math.min(prev + 1, animationSteps.length - 1));
   }, [animationSteps.length]);
-  
+
   // Update animation steps when algorithm changes
   useEffect(() => {
     const sorter = new SortingAlgorithms([...currentArray]);
@@ -320,19 +320,19 @@ export default function SortingVisualizerPage() {
     console.log("Sorting completed!");
     setIsPlaying(false);
     setCurrentStep(animationSteps.length - 1);
-    
+
     // Update algorithm stats
     const swaps = animationSteps.filter(step => step.type === 'swap').length;
     const comparisons = animationSteps.filter(step => step.type === 'compare').length;
     const runtime = Math.round((animationSteps.length / speed) * 100); // Simulated runtime in ms
-    
+
     setAlgorithmStats({
       swaps,
       comparisons,
       runtime
     });
   }, [animationSteps, speed]);
-  
+
   // Effect to update code highlighting when animation step changes
   useEffect(() => {
     if (currentStep >= animationSteps.length && animationSteps.length > 0) {
@@ -378,16 +378,16 @@ export default function SortingVisualizerPage() {
             { label: "Sorting" }
           ]} />
         </div>
-        <header className="py-6 px-4 bg-gradient-to-r from-[#83AFC9]/10 to-[#83AFC9]/30 shadow-sm rounded-lg border border-[#83AFC9]/20">
+        <header className="py-6 px-4 ">
           <div className="max-w-7xl mx-auto">
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight text-center bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-[#6da5c0]"
             >
               Sorting Algorithm Visualizer
             </motion.h1>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -395,23 +395,23 @@ export default function SortingVisualizerPage() {
             >
               Explore, compare and understand sorting algorithms in real-time
             </motion.p>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               className="mt-4 flex flex-wrap justify-center gap-3 text-sm"
             >
               <div className="inline-flex items-center px-3 py-1 bg-white/70 rounded-full shadow-sm">
-                <FaRegClock className="mr-1 text-[#83AFC9]" /> 
+                <FaRegClock className="mr-1 text-[#83AFC9]" />
                 <span>Visual learning</span>
               </div>
               <div className="inline-flex items-center px-3 py-1 bg-white/70 rounded-full shadow-sm">
-                <FaCode className="mr-1 text-[#83AFC9]" /> 
+                <FaCode className="mr-1 text-[#83AFC9]" />
                 <span>Code walkthrough</span>
               </div>
               <div className="inline-flex items-center px-3 py-1 bg-white/70 rounded-full shadow-sm">
-                <FaChalkboardTeacher className="mr-1 text-[#83AFC9]" /> 
+                <FaChalkboardTeacher className="mr-1 text-[#83AFC9]" />
                 <span>Step-by-step explanation</span>
               </div>
             </motion.div>
@@ -440,7 +440,7 @@ export default function SortingVisualizerPage() {
                     <li>Try different array sizes and patterns to see how the algorithm behaves</li>
                   </ul>
                 </div>
-                <button 
+                <button
                   onClick={() => setShowTips(false)}
                   className="ml-auto text-gray-400 hover:text-gray-600"
                   aria-label="Close tips"
@@ -450,9 +450,9 @@ export default function SortingVisualizerPage() {
               </div>
             </motion.div>
           )}
-          
+
           {/* Algorithm Selector */}
-          <motion.div 
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1 }}
@@ -468,7 +468,7 @@ export default function SortingVisualizerPage() {
           </motion.div>
 
           {/* Array Controls */}
-          <motion.div 
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -485,7 +485,7 @@ export default function SortingVisualizerPage() {
               onAddElement={addElement}
               onRemoveElement={removeElement}
             />
-            
+
             {/* Custom Array Input */}
             <div className="mt-4 p-4 bg-[#83AFC9]/5 rounded-lg border border-[#83AFC9]/20">
               <h3 className="text-sm font-medium mb-2 text-gray-700">Custom Array Input</h3>
@@ -511,7 +511,7 @@ export default function SortingVisualizerPage() {
                       setInputError("Please enter some numbers");
                       return;
                     }
-                    
+
                     try {
                       const values = customArrayInput
                         .split(',')
@@ -520,22 +520,22 @@ export default function SortingVisualizerPage() {
                           if (isNaN(parsed)) throw new Error('Invalid input');
                           return parsed;
                         });
-                      
+
                       if (values.length < 2) {
                         setInputError("Please enter at least 2 numbers");
                         return;
                       }
-                      
+
                       // Success: update arrays and reset visualization
                       setInitialArray(values);
                       setCurrentArray([...values]);
                       setCurrentStep(0);
                       setIsPlaying(false);
-                      
+
                       // Generate new animation steps
                       const sorter = new SortingAlgorithms([...values]);
                       setAnimationSteps(sorter.getAnimationSteps(selectedAlgo));
-                      
+
                       // Clear input error if any
                       setInputError("");
                     } catch (error) {
@@ -548,13 +548,13 @@ export default function SortingVisualizerPage() {
                 </button>
               </div>
             </div>
-            
+
             {/* Array Representation */}
             <div className="mt-4 p-3 bg-gray-50 rounded-lg overflow-x-auto">
               <div className="flex flex-wrap gap-1 justify-center">
                 {currentArray.map((value, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="w-8 h-8 flex items-center justify-center rounded-md text-xs font-mono bg-white border border-[#83AFC9]/30 shadow-sm"
                     style={{
                       backgroundColor: index === currentStep ? 'rgba(131, 175, 201, 0.2)' : 'white'
@@ -569,7 +569,7 @@ export default function SortingVisualizerPage() {
 
           {/* Visualization and Code */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <motion.section 
+            <motion.section
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -578,21 +578,21 @@ export default function SortingVisualizerPage() {
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-[#83AFC9]">Sorting Visualization</h2>
                 <div className="flex items-center gap-2">
-                  <button 
-                    onClick={() => setShowStats(!showStats)} 
+                  <button
+                    onClick={() => setShowStats(!showStats)}
                     className={`px-2 py-1 text-xs rounded-md ${showStats ? 'bg-[#83AFC9] text-white' : 'bg-gray-100 text-gray-600'}`}
                   >
                     {showStats ? 'Hide Stats' : 'Show Stats'}
                   </button>
-                  <button 
-                    onClick={() => setShowExplanation(!showExplanation)} 
+                  <button
+                    onClick={() => setShowExplanation(!showExplanation)}
                     className={`px-2 py-1 text-xs rounded-md ${showExplanation ? 'bg-[#83AFC9] text-white' : 'bg-gray-100 text-gray-600'}`}
                   >
                     {showExplanation ? 'Hide Explanation' : 'Show Explanation'}
                   </button>
                 </div>
               </div>
-              
+
               {/* Stats panel */}
               {showStats && (
                 <div className="mb-4 p-3 bg-[#83AFC9]/5 rounded-lg border border-[#83AFC9]/20 text-sm">
@@ -612,7 +612,7 @@ export default function SortingVisualizerPage() {
                   </div>
                 </div>
               )}
-              
+
               <VisualizationControls
                 isPlaying={isPlaying}
                 setIsPlaying={setIsPlaying}
@@ -626,7 +626,7 @@ export default function SortingVisualizerPage() {
                 onPrevStep={goToPrevStep}
                 onNextStep={goToNextStep}
               />
-              
+
               {/* Step explanation */}
               {showExplanation && currentStep < animationSteps.length && (
                 <div className="my-3 p-3 bg-yellow-50 border border-yellow-100 rounded-lg text-sm">
@@ -645,7 +645,7 @@ export default function SortingVisualizerPage() {
                   </div>
                 </div>
               )}
-              
+
               <PixiSortingVisualizer
                 blocks={currentArray}
                 animationSteps={animationSteps}
@@ -657,8 +657,8 @@ export default function SortingVisualizerPage() {
                 colorScheme={selectedAlgoData?.colorScheme}
               />
             </motion.section>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -672,7 +672,7 @@ export default function SortingVisualizerPage() {
                 isPlaying={isPlaying}
                 currentHighlightedLine={currentHighlightedLine}
               />
-              
+
               {/* Algorithm summary */}
               <div className="mt-4 p-3 bg-gray-50 rounded-lg">
                 <h3 className="font-medium text-gray-700 mb-1">Time Complexity</h3>
@@ -690,12 +690,12 @@ export default function SortingVisualizerPage() {
                     <span className="font-mono font-medium">{selectedAlgoData?.complexity.time.worst}</span>
                   </div>
                 </div>
-                
+
                 <h3 className="font-medium text-gray-700 mb-1">Space Complexity</h3>
                 <div className="bg-white p-2 rounded border border-gray-200 text-xs">
                   <span className="font-mono font-medium">{selectedAlgoData?.complexity.space}</span>
                 </div>
-                
+
                 <h3 className="font-medium text-gray-700 mt-3 mb-1">Best Used When</h3>
                 <ul className="list-disc pl-5 text-xs text-gray-600">
                   {selectedAlgo === 'bubble-sort' && (
@@ -745,6 +745,7 @@ export default function SortingVisualizerPage() {
             </motion.div>
           </div>
 
+          <BottomComponent />
         </main>
       </div>
     </BaseLayout>
