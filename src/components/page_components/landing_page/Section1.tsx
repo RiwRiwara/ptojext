@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FcRadarPlot,
@@ -8,6 +8,7 @@ import {
   FcOrgUnit,
 } from "react-icons/fc";
 import Image from "next/image";
+import { isMobileOrLowSpec, getOptimalAnimationSettings } from "@/utils/deviceDetection";
 
 
 
@@ -54,17 +55,35 @@ const letterVariants = {
 export default function Section1() {
   const [isClient, setIsClient] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isLowPerformanceDevice, setIsLowPerformanceDevice] = useState(false);
+  
+  // Get optimal animation settings based on device capability
+  const animationSettings = useMemo(() => {
+    return getOptimalAnimationSettings();
+  }, []);
 
   useEffect(() => {
     setIsClient(true);
+    setIsLowPerformanceDevice(isMobileOrLowSpec());
+    
+    // Throttled mouse move handler for better performance
+    let lastMove = 0;
+    const throttleDelay = isLowPerformanceDevice ? 150 : 50; // Higher throttle on mobile
 
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      const now = Date.now();
+      if (now - lastMove > throttleDelay) {
+        setMousePosition({ x: e.clientX, y: e.clientY });
+        lastMove = now;
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    // Only add mouse tracking on non-mobile devices to save performance
+    if (!isLowPerformanceDevice) {
+      window.addEventListener('mousemove', handleMouseMove);
+      return () => window.removeEventListener('mousemove', handleMouseMove);
+    }
+  }, [isLowPerformanceDevice]);
 
   if (!isClient) return null; // Prevent SSR mismatches
 
@@ -78,15 +97,25 @@ export default function Section1() {
         variants={containerVariants}
         viewport={{ once: true }} // Only animate once when in view
       >
-        {/* Dynamic gradient following mouse position */}
-        <motion.div 
-          className="absolute inset-0 opacity-30 -z-10 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.1) 25%, transparent 50%)`
-          }}
-          animate={{ opacity: [0.2, 0.3, 0.2] }}
-          transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
-        />
+        {/* Dynamic gradient - simplified on mobile */}
+        {!isLowPerformanceDevice ? (
+          <motion.div 
+            className="absolute inset-0 opacity-30 -z-10 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.1) 25%, transparent 50%)`
+            }}
+            animate={{ opacity: [0.2, 0.3, 0.2] }}
+            transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+          />
+        ) : (
+          // Static gradient for mobile/low-performance devices
+          <div 
+            className="absolute inset-0 opacity-25 -z-10 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.1) 25%, transparent 50%)`
+            }}
+          />
+        )}
 
         {/* Hero content */}
         <motion.div
@@ -130,7 +159,10 @@ export default function Section1() {
                       key={index}
                       className="hover:text-sky-950 hover:drop-shadow-lg duration-300 cursor-default"
                       variants={letterVariants}
-                      whileHover={{ scale: 1.3, y: -5 }}
+                      // Disable hover animations on mobile for better performance
+                      {...(!isLowPerformanceDevice && {
+                        whileHover: { scale: 1.3, y: -5 }
+                      })}
                     >
                       {letter}
                     </motion.span>
@@ -139,8 +171,12 @@ export default function Section1() {
               </motion.span>
               <motion.div 
                 className="h-1 w-0 bg-gradient-to-r from-sky-700 via-[#83AFC9] to-sky-50 mx-auto rounded-full mt-3"
-                animate={{ width: ["0%", "80%", "60%"] }}
-                transition={{ duration: 2, delay: 1 }}
+                // Simpler animation for mobile
+                animate={{ width: isLowPerformanceDevice ? "60%" : ["0%", "80%", "60%"] }}
+                transition={{ 
+                  duration: isLowPerformanceDevice ? 1 : 2, 
+                  delay: isLowPerformanceDevice ? 0.5 : 1 
+                }}
               />
             </motion.div>
 
@@ -178,17 +214,21 @@ export default function Section1() {
           </motion.div>
         </motion.div>
 
-        {/* Floating elements decoration */}
-        <motion.div 
-          className="absolute top-20 right-20 w-16 h-16 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 opacity-20 blur-xl"
-          animate={{ y: [0, -20, 0], opacity: [0.2, 0.3, 0.2] }}
-          transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
-        />
-        <motion.div 
-          className="absolute bottom-40 left-20 w-24 h-24 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-20 blur-xl"
-          animate={{ y: [0, 20, 0], opacity: [0.2, 0.25, 0.2] }}
-          transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
-        />
+        {/* Floating elements decoration - hidden on low performance devices */}
+        {!isLowPerformanceDevice && (
+          <>
+            <motion.div 
+              className="absolute top-20 right-20 w-16 h-16 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 opacity-20 blur-xl"
+              animate={{ y: [0, -20, 0], opacity: [0.2, 0.3, 0.2] }}
+              transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
+            />
+            <motion.div 
+              className="absolute bottom-40 left-20 w-24 h-24 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-20 blur-xl"
+              animate={{ y: [0, 20, 0], opacity: [0.2, 0.25, 0.2] }}
+              transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
+            />
+          </>
+        )}
       </motion.main>
     </AnimatePresence>
   );

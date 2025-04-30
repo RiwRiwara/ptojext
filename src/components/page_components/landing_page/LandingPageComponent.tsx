@@ -1,19 +1,40 @@
 "use client";
 import { useAnimation } from "framer-motion";
-import { useEffect, useCallback, useState } from "react";
-import ClothPhysic from "./ClothPhysic";
-import Section3 from "./Section3";
-
+import { useEffect, useCallback, useState, lazy, Suspense } from "react";
 import { FaPlayCircle } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@heroui/card";
+import { isMobileOrLowSpec } from "@/utils/deviceDetection";
+
+// Lazy load heavy components for better initial loading performance
+const ClothPhysic = lazy(() => import("./ClothPhysic"));
+const Section3 = lazy(() => import("./Section3"));
 
 export default function LandingPageComponent() {
   const controlsSection2 = useAnimation();
   const controlsSection3 = useAnimation();
   const [activeTab, setActiveTab] = useState(0);
+  const [isLowPerformanceDevice, setIsLowPerformanceDevice] = useState(false);
+  
+  // Check for low performance device on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsLowPerformanceDevice(isMobileOrLowSpec());
+    }
+  }, []);
 
   const handleScroll = useCallback(() => {
+    // Throttle scroll events on low-performance devices
+    if (isLowPerformanceDevice) {
+      // Skip animation on low-performance devices to conserve resources
+      // Just make all controls visible after a short delay
+      setTimeout(() => {
+        controlsSection2.start("visible");
+        controlsSection3.start("visible");
+      }, 1000);
+      return;
+    }
+      
     const sections = document.querySelectorAll("section");
     const scrollY = window.scrollY + window.innerHeight;
     const controlsArray = [controlsSection2, controlsSection3];
@@ -30,12 +51,27 @@ export default function LandingPageComponent() {
         }
       }
     });
-  }, [controlsSection2, controlsSection3]);
+  }, [controlsSection2, controlsSection3, isLowPerformanceDevice]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
+    // On mobile/low-spec, use passive event listener and throttle scroll events
+    if (isLowPerformanceDevice) {
+      let lastScroll = 0;
+      const throttledScroll = () => {
+        const now = Date.now();
+        if (now - lastScroll > 200) { // 200ms throttle for low-performance devices
+          handleScroll();
+          lastScroll = now;
+        }
+      };
+      
+      window.addEventListener("scroll", throttledScroll, { passive: true });
+      return () => window.removeEventListener("scroll", throttledScroll);
+    } else {
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+  }, [handleScroll, isLowPerformanceDevice]);
 
   // Features data for tabs
   const featuresData = [
@@ -225,8 +261,10 @@ export default function LandingPageComponent() {
               </div>
 
               <div className="relative">
-                <div className="relative ">
-                  <ClothPhysic controls={controlsSection2} />
+                <div className="relative">
+                  <Suspense fallback={<div className="w-full h-64 bg-gray-100 animate-pulse rounded-md"></div>}>
+                    <ClothPhysic controls={controlsSection2} />
+                  </Suspense>
                 </div>
               </div>
             </div>
@@ -235,7 +273,9 @@ export default function LandingPageComponent() {
       </section>
 
       {/* Existing sections Section3) */}
-      <Section3 controls={controlsSection3} />
+      <Suspense fallback={<div className="w-full h-64 bg-gray-100 animate-pulse rounded-md"></div>}>
+        <Section3 controls={controlsSection3} />
+      </Suspense>
 
 
     </div>

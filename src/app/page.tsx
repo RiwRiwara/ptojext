@@ -6,6 +6,7 @@ import Section1 from "@/components/page_components/landing_page/Section1";
 import { Card } from "@heroui/card";
 import { Spinner } from "@nextui-org/spinner";
 import { Suspense, useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
