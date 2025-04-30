@@ -7,11 +7,11 @@ import Matter, { MouseConstraint, Engine, Render, Runner, Constraint, Body, Mous
 import { VscRepoForcePush } from "react-icons/vsc";
 import { CgRedo } from "react-icons/cg";
 
-interface Section2Props {
+interface ClothPhysicProps {
   controls: AnimationControls;
 }
 
-export default function Section2({ controls }: Section2Props) {
+export default function ClothPhysic({ controls }: ClothPhysicProps) {
   const { t } = useTranslation('common');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gravity, setGravity] = useState<boolean>(true);
@@ -190,20 +190,16 @@ export default function Section2({ controls }: Section2Props) {
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center bg-white py-12 md:mt-28">
+    <section className="flex flex-col items-center justify-center bg-white">
       <motion.div
-        className="text-center md:mb-12"
         initial="hidden"
         variants={fadeInVariants}
         animate={controls ? controls : "pageLoad"}
       >
-        <h2 className="text-5xl font-extrabold text-gray-900 mb-4">{t("LSECTION2")}</h2>
-        <p className="text-md md:text-xl text-gray-600 max-w-2xl mx-4 md:mx-auto">
-          Interactive cloth simulation powered by Matter.js. Use the controls to manipulate the cloth.
-        </p>
+
       </motion.div>
       <motion.div
-        className="flex flex-col items-center gap-4 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg max-w-4xl w-fit md:w-full"
+        className="flex flex-col items-center gap-4 bg-white/80 backdrop-blur-sm rounded-xl "
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
@@ -211,7 +207,7 @@ export default function Section2({ controls }: Section2Props) {
         <div className="rounded-lg overflow-hidden border border-gray-200">
           <canvas
             ref={canvasRef}
-            className="bg-white w-72 h-56 md:w-[800px] md:h-[533px] block"
+            className="bg-white w-64 h-64 md:w-[540px] md:h-[300px] block"
           />
         </div>
         <div className="flex gap-2 bg-gray-100 p-2 rounded-full shadow-sm flex-wrap justify-center">
@@ -256,9 +252,7 @@ export default function Section2({ controls }: Section2Props) {
             </span>
           </button>
         </div>
-        <div className="text-sm text-gray-500 text-center">
-          Physics Demo: Interactive Cloth Simulation
-        </div>
+
       </motion.div>
     </section>
   );

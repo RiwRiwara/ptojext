@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { useSpring, a } from "@react-spring/web";
 import useMeasure from "react-use-measure";
-import { IoSearch, IoClose, IoInformationCircleOutline } from "react-icons/io5";
+import { IoSearch, IoClose, IoInformationCircleOutline, IoChevronDown } from "react-icons/io5";
 import { FaCode, FaImage, FaSort, FaMagic } from "react-icons/fa";
 import { MdInfo, MdSupport } from "react-icons/md";
 import Link from "next/link";
@@ -57,6 +57,7 @@ const HighlightText: React.FC<{ text: string; query: string }> = ({
     </>
   );
 };
+HighlightText.displayName = "HighlightText"; // Add displayName
 
 // Category Icons Mapping
 const categoryIcons: { [key: string]: JSX.Element } = {
@@ -74,57 +75,66 @@ const childIcons: { [key: string]: JSX.Element } = {
   Support: <MdSupport className="text-purple-500" size={16} />,
 };
 
-// Child Tree Component (for nested items)
+// Child Tree Component (for nested items) - using memo for better performance
 const ChildTree: React.FC<{
   item: TreeItem;
   searchQuery: string;
-}> = ({ item, searchQuery }) => {
+}> = memo(({ item, searchQuery }) => {
   const [isOpen, setOpen] = useState(item.defaultOpen || false);
   const [ref, { height: viewHeight }] = useMeasure();
 
-  const { height, opacity, y } = useSpring({
-    from: { height: 10, opacity: 0, y: 10 },
+  const { height, opacity } = useSpring({
+    from: { height: 0, opacity: 0 },
     to: {
-      height: isOpen ? viewHeight + 10 : 0,
+      height: isOpen ? viewHeight : 0,
       opacity: isOpen ? 1 : 0,
-      y: isOpen ? 0 : 10,
     },
-    config: { tension: 280, friction: 20 },
+    config: { tension: 300, friction: 26 },
   });
 
-  const icon = childIcons[item.name] || <FaCode className="text-gray-500" size={16} />;
+  // Get icon based on item name
+  const icon = childIcons[item.name] || <FaCode className="text-gray-500" size={14} />;
 
-  return (
-    <div >
-      <div
-        className={`flex items-center gap-3 p-2 rounded-lg transition-all duration-200 hover:bg-blue-50 cursor-pointer ${
-          item.children ? "border-b border-gray-100" : ""
-        }`}
-        onClick={() => item.children && setOpen(!isOpen)}
-        onKeyDown={(e) => e.key === "Enter" && item.children && setOpen(!isOpen)}
-        role={item.children ? "button" : "link"}
-        aria-expanded={item.children ? isOpen : undefined}
-        tabIndex={0}
-      >
-        {icon}
-        {item.link ? (
-          <Link href={item.link} className="flex-1">
-            <span className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200">
-              <HighlightText text={item.name} query={searchQuery} />
-            </span>
-          </Link>
-        ) : (
-          <span className="text-gray-800 text-sm font-medium flex-1">
+  // Link or button layout
+  const content = (
+    <div
+      className={`flex items-center gap-2 p-1.5 rounded-md transition-all hover:bg-blue-50 cursor-pointer`}
+      onClick={() => item.children && setOpen(!isOpen)}
+      onKeyDown={(e) => e.key === "Enter" && item.children && setOpen(!isOpen)}
+      role={item.children ? "button" : "link"}
+      aria-expanded={item.children ? isOpen : undefined}
+      tabIndex={0}
+    >
+      {icon}
+      {item.link ? (
+        <Link href={item.link} className="flex-1">
+          <span className="text-gray-700 text-xs hover:text-blue-600 transition-colors">
             <HighlightText text={item.name} query={searchQuery} />
           </span>
-        )}
-      </div>
+        </Link>
+      ) : (
+        <span className="text-gray-700 text-xs flex-1">
+          <HighlightText text={item.name} query={searchQuery} />
+        </span>
+      )}
+      {item.children && (
+        <IoChevronDown
+          className={`text-gray-400 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
+          size={14}
+        />
+      )}
+    </div>
+  );
+
+  return (
+    <div className="py-0.5">
+      {content}
       {item.children && (
         <a.div
           style={{ height, opacity, overflow: "hidden" }}
-          className="mt-1"
+          className="pl-4"
         >
-          <div ref={ref} style={{ transform: `translateY(${y}px)` }}>
+          <div ref={ref}>
             {item.children.map((child, index) => (
               <ChildTree key={index} item={child} searchQuery={searchQuery} />
             ))}
@@ -133,11 +143,10 @@ const ChildTree: React.FC<{
       )}
     </div>
   );
-};
+});
+ChildTree.displayName = "ChildTree"; // Explicitly set for clarity
 
-// Note: CategoryCard component is no longer used in the new sectioned layout
-
-// Main Component
+// Main Component - more compact and performance optimized
 const DropdownTree: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -149,44 +158,47 @@ const DropdownTree: React.FC = () => {
   const filteredItems = filterTree(gridItems, searchQuery);
 
   return (
-    <div className="">
-      <div className="relative mb-4">
-        <IoSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+    <div className="max-w-5xl mx-auto">
+      {/* Compact search input */}
+      <div className="relative mb-3">
+        <IoSearch className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
         <input
           type="text"
           placeholder="Search categories..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-10 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-gray-800 placeholder-gray-400 transition-all duration-200 bg-white shadow-sm"
+          className="w-full pl-9 pr-9 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400 text-xs text-gray-800 placeholder-gray-400 bg-white shadow-sm"
           aria-label="Search categories"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery("")}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             aria-label="Clear search"
           >
-            <IoClose size={20} />
+            <IoClose size={16} />
           </button>
         )}
       </div>
+
+      {/* No results message */}
       {filteredItems.length === 0 && searchQuery ? (
-        <p className="text-center text-gray-500 text-sm py-4">No results found</p>
+        <p className="text-center text-gray-500 text-xs py-2">No results found</p>
       ) : (
-        <div className="grid grid-cols-1 gap-8">
-          {/* Section Grid Layout */}
+        <div className="grid grid-cols-1 gap-4">
+          {/* More compact section layout */}
           {filteredItems.map((category, index) => (
-            <section key={index} className="bg-gray-50 rounded-xl p-4 shadow-sm border border-gray-100">
-              {/* Section Header */}
-              <div className="flex items-center gap-3 mb-4">
-                {categoryIcons[category.name] || <FaCode className="text-gray-500" size={24} />}
-                <h2 className="text-xl font-bold text-gray-800">{category.name}</h2>
+            <section key={index} className="bg-gray-50 rounded-lg p-3 shadow-sm border border-gray-100">
+              {/* Compact section header */}
+              <div className="flex items-center gap-2 mb-2">
+                {categoryIcons[category.name] || <FaCode className="text-gray-500" size={18} />}
+                <h2 className="text-base font-semibold text-gray-800">{category.name}</h2>
               </div>
-              
-              {/* Grid of Category Items */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
+
+              {/* Grid of Category Items - more compact */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {category.children?.map((item, itemIndex) => (
-                  <div key={itemIndex} className="bg-white rounded-lg shadow-sm p-3 hover:shadow-md transition-all duration-200">
+                  <div key={itemIndex} className="bg-white rounded-md shadow-sm p-1.5 hover:shadow transition-all duration-200">
                     <ChildTree item={item} searchQuery={searchQuery} />
                   </div>
                 ))}

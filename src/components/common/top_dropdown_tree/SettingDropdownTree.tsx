@@ -9,6 +9,7 @@ import {
   ModalFooter,
   Button,
 } from "@heroui/react";
+import Image from "next/image";
 
 interface SettingDropdownTreeProps {
   currentLang: string;
@@ -44,7 +45,7 @@ const SettingDropdownTree: React.FC<SettingDropdownTreeProps> = ({ currentLang, 
             <>
               <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-300 to-pink-300 flex items-center justify-center shadow-md">
                 {user.avatarUrl ? (
-                  <img src={user.avatarUrl} alt="avatar" className="w-14 h-14 rounded-full object-cover" />
+                  <Image src={user.avatarUrl} alt="avatar" className="w-14 h-14 rounded-full object-cover" width={56} height={56} />
                 ) : (
                   <FiUser className="w-8 h-8 text-white" />
                 )}
