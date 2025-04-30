@@ -23,9 +23,8 @@ export const viewport: Viewport = {
 
 // SEO & Social Metadata
 export const metadata: Metadata = {
-  title: "AI Playground: Pathfinding & Physics Visualizations",
-  description:
-    "Discover A*, Dijkstra, and physics simulations in an interactive AI playground. Master computer science with engaging visualizations.",
+  title: "AI Playground: Simulations and Visualizations",
+  description:"Discover Many Simulations in an interactive AI playground. Master computer science with engaging visualizations.",
   keywords: [
     "pathfinding algorithms",
     "A* algorithm",
@@ -40,9 +39,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Riwara", url: domain }],
   creator: "Riwara",
   openGraph: {
-    title: "AI Playground: Pathfinding & Physics Visualizations",
+    title: "AI Playground: Simulations and Visualizations",
     description:
-      "Discover A*, Dijkstra, and physics simulations in an interactive AI playground. Master computer science with engaging visualizations.",
+      "Discover Many Simulations in an interactive AI playground. Master computer science with engaging visualizations.",
     url: domain,
     siteName: "VisualRight",
     images: [

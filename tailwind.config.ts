@@ -22,7 +22,7 @@ const config: Config = {
           white: "#FFFFFF",
           "light-hover": "#DFDFE0",
           "light-active": "#BCBDBE",
-          normal: "#272B2C",
+          normal: "#83AFC9",
           "normal-active": "#1F2224",
           black: "#000000",
         },

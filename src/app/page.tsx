@@ -6,11 +6,8 @@ import Section1 from "@/components/page_components/landing_page/Section1";
 import { Card } from "@heroui/card";
 import { Spinner } from "@nextui-org/spinner";
 import { Suspense, useState, useEffect } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { FcDown } from "react-icons/fc";
-// Metadata is defined in layout.tsx since we can't export it from a 'use client' component
 
 // Animated particles background effect
 const ParticleBackground = () => {
@@ -145,13 +142,13 @@ const LoadingProgress = () => {
         setProgress(prev => {
           const increment = Math.floor(Math.random() * 15) + 5;
           const newProgress = Math.min(prev + increment, 100);
-          
+
           // Update loading text with SEO-optimized phrases
           if (newProgress > 85) setLoadingText('Finalizing Web Application...');
           else if (newProgress > 60) setLoadingText('Initializing Interactive Physics Simulations...');
           else if (newProgress > 30) setLoadingText('Loading ...');
           else setLoadingText('Almost ready...');
-          
+
           return newProgress;
         });
       }
@@ -219,86 +216,56 @@ export default function LandingPage() {
         </Card>
       </div>}>
       <AnimatePresence mode="wait">
-        {isLoading ? (
+
+        <motion.div
+          key="content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="relative"
+        >
+          <ParticleBackground />
           <motion.div
-            key="loading"
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 flex flex-col items-center justify-center bg-background/95 backdrop-blur-md z-50"
-          >
-            <Card className="p-8 shadow-lg flex flex-col items-center gap-6 bg-content1/90 border-0">
-              <motion.div
-                initial={{ rotate: 0 }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-              >
-                <Spinner
-                  size="lg"
-                  color="primary"
-                  className="h-10 w-10"
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="flex flex-col items-center"
-              >
-                <h1 className="text-lg font-medium mb-4">AI Interactive Playground - Loading Web Application</h1>
-                {/* <LoadingProgress /> */}
-              </motion.div>
-            </Card>
-          </motion.div>
-        ) : (
+            className="fixed inset-0 bg-gradient-to-b from-transparent to-white/30 pointer-events-none -z-10"
+            animate={{
+              background: [
+                'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3))',
+                'linear-gradient(to bottom, transparent, rgba(235,245,255,0.3))',
+                'linear-gradient(to bottom, transparent, rgba(245,235,255,0.3))',
+                'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3))'
+              ]
+            }}
+            transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
+          />
           <motion.div
-            key="content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            <ParticleBackground />
+            className="fixed inset-0 opacity-30 pointer-events-none -z-5"
+            style={{
+              backgroundImage: 'radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0, rgba(99, 102, 241, 0) 70%)'
+            }}
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.2, 0.3, 0.2]
+            }}
+            transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
+          />
+          <BaseLayout>
+            <Section1 />
             <motion.div
-              className="fixed inset-0 bg-gradient-to-b from-transparent to-white/30 pointer-events-none -z-10"
-              animate={{
-                background: [
-                  'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3))',
-                  'linear-gradient(to bottom, transparent, rgba(235,245,255,0.3))',
-                  'linear-gradient(to bottom, transparent, rgba(245,235,255,0.3))',
-                  'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3))'
-                ]
-              }}
-              transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
-            />
-            <motion.div
-              className="fixed inset-0 opacity-30 pointer-events-none -z-5"
-              style={{
-                backgroundImage: 'radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0, rgba(99, 102, 241, 0) 70%)'
-              }}
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.2, 0.3, 0.2]
-              }}
-              transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
-            />
-            <BaseLayout>
-              <Section1 />
-              <motion.div
-                className="absolute top-6 right-6 z-30 flex items-center gap-2 px-3 py-2 bg-white/70 backdrop-blur-sm rounded-full shadow-sm text-sm text-gray-600"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 3, duration: 0.5 }}
-                aria-live="polite"
-                role="status"
-              >
-                <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse" aria-hidden="true"></span>
-                <span>Interactive Algorithms Demo Ready</span>
-              </motion.div>
-              <RevealSection>
-                <LandingPageComponent />
-              </RevealSection>
-            </BaseLayout>
-          </motion.div>
-        )}
+              className="absolute top-6 right-6 z-30 flex items-center gap-2 px-3 py-2 bg-white/70 backdrop-blur-sm rounded-full shadow-sm text-sm text-gray-600"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 3, duration: 0.5 }}
+              aria-live="polite"
+              role="status"
+            >
+              <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse" aria-hidden="true"></span>
+              <span>Interactive Algorithms Demo Ready</span>
+            </motion.div>
+            <RevealSection>
+              <LandingPageComponent />
+            </RevealSection>
+          </BaseLayout>
+        </motion.div>
       </AnimatePresence>
     </Suspense>
   );
