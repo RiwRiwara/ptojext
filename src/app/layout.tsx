@@ -24,7 +24,7 @@ export const viewport: Viewport = {
 // SEO & Social Metadata
 export const metadata: Metadata = {
   title: "AI Playground: Simulations and Visualizations",
-  description:"Discover Many Simulations in an interactive AI playground. Master computer science with engaging visualizations.",
+  description: "Discover Many Simulations in an interactive AI playground. Master computer science with engaging visualizations.",
   keywords: [
     "pathfinding algorithms",
     "A* algorithm",
@@ -110,6 +110,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={comfortaa_font.className}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body className="antialiased font-sans">
         <AnimatePresence mode="wait" initial={false}>
           <NextUIProvider>{children}</NextUIProvider>
