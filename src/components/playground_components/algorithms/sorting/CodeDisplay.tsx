@@ -1,60 +1,93 @@
+"use client";
+import React from "react";
 import { algorithmCodeSnippets } from "./constants";
+import { motion } from "framer-motion";
 
 interface CodeDisplayProps {
     selectedAlgo: string;
     customAlgorithm: string;
     setCustomAlgorithm: (code: string) => void;
-    isPlaying: boolean;
     currentHighlightedLine: number;
+    isPlaying: boolean;
 }
 
-export default function CodeDisplay({
+const CodeDisplay: React.FC<CodeDisplayProps> = ({
     selectedAlgo,
     customAlgorithm,
     setCustomAlgorithm,
-    isPlaying,
     currentHighlightedLine,
-}: CodeDisplayProps) {
-    const formatPythonCode = (code: string) => {
-        if (!code) return [];
+    isPlaying,
+}) => {
+    // Get algorithm name for display
+    const getAlgorithmName = () => {
+        switch (selectedAlgo) {
+            case "bubble-sort":
+                return "Bubble Sort Algorithm";
+            case "selection-sort":
+                return "Selection Sort Algorithm";
+            case "insertion-sort":
+                return "Insertion Sort Algorithm";
+            case "merge-sort":
+                return "Merge Sort Algorithm";
+            case "quick-sort":
+                return "Quick Sort Algorithm";
+            case "custom-algorithm":
+                return "Custom Algorithm";
+            default:
+                return "Algorithm Code";
+        }
+    };
 
-        return code.split("\n").map((line, index) => {
+    const formatPythonCode = (code: string) => {
+        const lines = code.split("\n");
+        return lines.map((line, index) => {
             const lineNumber = index + 1;
             const isHighlighted = lineNumber === currentHighlightedLine;
 
             return (
                 <div
                     key={lineNumber}
-                    className={`font-mono text-sm p-1 ${isHighlighted ? "bg-yellow-200 dark:bg-yellow-800" : ""
-                        }`}
+                    className={`font-mono px-2 py-0.5 rounded ${isHighlighted 
+                        ? "bg-[#83AFC9]/20 text-white font-medium" 
+                        : "text-gray-300"
+                    }`}
                 >
-                    <span className="inline-block w-8 text-gray-500 select-none">
-                        {lineNumber}
-                    </span>
-                    <span>{line}</span>
+                    {line}
                 </div>
             );
         });
     };
 
     return (
-        <section className="mb-8 bg-white rounded-lg shadow-sm p-4 border border-gray-200 overflow-hidden">
-            <h3 className="text-lg font-semibold mb-3">Python Implementation</h3>
-            <div className="bg-gray-50 p-4 rounded-md overflow-auto max-h-[400px] text-sm">
-                {selectedAlgo === "custom-algorithm" ? (
+        <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-gray-900 rounded-lg overflow-hidden shadow-md"
+        >
+            <div className="p-3 bg-gray-800 text-gray-300 text-sm font-medium border-b border-gray-700">
+                {getAlgorithmName()}
+            </div>
+            
+            {selectedAlgo === "custom-algorithm" ? (
+                <div className="p-4">
                     <textarea
                         value={customAlgorithm}
                         onChange={(e) => setCustomAlgorithm(e.target.value)}
                         placeholder="# Enter your custom sorting algorithm here\ndef custom_sort(arr):\n    # Your code here\n    return arr"
-                        className="w-full h-[300px] font-mono text-sm p-2 border rounded"
+                        className="w-full h-[300px] font-mono text-sm p-2 border rounded bg-gray-800 text-gray-300 border-gray-700" 
                         disabled={isPlaying}
                     />
-                ) : (
-                    <div className="font-mono">
+                </div>
+            ) : (
+                <pre className="p-4 text-sm overflow-x-auto">
+                    <code>
                         {formatPythonCode(algorithmCodeSnippets[selectedAlgo] || "")}
-                    </div>
-                )}
-            </div>
-        </section>
+                    </code>
+                </pre>
+            )}
+        </motion.div>
     );
-}
+};
+
+export default CodeDisplay;

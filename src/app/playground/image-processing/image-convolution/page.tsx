@@ -7,23 +7,27 @@ import ImageConvolutionMap from "@/components/playground_components/image_proces
 export default function ImageConvolutionPage() {
   return (
     <BaseLayout>
-      <div className="mx-auto flex flex-col justify-start h-screen gap-8 p-2 pt-8 mb-10">
-        <div className="max-w-6xl mx-auto mb-4">
+      <div className="mx-auto flex flex-col justify-start min-h-screen gap-6 p-4 md:p-6 pt-8 mb-10 max-w-7xl">
+        <div className="w-full mx-auto mb-2">
           <Breadcrumb items={[
             { label: "Home", href: "/" },
+            { label: "Playground" },
+            { label: "Image Processing" },
             { label: "Image Convolution" }
           ]} />
         </div>
-        <h1 className="uppercase text-3xl font-bold mt-3 text-center">Image Convolution</h1>
 
+        <div className="py-8 px-6  mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-center text-[#83AFC9]">Image Convolution</h1>
+          <p className="text-[#83AFC9] text-center mt-2 max-w-3xl mx-auto opacity-90">
+            Learn how image filters work by exploring convolution matrices and their effects on pixels
+          </p>
+        </div>
 
         <ImageConvolutionMap />
 
-        {/* <h1 className="text-2xl font-semibold mb-2">Adjust the kernel</h1>
-        <ImageConvolution /> */}
         <BottomComponent />
       </div>
-
     </BaseLayout>
   );
 }

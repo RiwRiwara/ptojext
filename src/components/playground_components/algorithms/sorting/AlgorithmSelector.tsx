@@ -19,14 +19,14 @@ export default function AlgorithmSelector({
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                 Select Algorithm
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            <div className="flex flex-wrap flex-row gap-3">
                 {algorithms.map((algo) => (
                     <Button
                         key={algo.key}
                         onClick={() => onAlgoChange(algo.key)}
                         className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${selectedAlgo === algo.key
-                                ? "bg-indigo-600 text-white shadow-md"
-                                : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
+                            ? "bg-[#83AFC9] text-white shadow-md"
+                            : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
                             }`}
                     >
                         {algo.label}

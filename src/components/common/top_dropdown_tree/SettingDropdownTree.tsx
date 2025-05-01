@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { TbAlphabetThai, TbAlphabetLatin } from "react-icons/tb";
-import { FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
-
+import { FiLogIn, FiLogOut, FiUser, FiSettings } from "react-icons/fi";
+import { FaUserPlus, FaSignInAlt, FaGlobe, FaMoon, FaSun } from "react-icons/fa";
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 interface SettingDropdownTreeProps {
@@ -15,9 +16,28 @@ interface SettingDropdownTreeProps {
   setRegisterOpen: (open: boolean) => void;
   handleLogin: (username: string, password: string) => Promise<void>;
   handleRegister: (username: string, password: string) => Promise<void>;
+  // Optional props for theme toggling
+  isDarkMode?: boolean;
+  toggleDarkMode?: () => void;
 }
 
-const SettingDropdownTree: React.FC<SettingDropdownTreeProps> = ({ currentLang, onChangeLanguage, user, logout, loginOpen, setLoginOpen, registerOpen, setRegisterOpen, handleLogin, handleRegister }) => {
+const SettingDropdownTree: React.FC<SettingDropdownTreeProps> = ({ 
+  currentLang, 
+  onChangeLanguage, 
+  user, 
+  logout, 
+  loginOpen, 
+  setLoginOpen, 
+  registerOpen, 
+  setRegisterOpen, 
+  handleLogin, 
+  handleRegister,
+  isDarkMode = false,
+  toggleDarkMode
+}) => {
+  // State for active section
+  const [activeSection, setActiveSection] = useState<'account' | 'preferences'>('account');
+  
   // toggleAuth for switching between modals
   const toggleAuth = (type: 'login' | 'register') => {
     if (type === 'login') {
@@ -31,67 +51,140 @@ const SettingDropdownTree: React.FC<SettingDropdownTreeProps> = ({ currentLang, 
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center gap-4 bg-gray-50 min-w-[260px] ">
-        {/* User Section Card */}
-        <div className="flex flex-col items-center gap-2 w-full">
-          {user ? (
-            <>
-              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-300 to-pink-300 flex items-center justify-center shadow-md">
-                {user.avatarUrl ? (
-                  <Image src={user.avatarUrl} alt="avatar" className="w-14 h-14 rounded-full object-cover" width={56} height={56} />
-                ) : (
-                  <FiUser className="w-8 h-8 text-white" />
-                )}
-              </div>
-              <span className="font-medium text-gray-800 text-base text-center truncate max-w-[140px]">{user.name}</span>
-              <button
-                onClick={logout}
-                className="px-4 py-1 rounded-full bg-gray-200 hover:bg-red-400 hover:text-white transition-colors duration-200 flex items-center gap-2 text-sm font-medium mt-1"
-              >
-                <FiLogOut /> <span className="hidden sm:inline">Logout</span>
-              </button>
-            </>
-          ) : (
-            <div className="flex flex-col gap-2 w-full">
-              <button
-                onClick={() => setLoginOpen(true)}
-                className="px-4 py-2 rounded-full bg-[#83AFC9] hover:bg-blue-600 text-white border-2 border-white transition-all duration-200 flex items-center gap-2 font-semibold w-full justify-center"
-              >
-                <FiLogIn /> Login
-              </button>
-              <button
-                onClick={() => setRegisterOpen(true)}
-                className="px-4 py-2 rounded-full bg-white text-[#83AFC9] border-2 border-[#83AFC9]]    transition-all duration-200 flex items-center gap-2 font-semibold w-full justify-center"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>
-                Register
-              </button>
-            </div>
-          )}
-        </div>
-        {/* Language Switch Card */}
-        <div className="rounded-xl bg-white shadow-sm border p-0.5 w-full">
+      <div className="flex flex-col justify-center items-center gap-4 bg-gray-50 min-w-[280px] p-4 rounded-lg shadow-sm">
+        {/* Section Tabs */}
+        <div className="w-full flex bg-gray-100 rounded-lg p-1 mb-2">
           <button
-            onClick={onChangeLanguage}
-            className="flex items-center gap-3 bg-white w-full p-3 rounded-lg hover:bg-blue-100 transition-colors"
+            onClick={() => setActiveSection('account')}
+            className={`flex-1 py-2 px-3 rounded-md flex items-center justify-center gap-2 text-sm font-medium transition-all ${activeSection === 'account' ? 'bg-white shadow-sm text-[#83AFC9]' : 'text-gray-600 hover:bg-gray-200'}`}
           >
-            {currentLang === "en" ? (
-              <>
-                <TbAlphabetThai className="w-6 h-6 text-[#83AFC9]" />
-                <span className="text-sm font-medium text-gray-900">Switch to Thai</span>
-              </>
-            ) : (
-              <>
-                <TbAlphabetLatin className="w-6 h-6 text-[#83AFC9]" />
-                <span className="text-sm font-medium text-gray-900">Switch to English</span>
-              </>
-            )}
+            <FiUser size={16} />
+            Account
+          </button>
+          <button
+            onClick={() => setActiveSection('preferences')}
+            className={`flex-1 py-2 px-3 rounded-md flex items-center justify-center gap-2 text-sm font-medium transition-all ${activeSection === 'preferences' ? 'bg-white shadow-sm text-[#83AFC9]' : 'text-gray-600 hover:bg-gray-200'}`}
+          >
+            <FiSettings size={16} />
+            Preferences
           </button>
         </div>
+        
+        {/* Content based on active section */}
+        <motion.div 
+          key={activeSection}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="w-full"
+        >
+        {activeSection === 'account' && (
+          <div className="flex flex-col items-center gap-3 w-full">
+            {/* User Section Card */}
+            {user ? (
+              <div className="w-full bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-300 to-[#83AFC9] flex items-center justify-center shadow-md p-0.5 border-2 border-white mb-2">
+                  {user.avatarUrl ? (
+                    <Image src={user.avatarUrl} alt="avatar" className="w-full h-full rounded-full object-cover" width={64} height={64} />
+                  ) : (
+                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                      <FiUser className="w-8 h-8 text-[#83AFC9]" />
+                    </div>
+                  )}
+                </div>
+                <span className="font-semibold text-gray-800 text-base text-center truncate max-w-[180px] mb-1">{user.name}</span>
+                <span className="text-xs text-gray-500 mb-3">Logged in user</span>
+                <button
+                  onClick={logout}
+                  className="px-4 py-2 rounded-lg bg-white hover:bg-red-50 text-red-500 border border-red-200 hover:border-red-400 transition-all duration-200 flex items-center gap-2 text-sm font-medium w-full justify-center"
+                >
+                  <FiLogOut /> Logout
+                </button>
+              </div>
+            ) : (
+              <div className="w-full bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1.5">
+                  <FiUser className="text-[#83AFC9]" /> Account Access
+                </h3>
+                <div className="flex flex-col gap-2 w-full">
+                  <button
+                    onClick={() => setLoginOpen(true)}
+                    className="px-4 py-2.5 rounded-lg bg-[#83AFC9] hover:bg-blue-600 text-white transition-all duration-200 flex items-center gap-2 font-medium w-full justify-center shadow-sm"
+                  >
+                    <FaSignInAlt size={14} /> Sign In
+                  </button>
+                  <button
+                    onClick={() => setRegisterOpen(true)}
+                    className="px-4 py-2.5 rounded-lg bg-white text-[#83AFC9] border border-[#83AFC9] hover:bg-blue-50 transition-all duration-200 flex items-center gap-2 font-medium w-full justify-center"
+                  >
+                    <FaUserPlus size={14} /> Create Account
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        {activeSection === 'preferences' && (
+          <div className="flex flex-col gap-3 w-full">
+            {/* Language Switch Card */}
+            <div className="w-full bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+              <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1.5">
+                <FaGlobe className="text-[#83AFC9]" /> Language
+              </h3>
+              <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
+                <div className="flex items-center gap-2">
+                  {currentLang === "en" ? (
+                    <>
+                      <TbAlphabetLatin className="w-5 h-5 text-[#83AFC9]" />
+                      <span className="text-sm font-medium text-gray-700">English</span>
+                    </>
+                  ) : (
+                    <>
+                      <TbAlphabetThai className="w-5 h-5 text-[#83AFC9]" />
+                      <span className="text-sm font-medium text-gray-700">Thai</span>
+                    </>
+                  )}
+                </div>
+                <button
+                  onClick={onChangeLanguage}
+                  className="px-3 py-1.5 rounded-md bg-white border border-gray-200 text-sm font-medium text-[#83AFC9] hover:bg-blue-50 transition-all duration-200 shadow-sm"
+                >
+                  {currentLang === "en" ? "Switch to Thai" : "Switch to English"}
+                </button>
+              </div>
+            </div>
+            
+            {/* Theme Toggle Card */}
+            {toggleDarkMode && (
+              <div className="w-full bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1.5">
+                  {isDarkMode ? (
+                    <FaMoon className="text-[#83AFC9]" />
+                  ) : (
+                    <FaSun className="text-[#83AFC9]" />
+                  )}
+                  Theme
+                </h3>
+                <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
+                  <span className="text-sm font-medium text-gray-700">
+                    {isDarkMode ? "Dark Mode" : "Light Mode"}
+                  </span>
+                  <button
+                    onClick={toggleDarkMode}
+                    className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#83AFC9] focus:ring-offset-1 bg-gray-200"
+                  >
+                    <span
+                      className={`${isDarkMode ? 'translate-x-6 bg-[#83AFC9]' : 'translate-x-1 bg-white'} inline-block h-4 w-4 transform rounded-full transition-transform duration-200 shadow-sm`}
+                    />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        </motion.div>
       </div>
-
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaUserPlus, FaSignInAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface AuthModalProps {
@@ -10,19 +10,27 @@ interface AuthModalProps {
   mode: 'login' | 'register';
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onLogin, onRegister, mode }) => {
+const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onLogin, onRegister, mode: initialMode }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [activeMode, setActiveMode] = useState<'login' | 'register'>(initialMode);
+  
+  // Update active mode when prop changes
+  useEffect(() => {
+    if (open) {
+      setActiveMode(initialMode);
+    }
+  }, [initialMode, open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      if (mode === "login") {
+      if (activeMode === "login") {
         await onLogin(username, password);
       } else {
         await onRegister(username, password);
@@ -31,6 +39,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onLogin, onRegiste
       setError("Authentication failed");
     }
     setLoading(false);
+  };
+  
+  const switchMode = (newMode: 'login' | 'register') => {
+    setActiveMode(newMode);
+    setUsername("");
+    setPassword("");
+    setError(null);
   };
 
   // Prevent scrolling when modal is open
@@ -69,6 +84,30 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onLogin, onRegiste
           <FaTimes className="w-4 h-4" />
         </button>
 
+        {/* Tabs for switching between login and register */}
+        <div className="flex justify-center mb-6 gap-2">
+          <div className="w-full max-w-xs bg-gray-100 rounded-full p-1 flex">
+            <button
+              onClick={() => switchMode('login')}
+              className={`flex-1 py-2 px-4 rounded-full flex items-center justify-center gap-2 transition-all duration-200 ${activeMode === 'login' 
+                ? 'bg-white text-[#83AFC9] shadow-md font-medium' 
+                : 'text-gray-600 hover:bg-gray-200'}`}
+            >
+              <FaSignInAlt className={activeMode === 'login' ? 'text-[#83AFC9]' : 'text-gray-500'} />
+              Login
+            </button>
+            <button
+              onClick={() => switchMode('register')}
+              className={`flex-1 py-2 px-4 rounded-full flex items-center justify-center gap-2 transition-all duration-200 ${activeMode === 'register' 
+                ? 'bg-white text-[#83AFC9] shadow-md font-medium' 
+                : 'text-gray-600 hover:bg-gray-200'}`}
+            >
+              <FaUserPlus className={activeMode === 'register' ? 'text-[#83AFC9]' : 'text-gray-500'} />
+              Register
+            </button>
+          </div>
+        </div>
+        
         {/* Logo/Avatar */}
         <div className="flex justify-center mb-6">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#83AFC9] to-indigo-600 flex items-center justify-center shadow-lg p-1 border-2 border-white">
@@ -79,7 +118,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onLogin, onRegiste
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                {mode === "login" ? (
+                {activeMode === "login" ? (
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -101,10 +140,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onLogin, onRegiste
 
         {/* Heading */}
         <h2 className="text-2xl font-bold text-center text-[#83AFC9] mb-2">
-          {mode === "login" ? "Welcome Back" : "Create Account"}
+          {activeMode === "login" ? "Welcome Back" : "Create Account"}
         </h2>
         <p className="text-center text-gray-500 mb-6 text-sm">
-          {mode === "login" ? "Sign in to continue to your account" : "Join our community today"}
+          {activeMode === "login" ? "Sign in to continue to your account" : "Join our community today"}
         </p>
 
         {/* Form */}
@@ -195,11 +234,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onLogin, onRegiste
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 px-4 rounded-lg text-white font-semibold transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 ${mode === "login"
+            className={`w-full py-3 px-4 rounded-lg text-white font-semibold transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 ${activeMode === "login"
               ? "bg-gradient-to-r from-[#83AFC9] to-indigo-600 hover:from-[#6c9ab4] hover:to-indigo-700 focus:ring-[#83AFC9]"
               : "bg-gradient-to-r from-[#83AFC9] to-indigo-600 hover:from-[#6c9ab4] hover:to-indigo-700 focus:ring-[#83AFC9]"
               } disabled:opacity-50 disabled:cursor-not-allowed`}
-            aria-label={mode === "login" ? "Login" : "Register"}
+            aria-label={activeMode === "login" ? "Login" : "Register"}
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -207,10 +246,22 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onLogin, onRegiste
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                {mode === "login" ? "Logging in..." : "Registering..."}
+                {activeMode === "login" ? "Logging in..." : "Registering..."}
               </span>
             ) : (
-              mode === "login" ? "Login" : "Register"
+              <span className="flex items-center justify-center gap-2">
+                {activeMode === "login" ? (
+                  <>
+                    <FaSignInAlt className="text-white" />
+                    Login
+                  </>
+                ) : (
+                  <>
+                    <FaUserPlus className="text-white" />
+                    Register
+                  </>
+                )}
+              </span>
             )}
           </button>
 
@@ -224,38 +275,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose, onLogin, onRegiste
             Cancel
           </button>
 
-          {/* Switch Mode Link */}
-          <div className="text-center text-sm mt-6">
-            {mode === "login" ? (
-              <button
-                type="button"
-                onClick={() => {
-                  setUsername("");
-                  setPassword("");
-                  setError(null);
-                  // Tell the parent component to switch to register mode
-                  onClose();
-                  setTimeout(() => onRegister("", ""), 100);
-                }}
-                className="text-[#83AFC9] hover:text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-[#83AFC9] rounded px-2 py-1 transition-colors duration-200"
-              >
-                Don&apos;t have an account? Register here
-              </button>
+          {/* Additional help text */}
+          <div className="text-center text-sm mt-6 text-gray-500">
+            {activeMode === "login" ? (
+              <p>Use the tabs above to switch between login and register</p>
             ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  setUsername("");
-                  setPassword("");
-                  setError(null);
-                  // Tell the parent component to switch to login mode
-                  onClose();
-                  setTimeout(() => onLogin("", ""), 100);
-                }}
-                className="text-[#83AFC9] hover:text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-[#83AFC9] rounded px-2 py-1 transition-colors duration-200"
-              >
-                Already have an account? Login here
-              </button>
+              <p>Fill in your details to create a new account</p>
             )}
           </div>
         </form>

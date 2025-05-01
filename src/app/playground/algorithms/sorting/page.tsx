@@ -99,23 +99,6 @@ const sortingAlgorithms: SortingAlgorithm[] = [
       sortedBar: "#10b981",
     },
   },
-  {
-    key: "heap-sort",
-    label: "Heap Sort",
-    description:
-      "A comparison-based sorting algorithm that uses a binary heap data structure to build a max-heap and then repeatedly extracts the maximum element.",
-    complexity: {
-      time: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" },
-      space: "O(1)",
-    },
-    colorScheme: {
-      background: "#F8FBFD",
-      defaultBar: "#94a3b8",
-      activeBar: "#83AFC9",
-      comparingBar: "#0ea5e9",
-      sortedBar: "#10b981",
-    },
-  },
 ];
 
 export default function SortingVisualizerPage() {
@@ -140,16 +123,16 @@ export default function SortingVisualizerPage() {
     runtime: 0, // in ms
   });
   const [currentHighlightedLine, setCurrentHighlightedLine] = useState<number>(-1);
-  
+
   // Animation interval reference
   const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   // Get the selected algorithm data
   const selectedAlgoData = useMemo(
     () => sortingAlgorithms.find((algo) => algo.key === selectedAlgo),
     [selectedAlgo]
   );
-  
+
   // Code highlighting map
   const codeHighlightMap = useMemo(() => {
     return {
@@ -160,17 +143,17 @@ export default function SortingVisualizerPage() {
       done: 5,
     };
   }, []);
-  
+
   // Initialize array
   useEffect(() => {
     randomizeArray();
   }, []);
-  
+
   // Update current array when initial array changes
   useEffect(() => {
     setCurrentArray([...initialArray]);
   }, [initialArray]);
-  
+
   // Handle algorithm selection
   const handleAlgorithmSelect = useCallback((key: string) => {
     setSelectedAlgo(key);
@@ -178,7 +161,7 @@ export default function SortingVisualizerPage() {
     setIsPlaying(false);
     setCurrentHighlightedLine(-1);
   }, []);
-  
+
   // Handle array size change
   const handleArraySizeChange = useCallback((size: number) => {
     const newArray = Array.from({ length: size }, () => Math.floor(Math.random() * 100) + 1);
@@ -187,7 +170,7 @@ export default function SortingVisualizerPage() {
     setIsPlaying(false);
     setCurrentHighlightedLine(-1);
   }, []);
-  
+
   // Randomize array
   const randomizeArray = useCallback(() => {
     const size = initialArray.length;
@@ -197,7 +180,7 @@ export default function SortingVisualizerPage() {
     setIsPlaying(false);
     setCurrentHighlightedLine(-1);
   }, [initialArray.length]);
-  
+
   // Reset array to initial state
   const resetArray = useCallback(() => {
     setCurrentArray([...initialArray]);
@@ -205,7 +188,7 @@ export default function SortingVisualizerPage() {
     setIsPlaying(false);
     setCurrentHighlightedLine(-1);
   }, [initialArray]);
-  
+
   // Handle custom array input
   const handleCustomArraySubmit = useCallback((input: string) => {
     try {
@@ -220,63 +203,63 @@ export default function SortingVisualizerPage() {
       setInputError("Invalid input. Please enter comma-separated numbers.");
     }
   }, []);
-  
+
   // Go to previous step
   const goToPrevStep = useCallback(() => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   }, []);
-  
+
   // Go to next step
   const goToNextStep = useCallback(() => {
     setCurrentStep((prev) => Math.min(prev + 1, animationSteps.length - 1));
   }, [animationSteps.length]);
-  
+
   // Update animation steps when algorithm changes
   useEffect(() => {
     const sorter = new SortingAlgorithms([...currentArray]);
     setAnimationSteps(sorter.getAnimationSteps(selectedAlgo));
     setCurrentStep(0);
   }, [selectedAlgo, currentArray]);
-  
+
   // Handle sorting completion
   const handleSortingComplete = useCallback(() => {
     console.log("Sorting completed!");
     setIsPlaying(false);
     setCurrentStep(animationSteps.length - 1);
-    
+
     // Update algorithm stats
     const swaps = animationSteps.filter(step => step.type === 'swap').length;
     const comparisons = animationSteps.filter(step => step.type === 'compare').length;
     const runtime = Math.round((animationSteps.length / speed) * 100); // Simulated runtime in ms
-    
+
     setAlgorithmStats({
       swaps,
       comparisons,
       runtime
     });
   }, [animationSteps, speed]);
-  
+
   // Handle bar click to start sorting from a specific position
   const handleBarClick = useCallback((index: number) => {
     if (isPlaying) return;
-    
+
     // Reset animation state
     setCurrentStep(0);
     setIsPlaying(false);
     setCurrentHighlightedLine(-1);
-    
+
     // Run the sorting algorithm with a small delay to allow state updates
     setTimeout(() => {
       // Get animation steps for the selected algorithm
       const sorter = new SortingAlgorithms([...initialArray]);
       const steps = sorter.getAnimationSteps(selectedAlgo);
       setAnimationSteps(steps);
-      
+
       // Set the current step to the first step that involves the clicked index
-      const targetStep = steps.findIndex(step => 
+      const targetStep = steps.findIndex(step =>
         step.from === index || step.to === index
       );
-      
+
       if (targetStep !== -1) {
         setCurrentStep(Math.max(0, targetStep));
         const stepType = steps[targetStep]?.type as keyof typeof codeHighlightMap;
@@ -284,19 +267,19 @@ export default function SortingVisualizerPage() {
           setCurrentHighlightedLine(codeHighlightMap[stepType]);
         }
       }
-      
+
       // Start the animation
       setIsPlaying(true);
     }, 100);
   }, [initialArray, selectedAlgo, isPlaying, codeHighlightMap]);
-  
+
   // Effect to update code highlighting when animation step changes
   useEffect(() => {
     if (currentStep >= animationSteps.length && animationSteps.length > 0) {
       handleSortingComplete();
       return;
     }
-    
+
     if (currentStep < animationSteps.length && animationSteps.length > 0) {
       const stepType = animationSteps[currentStep]?.type;
       if (stepType && stepType in codeHighlightMap) {
@@ -306,7 +289,7 @@ export default function SortingVisualizerPage() {
       }
     }
   }, [codeHighlightMap, currentStep, animationSteps, handleSortingComplete]);
-  
+
   const handleStepChange = useCallback(
     (step: number) => {
       setCurrentStep(step);
@@ -319,19 +302,19 @@ export default function SortingVisualizerPage() {
     },
     [animationSteps, codeHighlightMap]
   );
-  
+
   useEffect(() => {
     const sorter = new SortingAlgorithms([...initialArray]);
     setAnimationSteps(sorter.getAnimationSteps(selectedAlgo));
   }, [selectedAlgo, initialArray]);
-  
+
   // Animation playback effect
   useEffect(() => {
     if (isPlaying) {
       if (animationIntervalRef.current) {
         clearInterval(animationIntervalRef.current);
       }
-      
+
       animationIntervalRef.current = setInterval(() => {
         setCurrentStep((prev) => {
           if (prev >= animationSteps.length - 1) {
@@ -345,14 +328,14 @@ export default function SortingVisualizerPage() {
     } else if (animationIntervalRef.current) {
       clearInterval(animationIntervalRef.current);
     }
-    
+
     return () => {
       if (animationIntervalRef.current) {
         clearInterval(animationIntervalRef.current);
       }
     };
   }, [isPlaying, animationSteps, speed]);
-  
+
   return (
     <BaseLayout>
       <div className="min-h-screen bg-gray-50">
@@ -365,14 +348,14 @@ export default function SortingVisualizerPage() {
               { label: "Sorting", href: "/playground/algorithms/sorting" },
             ]}
           />
-          
+
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">Sorting Algorithm Visualizer</h1>
             <p className="text-gray-600">
               Visualize and understand how different sorting algorithms work step by step.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left column - Algorithm selection and controls */}
             <div className="lg:col-span-1 space-y-6">
@@ -381,13 +364,13 @@ export default function SortingVisualizerPage() {
                 selectedAlgo={selectedAlgo}
                 onAlgoChange={handleAlgorithmSelect}
               />
-              
+
               <div className="bg-white rounded-lg shadow-md p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <FaChalkboardTeacher className="text-[#83AFC9]" />
                   <h3 className="text-lg font-medium text-gray-700">Array Controls</h3>
                 </div>
-                
+
                 <ArrayControls
                   arraySize={initialArray.length}
                   onArraySizeChange={handleArraySizeChange}
@@ -398,13 +381,13 @@ export default function SortingVisualizerPage() {
                   inputError={inputError}
                 />
               </div>
-              
+
               <div className="bg-white rounded-lg shadow-md p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <FaRegClock className="text-[#83AFC9]" />
                   <h3 className="text-lg font-medium text-gray-700">Visualization Controls</h3>
                 </div>
-                
+
                 <VisualizationControls
                   isPlaying={isPlaying}
                   setIsPlaying={setIsPlaying}
@@ -419,7 +402,7 @@ export default function SortingVisualizerPage() {
                   onNextStep={goToNextStep}
                 />
               </div>
-              
+
               {selectedAlgoData && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -431,7 +414,7 @@ export default function SortingVisualizerPage() {
                     <FaInfoCircle className="text-[#83AFC9]" />
                     <h3 className="text-lg font-medium text-gray-700">Algorithm Info</h3>
                   </div>
-                  
+
                   <div className="space-y-3">
                     <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-1">
                       <FaRegClock className="text-[#83AFC9]" /> Time Complexity
@@ -450,14 +433,14 @@ export default function SortingVisualizerPage() {
                         <span className="font-mono font-medium">{selectedAlgoData?.complexity.time.worst}</span>
                       </div>
                     </div>
-                    
+
                     <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-1">
                       <FaRegClock className="text-[#83AFC9]" /> Space Complexity
                     </h4>
                     <div className="bg-white p-2 rounded border border-gray-200 text-xs mb-3">
                       <span className="font-mono font-medium">{selectedAlgoData?.complexity.space}</span>
                     </div>
-                    
+
                     <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-1">
                       <FaLightbulb className="text-[#83AFC9]" /> Best Used When
                     </h4>
@@ -509,7 +492,7 @@ export default function SortingVisualizerPage() {
                 </motion.div>
               )}
             </div>
-            
+
             {/* Right column - Visualization and code */}
             <div className="lg:col-span-2 space-y-6">
               {/* Visualization area */}
@@ -536,7 +519,7 @@ export default function SortingVisualizerPage() {
                     </div>
                   </div>
                 )}
-                
+
                 <PixiSortingVisualizer
                   blocks={currentArray}
                   animationSteps={animationSteps}
@@ -549,7 +532,7 @@ export default function SortingVisualizerPage() {
                   colorScheme={selectedAlgoData?.colorScheme}
                 />
               </motion.div>
-              
+
               {/* Code display */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -561,7 +544,7 @@ export default function SortingVisualizerPage() {
                   <FaCode className="text-[#83AFC9]" />
                   <h3 className="text-lg font-medium text-gray-700">Algorithm Code</h3>
                 </div>
-                
+
                 <CodeDisplay
                   selectedAlgo={selectedAlgo}
                   customAlgorithm={customAlgorithm}
@@ -572,9 +555,9 @@ export default function SortingVisualizerPage() {
               </motion.div>
             </div>
           </div>
-          
-          <BottomComponent />
+
         </main>
+        <BottomComponent />
       </div>
     </BaseLayout>
   );
