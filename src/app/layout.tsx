@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Comfortaa } from "next/font/google";
+import { Mitr } from "next/font/google";
 import { NextUIProvider } from "@nextui-org/system";
 import "./globals.css";
 import { AnimatePresence } from "framer-motion";
@@ -9,8 +9,9 @@ import { Analytics } from "@vercel/analytics/react";
 const domain = "https://www.visualright.org/";
 
 // Font setup
-const comfortaa_font = Comfortaa({
-  subsets: ["latin"],
+const mitr_font = Mitr({
+  weight: ['400'],
+  subsets: ["latin", "thai"],
   display: "swap",
 });
 
@@ -109,7 +110,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={comfortaa_font.className}>
+    <html lang="en" className={mitr_font.className}>
       <body className="antialiased font-sans">
         <AnimatePresence mode="wait" initial={false}>
           <NextUIProvider>{children}</NextUIProvider>
