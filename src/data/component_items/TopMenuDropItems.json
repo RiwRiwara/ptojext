@@ -39,6 +39,17 @@
                 "className": "image-enhancement"
               }
             ]
+          },
+          {
+            "name": "Playground",
+            "className": "playground",
+            "children": [
+              {
+                "name": "Playground",
+                "link": "/playground",
+                "className": "playground-algorithms"
+              }
+            ]
           }
         ]
       },
