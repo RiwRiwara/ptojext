@@ -1,5 +1,7 @@
+"use client";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import BaseLayout from "@/components/layout/BaseLayout";
+import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 import ImageConvolutionMap from "@/components/playground_components/image_processing/image_convolution_map/ImageConvolutionMap";
 
 export default function ImageConvolutionPage() {
@@ -19,7 +21,9 @@ export default function ImageConvolutionPage() {
 
         {/* <h1 className="text-2xl font-semibold mb-2">Adjust the kernel</h1>
         <ImageConvolution /> */}
+        <BottomComponent />
       </div>
+
     </BaseLayout>
   );
 }

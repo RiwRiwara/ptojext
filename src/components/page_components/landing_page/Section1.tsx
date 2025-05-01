@@ -56,7 +56,7 @@ export default function Section1() {
   const [isClient, setIsClient] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLowPerformanceDevice, setIsLowPerformanceDevice] = useState(false);
-  
+
   // Get optimal animation settings based on device capability
   const animationSettings = useMemo(() => {
     return getOptimalAnimationSettings();
@@ -65,7 +65,7 @@ export default function Section1() {
   useEffect(() => {
     setIsClient(true);
     setIsLowPerformanceDevice(isMobileOrLowSpec());
-    
+
     // Throttled mouse move handler for better performance
     let lastMove = 0;
     const throttleDelay = isLowPerformanceDevice ? 150 : 50; // Higher throttle on mobile
@@ -99,7 +99,7 @@ export default function Section1() {
       >
         {/* Dynamic gradient - simplified on mobile */}
         {!isLowPerformanceDevice ? (
-          <motion.div 
+          <motion.div
             className="absolute inset-0 opacity-30 -z-10 pointer-events-none"
             style={{
               background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.1) 25%, transparent 50%)`
@@ -109,7 +109,7 @@ export default function Section1() {
           />
         ) : (
           // Static gradient for mobile/low-performance devices
-          <div 
+          <div
             className="absolute inset-0 opacity-25 -z-10 pointer-events-none"
             style={{
               background: `radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.1) 25%, transparent 50%)`
@@ -119,7 +119,7 @@ export default function Section1() {
 
         {/* Hero content */}
         <motion.div
-          className="text-center relative z-10"
+          className="text-center relative z-[5]"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -144,13 +144,13 @@ export default function Section1() {
                 priority
               />
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               className="relative px-10"
               variants={itemVariants}
             >
               <motion.span
-                className="default-blue font-bold flex flex-row justify-center gap-1 md:gap-2 text-5xl md:text-7xl"
+                className="default-blue font-bold flex flex-row justify-center gap-1 md:gap-2 text-4xl md:text-7xl"
                 variants={containerVariants}
               >
                 {["V", "I", "S", "U", "A", "L", "R", "I", "G", "H", "T"].map(
@@ -169,19 +169,19 @@ export default function Section1() {
                   )
                 )}
               </motion.span>
-              <motion.div 
+              <motion.div
                 className="h-1 w-0 bg-gradient-to-r from-sky-700 via-[#83AFC9] to-sky-50 mx-auto rounded-full mt-3"
                 // Simpler animation for mobile
                 animate={{ width: isLowPerformanceDevice ? "60%" : ["0%", "80%", "60%"] }}
-                transition={{ 
-                  duration: isLowPerformanceDevice ? 1 : 2, 
-                  delay: isLowPerformanceDevice ? 0.5 : 1 
+                transition={{
+                  duration: isLowPerformanceDevice ? 1 : 2,
+                  delay: isLowPerformanceDevice ? 0.5 : 1
                 }}
               />
             </motion.div>
 
             <motion.p
-              className="text-xl text-gray-700 max-w-lg mt-6 leading-relaxed"
+              className="text-sm px-2 md:px-0 text-gray-600 max-w-lg mt-2 md:mt-6 leading-relaxed md:text-2xl "
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.6 }}
@@ -217,12 +217,12 @@ export default function Section1() {
         {/* Floating elements decoration - hidden on low performance devices */}
         {!isLowPerformanceDevice && (
           <>
-            <motion.div 
+            <motion.div
               className="absolute top-20 right-20 w-16 h-16 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 opacity-20 blur-xl"
               animate={{ y: [0, -20, 0], opacity: [0.2, 0.3, 0.2] }}
               transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
             />
-            <motion.div 
+            <motion.div
               className="absolute bottom-40 left-20 w-24 h-24 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-20 blur-xl"
               animate={{ y: [0, 20, 0], opacity: [0.2, 0.25, 0.2] }}
               transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}

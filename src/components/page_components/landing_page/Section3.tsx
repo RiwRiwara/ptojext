@@ -50,7 +50,7 @@ export default function Section3({ controls }: Section3Props) {
   const dijkstraCanvasRef = useRef<HTMLDivElement>(null);
   const [speed, setSpeed] = useState<number>(40);
   const [wallDensity, setWallDensity] = useState<number>(30);
-  const [cellSizeValue, setCellSizeValue] = useState<number>(20);
+  const [cellSizeValue, setCellSizeValue] = useState<number>(17);
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const [algorithmStats, setAlgorithmStats] = useState({
     aStar: { pathLength: 0, nodesVisited: 0, executionTime: 0 },
@@ -581,11 +581,11 @@ export default function Section3({ controls }: Section3Props) {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-blue-900 mb-4"
+          className="text-xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-blue-900 mb-4"
         >
-          Pathfinder Versus: A* vs. Dijkstra
+          A* vs. Dijkstra
         </motion.h1>
-        <p className="text-md md:text-lg text-gray-600 max-w-3xl mx-auto font-medium">
+        <p className="text-xs md:text-md md:text-lg text-gray-600 max-w-3xl mx-auto font-medium">
           Visualize and compare these two popular pathfinding algorithms in real-time.
           Watch how they explore the grid differently to find the optimal path.
         </p>
@@ -594,7 +594,7 @@ export default function Section3({ controls }: Section3Props) {
 
 
       <motion.div
-        className="w-full max-w-6xl p-6 bg-white rounded-xl shadow-lg flex flex-col gap-8"
+        className="w-full max-w-6xl p-2 md:p-6 bg-white rounded-xl shadow-lg flex flex-col gap-2 md:gap-8"
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
@@ -602,7 +602,7 @@ export default function Section3({ controls }: Section3Props) {
         {/* Visualization Controls */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 bg-gray-50 rounded-lg mb-2">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">Animation Speed</label>
+            <label className="text-xs md:text-sm font-medium text-gray-700">Animation Speed</label>
             <div className="flex items-center gap-2">
               <input
                 type="range"
@@ -610,14 +610,14 @@ export default function Section3({ controls }: Section3Props) {
                 max="200"
                 value={speed}
                 onChange={(e) => setSpeed(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#83AFC9]"
               />
               <span className="text-xs text-gray-500 w-12 text-right">{speed}ms</span>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">Wall Density</label>
+            <label className="text-xs md:text-sm font-medium text-gray-700">Wall Density</label>
             <div className="flex items-center gap-2">
               <input
                 type="range"
@@ -625,14 +625,14 @@ export default function Section3({ controls }: Section3Props) {
                 max="40"
                 value={wallDensity}
                 onChange={(e) => setWallDensity(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#83AFC9]"
               />
               <span className="text-xs text-gray-500 w-12 text-right">{wallDensity}%</span>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">Cell Size</label>
+            <label className="text-xs md:text-sm font-medium text-gray-700">Cell Size</label>
             <div className="flex items-center gap-2">
               <input
                 type="range"
@@ -640,7 +640,7 @@ export default function Section3({ controls }: Section3Props) {
                 max="25"
                 value={cellSizeValue}
                 onChange={(e) => setCellSizeValue(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#83AFC9]"
               />
               <span className="text-xs text-gray-500 w-12 text-right">{cellSizeValue}px</span>
             </div>
@@ -659,10 +659,10 @@ export default function Section3({ controls }: Section3Props) {
         </div>
 
         {/* Visualization Grids */}
-        <div className="flex flex-col md:flex-row gap-8 justify-center items-start">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-8 justify-center items-start">
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-between w-full mb-3">
-              <h3 className="text-xl font-semibold text-indigo-700 tracking-tight">
+              <h3 className="text-xl md:text-2xl font-semibold text-indigo-700 tracking-tight">
                 A* Algorithm
               </h3>
               <span className="text-sm px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">Uses heuristics</span>
@@ -672,7 +672,7 @@ export default function Section3({ controls }: Section3Props) {
 
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-between w-full mb-3">
-              <h3 className="text-xl font-semibold text-purple-700 tracking-tight">
+              <h3 className="text-xl md:text-2xl font-semibold text-purple-700 tracking-tight">
                 Dijkstra Algorithm
               </h3>
               <span className="text-sm px-2 py-1 bg-purple-50 text-purple-700 rounded-full">Uniform cost search</span>

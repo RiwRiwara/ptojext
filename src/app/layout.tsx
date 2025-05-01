@@ -24,8 +24,8 @@ export const viewport: Viewport = {
 
 // SEO & Social Metadata
 export const metadata: Metadata = {
-  title: "AI Playground: Simulations and Visualizations",
-  description:"Discover Many Simulations in an interactive AI playground. Master computer science with engaging visualizations.",
+  title: "Visual Right: AI Simulations and Visualizations",
+  description: "Discover Many Simulations in an interactive AI playground. Master computer science with engaging visualizations.",
   keywords: [
     "pathfinding algorithms",
     "A* algorithm",
@@ -110,7 +110,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={mitr_font.className}>
+    <html lang="en" className={comfortaa_font.className}>
       <body className="antialiased font-sans">
         <AnimatePresence mode="wait" initial={false}>
           <NextUIProvider>{children}</NextUIProvider>

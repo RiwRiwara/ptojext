@@ -15,7 +15,7 @@ export default function LandingPageComponent() {
   const controlsSection3 = useAnimation();
   const [activeTab, setActiveTab] = useState(0);
   const [isLowPerformanceDevice, setIsLowPerformanceDevice] = useState(false);
-  
+
   // Check for low performance device on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -34,7 +34,7 @@ export default function LandingPageComponent() {
       }, 1000);
       return;
     }
-      
+
     const sections = document.querySelectorAll("section");
     const scrollY = window.scrollY + window.innerHeight;
     const controlsArray = [controlsSection2, controlsSection3];
@@ -64,7 +64,7 @@ export default function LandingPageComponent() {
           lastScroll = now;
         }
       };
-      
+
       window.addEventListener("scroll", throttledScroll, { passive: true });
       return () => window.removeEventListener("scroll", throttledScroll);
     } else {
@@ -122,28 +122,20 @@ export default function LandingPageComponent() {
       />
 
       {/* INTRO SECTION */}
-      <section className="py-16 flex flex-col items-center text-center gap-6">
-        <motion.div
+      <section className="py-4 flex flex-col items-center text-center gap-6">
+        <motion.h1
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="bg-gradient-to-r from-[#83AFC9] to-blue-900 text-white px-5 py-2 rounded-full text-sm font-medium mb-4"
+          className="bg-gradient-to-r from-[#83AFC9] to-[#83AFC9] text-white px-5 py-2 rounded-full text-sm md:text-xl font-medium mb-4"
         >
           Interactive Learning Reimagined
-        </motion.div>
-        <motion.h1
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-blue-900 mb-4"
-        >
-          Learn Through Interaction
         </motion.h1>
         <motion.p
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-md md:text-xl max-w-2xl mx-6 md:mx-auto text-gray-700 leading-relaxed"
+          className="text-xs md:text-lg max-w-2xl mx-6 md:mx-auto text-gray-700 leading-relaxed"
         >
           Our interactive playground helps you visualize and understand complex concepts
           through engaging simulations and hands-on experiences.
@@ -152,25 +144,28 @@ export default function LandingPageComponent() {
 
       {/* FEATURES TAB SECTION */}
       <section id="features" className="py-10 px-4 max-w-6xl mx-auto">
+
         <motion.div
           className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md p-8 mb-20"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
+
           {/* Tabs */}
           <div className="flex justify-center mb-10 overflow-x-auto pb-2">
-            <div className="inline-flex p-1 rounded-lg bg-gray-100">
+
+            <div className="inline-flex flex-col md:flex-row p-1 rounded-lg bg-gray-100 w-full justify-between ">
               {featuresData.map((feature, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveTab(index)}
-                  className={`relative px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${activeTab === index ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-600 hover:text-gray-800'}`}
+                  className={`relative px-6 py-2 text-xs md:text-lg text-nowrap font-medium rounded-lg transition-all duration-200 ${activeTab === index ? 'bg-white text-[#527387] shadow-sm' : 'text-gray-600 hover:text-gray-800'}`}
                 >
                   {feature.title}
                   {activeTab === index && (
                     <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#527387]"
                       layoutId="activeTab"
                     />
                   )}
@@ -189,7 +184,7 @@ export default function LandingPageComponent() {
               transition={{ duration: 0.3 }}
             >
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">{featuresData[activeTab].title}</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">{featuresData[activeTab].title}</h2>
                 <p className="text-gray-600 max-w-3xl mx-auto">{featuresData[activeTab].description}</p>
               </div>
 
@@ -201,9 +196,9 @@ export default function LandingPageComponent() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: featureIndex * 0.1 }}
                   >
-                    <Card className="p-6 flex flex-col items-center text-center h-full drop-shadow-[2px_2px_6px_rgb(99_102_241_/_0.2)] hover:shadow-lg transition-shadow duration-300">
+                    <Card className="p-6 flex flex-col items-center text-center h-full  hover:shadow-lg  duration-300 ease-soft-spring">
                       <div className="text-4xl mb-4">{feature.icon}</div>
-                      <h3 className="font-bold text-xl mb-2 text-gray-900">{feature.title}</h3>
+                      <h3 className="font-bold text-xl mb-2 text-gray-800">{feature.title}</h3>
                       <p className="text-gray-700">{feature.description}</p>
                     </Card>
                   </motion.div>
@@ -213,63 +208,122 @@ export default function LandingPageComponent() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Featured Experience Section */}
-        <div className="relative mb-4">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-3xl transform -rotate-1"></div>
+        {/* Cloth Simulation */}
+        <div className="py-6 mt-4">
+          {/* Header Section */}
           <motion.div
-            className="relative bg-white/90 backdrop-blur-sm rounded-2xl shadow-md p-8 overflow-hidden"
+            className="text-center mb-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8 }}
           >
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="bg-indigo-100 text-indigo-800 px-4 py-1 rounded-full text-sm font-medium inline-block mb-4">Featured Experience</div>
-                <h2 className="text-3xl font-bold mb-4">Interactive Cloth Physics</h2>
-                <p className="text-gray-700 mb-6">Explore our cloth simulation powered by Matter.js physics engine. Experiment with different properties to see how they affect the material behavior.</p>
+            <motion.h1
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="text-2xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-blue-900 mb-4 mt-2 md:mt-16"
+            >
+              Interactive Cloth Physics
+            </motion.h1>
+            <p className="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
+              Dive into a dynamic cloth simulation powered by Matter.js. Tweak properties like stiffness, friction and gravity to see how they shape the fabric behavior in real time.
+            </p>
+          </motion.div>
 
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-start gap-3">
-                    <div className="p-1 bg-green-100 rounded-full text-green-800 mt-0.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    <p className="text-gray-700">Adjustable stiffness, friction, and particle size</p>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="p-1 bg-green-100 rounded-full text-green-800 mt-0.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    <p className="text-gray-700">
-                      Apply wind and gravity
-                    </p>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="p-1 bg-green-100 rounded-full text-green-800 mt-0.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    <p className="text-gray-700">Add ball </p>
-                  </li>
-                </ul>
+          {/* Featured Experience Section */}
+          <div className="relative mb-0">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-3xl transform -rotate-2"></div>
 
-        
-              </div>
+            <motion.div
+              className="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-lg p-8 md:p-12 overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div>
+                  <span className="inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold mb-4">
+                    Featured Simulation
+                  </span>
+                  <h2 className="text-lg md:text-2xl font-bold text-[#83AFC9] mb-4">
+                    Realistic Cloth Dynamics
+                  </h2>
+                  <p className="text-gray-700 text-sm md:text-lg mb-6">
+                    Experience a cutting-edge cloth simulation driven by the Matter.js physics engine. Adjust parameters and interact with the fabric to explore its lifelike behavior.
+                  </p>
 
-              <div className="relative">
+                  <ul className="space-y-4 mb-8">
+                    <li className="flex items-center gap-3">
+                      <div className="p-1.5 bg-green-100 rounded-full text-green-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-gray-700 font-medium">
+                        Fine-tune stiffness, friction, and particle size
+                      </p>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="p-1.5 bg-green-100 rounded-full text-green-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-gray-700 font-medium">
+                        Simulate wind and gravity effects
+                      </p>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="p-1.5 bg-green-100 rounded-full text-green-800">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-gray-700 font-medium">
+                        Interact with dynamic objects like balls
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Simulation Canvas */}
                 <div className="relative">
-                  <Suspense fallback={<div className="w-full h-64 bg-gray-100 animate-pulse rounded-md"></div>}>
+                  <Suspense fallback={<div className="w-full h-80 bg-gray-100 animate-pulse rounded-lg"></div>}>
                     <ClothPhysic controls={controlsSection2} />
                   </Suspense>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
+
       </section>
 
       {/* Existing sections Section3) */}

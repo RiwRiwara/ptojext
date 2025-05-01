@@ -9,6 +9,7 @@ import { Suspense, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 
 // Animated particles background effect
 const ParticleBackground = () => {
@@ -251,20 +252,10 @@ export default function LandingPage() {
           />
           <BaseLayout>
             <Section1 />
-            <motion.div
-              className="absolute top-6 right-6 z-30 flex items-center gap-2 px-3 py-2 bg-white/70 backdrop-blur-sm rounded-full shadow-sm text-sm text-gray-600"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 3, duration: 0.5 }}
-              aria-live="polite"
-              role="status"
-            >
-              <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse" aria-hidden="true"></span>
-              <span>Interactive Algorithms Demo Ready</span>
-            </motion.div>
             <RevealSection>
               <LandingPageComponent />
             </RevealSection>
+            <BottomComponent />
           </BaseLayout>
         </motion.div>
       </AnimatePresence>

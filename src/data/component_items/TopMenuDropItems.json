@@ -9,9 +9,20 @@
         "className": "visualization",
         "children": [
           {
-            "name": "Sorting",
+            "name": "Algorithms",
             "className": "",
-            "link": "/playground/algorithms/sorting"
+            "children": [
+              {
+                "name": "Sorting",
+                "link": "/playground/algorithms/sorting",
+                "className": "sorting"
+              },
+              {
+                "name": "Search",
+                "link": "/playground/algorithms/search",
+                "className": "search"
+              }
+            ]
           },
           {
             "name": "Image processing",
@@ -35,6 +46,11 @@
         "name": "information",
         "className": "information",
         "children": [
+          {
+            "name": "Changelog",
+            "link": "/roadmap",
+            "className": "information-changelog"
+          },
           {
             "name": "About Us",
             "link": "/about",

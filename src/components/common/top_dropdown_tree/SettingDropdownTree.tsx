@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { TbAlphabetThai, TbAlphabetLatin } from "react-icons/tb";
 import { FiLogIn, FiLogOut, FiUser } from "react-icons/fi";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from "@heroui/react";
+
 import Image from "next/image";
 
 interface SettingDropdownTreeProps {
@@ -62,13 +55,13 @@ const SettingDropdownTree: React.FC<SettingDropdownTreeProps> = ({ currentLang, 
             <div className="flex flex-col gap-2 w-full">
               <button
                 onClick={() => setLoginOpen(true)}
-                className="px-4 py-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white shadow transition-all duration-200 flex items-center gap-2 font-semibold w-full justify-center"
+                className="px-4 py-2 rounded-full bg-[#83AFC9] hover:bg-blue-600 text-white border-2 border-white transition-all duration-200 flex items-center gap-2 font-semibold w-full justify-center"
               >
                 <FiLogIn /> Login
               </button>
               <button
                 onClick={() => setRegisterOpen(true)}
-                className="px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white shadow transition-all duration-200 flex items-center gap-2 font-semibold w-full justify-center"
+                className="px-4 py-2 rounded-full bg-white text-[#83AFC9] border-2 border-[#83AFC9]]    transition-all duration-200 flex items-center gap-2 font-semibold w-full justify-center"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -86,12 +79,12 @@ const SettingDropdownTree: React.FC<SettingDropdownTreeProps> = ({ currentLang, 
           >
             {currentLang === "en" ? (
               <>
-                <TbAlphabetThai className="w-6 h-6 text-blue-500" />
+                <TbAlphabetThai className="w-6 h-6 text-[#83AFC9]" />
                 <span className="text-sm font-medium text-gray-900">Switch to Thai</span>
               </>
             ) : (
               <>
-                <TbAlphabetLatin className="w-6 h-6 text-blue-500" />
+                <TbAlphabetLatin className="w-6 h-6 text-[#83AFC9]" />
                 <span className="text-sm font-medium text-gray-900">Switch to English</span>
               </>
             )}

@@ -5,6 +5,7 @@ import { AnimationStep } from '@/classes/sorting/SortingAlgorithms';
 import { gsap } from 'gsap';
 import useResizeObserver from '@/hooks/useResizeObserver';
 import { Tooltip } from '@nextui-org/tooltip';
+import { FaSort } from 'react-icons/fa';
 
 interface PixiSortingVisualizerProps {
   blocks: number[];
@@ -14,6 +15,7 @@ interface PixiSortingVisualizerProps {
   currentStep?: number;
   onSortingComplete: () => void;
   onStepChange?: (step: number) => void;
+  onBarClick?: (index: number) => void;
   colorScheme?: {
     background: string;
     defaultBar: string;
@@ -53,6 +55,7 @@ export default function PixiSortingVisualizer({
   currentStep = 0,
   onSortingComplete,
   onStepChange,
+  onBarClick,
   colorScheme = defaultColorScheme,
 }: PixiSortingVisualizerProps) {
   const pixiContainerRef = useRef<HTMLDivElement>(null);
@@ -700,6 +703,14 @@ export default function PixiSortingVisualizer({
           </div>
         </div>
       </div>
+      {!isPlaying && (
+        <div className="mt-2 text-center text-sm text-gray-600">
+          <div className="flex items-center justify-center gap-1">
+            <FaSort className="text-[#83AFC9]" />
+            <span>Click on any bar to start sorting from that position</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
