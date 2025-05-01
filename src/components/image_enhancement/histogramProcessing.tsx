@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@nextui-org/button"; // ensure this is imported
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Bar } from "react-chartjs-2";
@@ -219,19 +220,29 @@ export default function HistogramProcessingSection() {
 
   return (
     <div className="container mx-auto flex flex-col gap-8 p-4 pt-8">
-      <h1 className="text-2xl font-bold text-center">Histogram Processing</h1>
-
       {/* Select Transform */}
       <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-        <select
-          value={mode}
-          onChange={(e) => setMode(e.target.value as TransformMode)}
-          className="border rounded px-3 py-2 text-sm"
-        >
-          <option value="linear">Linear Stretch</option>
-          <option value="gamma">Gamma Correction</option>
-          <option value="log">Logarithmic Transform</option>
-        </select>
+        <div className="flex flex-wrap justify-center gap-2">
+          {(
+            [
+              { key: "linear", label: "Linear Stretch" },
+              { key: "gamma", label: "Gamma Correction" },
+              { key: "log", label: "Logarithmic Transform" },
+            ] as { key: TransformMode; label: string }[]
+          ).map(({ key, label }) => (
+            <Button
+              key={key}
+              onClick={() => setMode(key)}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition ${
+                mode === key
+                  ? "bg-indigo-600 text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
+              }`}
+            >
+              {label}
+            </Button>
+          ))}
+        </div>
 
         {/* Dynamic Sliders */}
         {mode === "gamma" && (
@@ -254,7 +265,7 @@ export default function HistogramProcessingSection() {
             <input
               type="range"
               min="1"
-              max="100"
+              max="300"
               step="1"
               value={logC}
               onChange={(e) => setLogC(parseFloat(e.target.value))}
@@ -263,7 +274,6 @@ export default function HistogramProcessingSection() {
           </div>
         )}
       </div>
-
       {/* Dynamic Formula */}
       <div className="text-center text-gray-700 font-mono text-sm">
         Formula: {dynamicFormula()}
@@ -291,7 +301,6 @@ export default function HistogramProcessingSection() {
             />
           </div>
         </div>
-
         {/* Transformed */}
         <div className="flex flex-col items-center gap-4">
           <h2 className="text-lg font-semibold text-gray-700 capitalize">

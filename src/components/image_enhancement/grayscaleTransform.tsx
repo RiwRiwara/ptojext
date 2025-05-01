@@ -11,32 +11,32 @@ const grayscaleTypes: GrayScaleTypes[] = [
     key: "linear",
     label: "Linear (Identity)",
     description: "Keeps pixel intensity unchanged.",
-    formula: "G = 0.299R + 0.587G + 0.114B"
+    formula: "G = 0.299R + 0.587G + 0.114B",
   },
   {
     key: "log",
     label: "Logarithmic",
     description: "Expands dark tones, compresses highlights.",
     param: { label: "c", min: 10, max: 200, step: 1, default: 70 },
-    formula: "G = c · log(1 + I)"
+    formula: "G = c · log(1 + I)",
   },
   {
     key: "power-law",
     label: "Power‑Law (Gamma)",
     description: "Classic gamma correction for displays.",
     param: { label: "γ", min: 0.05, max: 3, step: 0.05, default: 0.5 },
-    formula: "G = 255 · (I / 255)^γ"
-  }
+    formula: "G = 255 · (I / 255)^γ",
+  },
 ];
 
 export default function GrayscaleTransformSection() {
   const [selected, setSelected] = useState<GrayKey>("linear");
   const [param, setParam] = useState<number | undefined>(
-    grayscaleTypes.find(g => g.key === selected)?.param?.default
+    grayscaleTypes.find((g) => g.key === selected)?.param?.default
   );
 
   useEffect(() => {
-    setParam(grayscaleTypes.find(t => t.key === selected)?.param?.default);
+    setParam(grayscaleTypes.find((t) => t.key === selected)?.param?.default);
   }, [selected]);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -87,22 +87,22 @@ export default function GrayscaleTransformSection() {
     img.onload = () => applyTransform(img);
   }, [applyTransform]);
 
-  const meta = grayscaleTypes.find(t => t.key === selected)!;
+  const meta = grayscaleTypes.find((t) => t.key === selected)!;
 
   return (
     <div className="container mx-auto flex flex-col gap-8 p-4 pt-8">
       <h1 className="text-2xl font-bold">
-        Gray‑Level Transformations:{" "}
+        {" "}
         <span className="text-indigo-600">{meta.label}</span>
       </h1>
-          {/* ── img preview ─ */}
-          <canvas
+      {/* ── img preview ─ */}
+      <canvas
         ref={canvasRef}
         className="mx-auto border rounded shadow max-w-full"
       />
       {/* ── selector buttons ─ */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-        {grayscaleTypes.map(t => (
+        {grayscaleTypes.map((t) => (
           <Button
             key={t.key}
             onClick={() => setSelected(t.key)}
@@ -124,7 +124,9 @@ export default function GrayscaleTransformSection() {
           {meta.param
             ? meta.formula.replace(
                 meta.param.label,
-                `${meta.param.label}=${(param ?? meta.param.default).toFixed(2)}`
+                `${meta.param.label}=${(param ?? meta.param.default).toFixed(
+                  2
+                )}`
               )
             : meta.formula}
         </code>
@@ -142,7 +144,7 @@ export default function GrayscaleTransformSection() {
               max={meta.param.max}
               step={meta.param.step}
               value={param}
-              onChange={e => setParam(parseFloat(e.target.value))}
+              onChange={(e) => setParam(parseFloat(e.target.value))}
             />
           </div>
         )}
