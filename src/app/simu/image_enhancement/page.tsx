@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import HistogramProcessingSection from "@/components/image_enhancement/histogramProcessing";
 import ImageSubtractionSection from "@/components/image_enhancement/imageSubtraction";
 import { Button } from "@nextui-org/button";
-import { Head } from "next/document";
 
 export default function ImageEnhancementPage() {
   const { t } = useTranslation("imageenchanted");
@@ -28,14 +27,6 @@ export default function ImageEnhancementPage() {
 
   return (
     <BaseLayout>
-      <Head>
-        <title>Image Enhancement | YourSiteName</title>
-        <meta
-          name="description"
-          content="Apply grayscale, histogram processing, sharpening, and subtraction to enhance images visually and analytically."
-        />
-      </Head>
-
       <div className="container mx-auto flex flex-col justify-start min-h-screen gap-8 p-4 pt-8 mb-10">
         <div className="max-w-3xl mx-auto mb-4">
           <Breadcrumb
@@ -75,8 +66,9 @@ export default function ImageEnhancementPage() {
         {/* Content Sections */}
         <section id="grayscale" className="pt-8">
           <h2 className="text-2xl font-semibold mb-4 text-center">
-            Gray Level Transformation
+            Apply Grayscale Transformations to Your Image
           </h2>
+
           <GrayscaleTransformSection />
         </section>
         <section id="histogram" className="pt-8">
