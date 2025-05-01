@@ -94,7 +94,7 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
                 </label>
                 {param.defaultValue !== undefined && param.value !== param.defaultValue && (
                   <button 
-                    onClick={() => updateNodeParameter(node.id, param.name, param.defaultValue as any)}
+                    onClick={() => updateNodeParameter(node.id, param.name, param.defaultValue as number | boolean | string)}
                     className="text-xs text-[#83AFC9] hover:underline"
                   >
                     Reset
