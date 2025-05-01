@@ -15,7 +15,7 @@ const config: Config = {
     extend: {
 
       fontFamily: {
-        sans: ["Comfortaa", "sans-serif"],
+        sans: ["Mitr", "sans-serif"],
       },
       colors: {
         primary: {
