@@ -1,22 +1,42 @@
 "use client";
-import { useState } from "react";
 import BaseLayout from "@/components/layout/BaseLayout";
 import GrayscaleTransformSection from "@/components/image_enhancement/grayscaleTransform";
 import SharpenSmoothTransformSection from "@/components/image_enhancement/sharpenSmoothTransform";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { useTranslation } from "react-i18next";
 import HistogramProcessingSection from "@/components/image_enhancement/histogramProcessing";
+import ImageSubtractionSection from "@/components/image_enhancement/imageSubtraction";
+import { Button } from "@nextui-org/button";
+import { Head } from "next/document";
 
 export default function ImageEnhancementPage() {
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
-  const [openSpatial, setOpenSpatial] = useState(false);
-  const [openPoint, setOpenPoint] = useState(false);
-  const [openMask, setOpenMask] = useState(false);
   const { t } = useTranslation("imageenchanted");
+
+  const sections = [
+    { id: "grayscale", label: "Gray Level Transformation" },
+    { id: "histogram", label: "Histogram Processing" },
+    { id: "sharpenSmooth", label: "Smoothing and Sharpening" },
+    { id: "subtraction", label: "Image Subtraction" },
+  ];
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <BaseLayout>
-      <div className="container mx-auto flex flex-col justify-start h-screen gap-8 p-2 pt-8 mb-10 ">
+      <Head>
+        <title>Image Enhancement | YourSiteName</title>
+        <meta
+          name="description"
+          content="Apply grayscale, histogram processing, sharpening, and subtraction to enhance images visually and analytically."
+        />
+      </Head>
+
+      <div className="container mx-auto flex flex-col justify-start min-h-screen gap-8 p-4 pt-8 mb-10">
         <div className="max-w-3xl mx-auto mb-4">
           <Breadcrumb
             items={[
@@ -30,90 +50,53 @@ export default function ImageEnhancementPage() {
         </h1>
         <div className="flex flex-col md:flex-row gap-6 md:gap-10">
           <div>
-            <h1 className="text-2xl font-semibold mb-2">
+            <h2 className="text-2xl font-semibold mb-2">
               {t("whatisimageenchanted")}
-            </h1>
+            </h2>
             <p className="text-lg">{t("mean")}</p>
           </div>
         </div>
-        {/* Tree Menu */}
-        <div className="w-full max-w-md bg-white p-4 rounded-2xl shadow-md">
-          <div className="flex flex-col gap-2 text-gray-700 text-sm">
-            {/* Top Level */}
-            <button
-              onClick={() => setOpenSpatial(!openSpatial)}
-              className="text-left font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition-all w-full"
-            >
-              {openSpatial ? "▼" : "▶"} Spatial Domain
-            </button>
-
-            {/* Spatial Sub Levels */}
-            <div
-              className={`ml-4 overflow-hidden transition-all ${
-                openSpatial ? "max-h-96" : "max-h-0"
-              }`}
-            >
-              {/* Point Processing */}
-              <button
-                onClick={() => setOpenPoint(!openPoint)}
-                className="text-left w-full py-2 px-4 rounded-lg hover:bg-gray-100 transition-all font-medium"
+        {/* Navigation Buttons */}
+        <nav className="sticky top-0 z-10 bg-white py-4">
+          <div className="container mx-auto flex flex-wrap gap-4 justify-center">
+            {sections.map(({ id, label }) => (
+              <Button
+                key={id}
+                onClick={() => scrollToSection(id)}
+                className="px-4 py-2 text-sm font-medium rounded-md transition bg-gray-100 text-gray-700 hover:bg-indigo-100"
+                aria-label={`Scroll to ${label}`}
               >
-                {openPoint ? "▼" : "▶"} Point Processing
-              </button>
-
-              <div
-                className={`ml-4 overflow-hidden transition-all ${
-                  openPoint ? "max-h-40" : "max-h-0"
-                }`}
-              >
-                <button
-                  onClick={() => setSelectedSection("grayscale")}
-                  className="text-left w-full py-2 px-4 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-all"
-                >
-                  Gray Level Transformation
-                </button>
-                <button
-                  onClick={() => setSelectedSection("histogram")}
-                  className="text-left w-full py-2 px-4 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-all"
-                >
-                  Histogram Processing
-                </button>
-              </div>
-
-              {/* Mask Processing */}
-              <button
-                onClick={() => setOpenMask(!openMask)}
-                className="text-left w-full py-2 px-4 rounded-lg hover:bg-gray-100 transition-all font-medium mt-2"
-              >
-                {openMask ? "▼" : "▶"} Mask Processing
-              </button>
-
-              <div
-                className={`ml-4 overflow-hidden transition-all ${
-                  openMask ? "max-h-40" : "max-h-0"
-                }`}
-              >
-                <button
-                  onClick={() => setSelectedSection("sharpenSmooth")}
-                  className="text-left w-full py-2 px-4 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-all"
-                >
-                  Smoothing and Sharpening
-                </button>
-              </div>
-            </div>
+                {label}
+              </Button>
+            ))}
           </div>
-        </div>
+        </nav>
 
-        {/* Render Selected Section */}
-        <div className="w-full flex justify-center mt-10">
-          <div className="max-w-5xl">
-            {selectedSection === "grayscale" && <GrayscaleTransformSection />}
-            {selectedSection === "histogram" && <HistogramProcessingSection />}
-            {selectedSection === "sharpenSmooth" && (
-              <SharpenSmoothTransformSection />
-            )}
-          </div>
-        </div>
+        {/* Content Sections */}
+        <section id="grayscale" className="pt-8">
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            Gray Level Transformation
+          </h2>
+          <GrayscaleTransformSection />
+        </section>
+        <section id="histogram" className="pt-8">
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            Histogram Processing
+          </h2>
+          <HistogramProcessingSection />
+        </section>
+        <section id="sharpenSmooth" className="pt-8">
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            Smoothing and Sharpening
+          </h2>
+          <SharpenSmoothTransformSection />
+        </section>
+        <section id="subtraction" className="pt-8">
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            Image Subtraction
+          </h2>
+          <ImageSubtractionSection />
+        </section>
       </div>
     </BaseLayout>
   );
