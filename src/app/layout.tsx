@@ -110,7 +110,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={comfortaa_font.className}>
+    <html lang="en" className={mitr_font.className}>
       <body className="antialiased font-sans">
         <AnimatePresence mode="wait" initial={false}>
           <NextUIProvider>{children}</NextUIProvider>
