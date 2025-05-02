@@ -1,20 +1,22 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { BlockMath } from "react-katex";
+import "katex/dist/katex.min.css";
 
 const methods = [
   {
     key: "sharpen",
     label: "Sharpen",
     description: "Enhances edges by emphasizing pixel intensity differences.",
-    formula: `G = I + α(I - blurred(I))`,
+    formula: `G = I + \\alpha (I - \\text{blurred}(I))`,
     param: { label: "α", min: 0.1, max: 10.0, step: 0.1, default: 1.0 },
   },
   {
     key: "smooth",
     label: "Smooth",
     description: "Reduces noise by averaging nearby pixel values.",
-    formula: `G = 1/9 Σ I(x,y)`,
+    formula: `G = \\frac{1}{9} \\sum I(x, y)`,
     param: { label: "Kernel Size", min: 1, max: 10, step: 1, default: 3 },
   },
 ];
@@ -87,7 +89,7 @@ export default function SharpenSmoothTransformSection() {
         output[i] = Math.min(Math.max(r, 0), 255);
         output[i + 1] = Math.min(Math.max(g, 0), 255);
         output[i + 2] = Math.min(Math.max(b, 0), 255);
-        output[i + 3] = data[i + 3]; // copy alpha
+        output[i + 3] = data[i + 3];
       }
     }
 
@@ -125,7 +127,7 @@ export default function SharpenSmoothTransformSection() {
             const value = original + alpha * (original - blur);
             output[i + j] = Math.min(Math.max(value, 0), 255);
           }
-          output[i + 3] = data[i + 3]; // copy alpha
+          output[i + 3] = data[i + 3];
         }
 
         for (let i = 0; i < data.length; i++) data[i] = output[i];
@@ -152,13 +154,11 @@ export default function SharpenSmoothTransformSection() {
     <section className="mt-10 container mx-auto p-4 flex flex-col items-center space-y-6">
       <h2 className="text-xl font-bold">Sharpening & Smoothing</h2>
 
-      {/* Center the Canvas */}
       <canvas
         ref={canvasRef}
         className="mx-auto border rounded shadow max-w-full"
       />
 
-      {/* Center the Method Buttons */}
       <div className="flex gap-4 flex-wrap justify-center">
         {methods.map((m) => (
           <button
@@ -178,15 +178,15 @@ export default function SharpenSmoothTransformSection() {
         ))}
       </div>
 
-      {/* Centered Control Panel */}
       <div className="bg-gray-100 p-4 rounded shadow space-y-4 w-full max-w-xl">
         <p className="text-gray-700">{meta.description}</p>
+
         <label className="block mt-4 font-medium">
           {meta.param.label}: {param.toFixed(2)}
         </label>
         <input
           type="range"
-          className="w-full"
+          className="w-full accent-indigo-600"
           min={meta.param.min}
           max={meta.param.max}
           step={meta.param.step}
@@ -194,16 +194,14 @@ export default function SharpenSmoothTransformSection() {
           onChange={(e) => setParam(parseFloat(e.target.value))}
         />
 
-        {/* Visual Explanation */}
         <div className="bg-white p-4 rounded shadow-inner">
           {selected === "sharpen" ? (
             <div className="text-sm space-y-2">
-              <div className="font-mono text-blue-700">
-                G = I + α (I - blurred(I))
-              </div>
-              <div className="text-gray-600">
-                α = <span className="font-semibold">{param.toFixed(2)}</span>
-              </div>
+              <BlockMath>
+                {`G = I + \\alpha (I - \\text{blurred}(I)),\\quad \\alpha = ${param.toFixed(
+                  2
+                )}`}
+              </BlockMath>
               <div className="text-xs text-gray-500 italic">
                 Sharpening emphasizes edges by subtracting a blurred version
                 from the original image and amplifying the difference using α.
@@ -211,6 +209,9 @@ export default function SharpenSmoothTransformSection() {
             </div>
           ) : (
             <div className="space-y-2 flex flex-col items-center">
+              <BlockMath>{`G = \\frac{1}{${
+                param * param
+              }} \\sum I(x, y)`}</BlockMath>
               <div className="text-sm text-gray-700">
                 Averaging Kernel (size: {param}×{param}):
               </div>
