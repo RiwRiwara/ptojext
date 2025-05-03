@@ -11,7 +11,7 @@ type GrayKey = "linear" | "log" | "power-law";
 const grayscaleTypes: GrayScaleTypes[] = [
   {
     key: "linear",
-    label: "Linear (Identity)",
+    label: "Linear (Identity)",
     description: "Keeps pixel intensity unchanged.",
     formula: "G = 0.299R + 0.587G + 0.114B",
   },
@@ -24,7 +24,7 @@ const grayscaleTypes: GrayScaleTypes[] = [
   },
   {
     key: "power-law",
-    label: "Power‑Law (Gamma)",
+    label: "Power Law (Gamma)",
     description: "Classic gamma correction for displays.",
     param: { label: "\\gamma", min: 0.05, max: 3, step: 0.05, default: 0.5 },
     formula: "G = 255 \\cdot \\left(\\frac{I}{255}\\right)^{\\gamma}",

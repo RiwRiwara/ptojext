@@ -1,11 +1,11 @@
 "use client";
 import BaseLayout from "@/components/layout/BaseLayout";
-import GrayscaleTransformSection from "@/components/image_enhancement/GrayscaleTransform";
-import SharpenSmoothTransformSection from "@/components/image_enhancement/SharpenSmoothTransform";
+import GrayscaleTransformSection from "@/components/image_enhancement/grayscaleTransform";
+import SharpenSmoothTransformSection from "@/components/image_enhancement/sharpenSmoothTransform";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { useTranslation } from "react-i18next";
-import HistogramProcessingSection from "@/components/image_enhancement/HistogramProcessing";
-import ImageSubtractionSection from "@/components/image_enhancement/ImageSubtraction";
+import HistogramProcessingSection from "@/components/image_enhancement/histogramProcessing";
+import ImageSubtractionSection from "@/components/image_enhancement/imageSubtraction";
 import { Button } from "@nextui-org/button";
 
 export default function ImageEnhancementPage() {
