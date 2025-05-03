@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --default-black: #272B2D;
-  --default-blue: #83AFC9;
+  --default-black: #272b2d;
+  --default-blue: #83afc9;
 }
 
 html {

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import { Button } from "@heroui/react";
+import { BlockMath } from "react-katex";
+import "katex/dist/katex.min.css";
 import { GrayScaleTypes } from "@/components/image_enhancement/types";
 
 type GrayKey = "linear" | "log" | "power-law";
@@ -9,7 +11,7 @@ type GrayKey = "linear" | "log" | "power-law";
 const grayscaleTypes: GrayScaleTypes[] = [
   {
     key: "linear",
-    label: "Linear (Identity)",
+    label: "Linear (Identity)",
     description: "Keeps pixel intensity unchanged.",
     formula: "G = 0.299R + 0.587G + 0.114B",
   },
@@ -18,14 +20,14 @@ const grayscaleTypes: GrayScaleTypes[] = [
     label: "Logarithmic",
     description: "Expands dark tones, compresses highlights.",
     param: { label: "c", min: 10, max: 200, step: 1, default: 70 },
-    formula: "G = c · log(1 + I)",
+    formula: "G = c \\cdot \\log(1 + I)",
   },
   {
     key: "power-law",
-    label: "Power‑Law (Gamma)",
+    label: "Power Law (Gamma)",
     description: "Classic gamma correction for displays.",
-    param: { label: "γ", min: 0.05, max: 3, step: 0.05, default: 0.5 },
-    formula: "G = 255 · (I / 255)^γ",
+    param: { label: "\\gamma", min: 0.05, max: 3, step: 0.05, default: 0.5 },
+    formula: "G = 255 \\cdot \\left(\\frac{I}{255}\\right)^{\\gamma}",
   },
 ];
 
@@ -89,17 +91,27 @@ export default function GrayscaleTransformSection() {
 
   const meta = grayscaleTypes.find((t) => t.key === selected)!;
 
+  // Generate LaTeX formula with value if applicable
+  const formulaLatex = meta.param
+    ? meta.formula.replace(
+        meta.param.label,
+        `${meta.param.label}=${(param ?? meta.param.default).toFixed(2)}`
+      )
+    : meta.formula;
+
   return (
     <div className="container mx-auto flex flex-col gap-8 p-4 pt-8">
       <h1 className="text-2xl font-bold">
-        {" "}
+        Gray‑Level Transformations:{" "}
         <span className="text-indigo-600">{meta.label}</span>
       </h1>
-      {/* ── img preview ─ */}
+
+      {/* ── canvas preview ─ */}
       <canvas
         ref={canvasRef}
         className="mx-auto border rounded shadow max-w-full"
       />
+
       {/* ── selector buttons ─ */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {grayscaleTypes.map((t) => (
@@ -115,25 +127,19 @@ export default function GrayscaleTransformSection() {
           </Button>
         ))}
       </div>
-      {/* ── info / slider panel ─ */}
+
+      {/* ── info and slider ─ */}
       <div className="bg-gray-50 p-6 rounded-md space-y-4 shadow-sm">
         <p className="text-sm text-gray-700">{meta.description}</p>
 
-        <code className="block bg-gray-100 text-gray-800 font-mono p-3 rounded border">
-          {meta.param
-            ? meta.formula.replace(
-              meta.param.label,
-              `${meta.param.label}=${(param ?? meta.param.default).toFixed(
-                2
-              )}`
-            )
-            : meta.formula}
-        </code>
+        <div className="text-center">
+          <BlockMath>{formulaLatex}</BlockMath>
+        </div>
 
         {meta.param && (
           <div className="space-y-1">
             <label className="text-sm font-medium">
-              {meta.param.label}&nbsp;=&nbsp;
+              {meta.param.label} ={" "}
               <span className="font-mono">{param?.toFixed(2)}</span>
             </label>
             <input
