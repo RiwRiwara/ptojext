@@ -106,11 +106,10 @@ export default function GrayscaleTransformSection() {
           <Button
             key={t.key}
             onClick={() => setSelected(t.key)}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition ${
-              selected === t.key
-                ? "bg-indigo-600 text-white shadow-md"
-                : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
-            }`}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition ${selected === t.key
+              ? "bg-indigo-600 text-white shadow-md"
+              : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
+              }`}
           >
             {t.label}
           </Button>
@@ -123,11 +122,11 @@ export default function GrayscaleTransformSection() {
         <code className="block bg-gray-100 text-gray-800 font-mono p-3 rounded border">
           {meta.param
             ? meta.formula.replace(
-                meta.param.label,
-                `${meta.param.label}=${(param ?? meta.param.default).toFixed(
-                  2
-                )}`
-              )
+              meta.param.label,
+              `${meta.param.label}=${(param ?? meta.param.default).toFixed(
+                2
+              )}`
+            )
             : meta.formula}
         </code>
 

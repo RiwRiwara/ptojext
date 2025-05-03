@@ -2,20 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { Handle, Position, NodeProps, Node } from '@xyflow/react';
 import { FaFilter } from 'react-icons/fa';
 import { useFlowStore } from '../store';
+import { NodeParameter } from '../store/types';
+import { NodeBase, ParameterControl } from './NodeBase';
 
 export function ImageProcessNode({ data, id, selected }: NodeProps) {
   const [processingImage, setProcessingImage] = useState<boolean>(false);
   const [outputImage, setOutputImage] = useState<string | null>(null);
   const [inputImage, setInputImage] = useState<string | null>(null);
+  const [showProperties, setShowProperties] = useState<boolean>(false);
+  const [parameters, setParameters] = useState<NodeParameter[]>([]);
   
-  const { 
-    setSelectedNode, 
-    getNodeInputImage, 
-    getNodeOutputImage,
-    setNodeInputImage,
-    processNode,
-    processFlow
-  } = useFlowStore();
+  // Using individual selectors to prevent re-renders
+  const setSelectedNode = useFlowStore(state => state.setSelectedNode);
+  const getNodeInputImage = useFlowStore(state => state.getNodeInputImage);
+  const getNodeOutputImage = useFlowStore(state => state.getNodeOutputImage);
+  const processNode = useFlowStore(state => state.processNode);
+  const getNodeParameters = useFlowStore(state => state.getNodeParameters);
+  const updateNodeParameter = useFlowStore(state => state.updateNodeParameter);
+  
+  // Load node parameters only once when the component mounts or when the id changes
+  useEffect(() => {
+    // Adding a small delay to ensure store is initialized
+    const fetchParams = () => {
+      const params = getNodeParameters(id as string);
+      if (params) {
+        setParameters(params);
+      }
+    };
+    
+    fetchParams();
+  }, [id]); // Remove getNodeParameters from dependencies
   
   // Handle node selection for properties panel
   const handleNodeClick = () => {
@@ -24,83 +40,107 @@ export function ImageProcessNode({ data, id, selected }: NodeProps) {
   
   // Monitor for input image changes and process the node
   useEffect(() => {
-    console.log(`ImageProcessNode ${id} checking for input image`);
     const newInputImage = getNodeInputImage(id as string);
-    if (newInputImage) {
-      console.log(`ImageProcessNode ${id} received input image`);
+    if (newInputImage && inputImage !== newInputImage) {
       setInputImage(newInputImage);
       setProcessingImage(true);
       // The actual processing happens in the store
-      processNode(id as string, [], []);
+      setTimeout(() => {
+        processNode(id as string, [], []);
+      }, 0);
     }
-  }, [id, getNodeInputImage, processNode]);
+  }, [id, inputImage]); // Remove getNodeInputImage and processNode from dependencies
   
   // Monitor for output image changes
   useEffect(() => {
-    console.log(`ImageProcessNode ${id} checking for output image`);
-    const newOutputImage = getNodeOutputImage(id as string);
-    if (newOutputImage) {
-      console.log(`ImageProcessNode ${id} received output image`);
-      setOutputImage(newOutputImage);
-      setProcessingImage(false);
-    }
-  }, [id, getNodeOutputImage]);
+    const checkOutputImage = () => {
+      const newOutputImage = getNodeOutputImage(id as string);
+      if (newOutputImage && outputImage !== newOutputImage) {
+        setOutputImage(newOutputImage);
+        setProcessingImage(false);
+      }
+    };
+    
+    // Set up an interval to check for output changes
+    const intervalId = setInterval(checkOutputImage, 100);
+    checkOutputImage(); // Check immediately as well
+    
+    return () => clearInterval(intervalId);
+  }, [id, outputImage]); // Remove getNodeOutputImage from dependencies
   
   // Force reprocessing when the node is selected
   useEffect(() => {
     if (selected && inputImage) {
-      console.log(`ImageProcessNode ${id} selected, reprocessing...`);
-      processNode(id as string, [], []);
+      // Use setTimeout to avoid state updates during render
+      setTimeout(() => {
+        processNode(id as string, [], []);
+      }, 0);
     }
-  }, [selected, id, inputImage, processNode]);
+  }, [selected, id, inputImage]); // Remove processNode from dependencies
   
-  return (
-    <div className="bg-white p-3 rounded-lg shadow-md border border-gray-200 min-w-[220px]" onClick={handleNodeClick}>
-      <div className="font-medium text-sm mb-2 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <FaFilter className="text-[#83AFC9]" />
-          <span>{typeof data === 'object' && data && 'label' in data ? String(data.label) : 'Process'}</span>
-        </div>
-        {/* Show processing status */}
-        <div className="text-xs text-gray-500 flex items-center gap-1">
-          <span className={`w-2 h-2 rounded-full ${outputImage ? 'bg-green-500' : 'bg-gray-300'} ${outputImage ? 'animate-pulse' : ''}`}></span>
-          {outputImage ? 'Active' : 'Waiting'}
-        </div>
+  // Handle parameter change
+  const handleParameterChange = (paramName: string, value: number | boolean | string) => {
+    // Use setTimeout to avoid state updates during render
+    setTimeout(() => {
+      updateNodeParameter(id as string, paramName, value);
+    }, 0);
+  };
+
+  // Create input section content
+  const inputSectionContent = (
+    inputImage ? (
+      <div className="relative">
+        <img src={inputImage} alt="Input" className="w-full h-auto rounded border border-gray-200 max-h-24 object-cover" />
       </div>
-      
-      <div className="space-y-2">
-        {/* Input Image Preview */}
-        <div className="border-t border-gray-100 pt-2">
-          <div className="text-xs text-gray-500 mb-1">Input</div>
-          {inputImage ? (
-            <div className="relative">
-              <img src={inputImage} alt="Input" className="w-full h-auto rounded border border-gray-200" />
-              <div className="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">In</div>
-            </div>
-          ) : (
-            <div className="w-full h-16 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">
-              No input
-            </div>
-          )}
-        </div>
-        
-        {/* Output Image Preview */}
-        <div className="border-t border-gray-100 pt-2">
-          <div className="text-xs text-gray-500 mb-1">Output</div>
-          {outputImage ? (
-            <div className="relative">
-              <img src={outputImage} alt="Processed" className="w-full h-auto rounded border border-gray-200" />
-              <div className="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">Out</div>
-            </div>
-          ) : (
-            <div className="w-full h-16 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">
-              Processing...
-            </div>
-          )}
-        </div>
+    ) : (
+      <div className="w-full h-16 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">
+        No input
       </div>
-      
-      {/* Node handles for connections */}
+    )
+  );
+
+  // Create properties section content with better organization
+  const propertiesSectionContent = (
+    <div className="space-y-3 max-h-48 overflow-y-auto custom-scrollbar pr-1">
+      {parameters.map((param, index) => (
+        <React.Fragment key={param.name}>
+          <ParameterControl 
+            parameter={param} 
+            onChange={handleParameterChange} 
+          />
+          {/* Add a divider between parameters if there are more after this one */}
+          {index < parameters.length - 1 && (
+            <div className="border-t border-gray-100 my-2"></div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+
+  // Create output section content
+  const outputSectionContent = (
+    outputImage ? (
+      <div className="relative">
+        <img src={outputImage} alt="Processed" className="w-full h-auto rounded border border-gray-200 max-h-24 object-cover" />
+      </div>
+    ) : (
+      <div className="w-full h-16 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">
+        {processingImage ? 'Processing...' : 'No output'}
+      </div>
+    )
+  );
+
+  // Create node status indicator
+  const nodeRight = (
+    <div className="text-xs text-gray-500 flex items-center gap-1">
+      <span className={`w-2 h-2 rounded-full ${outputImage ? 'bg-green-500' : 'bg-gray-300'} ${processingImage ? 'animate-pulse' : ''}`}></span>
+      {processingImage ? 'Processing' : (outputImage ? 'Ready' : 'Waiting')}
+    </div>
+  );
+
+  // Create node handles
+  const handles = (
+    <>
       <Handle
         type="target"
         position={Position.Left}
@@ -113,6 +153,27 @@ export function ImageProcessNode({ data, id, selected }: NodeProps) {
         id="output"
         style={{ background: '#83AFC9', width: 10, height: 10 }}
       />
-    </div>
+    </>
+  );
+  
+  return (
+    <NodeBase
+      id={id}
+      title={typeof data === 'object' && data && 'label' in data ? String(data.label) : 'Process'}
+      icon={<FaFilter size={16} />}
+      type="imageProcess"
+      selected={selected}
+      nodeRight={nodeRight}
+      node={{ id, data, type: 'imageProcess' } as Node}
+      inputSection={inputSectionContent}
+      propertiesSection={{
+        show: showProperties,
+        setShow: setShowProperties,
+        content: propertiesSectionContent
+      }}
+      outputSection={outputSectionContent}
+      onNodeClick={handleNodeClick}
+      handles={handles}
+    />
   );
 }
