@@ -59,8 +59,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "AI Playground: Algorithm & Physics Visualizations",
     description:
-      "Discover A*, Dijkstra, and physics simulations. Master computer science with VisualRight’s interactive visuals.",
-    creator: "@Riwara", // Update if handle changes
+      "Discover A*, Dijkstra, and physics simulations. Master computer science with VisualRight's interactive visuals.",
+    creator: "@Riwara",
     images: [`${domain}og-image.png`],
   },
   metadataBase: new URL(domain),
@@ -112,7 +112,8 @@ export default function RootLayout({
     <html lang="en" className={comfortaa_font.className}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="https://www.visualright.org/favicon.ico" type="image/x-icon" />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
