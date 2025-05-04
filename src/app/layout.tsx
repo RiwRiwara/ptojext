@@ -59,8 +59,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "AI Playground: Algorithm & Physics Visualizations",
     description:
-      "Discover A*, Dijkstra, and physics simulations. Master computer science with VisualRight’s interactive visuals.",
-    creator: "@Riwara", // Update if handle changes
+      "Discover A*, Dijkstra, and physics simulations. Master computer science with VisualRight's interactive visuals.",
+    creator: "@Riwara",
     images: [`${domain}og-image.png`],
   },
   metadataBase: new URL(domain),
@@ -112,7 +112,32 @@ export default function RootLayout({
     <html lang="en" className={comfortaa_font.className}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="https://www.visualright.org/favicon.ico" type="image/x-icon" />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "VisualRight",
+              url: domain,
+              description:
+                "Interactive visualizations and simulations for learning computer science concepts like pathfinding algorithms and physics.",
+              publisher: {
+                "@type": "Organization",
+                name: "VisualRight",
+              },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: `${domain}search?q={search_term_string}`,
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
       </head>
+
       <body className="antialiased font-sans">
         <AnimatePresence mode="wait" initial={false}>
           <NextUIProvider>{children}</NextUIProvider>

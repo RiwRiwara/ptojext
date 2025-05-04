@@ -1,20 +1,22 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { BlockMath } from "react-katex";
+import "katex/dist/katex.min.css";
 
 const methods = [
   {
     key: "sharpen",
     label: "Sharpen",
     description: "Enhances edges by emphasizing pixel intensity differences.",
-    formula: `G = I + α(I - blurred(I))`,
+    formula: `G = I + \\alpha (I - \\text{blurred}(I))`,
     param: { label: "α", min: 0.1, max: 10.0, step: 0.1, default: 1.0 },
   },
   {
     key: "smooth",
     label: "Smooth",
     description: "Reduces noise by averaging nearby pixel values.",
-    formula: `G = 1/9 Σ I(x,y)`,
+    formula: `G = \\frac{1}{9} \\sum I(x, y)`,
     param: { label: "Kernel Size", min: 1, max: 10, step: 1, default: 3 },
   },
 ];
@@ -87,7 +89,7 @@ export default function SharpenSmoothTransformSection() {
         output[i] = Math.min(Math.max(r, 0), 255);
         output[i + 1] = Math.min(Math.max(g, 0), 255);
         output[i + 2] = Math.min(Math.max(b, 0), 255);
-        output[i + 3] = data[i + 3]; // copy alpha
+        output[i + 3] = data[i + 3];
       }
     }
 
@@ -125,7 +127,7 @@ export default function SharpenSmoothTransformSection() {
             const value = original + alpha * (original - blur);
             output[i + j] = Math.min(Math.max(value, 0), 255);
           }
-          output[i + 3] = data[i + 3]; // copy alpha
+          output[i + 3] = data[i + 3];
         }
 
         for (let i = 0; i < data.length; i++) data[i] = output[i];

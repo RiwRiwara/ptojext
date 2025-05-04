@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import { Button } from "@heroui/react";
+import { BlockMath } from "react-katex";
+import "katex/dist/katex.min.css";
 import { GrayScaleTypes } from "@/components/image_enhancement/types";
 
 type GrayKey = "linear" | "log" | "power-law";
@@ -9,7 +11,7 @@ type GrayKey = "linear" | "log" | "power-law";
 const grayscaleTypes: GrayScaleTypes[] = [
   {
     key: "linear",
-    label: "Linear (Identity)",
+    label: "Linear (Identity)",
     description: "Keeps pixel intensity unchanged.",
     formula: "G = 0.299R + 0.587G + 0.114B",
   },
@@ -18,14 +20,14 @@ const grayscaleTypes: GrayScaleTypes[] = [
     label: "Logarithmic",
     description: "Expands dark tones, compresses highlights.",
     param: { label: "c", min: 10, max: 200, step: 1, default: 70 },
-    formula: "G = c · log(1 + I)",
+    formula: "G = c \\cdot \\log(1 + I)",
   },
   {
     key: "power-law",
-    label: "Power‑Law (Gamma)",
+    label: "Power Law (Gamma)",
     description: "Classic gamma correction for displays.",
-    param: { label: "γ", min: 0.05, max: 3, step: 0.05, default: 0.5 },
-    formula: "G = 255 · (I / 255)^γ",
+    param: { label: "\\gamma", min: 0.05, max: 3, step: 0.05, default: 0.5 },
+    formula: "G = 255 \\cdot \\left(\\frac{I}{255}\\right)^{\\gamma}",
   },
 ];
 
@@ -88,6 +90,14 @@ export default function GrayscaleTransformSection() {
   }, [applyTransform]);
 
   const meta = grayscaleTypes.find((t) => t.key === selected)!;
+
+  // Generate LaTeX formula with value if applicable
+  const formulaLatex = meta.param
+    ? meta.formula.replace(
+        meta.param.label,
+        `${meta.param.label}=${(param ?? meta.param.default).toFixed(2)}`
+      )
+    : meta.formula;
 
   return (
     <div className="container mx-auto flex flex-col gap-4 p-6">

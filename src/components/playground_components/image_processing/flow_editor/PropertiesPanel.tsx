@@ -11,7 +11,7 @@ interface PropertiesPanelProps {
 export function PropertiesPanel({ node }: PropertiesPanelProps) {
   const { getNodeParameters, updateNodeParameter, setSelectedNode, processNode } = useFlowStore();
   const [showDescriptions, setShowDescriptions] = useState<boolean>(false);
-  
+
   if (!node) {
     return (
       <div className="h-full flex items-center justify-center text-gray-500 text-sm p-4 text-center">
@@ -22,17 +22,17 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
       </div>
     );
   }
-  
+
   const parameters = getNodeParameters(node.id);
-  
+
   const handleSliderChange = (paramName: string, value: number) => {
     updateNodeParameter(node.id, paramName, value);
   };
-  
+
   const handleToggleChange = (paramName: string, value: boolean) => {
     updateNodeParameter(node.id, paramName, value);
   };
-  
+
   const handleClose = () => {
     setSelectedNode(null);
   };
@@ -44,11 +44,11 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
         updateNodeParameter(node.id, param.name, param.defaultValue);
       }
     });
-    
+
     // Reprocess the node
     processNode(node.id, [], []);
   };
-  
+
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
@@ -56,21 +56,21 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
           {typeof node.data === 'object' && node.data && 'label' in node.data ? String(node.data.label) : 'Node'} Properties
         </h3>
         <div className="flex items-center gap-2">
-          <button 
+          <button
             onClick={() => setShowDescriptions(!showDescriptions)}
             className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100"
             title="Toggle parameter descriptions"
           >
             <TbInfoCircle size={18} />
           </button>
-          <button 
+          <button
             onClick={resetToDefaults}
             className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100"
             title="Reset to defaults"
           >
             <TbRefresh size={18} />
           </button>
-          <button 
+          <button
             onClick={handleClose}
             className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100"
             title="Close panel"
@@ -79,7 +79,7 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
           </button>
         </div>
       </div>
-      
+
       {parameters.length === 0 ? (
         <div className="text-gray-500 text-sm p-4 bg-gray-50 rounded-lg text-center">
           No editable properties for this node
@@ -93,7 +93,7 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
                   {param.label || param.name}
                 </label>
                 {param.defaultValue !== undefined && param.value !== param.defaultValue && (
-                  <button 
+                  <button
                     onClick={() => updateNodeParameter(node.id, param.name, param.defaultValue as number | boolean | string)}
                     className="text-xs text-[#83AFC9] hover:underline"
                   >
@@ -101,13 +101,13 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
                   </button>
                 )}
               </div>
-              
+
               {showDescriptions && param.description && (
                 <div className="text-xs text-gray-500 mb-2 italic">
                   {param.description}
                 </div>
               )}
-              
+
               {param.type === 'slider' && (
                 <div className="flex items-center gap-3">
                   <input
@@ -124,7 +124,7 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
                   </span>
                 </div>
               )}
-              
+
               {param.type === 'toggle' && (
                 <div className="flex items-center">
                   <input
@@ -138,7 +138,7 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
                   </span>
                 </div>
               )}
-              
+
               {param.type === 'color' && (
                 <div className="flex items-center gap-2">
                   <input
@@ -147,15 +147,15 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
                     onChange={(e) => updateNodeParameter(node.id, param.name, e.target.value)}
                     className="h-8 w-8 rounded border-gray-300"
                   />
-                  <input 
-                    type="text" 
-                    value={param.value as string} 
+                  <input
+                    type="text"
+                    value={param.value as string}
                     onChange={(e) => updateNodeParameter(node.id, param.name, e.target.value)}
                     className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-[#83AFC9] focus:ring-[#83AFC9] text-sm"
                   />
                 </div>
               )}
-              
+
               {param.type === 'select' && param.options && (
                 <select
                   value={param.value as string}
@@ -173,7 +173,7 @@ export function PropertiesPanel({ node }: PropertiesPanelProps) {
           ))}
         </div>
       )}
-      
+
       <div className="mt-6 pt-4 border-t border-gray-200">
         <div className="text-xs text-gray-500 mb-2">Node Information</div>
         <div className="space-y-2 text-sm">

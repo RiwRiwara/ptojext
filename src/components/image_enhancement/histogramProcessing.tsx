@@ -11,6 +11,8 @@ import {
   Tooltip,
   TooltipItem,
 } from "chart.js";
+import { BlockMath } from "react-katex";
+import "katex/dist/katex.min.css";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip);
 
@@ -208,11 +210,13 @@ export default function HistogramProcessingSection() {
   const dynamicFormula = () => {
     switch (mode) {
       case "linear":
-        return "s = (r - min) * (255 / (max - min))";
+        return "s = \\frac{r - \\text{min}}{\\text{max} - \\text{min}} \\cdot 255";
       case "gamma":
-        return `s = 255 × (r / 255)^${gammaValue.toFixed(2)}`;
+        return `s = 255 \\cdot \\left(\\frac{r}{255}\\right)^{${gammaValue.toFixed(
+          2
+        )}}`;
       case "log":
-        return `s = ${logC} × log(1 + r) / log(256)`;
+        return `s = ${logC} \\cdot \\frac{\\log(1 + r)}{\\log(256)}`;
       default:
         return "";
     }
