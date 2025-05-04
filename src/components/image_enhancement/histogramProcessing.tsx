@@ -235,8 +235,8 @@ export default function HistogramProcessingSection() {
               onClick={() => setMode(key)}
               className={`px-4 py-2 text-sm font-medium rounded-md transition ${
                 mode === key
-                  ? "bg-indigo-600 text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-blue-100"
               }`}
             >
               {label}
@@ -255,7 +255,7 @@ export default function HistogramProcessingSection() {
               step="0.1"
               value={gammaValue}
               onChange={(e) => setGammaValue(parseFloat(e.target.value))}
-              className="accent-indigo-600"
+              className="accent-blue-600"
             />
           </div>
         )}
@@ -269,13 +269,14 @@ export default function HistogramProcessingSection() {
               step="1"
               value={logC}
               onChange={(e) => setLogC(parseFloat(e.target.value))}
-              className="accent-indigo-600"
+              className="accent-blue-600"
             />
           </div>
         )}
       </div>
+
       {/* Dynamic Formula */}
-      <div className="text-center text-gray-700 font-mono text-sm">
+      <div className="text-center text-gray-700 font-mono text-xs md:text-sm">
         Formula: {dynamicFormula()}
       </div>
 
@@ -283,12 +284,12 @@ export default function HistogramProcessingSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Original */}
         <div className="flex flex-col items-center gap-4">
-          <h2 className="text-lg font-semibold text-gray-700">
+          <h2 className="text-base md:text-lg font-semibold text-gray-700">
             Original Image
           </h2>
           <canvas
             ref={originalCanvasRef}
-            className="border rounded shadow max-w-full"
+            className="border rounded-xl shadow max-w-full"
           />
           <h3 className="text-sm font-medium text-gray-600">
             Original Histogram
@@ -301,14 +302,15 @@ export default function HistogramProcessingSection() {
             />
           </div>
         </div>
+
         {/* Transformed */}
         <div className="flex flex-col items-center gap-4">
-          <h2 className="text-lg font-semibold text-gray-700 capitalize">
+          <h2 className="text-base md:text-lg font-semibold text-gray-700 capitalize">
             {mode} Transformed
           </h2>
           <canvas
             ref={transformedCanvasRef}
-            className="border rounded shadow max-w-full"
+            className="border rounded-xl shadow max-w-full"
           />
           <h3 className="text-sm font-medium text-gray-600 capitalize">
             {mode} Histogram
@@ -324,12 +326,12 @@ export default function HistogramProcessingSection() {
 
         {/* Equalized */}
         <div className="flex flex-col items-center gap-4">
-          <h2 className="text-lg font-semibold text-gray-700">
+          <h2 className="text-base md:text-lg font-semibold text-gray-700">
             Equalized Image
           </h2>
           <canvas
             ref={equalizedCanvasRef}
-            className="border rounded shadow max-w-full"
+            className="border rounded-xl shadow max-w-full"
           />
           <h3 className="text-sm font-medium text-gray-600">
             Equalized Histogram

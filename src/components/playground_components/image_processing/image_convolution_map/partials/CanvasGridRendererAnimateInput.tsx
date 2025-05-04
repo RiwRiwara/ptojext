@@ -113,7 +113,7 @@ export default function CanvasGridRendererAnimateInput() {
       </div>
 
       {/* Action buttons */}
-      <div className="flex justify-end mt-2 gap-2">
+      <div className="flex justify-center mt-2 gap-2">
         <button 
           onClick={() => setShowCalculator(!showCalculator)}
           className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${showCalculator ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}

@@ -140,7 +140,7 @@ export default function Section1() {
                 width={150}
                 height={150}
                 alt="VISUALRIGHT logo"
-                className="animate-appearance-in drop-shadow-xl"
+                className="animate-appearance-in drop-shadow-xl mt-12 md:mt-0 w-32 h-32 md:w-48 md:h-48"
                 priority
               />
             </motion.div>
@@ -190,13 +190,13 @@ export default function Section1() {
             </motion.p>
 
             <motion.div
-              className="mt-8 flex gap-4"
+              className="mt-2 md:mt-8 flex gap-2 md:gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.6, duration: 0.6 }}
             >
               <motion.button
-                className="px-6 py-3 bg-[#83AFC9] text-white rounded-full font-medium shadow-lg hover:shadow-xl"
+                className="text-sm md:text-base px-6 py-3 bg-[#83AFC9] text-white rounded-full font-medium shadow-lg hover:shadow-xl"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => window.scrollTo({ top: window.innerHeight * 0.8, behavior: 'smooth' })}
@@ -204,7 +204,7 @@ export default function Section1() {
                 Explore Features
               </motion.button>
               <motion.button
-                className="px-6 py-3 border-2 border-[#83AFC9] text-[#83AFC9] rounded-full font-medium hover:bg-[#83AFC9] hover:text-white"
+                className="text-sm md:text-base px-6 py-3 border-2 border-[#83AFC9] text-[#83AFC9] rounded-full font-medium hover:bg-[#83AFC9] hover:text-white"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >

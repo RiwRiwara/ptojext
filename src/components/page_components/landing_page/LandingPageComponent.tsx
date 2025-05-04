@@ -135,7 +135,7 @@ export default function LandingPageComponent() {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-xs md:text-lg max-w-2xl mx-6 md:mx-auto text-gray-700 leading-relaxed"
+          className="text-sm md:text-lg max-w-2xl mx-6 md:mx-auto text-gray-700 leading-relaxed"
         >
           Our interactive playground helps you visualize and understand complex concepts
           through engaging simulations and hands-on experiences.

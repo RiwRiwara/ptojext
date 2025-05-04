@@ -194,7 +194,7 @@ function FlowEditorContent() {
   };
 
   return (
-    <div className=" py-6 px-4">
+    <>
       <div className="flex gap-4 h-[calc(100vh-200px)] min-h-[600px]">
         {/* Left panel - Node library */}
         <div className="w-64 bg-white rounded-lg shadow-md border border-gray-200 flex flex-col">
@@ -343,7 +343,7 @@ function FlowEditorContent() {
           <PropertiesPanel node={selectedNode} />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

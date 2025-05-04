@@ -51,7 +51,7 @@ const SettingDropdownTree: React.FC<SettingDropdownTreeProps> = ({
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center gap-4 bg-gray-50 min-w-[280px] p-4 rounded-lg shadow-sm">
+      <div className="flex flex-col justify-center items-center gap-4 bg-gray-50 min-w-[280px] p-0 md:p-4 rounded-lg shadow-sm">
         {/* Section Tabs */}
         <div className="w-full flex bg-gray-100 rounded-lg p-1 mb-2">
           <button

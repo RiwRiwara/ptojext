@@ -10,7 +10,7 @@ import CodeDisplay from "@/components/playground_components/algorithms/search/Co
 import { AnimationStep, SearchAlgorithm } from "@/components/playground_components/algorithms/search/types";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { motion } from "framer-motion";
-import { FaInfoCircle, FaLightbulb, FaRegClock, FaCode, FaChalkboardTeacher } from "react-icons/fa";
+import { FaInfoCircle, FaLightbulb, FaRegClock, FaMemory, FaCode, FaChalkboardTeacher } from "react-icons/fa";
 import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 
 const searchAlgorithms: SearchAlgorithm[] = [
@@ -380,7 +380,7 @@ export default function SearchVisualizerPage() {
             ]}
           />
 
-          <div className="mb-8">
+          <div className="mt-8 mb-8 ml-1 md:ml-0">
             <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">Search Algorithm Visualizer</h1>
             <p className="text-gray-600">
               Visualize and understand how different search algorithms work step by step.
@@ -431,41 +431,41 @@ export default function SearchVisualizerPage() {
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <FaInfoCircle className="text-[#83AFC9]" />
-                    <h3 className="text-lg font-medium text-gray-700">Algorithm Info</h3>
+                    <h3 className="text-lg font-medium text-gray-700">Complexity Analysis</h3>
                   </div>
 
                   <p className="text-gray-600 text-sm mb-4">{selectedAlgoData.description}</p>
 
                   <div className="bg-gray-50 p-3 rounded-lg">
-                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-1">
-                      <FaRegClock className="text-[#83AFC9]" /> Time Complexity
+                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                      <FaRegClock className="text-[#83AFC9]" /> <span>Time Complexity</span>
                     </h4>
                     <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
                       <div className="bg-white p-2 rounded border border-gray-200">
                         <span className="text-gray-500 block">Best Case</span>
-                        <span className="font-mono font-medium">{selectedAlgoData.complexity.time.best}</span>
+                        <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.time.best}</span>
                       </div>
                       <div className="bg-white p-2 rounded border border-gray-200">
                         <span className="text-gray-500 block">Average</span>
-                        <span className="font-mono font-medium">{selectedAlgoData.complexity.time.average}</span>
+                        <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.time.average}</span>
                       </div>
                       <div className="bg-white p-2 rounded border border-gray-200">
                         <span className="text-gray-500 block">Worst Case</span>
-                        <span className="font-mono font-medium">{selectedAlgoData.complexity.time.worst}</span>
+                        <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.time.worst}</span>
                       </div>
                     </div>
 
-                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-1">
-                      <FaChalkboardTeacher className="text-[#83AFC9]" /> Space Complexity
+                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                      <FaMemory className="text-[#83AFC9]" /> <span>Space Complexity</span>
                     </h4>
                     <div className="bg-white p-2 rounded border border-gray-200 text-xs mb-3">
-                      <span className="font-mono font-medium">{selectedAlgoData.complexity.space}</span>
+                      <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.space}</span>
                     </div>
 
-                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-1">
-                      <FaLightbulb className="text-[#83AFC9]" /> Best Used When
+                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                      <FaLightbulb className="text-[#83AFC9]" /> <span>Best Used When</span>
                     </h4>
-                    <ul className="list-disc pl-5 text-xs text-gray-600">
+                    <ul className="list-disc pl-5 text-sm text-gray-600">
                       {selectedAlgo === 'linear-search' && (
                         <>
                           <li>The array is unsorted</li>

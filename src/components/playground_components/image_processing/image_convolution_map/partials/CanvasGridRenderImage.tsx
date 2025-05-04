@@ -153,7 +153,7 @@ export default function CanvasGridRenderImage({
 
   return (
     <div className="flex gap-4 flex-col justify-center items-center">
-      <div className="flex flex-row gap-4 shadow-sm p-2 rounded">
+      <div className="flex flex-row gap-4 shadow-sm p-2 rounded text-xs md:text-sm">
         <div>
           <label>Rows: {rows}</label>
           <Slider minValue={1} maxValue={200} value={rows}
@@ -170,7 +170,7 @@ export default function CanvasGridRenderImage({
         </div>
         <div>
           <label>Cell Size: {cellSize}px</label>
-          <Slider minValue={1} maxValue={10} step={1} value={cellSize}
+          <Slider minValue={1} maxValue={8} step={1} value={cellSize}
             aria-label="Cells slider"
             onChange={
               (value) => handleChangeCellSize(Array.isArray(value) ? value[0] : value)
