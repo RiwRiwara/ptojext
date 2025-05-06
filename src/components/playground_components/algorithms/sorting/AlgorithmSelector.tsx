@@ -15,7 +15,7 @@ export default function AlgorithmSelector({
     algoData,
 }: AlgorithmSelectorProps) {
     return (
-        <section className="mb-8 bg-white rounded-lg shadow-sm p-6">
+        <section className="mb-8 bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                 Select Algorithm
             </h2>

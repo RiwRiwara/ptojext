@@ -577,7 +577,7 @@ export default function PixiSortingVisualizer({
     <div className="relative w-full h-full flex flex-col">
       {/* Step Description Banner */}
       <div className="w-full flex justify-center mb-2">
-        <div className="bg-indigo-100 text-indigo-900 font-semibold rounded-lg px-4 py-2 shadow border border-indigo-200 text-center text-base md:text-lg min-h-[2.5rem]">
+        <div className="bg-indigo-100 text-indigo-900 font-semibold rounded-lg px-4 py-2 shadow border border-indigo-200 text-center text-base min-h-[2.5rem]">
           {stepDescription}
         </div>
       </div>
@@ -615,7 +615,7 @@ export default function PixiSortingVisualizer({
         ))}
       </div>
       {/* Real-time Array State Visualization */}
-      <div className="w-full flex flex-col items-center mt-2 mb-2">
+      <div className="w-full flex flex-col items-center mt-6 mb-2">
         <div className="font-semibold text-gray-700 mb-1">Array State (Live)</div>
         <div className="flex flex-wrap gap-2 justify-center bg-gray-50 rounded-lg px-4 py-2 shadow-inner border border-gray-200">
           {Array.from({ length: blocks.length }, (_, idx) => {

@@ -239,10 +239,10 @@ function FlowEditorContent() {
   };
 
   return (
-    <div className=" py-6 px-4">
-      <div className="flex h-full">
-        {/* Left sidebar - Node types */}
-        <div className="w-64 bg-white rounded-lg shadow-md border border-gray-200 overflow-y-auto">
+    <>
+      <div className="flex gap-4 h-[calc(100vh-200px)] min-h-[600px]">
+        {/* Left panel - Node library */}
+        <div className="w-64 bg-white rounded-lg shadow-md border border-gray-200 flex flex-col">
           <div className="p-4 border-b border-gray-200">
             <h2 className="font-medium text-gray-800">{t('Image Processing')}</h2>
             <p className="text-xs text-gray-500">{t('Drag nodes to the canvas')}</p>
@@ -414,7 +414,7 @@ function FlowEditorContent() {
           </ReactFlow>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

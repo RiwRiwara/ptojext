@@ -581,11 +581,11 @@ export default function Section3({ controls }: Section3Props) {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="text-xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-blue-900 mb-4"
+          className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-blue-900 mb-4"
         >
           A* vs. Dijkstra
         </motion.h1>
-        <p className="text-xs md:text-md md:text-lg text-gray-600 max-w-3xl mx-auto font-medium">
+        <p className="text-sm md:text-md md:text-lg text-gray-600 max-w-3xl mx-auto font-medium">
           Visualize and compare these two popular pathfinding algorithms in real-time.
           Watch how they explore the grid differently to find the optimal path.
         </p>
@@ -651,7 +651,7 @@ export default function Section3({ controls }: Section3Props) {
         <div className="flex justify-center mb-2">
           <button
             onClick={() => setRefreshTrigger(prev => prev + 1)}
-            className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+            className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-medium text-sm md:text-base py-2 px-4 rounded-lg transition-colors duration-200"
           >
             <FiRefreshCw className="animate-spin-slow" />
             Generate New Grid
@@ -659,23 +659,23 @@ export default function Section3({ controls }: Section3Props) {
         </div>
 
         {/* Visualization Grids */}
-        <div className="flex flex-col md:flex-row gap-2 md:gap-8 justify-center items-start">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8 justify-center items-start">
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-between w-full mb-3">
-              <h3 className="text-xl md:text-2xl font-semibold text-indigo-700 tracking-tight">
+              <h3 className="ml-2 md:ml-0 text-lg md:text-2xl font-semibold text-indigo-700 tracking-tight">
                 A* Algorithm
               </h3>
-              <span className="text-sm px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">Uses heuristics</span>
+              <span className="text-xs md:text-sm px-3 md:px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">Uses heuristics</span>
             </div>
             <div ref={aStarCanvasRef} className="border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"></div>
           </div>
 
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-between w-full mb-3">
-              <h3 className="text-xl md:text-2xl font-semibold text-purple-700 tracking-tight">
+              <h3 className="ml-2 md:ml-0 text-lg md:text-2xl font-semibold text-purple-700 tracking-tight">
                 Dijkstra Algorithm
               </h3>
-              <span className="text-sm px-2 py-1 bg-purple-50 text-purple-700 rounded-full">Uniform cost search</span>
+              <span className="text-xs md:text-sm px-3 md:px-2 py-1 bg-purple-50 text-purple-700 rounded-full">Uniform cost search</span>
             </div>
             <div ref={dijkstraCanvasRef} className="border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"></div>
           </div>

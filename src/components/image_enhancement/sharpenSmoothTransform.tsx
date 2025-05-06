@@ -151,73 +151,76 @@ export default function SharpenSmoothTransformSection() {
   const meta = methods.find((m) => m.key === selected)!;
 
   return (
-    <section className="mt-10 container mx-auto p-4 flex flex-col items-center space-y-6">
-      <h2 className="text-xl font-bold">Sharpening & Smoothing</h2>
-
-      <canvas
-        ref={canvasRef}
-        className="mx-auto border rounded shadow max-w-full"
-      />
-
-      <div className="flex gap-4 flex-wrap justify-center">
-        {methods.map((m) => (
-          <button
-            key={m.key}
-            className={`px-4 py-2 rounded transition ${
-              selected === m.key
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 hover:bg-blue-100"
-            }`}
-            onClick={() => {
-              setSelected(m.key);
-              setParam(m.param.default);
-            }}
-          >
-            {m.label}
-          </button>
-        ))}
+    <section className="flex flex-col md:flex-row gap-6 mx-auto p-6">
+      <div className="w-full md:w-1/2 flex flex-col gap-4">
+        <h2 className="text-base md:text-xl font-semibold capitalize">{selected}</h2>
+        <canvas
+          ref={canvasRef}
+          className="w-full rounded-xl drop-shadow-md mx-auto"
+        />
       </div>
 
-      <div className="bg-gray-100 p-4 rounded shadow space-y-4 w-full max-w-xl">
-        <p className="text-gray-700">{meta.description}</p>
+      <div className="w-full md:w-1/2 flex flex-col gap-4">
+        {/* Center the Method Buttons */}
+        <div className="w-full grid grid-cols-2 gap-4 mt-0 md:mt-10">
+          {methods.map((m) => (
+            <button
+              key={m.key}
+              className={`px-4 py-2 rounded-md transition ${
+                selected === m.key
+                  ? "bg-green-600 text-white"
+                  : "bg-gray-200 hover:bg-green-100"
+              }`}
+              onClick={() => {
+                setSelected(m.key);
+                setParam(m.param.default);
+              }}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
 
-        <label className="block mt-4 font-medium">
-          {meta.param.label}: {param.toFixed(2)}
-        </label>
-        <input
-          type="range"
-          className="w-full accent-indigo-600"
-          min={meta.param.min}
-          max={meta.param.max}
-          step={meta.param.step}
-          value={param}
-          onChange={(e) => setParam(parseFloat(e.target.value))}
-        />
+        {/* Centered Control Panel */}
+        <div className="w-full bg-gray-100 p-4 rounded-md shadow space-y-4">
+          <p className="text-gray-700">{meta.description}</p>
+          <label className="block mt-4 font-medium">
+            {meta.param.label}: {param.toFixed(2)}
+          </label>
+          <input
+            type="range"
+            className="w-full accent-green-600"
+            min={meta.param.min}
+            max={meta.param.max}
+            step={meta.param.step}
+            value={param}
+            onChange={(e) => setParam(parseFloat(e.target.value))}
+          />
 
-        <div className="bg-white p-4 rounded shadow-inner">
-          {selected === "sharpen" ? (
-            <div className="text-sm space-y-2">
-              <BlockMath>
-                {`G = I + \\alpha (I - \\text{blurred}(I)),\\quad \\alpha = ${param.toFixed(
-                  2
-                )}`}
-              </BlockMath>
-              <div className="text-xs text-gray-500 italic">
-                Sharpening emphasizes edges by subtracting a blurred version
-                from the original image and amplifying the difference using α.
+          {/* Visual Explanation */}
+          <div className="bg-white p-4 rounded shadow-inner">
+            {selected === "sharpen" ? (
+              <div className="text-sm space-y-2">
+                <div className="font-mono text-green-700">
+                  G = I + α (I - blurred(I))
+                </div>
+                <div className="text-gray-600">
+                  α = <span className="font-semibold">{param.toFixed(2)}</span>
+                </div>
+                <div className="text-xs text-gray-500 italic">
+                  Sharpening emphasizes edges by subtracting a blurred version
+                  from the original image and amplifying the difference using α.
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="space-y-2 flex flex-col items-center">
-              <BlockMath>{`G = \\frac{1}{${
-                param * param
-              }} \\sum I(x, y)`}</BlockMath>
-              <div className="text-sm text-gray-700">
-                Averaging Kernel (size: {param}×{param}):
+            ) : (
+              <div className="space-y-2 flex flex-col items-center">
+                <div className="text-sm text-gray-700">
+                  Averaging Kernel (size: {param}×{param}):
+                </div>
+                {renderKernelMatrix(generateBoxKernel(param as number))}
               </div>
-              {renderKernelMatrix(generateBoxKernel(param as number))}
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </section>

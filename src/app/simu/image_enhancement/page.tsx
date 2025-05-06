@@ -27,68 +27,91 @@ export default function ImageEnhancementPage() {
 
   return (
     <BaseLayout>
-      <div className="container mx-auto flex flex-col justify-start min-h-screen gap-8 p-4 pt-8 mb-10">
-        <div className="max-w-3xl mx-auto mb-4">
+      <div className="min-h-screen bg-gray-50">
+        <main className="container mx-auto px-4 py-8">
           <Breadcrumb
             items={[
               { label: "Home", href: "/" },
               { label: "Image Enhancement" },
             ]}
           />
-        </div>
-        <h1 className="uppercase text-3xl font-bold text-center">
-          Image Enhancement
-        </h1>
-        <div className="flex flex-col md:flex-row gap-6 md:gap-10">
-          <div>
-            <h2 className="text-2xl font-semibold mb-2">
-              {t("whatisimageenchanted")}
-            </h2>
-            <p className="text-lg">{t("mean")}</p>
-          </div>
-        </div>
-        {/* Navigation Buttons */}
-        <nav className="sticky top-0 z-10 bg-white py-4">
-          <div className="container mx-auto flex flex-wrap gap-4 justify-center">
-            {sections.map(({ id, label }) => (
-              <Button
-                key={id}
-                onClick={() => scrollToSection(id)}
-                className="px-4 py-2 text-sm font-medium rounded-md transition bg-gray-100 text-gray-700 hover:bg-indigo-100"
-                aria-label={`Scroll to ${label}`}
-              >
-                {label}
-              </Button>
-            ))}
-          </div>
-        </nav>
 
-        {/* Content Sections */}
-        <section id="grayscale" className="pt-8">
-          <h2 className="text-2xl font-semibold mb-4 text-center">
-            Apply Grayscale Transformations to Your Image
-          </h2>
+          <div className="mt-8 mb-8 ml-1 md:ml-0">
+            <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">
+              Image Enhancement
+            </h1>
+            <p className="text-gray-600">{t("mean")}</p>
+          </div>
 
-          <GrayscaleTransformSection />
-        </section>
-        <section id="histogram" className="pt-8">
-          <h2 className="text-2xl font-semibold mb-4 text-center">
-            Histogram Processing
-          </h2>
-          <HistogramProcessingSection />
-        </section>
-        <section id="sharpenSmooth" className="pt-8">
-          <h2 className="text-2xl font-semibold mb-4 text-center">
-            Smoothing and Sharpening
-          </h2>
-          <SharpenSmoothTransformSection />
-        </section>
-        <section id="subtraction" className="pt-8">
-          <h2 className="text-2xl font-semibold mb-4 text-center">
-            Image Subtraction
-          </h2>
-          <ImageSubtractionSection />
-        </section>
+          {/* Navigation Buttons */}
+          <nav className="block top-0 z-10 bg-white py-4 drop-shadow-md rounded-xl mb-4">
+            <div className="container mx-auto flex flex-wrap gap-4 justify-center">
+              {sections.map(({ id, label }) => (
+                <Button
+                  key={id}
+                  onClick={() => scrollToSection(id)}
+                  className="w-full lg:w-fit py-2 mx-4 md:mx-0 text-sm font-medium rounded-md transition bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-gray-900"
+                  aria-label={`Scroll to ${label}`}
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
+          </nav>
+
+          {/* Content Sections */}
+          <div className="flex flex-col gap-6">
+            <section
+              id="grayscale"
+              className="bg-white rounded-xl drop-shadow-md"
+            >
+              <div className="flex items-center gap-6 bg-indigo-50 p-6">
+                <div className="bg-indigo-600 h-8 w-1 rounded-full"></div>
+                <h2 className="text-lg md:text-2xl font-semibold">
+                  Apply Grayscale Transformations to Your Image
+                </h2>
+              </div>
+
+              <GrayscaleTransformSection />
+            </section>
+
+            <section
+              id="histogram"
+              className="bg-white rounded-xl drop-shadow-md"
+            >
+              <div className="flex items-center gap-6 bg-blue-50 p-6">
+                <div className="bg-blue-600 h-8 w-1 rounded-full"></div>
+                <h2 className="text-lg md:text-2xl font-semibold">
+                  Histogram Processing
+                </h2>
+              </div>
+
+              <HistogramProcessingSection />
+            </section>
+
+            <section id="sharpenSmooth" className="bg-white rounded-xl drop-shadow-md">
+              <div className="flex items-center gap-6 bg-green-50 p-6">
+                <div className="bg-green-600 h-8 w-1 rounded-full"></div>
+                <h2 className="text-lg md:text-2xl font-semibold">
+                  Smoothing and Sharpening
+                </h2>
+              </div>
+
+              <SharpenSmoothTransformSection />
+            </section>
+
+            <section id="subtraction" className="bg-white rounded-xl drop-shadow-md">
+              <div className="flex items-center gap-6 bg-purple-50 p-6">
+                <div className="bg-purple-600 h-8 w-1 rounded-full"></div>
+                <h2 className="text-xl md:text-2xl font-semibold text-center">
+                  Image Subtraction
+                </h2>
+              </div>
+
+              <ImageSubtractionSection />
+            </section>
+          </div>
+        </main>
       </div>
     </BaseLayout>
   );

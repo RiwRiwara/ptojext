@@ -65,9 +65,11 @@ const CodeDisplay: React.FC<CodeDisplayProps> = ({
             transition={{ duration: 0.3 }}
             className="bg-gray-900 rounded-lg overflow-hidden shadow-md"
         >
-            <div className="p-3 bg-gray-800 text-gray-300 text-sm font-medium border-b border-gray-700">
+            <div className="flex justify-between items-center p-3 bg-gray-800 text-gray-300 text-sm font-medium border-b border-gray-700">
                 {getAlgorithmName()}
+                <span className="px-3 py-1 text-xs md:text-sm rounded border border-gray-700">Python</span>
             </div>
+            
             
             {selectedAlgo === "custom-algorithm" ? (
                 <div className="p-4">

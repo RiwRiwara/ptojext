@@ -78,7 +78,7 @@ export default function ImageComparisonSection() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-8 px-4">
+    <div className="flex flex-col items-center gap-8 p-8">
       {/* Image Set Buttons */}
       <div className="flex flex-wrap justify-center gap-4">
         {Object.entries(imageSets).map(([key, value]) => (
@@ -87,8 +87,8 @@ export default function ImageComparisonSection() {
             onClick={() => setSelectedKey(key as keyof typeof imageSets)}
             className={`px-4 py-2 text-sm font-medium rounded-md transition ${
               selectedKey === key
-                ? "bg-indigo-600 text-white shadow-md"
-                : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
+                ? "bg-purple-600 text-white shadow-md"
+                : "bg-gray-100 text-gray-700 hover:bg-purple-100"
             }`}
           >
             {value.label}
@@ -97,7 +97,7 @@ export default function ImageComparisonSection() {
       </div>
 
       {/* Horizontal A + offset - B = Result layout */}
-      <div className="flex items-center justify-center flex-wrap gap-4 overflow-x-auto w-full">
+      <div className="flex flex-col md:flex-row items-center justify-center flex-wrap gap-4 overflow-x-auto w-full">
         {/* Image A */}
         <div className="flex flex-col items-center">
           <img
@@ -114,7 +114,7 @@ export default function ImageComparisonSection() {
         {/* Offset display */}
         <div className="flex flex-col items-center px-4 py-2 border rounded-lg bg-gray-100 shadow-sm min-w-[80px]">
           <span className="text-sm font-medium text-gray-600">Offset</span>
-          <span className="text-xl font-bold text-blue-600">{offset}</span>
+          <span className="text-xl font-bold text-purple-600">{offset}</span>
         </div>
 
         <span className="text-3xl font-bold text-gray-700">−</span>
@@ -143,9 +143,9 @@ export default function ImageComparisonSection() {
       </div>
 
       {/* Offset slider */}
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-xl">
         <label className="block text-center font-semibold mb-2">
-          Adjust Offset: <span className="text-blue-600">{offset}</span>
+          Adjust Offset: <span className="text-purple-600">{offset}</span>
         </label>
         <input
           type="range"
@@ -153,7 +153,7 @@ export default function ImageComparisonSection() {
           max={255}
           value={offset}
           onChange={(e) => setOffset(parseInt(e.target.value))}
-          className="w-full accent-blue-600"
+          className="w-full accent-purple-600"
         />
       </div>
     </div>

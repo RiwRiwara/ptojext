@@ -100,59 +100,68 @@ export default function GrayscaleTransformSection() {
     : meta.formula;
 
   return (
-    <div className="container mx-auto flex flex-col gap-8 p-4 pt-8">
-      <h1 className="text-2xl font-bold">
-        Gray‑Level Transformations:{" "}
-        <span className="text-indigo-600">{meta.label}</span>
+    <div className="container mx-auto flex flex-col gap-4 p-6">
+      <h1 className="text-base md:text-xl font-semibold ml-1 md:ml-2">
+        {meta.label}
       </h1>
 
-      {/* ── canvas preview ─ */}
-      <canvas
-        ref={canvasRef}
-        className="mx-auto border rounded shadow max-w-full"
-      />
+      <div className="flex flex-col md:flex-row justify-center gap-6">
+        <canvas
+          ref={canvasRef}
+          className="mx-auto border rounded-xl shadow max-w-full"
+        />
 
-      {/* ── selector buttons ─ */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-        {grayscaleTypes.map((t) => (
-          <Button
-            key={t.key}
-            onClick={() => setSelected(t.key)}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition ${selected === t.key
-              ? "bg-indigo-600 text-white shadow-md"
-              : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
-              }`}
-          >
-            {t.label}
-          </Button>
-        ))}
-      </div>
-
-      {/* ── info and slider ─ */}
-      <div className="bg-gray-50 p-6 rounded-md space-y-4 shadow-sm">
-        <p className="text-sm text-gray-700">{meta.description}</p>
-
-        <div className="text-center">
-          <BlockMath>{formulaLatex}</BlockMath>
-        </div>
-
-        {meta.param && (
-          <div className="space-y-1">
-            <label className="text-sm font-medium">
-              {meta.param.label} ={" "}
-              <span className="font-mono">{param?.toFixed(2)}</span>
-            </label>
-            <input
-              type="range"
-              className="w-full accent-indigo-600"
-              min={meta.param.min}
-              max={meta.param.max}
-              step={meta.param.step}
-              value={param}
-              onChange={(e) => setParam(parseFloat(e.target.value))}
-            />
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
+            {grayscaleTypes.map((t) => (
+              <Button
+                key={t.key}
+                onClick={() => setSelected(t.key)}
+                className={`px-20 py-2 text-sm font-medium rounded-md transition ${
+                  selected === t.key
+                    ? "bg-indigo-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
+                }`}
+              >
+                {t.label}
+              </Button>
+            ))}
           </div>
-        )}
+
+          <div className="bg-gray-50 p-6 rounded-lg space-y-4 drop-shadow-sm">
+            <p className="text-sm text-gray-700">{meta.description}</p>
+
+            <code className="block bg-gray-100 text-gray-800 rounded-md p-3 border">
+              {meta.param
+                ? meta.formula.replace(
+                    meta.param.label,
+                    `${meta.param.label}`
+                    // `${meta.param.label}=${(
+                    //   param ?? meta.param.default
+                    // ).toFixed(2)}`
+                  )
+                : meta.formula}
+            </code>
+
+            {meta.param && (
+              <div className="space-y-1">
+                <label className="text-sm font-medium">
+                  {meta.param.label}&nbsp;=&nbsp;
+                  <span className="font-mono">{param?.toFixed(2)}</span>
+                </label>
+                <input
+                  type="range"
+                  className="w-full accent-indigo-600"
+                  min={meta.param.min}
+                  max={meta.param.max}
+                  step={meta.param.step}
+                  value={param}
+                  onChange={(e) => setParam(parseFloat(e.target.value))}
+                />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -201,7 +201,7 @@ const DropdownTree: React.FC = () => {
               {/* Grid of Category Items - more compact */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {category.children?.map((item, itemIndex) => (
-                  <div key={itemIndex} className="bg-white rounded-md shadow-sm p-1.5 hover:shadow transition-all duration-200">
+                  <div key={itemIndex} className="bg-white rounded-md shadow-sm p-2 hover:shadow transition-all duration-200">
                     <ChildTree item={item} searchQuery={searchQuery} />
                   </div>
                 ))}
