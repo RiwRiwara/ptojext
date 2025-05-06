@@ -3,7 +3,6 @@ import React from "react";
 import BaseLayout from "@/components/layout/BaseLayout";
 import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 import Breadcrumb from "@/components/common/Breadcrumb";
-import { FlowEditor } from "@/components/playground_components/image_processing/flow_editor/FlowEditor";
 
 export default function PlaygroundPage() {
   return (
@@ -32,7 +31,6 @@ export default function PlaygroundPage() {
           </div>
 
           {/* Image Processing Flow Editor */}
-          <FlowEditor />
         </main>
         <BottomComponent />
       </div>
