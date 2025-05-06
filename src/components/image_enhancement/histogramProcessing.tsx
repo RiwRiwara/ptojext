@@ -210,13 +210,11 @@ export default function HistogramProcessingSection() {
   const dynamicFormula = () => {
     switch (mode) {
       case "linear":
-        return "s = \\frac{r - \\text{min}}{\\text{max} - \\text{min}} \\cdot 255";
+        return "s = \\frac{r - \\min}{\\max - \\min} \\cdot 255";
       case "gamma":
-        return `s = 255 \\cdot \\left(\\frac{r}{255}\\right)^{${gammaValue.toFixed(
-          2
-        )}}`;
+        return "s = 255 \\cdot \\left(\\frac{r}{255}\\right)^\\gamma";
       case "log":
-        return `s = ${logC} \\cdot \\frac{\\log(1 + r)}{\\log(256)}`;
+        return "s = c \\cdot \\frac{\\log(1 + r)}{\\log(256)}";
       default:
         return "";
     }
@@ -280,8 +278,8 @@ export default function HistogramProcessingSection() {
       </div>
 
       {/* Dynamic Formula */}
-      <div className="text-center text-gray-700 font-mono text-xs md:text-sm">
-        Formula: {dynamicFormula()}
+      <div className="text-center text-gray-700 text-sm">
+        <BlockMath>{dynamicFormula()}</BlockMath>
       </div>
 
       {/* Images and Histograms */}

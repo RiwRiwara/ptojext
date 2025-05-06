@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback, useState } from "react";
 import { Button } from "@heroui/react";
 import { BlockMath } from "react-katex";
-import "katex/dist/katex.min.css";
+// import "katex/dist/katex.min.css";
 import { GrayScaleTypes } from "@/components/image_enhancement/types";
 
 type GrayKey = "linear" | "log" | "power-law";
@@ -91,14 +91,6 @@ export default function GrayscaleTransformSection() {
 
   const meta = grayscaleTypes.find((t) => t.key === selected)!;
 
-  // Generate LaTeX formula with value if applicable
-  const formulaLatex = meta.param
-    ? meta.formula.replace(
-        meta.param.label,
-        `${meta.param.label}=${(param ?? meta.param.default).toFixed(2)}`
-      )
-    : meta.formula;
-
   return (
     <div className="container mx-auto flex flex-col gap-4 p-6">
       <h1 className="text-base md:text-xl font-semibold ml-1 md:ml-2">
@@ -131,22 +123,12 @@ export default function GrayscaleTransformSection() {
           <div className="bg-gray-50 p-6 rounded-lg space-y-4 drop-shadow-sm">
             <p className="text-sm text-gray-700">{meta.description}</p>
 
-            <code className="block bg-gray-100 text-gray-800 rounded-md p-3 border">
-              {meta.param
-                ? meta.formula.replace(
-                    meta.param.label,
-                    `${meta.param.label}`
-                    // `${meta.param.label}=${(
-                    //   param ?? meta.param.default
-                    // ).toFixed(2)}`
-                  )
-                : meta.formula}
-            </code>
+            <BlockMath>{meta.formula}</BlockMath>
 
             {meta.param && (
               <div className="space-y-1">
                 <label className="text-sm font-medium">
-                  {meta.param.label}&nbsp;=&nbsp;
+                  {meta.param.label.replace(/\\/, "")} ={" "}
                   <span className="font-mono">{param?.toFixed(2)}</span>
                 </label>
                 <input

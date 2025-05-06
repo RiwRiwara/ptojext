@@ -153,7 +153,9 @@ export default function SharpenSmoothTransformSection() {
   return (
     <section className="flex flex-col md:flex-row gap-6 mx-auto p-6">
       <div className="w-full md:w-1/2 flex flex-col gap-4">
-        <h2 className="text-base md:text-xl font-semibold capitalize">{selected}</h2>
+        <h2 className="text-base md:text-xl font-semibold capitalize">
+          {selected}
+        </h2>
         <canvas
           ref={canvasRef}
           className="w-full rounded-xl drop-shadow-md mx-auto"
@@ -200,10 +202,8 @@ export default function SharpenSmoothTransformSection() {
           {/* Visual Explanation */}
           <div className="bg-white p-4 rounded shadow-inner">
             {selected === "sharpen" ? (
-              <div className="text-sm space-y-2">
-                <div className="font-mono text-green-700">
-                  G = I + α (I - blurred(I))
-                </div>
+              <div className="text-sm space-y-2 w-full text-center">
+                <BlockMath>{meta.formula}</BlockMath>
                 <div className="text-gray-600">
                   α = <span className="font-semibold">{param.toFixed(2)}</span>
                 </div>
