@@ -72,6 +72,7 @@ export default function HistogramProcessingSection() {
 
     applyTransformation(gray);
     applyEqualization(gray);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const applyTransformation = useCallback(
@@ -112,6 +113,7 @@ export default function HistogramProcessingSection() {
       transformed.forEach((v) => hist[Math.floor(v)]++);
       setTransformedHist(hist);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [mode, gammaValue, logC]
   );
 

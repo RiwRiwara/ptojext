@@ -141,6 +141,8 @@ export default function PixiSortingVisualizer({
     }
   }, [containerSize]);
 
+
+
   useEffect(() => {
     if (!pixiContainerRef.current || dimensions.width === 0) return;
 
@@ -152,27 +154,23 @@ export default function PixiSortingVisualizer({
       resolution: window.devicePixelRatio || 1,
       autoDensity: true,
     });
-
-    const barsContainer = new Container();
-    barsContainer.sortableChildren = true;
-    app.stage.addChild(barsContainer);
-    barsContainerRef.current = barsContainer;
     appRef.current = app;
 
-    let frameCount = 0;
-    let lastTime = performance.now();
-    const updateFPS = () => {
-      const now = performance.now();
-      frameCount++;
-      if (now - lastTime > 1000) {
-        setFps(Math.round((frameCount * 1000) / (now - lastTime)));
-        frameCount = 0;
-        lastTime = now;
-      }
-    };
+    const barsContainer = new Container();
+    barsContainer.position.set(0, 0);
+    barsContainerRef.current = barsContainer;
+    app.stage.addChild(barsContainer);
 
+    // Store a reference to the container element to avoid closure issues
+    const containerElement = pixiContainerRef.current;
+    if (containerElement) {
+      containerElement.appendChild(app.view as unknown as Node);
+    }
+
+    const updateFPS = () => {
+      setFps(app.ticker.FPS);
+    };
     app.ticker.add(updateFPS);
-    pixiContainerRef.current.appendChild(app.view as unknown as Node);
 
     blocks.forEach((value, index) => {
       valueMapRef.current.set(index, value);
@@ -183,8 +181,9 @@ export default function PixiSortingVisualizer({
     return () => {
       app.ticker.remove(updateFPS);
       app.destroy(true, { children: true, texture: true, baseTexture: true });
-      if (pixiContainerRef.current && app.view && pixiContainerRef.current.contains(app.view as unknown as Node)) {
-        pixiContainerRef.current.removeChild(app.view as unknown as Node);
+      // Use the stored reference in the cleanup function
+      if (containerElement && app.view && containerElement.contains(app.view as unknown as Node)) {
+        containerElement.removeChild(app.view as unknown as Node);
       }
       appRef.current = null;
       barsContainerRef.current = null;
@@ -192,7 +191,8 @@ export default function PixiSortingVisualizer({
       labelsRef.current = [];
       cancelAnimationFrame(animationFrameRef.current);
     };
-  }, [dimensions]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dimensions, colorScheme.background]);
 
   useEffect(() => {
     resetAnimation();
@@ -201,6 +201,7 @@ export default function PixiSortingVisualizer({
       valueMapRef.current.set(index, value);
     });
     drawBars();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blocks]);
 
   useEffect(() => {
@@ -208,6 +209,7 @@ export default function PixiSortingVisualizer({
       appRef.current.renderer.resize(dimensions.width, dimensions.height);
       drawBars();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dimensions]);
 
   useEffect(() => {
@@ -215,6 +217,7 @@ export default function PixiSortingVisualizer({
       currentStepRef.current = Math.min(currentStep, animationSteps.length - 1);
       updateBarPositions();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep, animationSteps.length, isPlaying]);
 
   useEffect(() => {
@@ -224,6 +227,7 @@ export default function PixiSortingVisualizer({
       pauseSorting();
     }
     return () => pauseSorting();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying, speed]);
 
   const resetAnimation = () => {
@@ -320,6 +324,8 @@ export default function PixiSortingVisualizer({
       barContainer.addChild(label);
       labelsRef.current.push(label);
     });
+    // ignore eslint
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blocks, dimensions, colorScheme]);
 
   const updateBarPositions = useCallback(() => {
@@ -366,7 +372,8 @@ export default function PixiSortingVisualizer({
 
       bar.parent.position.x = index * (barWidth + spacing) + spacing / 2;
     });
-  }, [blocks, dimensions, colorScheme, animationSteps]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocks, dimensions, colorScheme]); // currentStepObj, from, getBarDimensions, stepType, to are intentionally omitted
 
   const animate = useCallback(
     (timestamp: number) => {
@@ -465,6 +472,7 @@ export default function PixiSortingVisualizer({
       lastTimestampRef.current = timestamp;
       animationFrameRef.current = requestAnimationFrame(animate);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [animationSteps, speed, colorScheme, onSortingComplete, onStepChange, updateBarPositions]
   );
 
@@ -482,7 +490,8 @@ export default function PixiSortingVisualizer({
         ease: 'back.out(1.7)',
       });
     }
-  }, [animate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animationSteps.length, animate]);
 
   const pauseSorting = useCallback(() => {
     isSortingRef.current = false;
@@ -663,15 +672,7 @@ export default function PixiSortingVisualizer({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {fps > 0 && (
-            <div className="flex items-center">
-              <div
-                className={`w-2 h-2 rounded-full mr-1 ${fps > 40 ? 'bg-green-500' : fps > 20 ? 'bg-yellow-500' : 'bg-red-500'
-                  }`}
-              ></div>
-              <span className="text-gray-600">{fps} FPS</span>
-            </div>
-          )}
+
           <div className="flex items-center gap-2">
             <div className="flex items-center">
               <div

@@ -147,6 +147,7 @@ export default function SortingVisualizerPage() {
   // Initialize array
   useEffect(() => {
     randomizeArray();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update current array when initial array changes

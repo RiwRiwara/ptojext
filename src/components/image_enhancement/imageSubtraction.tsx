@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@heroui/react";
+import Image from "next/image";
 const imageSets = {
   scanFix: {
     label: "Document Scan Fix",
@@ -85,11 +86,10 @@ export default function ImageComparisonSection() {
           <Button
             key={key}
             onClick={() => setSelectedKey(key as keyof typeof imageSets)}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition ${
-              selectedKey === key
+            className={`px-4 py-2 text-sm font-medium rounded-md transition ${selectedKey === key
                 ? "bg-purple-600 text-white shadow-md"
                 : "bg-gray-100 text-gray-700 hover:bg-purple-100"
-            }`}
+              }`}
           >
             {value.label}
           </Button>
@@ -100,11 +100,13 @@ export default function ImageComparisonSection() {
       <div className="flex flex-col md:flex-row items-center justify-center flex-wrap gap-4 overflow-x-auto w-full">
         {/* Image A */}
         <div className="flex flex-col items-center">
-          <img
+          <Image
             src={selected.images[0]}
             alt="Image A"
             onLoad={(e) => handleImageLoad(e, "A")}
             className="rounded-lg shadow-md max-w-[200px] border"
+            width={200}
+            height={200}
           />
           <span className="mt-2 font-medium text-sm">Image A</span>
         </div>
@@ -121,11 +123,13 @@ export default function ImageComparisonSection() {
 
         {/* Image B */}
         <div className="flex flex-col items-center">
-          <img
+          <Image
             src={selected.images[1]}
             alt="Image B"
             onLoad={(e) => handleImageLoad(e, "B")}
             className="rounded-lg shadow-md max-w-[200px] border"
+            width={200}
+            height={200}
           />
           <span className="mt-2 font-medium text-sm">Image B</span>
         </div>

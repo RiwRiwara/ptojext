@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Slider } from "@nextui-org/slider";
 import { Button } from "@nextui-org/button";
 import { Select, SelectItem } from "@nextui-org/select";
+import Image from "next/image";
 
 const noiseTypes = [
   { label: "Gaussian Noise", value: "gaussian" },
@@ -34,10 +35,12 @@ const GrayScaleNode = () =>  {
     if (image.complete) {
       image.onload?.(new Event("load"));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     processImage();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grayScale, noiseType, noiseIntensity]);
 
   const processImage = () => {
@@ -118,12 +121,14 @@ const GrayScaleNode = () =>  {
 
       <canvas ref={canvasRef} className="rounded-md border-2 border-purple-300" />
 
-      <img
+      <Image
         ref={imageRef}
         src="/people.jpg"
         alt="People"
         className="hidden"
         crossOrigin="anonymous"
+        width={500}
+        height={500}
       />
 
       {/* Grayscale Slider */}

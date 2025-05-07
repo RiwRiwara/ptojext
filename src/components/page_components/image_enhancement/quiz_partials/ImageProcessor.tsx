@@ -82,6 +82,7 @@ const ImageProcessor: React.FC<ImageProcessorProps> = ({
 
     // Put the modified image data back
     ctx.putImageData(imageData, 0, 0);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adjustmentValues]);
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { Slider } from "@nextui-org/slider";
 import { Button } from "@nextui-org/button";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Input } from "@heroui/react";
+import Image from "next/image";
 
 const noiseTypes = [
   { label: "Gaussian Noise", value: "gaussian" },
@@ -41,10 +42,12 @@ const EnchantedFilters = () => {
     if (image.complete) {
       if (image.onload) image.onload(new Event("load"));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageSrc]);
 
   useEffect(() => {
     processImage();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grayScale, noiseType, noiseIntensity, brightness, contrast, sepia, blurRadius]);
 
   const processImage = () => {
@@ -205,7 +208,7 @@ const EnchantedFilters = () => {
 
       <canvas ref={canvasRef} className="rounded-md border-2 max-w-full" />
 
-      <img
+      <Image
         ref={imageRef}
         src={imageSrc}
         alt="Selected"

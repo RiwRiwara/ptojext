@@ -262,6 +262,7 @@ const fileInputRef = useRef<HTMLInputElement>(null);
     if (userImage && showPreview) {
       applyConvolutionToImage();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useStore.getState().convolutionData]);
 
   return (

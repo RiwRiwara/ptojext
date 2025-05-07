@@ -129,7 +129,7 @@ export default function RootLayout({
         <link rel="icon" href="https://www.visualright.org/favicon.ico" type="image/x-icon" />
         <link rel="icon" type="image/png" sizes="32x32" href="https://www.visualright.org/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="https://www.visualright.org/favicon-16x16.png" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="theme-color" content="#83AFC9" />
         <meta name="application-name" content="VisualRight" />

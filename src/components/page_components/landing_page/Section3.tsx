@@ -342,6 +342,7 @@ export default function Section3({ controls }: Section3Props) {
         app.destroy(true);
       };
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [speed, cols, rows, cellSize, start, end]
   );
 
@@ -545,6 +546,7 @@ export default function Section3({ controls }: Section3Props) {
         app.destroy(true);
       };
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [speed, cols, rows, cellSize, start, end]
   );
 
