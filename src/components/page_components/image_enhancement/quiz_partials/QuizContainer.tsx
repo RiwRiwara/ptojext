@@ -322,13 +322,13 @@ const QuizContainer: React.FC = () => {
           variant="bordered"
           fullWidth
           aria-label="Quiz Mode"
+          color="primary"
           selectedKey={quizMode}
           onSelectionChange={(key) => setQuizMode(key as "predefined" | "generated")}
           classNames={{
             tabList: "p-0 border-b-2 border-gray-200 gap-4",
             tab: "px-4 py-2 rounded-t-lg font-medium",
             tabContent: "p-4",
-            cursor: "bg-blue-100 dark:bg-blue-900"
           }}
         >
           <Tab

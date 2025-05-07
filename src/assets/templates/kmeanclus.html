@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>k-Means Clustering Interactive Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: "#eef6fc",
+                            100: "#d9ebf7",
+                            200: "#b6dbf5",
+                            300: "#83AFC9",
+                            DEFAULT: "#83AFC9",
+                            400: "#5a9fc0",
+                            500: "#3b88b8",
+                            600: "#2e6c9a",
+                            700: "#285a7f",
+                            800: "#254c6a",
+                            900: "#23425a",
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body class="bg-primary-100 flex flex-col items-center justify-center min-h-screen font-sans">
+    <div class="bg-white p-8 rounded-xl shadow-xl max-w-5xl w-full">
+        <h1 class="text-3xl font-bold mb-6 text-center text-primary-900">k-Means Clustering Interactive Simulation</h1>
+        <div class="flex flex-col lg:flex-row gap-8">
+            <div class="flex-1">
+                <div class="bg-primary-50 p-4 rounded-lg border border-primary-200 relative">
+                    <p class="absolute top-2 left-2 text-sm text-primary-700 z-10">Click and drag points to reposition</p>
+                    <p id="current-step" class="absolute top-2 right-2 text-sm font-semibold text-primary-600">Initializing...</p>
+                    <div id="canvas-container" class="relative"></div>
+                    <div class="mt-2 h-2 bg-primary-200 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-primary-500 transition-all duration-100" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="k-slider" class="block text-sm font-medium text-primary-700">Number of Clusters (k): <span id="k-value">3</span></label>
+                        <input id="k-slider" type="range" min="2" max="6" value="3" class="w-full h-2 bg-primary-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <label for="points-slider" class="block text-sm font-medium text-primary-700">Number of Points: <span id="points-value">30</span></label>
+                        <input id="points-slider" type="range" min="10" max="50" value="30" class="w-full h-2 bg-primary-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <label for="speed-slider" class="block text-sm font-medium text-primary-700">Animation Speed: <span id="speed-value">Normal</span></label>
+                        <input id="speed-slider" type="range" min="20" max="100" value="60" class="w-full h-2 bg-primary-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <label for="init-mode" class="block text-sm font-medium text-primary-700">Centroid Initialization</label>
+                        <select id="init-mode" class="w-full p-2 border border-primary-300 rounded-lg bg-white text-primary-700">
+                            <option value="random">Random</option>
+                            <option value="manual">Manual (Click to Place)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="legend-position" class="block text-sm font-medium text-primary-700">Legend Position</label>
+                        <select id="legend-position" class="w-full p-2 border border-primary-300 rounded-lg bg-white text-primary-700">
+                            <option value="bottom">Bottom</option>
+                            <option value="top">Top</option>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4 mt-4">
+                    <button id="reset-btn" class="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 flex items-center" title="Reset points and centroids">
+                        <i class="fas fa-redo mr-2"></i> Reset
+                    </button>
+                    <button id="step-btn" class="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 flex items-center" title="Run one iteration">
+                        <i class="fas fa-step-forward mr-2"></i> Step
+                    </button>
+                    <button id="run-btn" class="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 flex items-center" title="Run or pause the simulation">
+                        <i class="fas fa-play mr-2"></i> Run
+                    </button>
+                    <button id="stop-btn" class="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 flex items-center" title="Stop the simulation">
+                        <i class="fas fa-stop mr-2"></i> Stop
+                    </button>
+                </div>
+                <p class="text-center mt-4 text-primary-700">Iteration: <span id="iteration">0</span></p>
+                <div id="legend-container" class="mt-4">
+                    <h3 class="text-lg font-semibold text-primary-900">Cluster Legend</h3>
+                    <div id="legend" class="flex flex-wrap gap-4 mt-2"></div>
+                </div>
+            </div>
+            <div class="flex-1">
+                <h2 class="text-xl font-semibold mb-3 text-primary-900">How k-Means Works</h2>
+                <ol class="list-decimal list-inside text-sm space-y-2 text-primary-700">
+                    <li><strong>Initialize Centroids:</strong> Place k centroids (red stars) randomly or manually.</li>
+                    <li><strong>Assign Points:</strong> Each point is assigned to the nearest centroid, forming clusters.</li>
+                    <li><strong>Update Centroids:</strong> Move centroids to the average position of their cluster's points.</li>
+                    <li><strong>Repeat:</strong> Reassign points and update centroids until convergence.</li>
+                    <li><strong>Convergence:</strong> Clusters stabilize when centroids stop moving significantly.</li>
+                </ol>
+                <h2 class="text-xl font-semibold mt-6 mb-3 text-primary-900">Process Log</h2>
+                <div id="log-container" class="bg-primary-50 p-4 rounded-lg max-h-80 overflow-y-auto text-sm border border-primary-200"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let points = [];
+        let displayPoints = [];
+        let centroids = [];
+        let displayCentroids = [];
+        let clusters = [];
+        let targetClusters = [];
+        let targetCentroids = [];
+        let k = 3;
+        let numPoints = 30;
+        let iteration = 0;
+        let running = false;
+        let animating = false;
+        let animationProgress = 0;
+        let selectedPoint = null;
+        let animationDuration = 60;
+        let initMode = 'random';
+        let placingCentroids = false;
+        let placedCentroids = 0;
+        let legendPosition = 'bottom';
+        const canvasWidth = 400;
+        const canvasHeight = 400;
+        const colors = [
+            [255, 99, 132], [54, 162, 235], [255, 206, 86],
+            [75, 192, 192], [153, 102, 255], [255, 159, 64]
+        ];
+
+        function setup() {
+            let canvas = createCanvas(canvasWidth, canvasHeight);
+            canvas.parent('canvas-container');
+            initializePointsAndCentroids();
+            updateClusters(false);
+            updateLegend();
+            updateLegendPosition();
+        }
+
+        function initializePointsAndCentroids() {
+            points = [];
+            displayPoints = [];
+            centroids = [];
+            displayCentroids = [];
+            clusters = Array(k).fill().map(() => []);
+            targetClusters = Array(k).fill().map(() => []);
+            targetCentroids = [];
+            iteration = 0;
+            animating = false;
+            animationProgress = 0;
+            selectedPoint = null;
+            placingCentroids = initMode === 'manual';
+            placedCentroids = 0;
+            document.getElementById('iteration').textContent = iteration;
+            document.getElementById('current-step').textContent = initMode === 'manual' ? 'Place centroids' : 'Initializing...';
+            clearLog();
+            logMessage(`Initialized ${k} centroids and ${numPoints} points. Mode: ${initMode}.`);
+
+            // Generate points
+            for (let i = 0; i < numPoints; i++) {
+                let p = createVector(random(50, canvasWidth - 50), random(50, canvasHeight - 50));
+                points.push(p);
+                displayPoints.push(p.copy());
+            }
+
+            // Initialize centroids
+            if (initMode === 'random') {
+                for (let i = 0; i < k; i++) {
+                    let c = createVector(random(50, canvasWidth - 50), random(50, canvasHeight - 50));
+                    centroids.push(c);
+                    displayCentroids.push(c.copy());
+                    targetCentroids.push(c.copy());
+                }
+                updateClusters(false);
+            }
+        }
+
+        function updateClusters(animate = true) {
+            document.getElementById('current-step').textContent = 'Assigning points...';
+            targetClusters = Array(k).fill().map(() => []);
+            if (!animate) {
+                clusters = targetClusters.map(cluster => [...cluster]);
+            }
+
+            // Assign points to nearest centroid
+            let assignmentLog = [];
+            for (let i = 0; i < points.length; i++) {
+                let minDist = Infinity;
+                let clusterIndex = 0;
+                for (let j = 0; j < centroids.length; j++) {
+                    let d = p5.Vector.dist(points[i], centroids[j]);
+                    if (d < minDist) {
+                        minDist = d;
+                        clusterIndex = j;
+                    }
+                }
+                targetClusters[clusterIndex].push(i);
+                assignmentLog.push(`Point ${i} assigned to cluster ${clusterIndex}`);
+            }
+            logMessage(`Iteration ${iteration + 1}:`, 'font-semibold text-primary-600');
+            assignmentLog.forEach(msg => logMessage(msg));
+
+            // Update centroids
+            document.getElementById('current-step').textContent = 'Updating centroids...';
+            let moved = targetCentroids.length === 0;
+            targetCentroids = [];
+            for (let i = 0; i < k; i++) {
+                let newCentroid = createVector(centroids[i].x, centroids[i].y);
+                if (targetClusters[i].length > 0) {
+                    let sumX = 0;
+                    let sumY = 0;
+                    for (let idx of targetClusters[i]) {
+                        sumX += points[idx].x;
+                        sumY += points[idx].y;
+                    }
+                    newCentroid.set(sumX / targetClusters[i].length, sumY / targetClusters[i].length);
+                    if (abs(centroids[i].x - newCentroid.x) > 0.1 || abs(centroids[i].y - newCentroid.y) > 0.1) {
+                        moved = true;
+                        logMessage(`Centroid ${i} moved to (${newCentroid.x.toFixed(1)}, ${newCentroid.y.toFixed(1)})`, 'text-primary-600');
+                    }
+                }
+                targetCentroids.push(newCentroid);
+            }
+
+            if (animate) {
+                animating = true;
+                animationProgress = 0;
+            } else {
+                centroids = targetCentroids.map(c => c.copy());
+                displayCentroids = centroids.map(c => c.copy());
+                clusters = targetClusters.map(cluster => [...cluster]);
+            }
+            return moved;
+        }
+
+        function draw() {
+            background(255);
+
+            // Draw cluster boundaries (simplified Voronoi)
+            if (!placingCentroids) {
+                for (let x = 0; x < canvasWidth; x += 10) {
+                    for (let y = 0; y < canvasHeight; y += 10) {
+                        let minDist = Infinity;
+                        let clusterIndex = 0;
+                        for (let i = 0; i < centroids.length; i++) {
+                            let d = dist(x, y, centroids[i].x, centroids[i].y);
+                            if (d < minDist) {
+                                minDist = d;
+                                clusterIndex = i;
+                            }
+                        }
+                        fill(...colors[clusterIndex], 50);
+                        noStroke();
+                        rect(x, y, 10, 10);
+                    }
+                }
+            }
+
+            if (animating) {
+                animationProgress += 1 / animationDuration;
+                document.getElementById('progress-bar').style.width = `${animationProgress * 100}%`;
+                if (animationProgress >= 1) {
+                    animationProgress = 1;
+                    animating = false;
+                    clusters = targetClusters.map(cluster => [...cluster]);
+                    centroids = targetCentroids.map(c => c.copy());
+                    displayCentroids = centroids.map(c => c.copy());
+                    document.getElementById('progress-bar').style.width = '0%';
+                    document.getElementById('current-step').textContent = running ? 'Assigning points...' : 'Ready';
+                }
+
+                // Interpolate positions
+                for (let i = 0; i < points.length; i++) {
+                    displayPoints[i].x = lerp(displayPoints[i].x, points[i].x, animationProgress);
+                    displayPoints[i].y = lerp(displayPoints[i].y, points[i].y, animationProgress);
+                }
+                for (let i = 0; i < k; i++) {
+                    displayCentroids[i].x = lerp(displayCentroids[i].x, targetCentroids[i].x, animationProgress);
+                    displayCentroids[i].y = lerp(displayCentroids[i].y, targetCentroids[i].y, animationProgress);
+                }
+            }
+
+            // Draw points
+            for (let i = 0; i < k; i++) {
+                fill(...colors[i], 200);
+                noStroke();
+                for (let idx of (animating ? targetClusters[i] : clusters[i])) {
+                    ellipse(displayPoints[idx].x, displayPoints[idx].y, 10, 10);
+                }
+            }
+
+            // Draw centroids
+            fill(255, 0, 0);
+            stroke(0);
+            strokeWeight(1);
+            for (let c of displayCentroids) {
+                star(c.x, c.y, 7, 10, 5);
+            }
+
+            // Highlight selected point and nearest centroid
+            if (selectedPoint !== null) {
+                fill(0, 255, 0);
+                noStroke();
+                ellipse(displayPoints[selectedPoint].x, displayPoints[selectedPoint].y, 12, 12);
+                let minDist = Infinity;
+                let nearestCentroid = 0;
+                for (let i = 0; i < centroids.length; i++) {
+                    let d = p5.Vector.dist(points[selectedPoint], centroids[i]);
+                    if (d < minDist) {
+                        minDist = d;
+                        nearestCentroid = i;
+                    }
+                }
+                stroke(0, 255, 0);
+                strokeWeight(1);
+                line(displayPoints[selectedPoint].x, displayPoints[selectedPoint].y, centroids[nearestCentroid].x, centroids[nearestCentroid].y);
+            }
+
+            if (running && !animating) {
+                let moved = updateClusters();
+                if (!moved) {
+                    running = false;
+                    document.getElementById('run-btn').innerHTML = '<i class="fas fa-play mr-2"></i> Run';
+                    logMessage('Converged: No significant centroid movement.', 'font-semibold text-primary-600');
+                    document.getElementById('current-step').textContent = 'Converged';
+                }
+                iteration++;
+                document.getElementById('iteration').textContent = iteration;
+            }
+        }
+
+        function star(x, y, radius1, radius2, npoints) {
+            let angle = TWO_PI / npoints;
+            let halfAngle = angle / 2.0;
+            beginShape();
+            for (let a = 0; a < TWO_PI; a += angle) {
+                let sx = x + cos(a) * radius2;
+                let sy = y + sin(a) * radius2;
+                vertex(sx, sy);
+                sx = x + cos(a + halfAngle) * radius1;
+                sy = y + sin(a + halfAngle) * radius1;
+                vertex(sx, sy);
+            }
+            endShape(CLOSE);
+        }
+
+        function mousePressed() {
+            if (!running && !animating && mouseX >= 0 && mouseX <= canvasWidth && mouseY >= 0 && mouseY <= canvasHeight) {
+                if (placingCentroids && placedCentroids < k) {
+                    centroids.push(createVector(mouseX, mouseY));
+                    displayCentroids.push(createVector(mouseX, mouseY));
+                    targetCentroids.push(createVector(mouseX, mouseY));
+                    placedCentroids++;
+                    logMessage(`Placed centroid ${placedCentroids} at (${mouseX.toFixed(1)}, ${mouseY.toFixed(1)})`, 'text-primary-600');
+                    if (placedCentroids === k) {
+                        placingCentroids = false;
+                        updateClusters(false);
+                        document.getElementById('current-step').textContent = 'Ready';
+                    }
+                } else {
+                    for (let i = 0; i < points.length; i++) {
+                        let d = dist(mouseX, mouseY, displayPoints[i].x, displayPoints[i].y);
+                        if (d < 10) {
+                            selectedPoint = i;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        function mouseDragged() {
+            if (selectedPoint !== null && mouseX >= 0 && mouseX <= canvasWidth && mouseY >= 0 && mouseY <= canvasHeight) {
+                points[selectedPoint].set(mouseX, mouseY);
+                displayPoints[selectedPoint].set(mouseX, mouseY);
+            }
+        }
+
+        function mouseReleased() {
+            if (selectedPoint !== null) {
+                selectedPoint = null;
+                updateClusters(false);
+            }
+        }
+
+        function logMessage(message, classes = '') {
+            const logContainer = document.getElementById('log-container');
+            const logEntry = document.createElement('p');
+            logEntry.className = `text-primary-700 ${classes}`;
+            const time = new Date().toLocaleTimeString();
+            logEntry.textContent = `[${time}] ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log-container').innerHTML = '';
+        }
+
+        function updateLegend() {
+            const legend = document.getElementById('legend');
+            legend.innerHTML = '';
+            for (let i = 0; i < k; i++) {
+                const div = document.createElement('div');
+                div.className = 'flex items-center';
+                div.innerHTML = `
+                    <span class="w-4 h-4 rounded-full mr-2" style="background-color: rgb(${colors[i].join(',')})"></span>
+                    Cluster ${i + 1}
+                `;
+                legend.appendChild(div);
+            }
+        }
+
+        function updateLegendPosition() {
+            const container = document.getElementById('legend-container');
+            const canvasSection = container.parentElement;
+            container.className = 'mt-4';
+            if (legendPosition === 'top') {
+                canvasSection.insertBefore(container, canvasSection.firstChild);
+                container.className = 'mb-4';
+            } else if (legendPosition === 'bottom') {
+                canvasSection.appendChild(container);
+                container.className = 'mt-4';
+            } else if (legendPosition === 'left') {
+                canvasSection.insertBefore(container, document.getElementById('canvas-container').parentElement);
+                container.className = 'mr-4';
+                document.getElementById('legend').className = 'flex flex-col gap-2';
+            } else if (legendPosition === 'right') {
+                canvasSection.appendChild(container);
+                container.className = 'ml-4';
+                document.getElementById('legend').className = 'flex flex-col gap-2';
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            running = false;
+            placingCentroids = initMode === 'manual';
+            placedCentroids = 0;
+            document.getElementById('run-btn').innerHTML = '<i class="fas fa-play mr-2"></i> Run';
+            initializePointsAndCentroids();
+            updateClusters(false);
+            updateLegend();
+        });
+
+        document.getElementById('step-btn').addEventListener('click', () => {
+            if (!running && !animating && !placingCentroids) {
+                updateClusters();
+                iteration++;
+                document.getElementById('iteration').textContent = iteration;
+            }
+        });
+
+        document.getElementById('run-btn').addEventListener('click', () => {
+            if (!animating && !placingCentroids) {
+                running = !running;
+                document.getElementById('run-btn').innerHTML = running ?
+                    '<i class="fas fa-pause mr-2"></i> Pause' :
+                    '<i class="fas fa-play mr-2"></i> Run';
+            }
+        });
+
+        document.getElementById('stop-btn').addEventListener('click', () => {
+            if (running || animating) {
+                running = false;
+                animating = false;
+                animationProgress = 0;
+                document.getElementById('run-btn').innerHTML = '<i class="fas fa-play mr-2"></i> Run';
+                document.getElementById('progress-bar').style.width = '0%';
+                document.getElementById('current-step').textContent = 'Stopped';
+                logMessage('Simulation stopped.', 'font-semibold text-primary-600');
+            }
+        });
+
+        document.getElementById('k-slider').addEventListener('input', (e) => {
+            k = parseInt(e.target.value);
+            document.getElementById('k-value').textContent = k;
+            if (!running && !animating) {
+                initializePointsAndCentroids();
+                updateClusters(false);
+                updateLegend();
+            }
+        });
+
+        document.getElementById('points-slider').addEventListener('input', (e) => {
+            numPoints = parseInt(e.target.value);
+            document.getElementById('points-value').textContent = numPoints;
+            if (!running && !animating) {
+                initializePointsAndCentroids();
+                updateClusters(false);
+            }
+        });
+
+        document.getElementById('speed-slider').addEventListener('input', (e) => {
+            animationDuration = parseInt(e.target.value);
+            const speedLabel = animationDuration < 40 ? 'Fast' : animationDuration < 80 ? 'Normal' : 'Slow';
+            document.getElementById('speed-value').textContent = speedLabel;
+        });
+
+        document.getElementById('init-mode').addEventListener('change', (e) => {
+            initMode = e.target.value;
+            if (!running && !animating) {
+                initializePointsAndCentroids();
+                updateClusters(false);
+            }
+        });
+
+        document.getElementById('legend-position').addEventListener('change', (e) => {
+            legendPosition = e.target.value;
+            updateLegendPosition();
+        });
+    </script>
+
+    <style>
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #3b88b8;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #3b88b8;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+</body>
+</html>
