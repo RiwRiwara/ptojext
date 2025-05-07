@@ -6,13 +6,15 @@ import { Progress } from "@heroui/progress";
 import { Select, SelectItem } from "@heroui/select";
 import { Tabs, Tab } from "@heroui/tabs";
 import { Spinner } from "@heroui/spinner";
+import { Badge } from "@heroui/badge";
+import { Tooltip } from "@heroui/tooltip";
 import { quizData, quizSettings } from "./quizData";
-import { AdjustmentValues, QuizItem } from "./types";
+import { AdjustmentValues, QuizItem, HistogramMethod } from "./types";
 import ImageProcessor from "./ImageProcessor";
 import AdjustmentControls from "./AdjustmentControls";
 import FeedbackModal from "./FeedbackModal";
 import Image from "next/image";
-import { FiEye, FiEyeOff, FiArrowLeft, FiArrowRight, FiCpu, FiRefreshCw, FiGlobe } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiArrowLeft, FiArrowRight, FiCpu, FiRefreshCw, FiGlobe, FiAward, FiInfo, FiBarChart2 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { QuizGenerator, QuizTheme, QuizDifficulty, GenerateQuizOptions } from "@/utils/image_processing/quiz/ImageProcessingQuizAI";
 import { useTranslation } from "react-i18next";
@@ -30,6 +32,9 @@ const QuizContainer: React.FC = () => {
   const [selectedTheme, setSelectedTheme] = useState<QuizTheme>("general");
   const [selectedDifficulty, setSelectedDifficulty] = useState<QuizDifficulty>("beginner");
   const [isGenerating, setIsGenerating] = useState(false);
+
+  // Interface state
+  const [activeSection, setActiveSection] = useState<"quiz" | "settings">("quiz");
 
   // Language toggle function
   const toggleLanguage = () => {
@@ -54,9 +59,13 @@ const QuizContainer: React.FC = () => {
     contrast: 1,
     brightness: 0,
     gamma: 1,
+    histogramMethod: "equalization",
     histogramEqualization: false,
+    logTransformConstant: 5,
+    gammaValue: 1,
     kernelType: "smoothing",
     kernelSize: 3,
+    kernelIntensity: 1,
     subtractValue: 0,
   });
 
@@ -96,6 +105,21 @@ const QuizContainer: React.FC = () => {
       setQuizComplete(false);
       setShowHint(false);
       setQuizMode("generated");
+
+      // Reset adjustment values
+      setAdjustmentValues({
+        contrast: 1,
+        brightness: 0,
+        gamma: 1,
+        histogramMethod: "equalization",
+        histogramEqualization: false,
+        logTransformConstant: 5,
+        gammaValue: 1,
+        kernelType: "smoothing",
+        kernelSize: 3,
+        kernelIntensity: 1,
+        subtractValue: 0,
+      });
     } catch (error) {
       console.error("Error generating quiz:", error);
     } finally {
@@ -208,9 +232,13 @@ const QuizContainer: React.FC = () => {
         contrast: 1,
         brightness: 0,
         gamma: 1,
+        histogramMethod: "equalization",
         histogramEqualization: false,
+        logTransformConstant: 5,
+        gammaValue: 1,
         kernelType: "smoothing",
         kernelSize: 3,
+        kernelIntensity: 1,
         subtractValue: 0,
       });
     } else {
@@ -230,9 +258,13 @@ const QuizContainer: React.FC = () => {
         contrast: 1,
         brightness: 0,
         gamma: 1,
+        histogramMethod: "equalization",
         histogramEqualization: false,
+        logTransformConstant: 5,
+        gammaValue: 1,
         kernelType: "smoothing",
         kernelSize: 3,
+        kernelIntensity: 1,
         subtractValue: 0,
       });
     }
@@ -251,9 +283,13 @@ const QuizContainer: React.FC = () => {
       contrast: 1,
       brightness: 0,
       gamma: 1,
+      histogramMethod: "equalization",
       histogramEqualization: false,
+      logTransformConstant: 5,
+      gammaValue: 1,
       kernelType: "smoothing",
       kernelSize: 3,
+      kernelIntensity: 1,
       subtractValue: 0,
     });
   };
@@ -283,12 +319,15 @@ const QuizContainer: React.FC = () => {
         </div>
 
         <Tabs
+          variant="bordered"
+          fullWidth
           aria-label="Quiz Mode"
           selectedKey={quizMode}
           onSelectionChange={(key) => setQuizMode(key as "predefined" | "generated")}
           classNames={{
             tabList: "p-0 border-b-2 border-gray-200 gap-4",
             tab: "px-4 py-2 rounded-t-lg font-medium",
+            tabContent: "p-4",
             cursor: "bg-blue-100 dark:bg-blue-900"
           }}
         >
@@ -313,11 +352,13 @@ const QuizContainer: React.FC = () => {
         </Tabs>
 
         {quizMode === "generated" && (
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg shadow-sm">
+          <div className="mt-4 p-4  rounded-lg shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium mb-2">{t('medicalSpecialty')}</label>
                 <Select
+                  variant="underlined"
+                  color="primary"
                   selectedKeys={[selectedTheme]}
                   onChange={(e) => setSelectedTheme(e.target.value as QuizTheme)}
                   className="w-full"
@@ -334,6 +375,8 @@ const QuizContainer: React.FC = () => {
               <div>
                 <label className="block text-sm font-medium mb-2">{t('challengeLevel')}</label>
                 <Select
+                  variant="underlined"
+                  color="primary"
                   selectedKeys={[selectedDifficulty]}
                   onChange={(e) => setSelectedDifficulty(e.target.value as QuizDifficulty)}
                   className="w-full"
@@ -349,7 +392,7 @@ const QuizContainer: React.FC = () => {
             <Button
               color="primary"
               onPress={generateQuizzes}
-              className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 transition-colors"
+              className="w-full md:w-auto"
               isDisabled={isGenerating}
               startContent={isGenerating ? <Spinner size="sm" /> : <FiCpu />}
             >
@@ -386,38 +429,45 @@ const QuizContainer: React.FC = () => {
                   </div>
                 )}
               </div>
-              <Progress
-                aria-label="Quiz progress"
-                value={((currentQuizIndex + 1) / filteredQuizData.length) * 100}
-                className="max-w-full"
-              />
-              <div className="mt-2 text-sm text-gray-600 flex justify-between items-center">
-                <span>{t('question', { current: currentQuizIndex + 1, total: filteredQuizData.length })}</span>
-                <span>{t('score', { score: score })}</span>
-                <span>{t('attempts', { current: attempts, max: quizSettings.attemptsLimit })}</span>
-              </div>
 
-              {/* Navigation Buttons */}
-              <div className="flex justify-between mt-4">
-                <Button
-                  variant="ghost"
-                  onPress={previousQuiz}
-                  className="flex items-center gap-1"
-                  isDisabled={currentQuizIndex === 0}
-                  aria-label="Previous quiz"
-                >
-                  <FiArrowLeft /> {t('previous')}
-                </Button>
-                <Button
-                  variant="ghost"
-                  onPress={nextQuiz}
-                  className="flex items-center gap-1"
-                  isDisabled={currentQuizIndex === filteredQuizData.length - 1}
-                  aria-label="Next quiz"
-                >
-                  {t('next')} <FiArrowRight />
-                </Button>
-              </div>
+              {quizMode !== "generated" && (
+                <>
+                  <Progress
+                    aria-label="Quiz progress"
+                    value={((currentQuizIndex + 1) / filteredQuizData.length) * 100}
+                    className="max-w-full"
+                  />
+                  <div className="mt-2 text-sm text-gray-600 flex justify-between items-center">
+                    <span>{t('question', { current: currentQuizIndex + 1, total: filteredQuizData.length })}</span>
+                    <span>{t('score', { score: score })}</span>
+                    <span>{t('attempts', { current: attempts, max: quizSettings.attemptsLimit })}</span>
+                  </div>
+
+                  {/* Navigation Buttons */}
+                  <div className="flex justify-between mt-4">
+                    <Button
+                      variant="ghost"
+                      onPress={previousQuiz}
+                      className="flex items-center gap-1"
+                      isDisabled={currentQuizIndex === 0}
+                      aria-label="Previous quiz"
+                    >
+                      <FiArrowLeft /> {t('previous')}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onPress={nextQuiz}
+                      className="flex items-center gap-1"
+                      isDisabled={currentQuizIndex === filteredQuizData.length - 1}
+                      aria-label="Next quiz"
+                    >
+                      {t('next')} <FiArrowRight />
+                    </Button>
+                  </div>
+                </>
+              )}
+
+
             </motion.div>
           </AnimatePresence>
 
@@ -501,13 +551,31 @@ const QuizContainer: React.FC = () => {
                 <Button
                   color="primary"
                   onPress={checkAnswer}
-                  className="w-full bg-blue-600"
+                  className="w-full"
+                  size="lg"
+                  startContent={<FiBarChart2 />}
                   aria-label="Check answer"
                   disabled={attempts >= quizSettings.attemptsLimit && feedbackType === "error"}
                 >
                   {t('checkAnswer')}
                 </Button>
-                <p className="text-sm text-gray-600">{t('currentScore', { score })}</p>
+                <Card className="mt-4 shadow-sm border-none bg-gradient-to-r from-primary-50 to-primary-100">
+                  <div className="flex items-center justify-between px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <div className="bg-primary-200 p-2 rounded-full">
+                        <FiAward className="text-primary text-lg" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-gray-700">{t('currentScore')}</span>
+                        <span className="text-xs text-gray-500">{attempts > 0 ? t('attemptsUsed', { count: attempts }) : t('noAttempts')}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-2xl font-bold text-primary">{score}</span>
+                      <span className="text-sm text-gray-500">/ 100</span>
+                    </div>
+                  </div>
+                </Card>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Comfortaa } from "next/font/google";
+import { Comfortaa, Anuphan } from "next/font/google";
 import { NextUIProvider } from "@nextui-org/system";
 import "./globals.css";
 import { AnimatePresence } from "framer-motion";
@@ -12,6 +12,13 @@ const domain = "https://www.visualright.org/";
 const comfortaa_font = Comfortaa({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-en",
+});
+
+const anuphan_font = Anuphan({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-th",
 });
 
 // Viewport export for viewport and themeColor
@@ -81,7 +88,10 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: `${domain}favicon.ico`,
+    icon: [
+      { url: `${domain}favicon-32x32.png`, sizes: "32x32", type: "image/png" },
+      { url: `${domain}favicon-16x16.png`, sizes: "16x16", type: "image/png" },
+    ],
     apple: `${domain}apple-touch-icon.png`,
   },
   other: {
@@ -111,10 +121,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={comfortaa_font.className}>
+    <html lang="en" className={`${comfortaa_font.variable} ${anuphan_font.variable}`}>
+
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="https://www.visualright.org/favicon.ico" type="image/x-icon" />
+        <link rel="icon" type="image/png" sizes="32x32" href="https://www.visualright.org/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="https://www.visualright.org/favicon-16x16.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="theme-color" content="#83AFC9" />
+        <meta name="application-name" content="VisualRight" />
+        <meta name="msapplication-TileColor" content="#83AFC9" />
 
         <script
           type="application/ld+json"
@@ -140,7 +158,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body className="antialiased font-sans">
+      <body className="antialiased ">
         <AnimatePresence mode="wait" initial={false}>
           <NextUIProvider>{children}</NextUIProvider>
         </AnimatePresence>

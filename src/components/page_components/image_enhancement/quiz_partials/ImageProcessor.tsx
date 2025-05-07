@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useCallback } from "react";
-import { AdjustmentValues, KernelType } from "./types";
+import { AdjustmentValues, KernelType, HistogramMethod } from "./types";
 
 interface ImageProcessorProps {
   imageSrc: string;
@@ -42,9 +42,13 @@ const ImageProcessor: React.FC<ImageProcessorProps> = ({
       contrast: adjustmentValues.contrast ?? 1,
       brightness: adjustmentValues.brightness ?? 0,
       gamma: adjustmentValues.gamma ?? 1,
+      histogramMethod: adjustmentValues.histogramMethod ?? "equalization",
       histogramEqualization: adjustmentValues.histogramEqualization ?? false,
+      logTransformConstant: adjustmentValues.logTransformConstant ?? 5,
+      gammaValue: adjustmentValues.gammaValue ?? 1,
       kernelType: adjustmentValues.kernelType,
       kernelSize: adjustmentValues.kernelSize ?? 3,
+      kernelIntensity: adjustmentValues.kernelIntensity ?? 1,
       subtractValue: adjustmentValues.subtractValue ?? 0
     };
 
@@ -57,9 +61,13 @@ const ImageProcessor: React.FC<ImageProcessorProps> = ({
     // Apply all adjustments in sequence
     applyBasicAdjustments(data, canvas.width, canvas.height, effectiveAdjustments);
     
-    // 2. Histogram equalization if enabled
-    if (effectiveAdjustments.histogramEqualization) {
+    // 2. Histogram processing
+    if (effectiveAdjustments.histogramMethod === "equalization" && effectiveAdjustments.histogramEqualization) {
       applyHistogramEqualization(data, canvas.width, canvas.height);
+    } else if (effectiveAdjustments.histogramMethod === "gamma") {
+      applyGammaTransform(data, canvas.width, canvas.height, effectiveAdjustments.gammaValue);
+    } else if (effectiveAdjustments.histogramMethod === "log") {
+      applyLogTransform(data, canvas.width, canvas.height, effectiveAdjustments.logTransformConstant);
     }
     
     // 3. Kernel filters (smoothing, sharpening, edge detection)
@@ -96,9 +104,13 @@ const ImageProcessor: React.FC<ImageProcessorProps> = ({
     contrast: number;
     brightness: number;
     gamma: number;
+    histogramMethod: HistogramMethod;
     histogramEqualization: boolean;
+    logTransformConstant: number;
+    gammaValue: number;
     kernelType?: KernelType;
     kernelSize: number;
+    kernelIntensity: number;
     subtractValue: number;
   }) => {
     const { contrast, brightness, gamma } = effectiveAdjustments;
@@ -136,55 +148,71 @@ const ImageProcessor: React.FC<ImageProcessorProps> = ({
   };
 
   const applyHistogramEqualization = (data: Uint8ClampedArray, width: number, height: number) => {
-    // Calculate histogram
+    // Step 1: Calculate histogram
     const histogram = new Array(256).fill(0);
     for (let i = 0; i < data.length; i += 4) {
-      // Convert to grayscale for histogram
-      const gray = Math.round(0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]);
-      histogram[gray]++;
+      // Use average of RGB as grayscale value
+      const grayValue = Math.round((data[i] + data[i + 1] + data[i + 2]) / 3);
+      histogram[grayValue]++;
     }
 
-    // Calculate cumulative distribution function (CDF)
+    // Step 2: Calculate cumulative histogram
     const cdf = new Array(256).fill(0);
     cdf[0] = histogram[0];
     for (let i = 1; i < 256; i++) {
       cdf[i] = cdf[i - 1] + histogram[i];
     }
 
-    // Find first non-zero value for better contrast
-    let cdfMin = 0;
-    for (let i = 0; i < 256; i++) {
-      if (cdf[i] > 0) {
-        cdfMin = cdf[i];
-        break;
-      }
-    }
-
-    // Normalize CDF with improved algorithm
+    // Step 3: Normalize CDF
     const totalPixels = width * height;
-    const lookupTable = new Array(256).fill(0);
-    for (let i = 0; i < 256; i++) {
-      // Use improved formula to avoid dark images
-      lookupTable[i] = Math.round(((cdf[i] - cdfMin) / (totalPixels - cdfMin)) * 255);
-    }
+    const normalizedCdf = cdf.map(value => Math.round((value / totalPixels) * 255));
 
-    // Apply equalization
+    // Step 4: Apply histogram equalization
     for (let i = 0; i < data.length; i += 4) {
-      data[i] = lookupTable[data[i]];
-      data[i + 1] = lookupTable[data[i + 1]];
-      data[i + 2] = lookupTable[data[i + 2]];
+      data[i] = normalizedCdf[data[i]];
+      data[i + 1] = normalizedCdf[data[i + 1]];
+      data[i + 2] = normalizedCdf[data[i + 2]];
+      // Alpha channel remains unchanged
+    }
+  };
+
+  const applyGammaTransform = (data: Uint8ClampedArray, width: number, height: number, gammaValue: number) => {
+    // Apply gamma transform: output = 255 * (input/255)^gammaValue
+    for (let i = 0; i < data.length; i += 4) {
+      // Apply to each RGB channel
+      data[i] = clamp(255 * Math.pow(data[i] / 255, gammaValue));
+      data[i + 1] = clamp(255 * Math.pow(data[i + 1] / 255, gammaValue));
+      data[i + 2] = clamp(255 * Math.pow(data[i + 2] / 255, gammaValue));
+      // Alpha channel remains unchanged
+    }
+  };
+
+  const applyLogTransform = (data: Uint8ClampedArray, width: number, height: number, constant: number) => {
+    // Apply log transform: output = constant * log(1 + input)
+    // Scale factor to map values back to 0-255 range
+    const scaleFactor = 255 / Math.log(1 + 255 * (constant / 20));
+    
+    for (let i = 0; i < data.length; i += 4) {
+      // Apply to each RGB channel with scaling
+      data[i] = clamp(scaleFactor * Math.log(1 + data[i] * (constant / 20)));
+      data[i + 1] = clamp(scaleFactor * Math.log(1 + data[i + 1] * (constant / 20)));
+      data[i + 2] = clamp(scaleFactor * Math.log(1 + data[i + 2] * (constant / 20)));
+      // Alpha channel remains unchanged
     }
   };
 
   const applyKernelFilter = (data: Uint8ClampedArray, width: number, height: number, effectiveAdjustments: {
     kernelType?: KernelType;
     kernelSize: number;
+    kernelIntensity: number;
   }) => {
     const { kernelType, kernelSize } = effectiveAdjustments;
     const size = kernelSize;
     let kernel: number[][];
 
     // Define kernels
+    const intensity = effectiveAdjustments.kernelIntensity;
+
     if (kernelType === "smoothing") {
       // Gaussian smoothing
       if (size === 3) {
@@ -193,7 +221,7 @@ const ImageProcessor: React.FC<ImageProcessorProps> = ({
           [2/16, 4/16, 2/16],
           [1/16, 2/16, 1/16]
         ];
-      } else { // 5x5
+      } else if (size === 5) {
         kernel = [
           [1/256, 4/256, 6/256, 4/256, 1/256],
           [4/256, 16/256, 24/256, 16/256, 4/256],
@@ -201,20 +229,53 @@ const ImageProcessor: React.FC<ImageProcessorProps> = ({
           [4/256, 16/256, 24/256, 16/256, 4/256],
           [1/256, 4/256, 6/256, 4/256, 1/256]
         ];
+      } else { // 7x7
+        const sigma = 1.5;
+        const s = 2.0 * sigma * sigma;
+        kernel = [];
+        const kernelRadius = 3;
+        
+        for (let y = -kernelRadius; y <= kernelRadius; y++) {
+          const row = [];
+          for (let x = -kernelRadius; x <= kernelRadius; x++) {
+            const r = Math.sqrt(x*x + y*y);
+            const val = Math.exp(-(r*r)/s) / (Math.PI * s);
+            row.push(val);
+          }
+          kernel.push(row);
+        }
+        
+        // Normalize the kernel
+        let sum = 0;
+        for (let y = 0; y < 7; y++) {
+          for (let x = 0; x < 7; x++) {
+            sum += kernel[y][x];
+          }
+        }
+        
+        for (let y = 0; y < 7; y++) {
+          for (let x = 0; x < 7; x++) {
+            kernel[y][x] /= sum;
+          }
+        }
       }
     } else if (kernelType === "sharpening") {
-      // Sharpening with improved kernel to prevent darkening
+      // Sharpening with adjustable intensity
+      const center = 1 + 4 * intensity;
+      const side = -intensity;
       kernel = [
-        [0, -1, 0],
-        [-1, 5, -1],
-        [0, -1, 0]
+        [0, side, 0],
+        [side, center, side],
+        [0, side, 0]
       ];
     } else { // edge-detection
-      // Edge detection (Sobel) with improved visibility
+      // Edge detection with adjustable intensity
+      const center = 1 + 8 * intensity;
+      const side = -intensity;
       kernel = [
-        [-1, -1, -1],
-        [-1, 9, -1], // Increased center weight for better visibility
-        [-1, -1, -1]
+        [side, side, side],
+        [side, center, side],
+        [side, side, side]
       ];
     }
 
@@ -250,9 +311,10 @@ const ImageProcessor: React.FC<ImageProcessorProps> = ({
 
         // Apply brightness boost for edge detection and sharpening to prevent darkening
         if (kernelType === "edge-detection" || kernelType === "sharpening") {
-          sumR += 10; // Small brightness boost
-          sumG += 10;
-          sumB += 10;
+          const boost = 10 * effectiveAdjustments.kernelIntensity;
+          sumR += boost; // Adjustable brightness boost based on intensity
+          sumG += boost;
+          sumB += boost;
         }
 
         data[pixelIndex] = clamp(sumR);

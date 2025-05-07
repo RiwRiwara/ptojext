@@ -16,9 +16,14 @@ const ImageEnhancementQuizPage: React.FC = () => {
             { label: "Quiz", href: "/simu/image_enhancement/quiz" },
           ]}
         />
-        
+
         <h1 className="text-3xl font-bold mt-6 mb-8">Image Enhancement Quiz</h1>
-        
+        <p>
+          This quiz is designed to test your understanding of image enhancement concepts and techniques. If you need any help, please refer to the
+          <a
+            className="text-primary-500 hover:underline mx-2 text-lg font-semibold"
+            href="/simu/image_enhancement">Image Enhancement</a> page.
+        </p>
         <QuizContainer />
       </div>
     </BaseLayout>

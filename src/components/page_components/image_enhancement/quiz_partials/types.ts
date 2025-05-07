@@ -1,6 +1,7 @@
 // Types for image enhancement quiz components
 export type AdjustmentMethod = 'basic' | 'histogram' | 'smoothing' | 'subtraction';
 export type KernelType = 'smoothing' | 'sharpening' | 'edge-detection';
+export type HistogramMethod = 'equalization' | 'gamma' | 'log';
 
 export interface QuizItem {
   id: number;
@@ -13,18 +14,25 @@ export interface QuizItem {
     contrast?: number;
     brightness?: number;
     gamma?: number;
+    histogramMethod?: HistogramMethod;
     histogramEqualization?: boolean;
+    logTransformConstant?: number;
+    gammaValue?: number;
     kernelType?: KernelType;
     kernelSize?: number;
+    kernelIntensity?: number; // Intensity value for sharpening and edge detection
     subtractValue?: number;
-    [key: string]: number | boolean | string | KernelType | undefined;
+    [key: string]: number | boolean | string | KernelType | HistogramMethod | undefined;
   };
   tolerance?: {
     contrast?: number;
     brightness?: number;
     gamma?: number;
+    logTransformConstant?: number;
+    gammaValue?: number;
+    kernelIntensity?: number;
     subtractValue?: number;
-    [key: string]: number | boolean | string | KernelType | undefined;
+    [key: string]: number | boolean | string | KernelType | HistogramMethod | undefined;
   };
   hint?: string;
   // Bilingual support
@@ -46,8 +54,12 @@ export interface AdjustmentValues {
   contrast: number;
   brightness: number;
   gamma: number;
+  histogramMethod: HistogramMethod;
   histogramEqualization: boolean;
+  logTransformConstant: number;
+  gammaValue: number;
   kernelType: KernelType;
   kernelSize: number;
+  kernelIntensity: number;
   subtractValue: number;
 }

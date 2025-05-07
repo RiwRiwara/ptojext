@@ -15,18 +15,45 @@ const config: Config = {
     extend: {
 
       fontFamily: {
-        sans: ["Comfortaa", "sans-serif"],
+        sans: ['var(--font-en)', 'var(--font-th)', 'sans-serif'],
+        en: ['var(--font-en)'],
+        th: ['var(--font-th)'],
       },
       colors: {
-        primary: {
-          default: "#83AFC9",
-          white: "#FFFFFF",
-          "light-hover": "#DFDFE0",
-          "light-active": "#BCBDBE",
-          normal: "#83AFC9",
-          "normal-active": "#1F2224",
-          black: "#000000",
-        },
+        // Primary color and its variations
+        primary: "#83AFC9",
+        "primary-50": "#eef6fc",
+        "primary-100": "#d9ebf7",
+        "primary-200": "#b6dbf5",
+        "primary-300": "#83AFC9",
+        "primary-400": "#5a9fc0",
+        "primary-500": "#3b88b8",
+        "primary-600": "#2e6c9a",
+        "primary-700": "#285a7f",
+        "primary-800": "#254c6a",
+        "primary-900": "#23425a",
+
+        // Secondary colors
+        secondary: "#C59BD8",
+
+        // Accent colors
+        accent: "#F5A2C9",
+
+        // Semantic colors for HeroUI components
+        success: "#00D26A",
+        danger: "#F8312F",
+        warning: "#F5C689",
+        info: "#B6DBF5",
+
+        // Original color definitions (keeping for backward compatibility)
+        "primary-default": "#83AFC9",
+        "primary-white": "#FFFFFF",
+        "primary-light-hover": "#DFDFE0",
+        "primary-light-active": "#BCBDBE",
+        "primary-normal": "#83AFC9",
+        "primary-normal-active": "#1F2224",
+        "primary-black": "#000000",
+
         functional: {
           neutral: "#DFDFE0",
           success: "#00D26A",
@@ -48,6 +75,28 @@ const config: Config = {
 
     },
   },
-  plugins: [nextui(), heroui()],
+  plugins: [nextui(),
+  heroui({
+    prefix: "heroui",
+    addCommonColors: false,
+    defaultTheme: "light",
+    defaultExtendTheme: "light",
+    layout: {},
+    themes: {
+      light: {
+        layout: {},
+        colors: {
+          primary: "#83AFC9",
+        },
+      },
+      dark: {
+        layout: {},
+        colors: {
+          primary: "#83AFC9",
+        },
+      },
+    },
+  }),
+  ],
 };
 export default config;

@@ -6,7 +6,7 @@ import Matter, { Engine, Render, World, Bodies, Runner, Mouse, MouseConstraint, 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaGithub, FaLinkedin, FaEnvelope, FaGraduationCap } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaGraduationCap, FaTwitter } from "react-icons/fa";
 import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 
 // Team member data
@@ -26,44 +26,42 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     name: "Riw Awirut",
-    role: "Lead Developer ",
+    role: "Lead Developer",
     bio: "Full-stack developer with expertise in interactive visualizations and AI algorithms. Passionate about creating educational tools that make complex concepts accessible.",
-    image: "/team/profile1.png",
+    image: "/team/profile1.webp", // Changed to WebP for performance
     links: {
       github: "https://github.com/riwara",
-      // linkedin: "https://linkedin.com/in/riwara",
-      // email: "riwara@example.com"
-    }
+    },
   },
   {
     name: "Gunn",
-    role: "Algorithm Specialist ",
+    role: "Algorithm Specialist",
     bio: "Computer science researcher specializing in algorithm optimization and data structures. Contributes to the pathfinding and sorting visualizations.",
-    image: "/team/profile2.png",
+    image: "/team/profile2.webp",
     links: {
       github: "https://github.com/Gunn",
-      // linkedin: "https://linkedin.com/in/alexchen"
-    }
+    },
   },
   {
     name: "Punnapa",
     role: "UI/UX Designer",
     bio: "Creative designer focused on crafting intuitive and accessible user experiences. Responsible for the visual identity and interactive elements of the platform.",
-    image: "/team/profile3.png",
+    image: "/team/profile3.webp",
     links: {
       github: "https://github.com/Punnapa",
       portfolio: "https://sarahjohnson.design",
-      // email: "sarah@example.com"
-    }
-  }
+    },
+  },
 ];
+
+// SEO is handled in metadata.ts file
 
 export default function About() {
   const { t, i18n } = useTranslation("common");
-  const sceneRef = useRef<HTMLDivElement>(null); // Ref for the Matter.js canvas container
-  const engineRef = useRef<Engine | null>(null); // Ref for Matter.js engine
-  const runnerRef = useRef<Runner | null>(null); // Ref for Matter.js runner
-  const [activeTab, setActiveTab] = useState<'about' | 'team' | 'mission'>('about');
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const engineRef = useRef<Engine | null>(null);
+  const runnerRef = useRef<Runner | null>(null);
+  const [activeTab, setActiveTab] = useState<"about" | "team" | "mission">("about");
 
   const changeLanguageBox = () => {
     const nextLanguage = i18n.language === "th" ? "en" : "th";
@@ -73,128 +71,107 @@ export default function About() {
   useEffect(() => {
     if (!sceneRef.current) return;
 
-    // Create engine with less gravity
+    // Create engine with light gravity
     const engine = Engine.create({
-      gravity: { y: 0.1, x: 0 } // Very light gravity to allow floating
+      gravity: { y: 0.1, x: 0 },
     });
     engineRef.current = engine;
 
-    // Create renderer with explicit transparent settings
+    // Create renderer with transparent background
     const render = Render.create({
       element: sceneRef.current,
       engine: engine,
       options: {
         width: window.innerWidth,
         height: window.innerHeight,
-        background: "transparent", // Ensure no black background
-        wireframes: false, // No wireframes, solid shapes only
-        showAngleIndicator: false, // Ensure no debug indicators
-        showCollisions: false, // Ensure no collision visuals
-        showVelocity: false, // Ensure no velocity visuals
+        background: "transparent",
+        wireframes: false,
+        showAngleIndicator: false,
+        showCollisions: false,
+        showVelocity: false,
       },
     });
 
-    // Create boundaries (walls) with no visual styling (transparent)
+    // Create invisible boundaries
     const boundaries = [
       Bodies.rectangle(window.innerWidth / 2, 0, window.innerWidth, 50, {
         isStatic: true,
-        render: {
-          fillStyle: "transparent", // Transparent boundaries
-          visible: false // Make boundaries invisible
-        }
+        render: { fillStyle: "transparent", visible: false },
       }), // Top
       Bodies.rectangle(window.innerWidth / 2, window.innerHeight, window.innerWidth, 50, {
         isStatic: true,
-        render: {
-          fillStyle: "transparent",
-          visible: false
-        }
+        render: { fillStyle: "transparent", visible: false },
       }), // Bottom
       Bodies.rectangle(0, window.innerHeight / 2, 50, window.innerHeight, {
         isStatic: true,
-        render: {
-          fillStyle: "transparent",
-          visible: false
-        }
+        render: { fillStyle: "transparent", visible: false },
       }), // Left
       Bodies.rectangle(window.innerWidth, window.innerHeight / 2, 50, window.innerHeight, {
         isStatic: true,
-        render: {
-          fillStyle: "transparent",
-          visible: false
-        }
+        render: { fillStyle: "transparent", visible: false },
       }), // Right
     ];
 
-    // Create bouncing circles with less friction
-    const circles = Array.from({ length: 20 }, (_, index) => {
-      return Bodies.circle(
-        Math.random() * window.innerWidth,
-        Math.random() * window.innerHeight,
-        20, // Radius
-        {
-          restitution: 0.8, // Slightly less bouncy
-          friction: 0.001, // Almost no friction
-          frictionAir: 0.001, // Very low air friction
-          render: {
-            fillStyle: "rgba(99, 102, 241, 0.5)", // Semi-transparent indigo (no black)
-          },
-          label: `circle-${index}`,
-        }
-      );
+    // Optimize circle count for mobile
+    const circleCount = window.innerWidth < 768 ? 10 : 15; // Reduced from 20
+    const circles = Array.from({ length: circleCount }, (_, index) => {
+      return Bodies.circle(Math.random() * window.innerWidth, Math.random() * window.innerHeight, 20, {
+        restitution: 0.8,
+        friction: 0.001,
+        frictionAir: 0.001,
+        render: {
+          fillStyle: "rgba(99, 102, 241, 0.5)",
+        },
+        label: `circle-${index}`,
+      });
     });
 
-    // Add a bouncing square (distinct color)
+    // Add a bouncing square
     const square = Bodies.rectangle(
       Math.random() * window.innerWidth,
       Math.random() * window.innerHeight,
-      40, 40,
+      40,
+      40,
       {
         restitution: 0.7,
         friction: 0.002,
         frictionAir: 0.002,
         render: {
-          fillStyle: "rgba(251, 146, 60, 0.8)", // Orange
+          fillStyle: "rgba(251, 146, 60, 0.8)",
         },
-        label: "special-square"
+        label: "special-square",
       }
     );
 
-    // Add circles, square, and boundaries to world
+    // Add all bodies to world
     World.add(engine.world, [...circles, square, ...boundaries]);
 
-    // Add mouse control for dragging (optional)
+    // Add mouse control
     const mouse = Mouse.create(render.canvas);
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse: mouse,
       constraint: {
         stiffness: 0.2,
-        render: {
-          visible: false, // Ensure mouse constraint is invisible
-        },
+        render: { visible: false },
       },
     });
-
     World.add(engine.world, mouseConstraint);
     render.mouse = mouse;
 
-    // Add random forces to simulate bird-like movement
-    Matter.Events.on(engine, 'beforeUpdate', () => {
-      circles.forEach(circle => {
-        if (Math.random() < 0.05) { // 5% chance each frame to change direction
+    // Simulate bird-like movement
+    Matter.Events.on(engine, "beforeUpdate", () => {
+      circles.forEach((circle) => {
+        if (Math.random() < 0.05) {
           const forceMagnitude = 0.001;
-          Body.applyForce(circle, {
-            x: circle.position.x,
-            y: circle.position.y
-          }, {
+          Body.applyForce(circle, circle.position, {
             x: (Math.random() - 0.5) * forceMagnitude,
-            y: (Math.random() - 0.5) * forceMagnitude
+            y: (Math.random() - 0.5) * forceMagnitude,
           });
         }
       });
     });
 
-    // --- ENHANCEMENT: Hover to scale up balls and change cursor ---
+    // Hover effect for scaling circles
     let lastHovered: Matter.Body | null = null;
     let lastScale = 1;
     const scaleUp = 1.4;
@@ -205,10 +182,8 @@ export default function About() {
         x: event.clientX - rect.left,
         y: event.clientY - rect.top,
       };
-      // Find the topmost circle under the mouse
       const found = Matter.Query.point(circles, mousePos)[0] || null;
       if (found !== lastHovered) {
-        // Restore previous
         if (lastHovered && lastScale !== 1) {
           Matter.Body.scale(lastHovered, 1 / lastScale, 1 / lastScale);
         }
@@ -223,6 +198,7 @@ export default function About() {
         lastHovered = found;
       }
     }
+
     render.canvas.addEventListener("mousemove", handleMouseMove);
     render.canvas.addEventListener("mouseleave", () => {
       if (lastHovered && lastScale !== 1) {
@@ -232,50 +208,115 @@ export default function About() {
       }
       render.canvas.style.cursor = "default";
     });
-    // --- END ENHANCEMENT ---
 
-    // Create and run the runner
+    // Create and run runner
     const runner = Runner.create();
     runnerRef.current = runner;
     Runner.run(runner, engine);
 
-    // Run the renderer
+    // Run renderer
     Render.run(render);
 
-    // Cleanup on unmount
+    // Pause animation when out of view
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (runnerRef.current) {
+          if (entry.isIntersecting) {
+            Runner.start(runnerRef.current, engine);
+          } else {
+            Runner.stop(runnerRef.current);
+          }
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(sceneRef.current);
+
+    // Cleanup
     return () => {
-      if (render && runnerRef.current) {
-        Render.stop(render);
-        Runner.stop(runnerRef.current);
-        World.clear(engine.world, true);
-        Engine.clear(engine);
-        render.canvas.remove();
-        if (mouseConstraint) World.remove(engine.world, mouseConstraint);
-      }
-      // Remove event listeners for hover
-      if (render && render.canvas) {
-        render.canvas.removeEventListener("mousemove", handleMouseMove);
-        render.canvas.removeEventListener("mouseleave", () => { });
-      }
+      observer.disconnect();
+      Render.stop(render);
+      Runner.stop(runner);
+      World.clear(engine.world, true);
+      Engine.clear(engine);
+      render.canvas.remove();
+      World.remove(engine.world, mouseConstraint);
+      render.canvas.removeEventListener("mousemove", handleMouseMove);
+      render.canvas.removeEventListener("mouseleave", () => { });
     };
   }, []);
+
   return (
     <BaseLayout>
+      {/* SEO: Hreflang tags and structured data */}
+      <head>
+        <link rel="alternate" hrefLang="en" href="https://www.visualright.org/about?lang=en" />
+        <link rel="alternate" hrefLang="th" href="https://www.visualright.org/about?lang=th" />
+        <link rel="alternate" hrefLang="x-default" href="https://www.visualright.org/about" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "AboutPage",
+              name: "About Visual Right: AI Playground",
+              url: "https://www.visualright.org/about",
+              description: t(
+                "ABOUT_DESCRIPTION",
+                "Learn about Visual Right’s mission to make AI and computer science accessible through interactive visualizations, meet our team, and explore our technology."
+              ),
+              inLanguage: ["en", "th"],
+              publisher: {
+                "@type": "Organization",
+                name: "Visual Right",
+                url: "https://www.visualright.org",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://www.visualright.org/logo.png",
+                  width: 200,
+                  height: 60,
+                },
+              },
+              mainEntity: [
+                {
+                  "@type": "Organization",
+                  name: "Visual Right",
+                  description: t(
+                    "ORGANIZATION_DESCRIPTION",
+                    "An educational platform for interactive AI and computer science visualizations."
+                  ),
+                  member: teamMembers.map((member) => ({
+                    "@type": "Person",
+                    name: member.name,
+                    jobTitle: member.role,
+                    description: member.bio,
+                    image: `https://www.visualright.org${member.image}`,
+                    sameAs: Object.values(member.links).filter(Boolean),
+                  })),
+                },
+              ],
+            }),
+          }}
+        />
+      </head>
+
       {/* Interactive background */}
-      <div ref={sceneRef} className="absolute inset-0 pointer-events-auto z-0" />
+      <div ref={sceneRef} className="absolute inset-0 pointer-events-auto z-0" aria-hidden="true" />
 
       {/* Main content */}
       <div className="py-12 px-4 sm:px-6 lg:px-8 relative min-h-screen">
         <div className="max-w-6xl mx-auto">
           {/* Breadcrumb navigation */}
           <div className="mb-6">
-            <Breadcrumb items={[
-              { label: "Home", href: "/" },
-              { label: "About Us" }
-            ]} />
+            <Breadcrumb
+              items={[
+                { label: t("HOME", "Home"), href: "/" },
+                { label: t("ABOUT_US", "About Us") },
+              ]}
+            />
           </div>
 
-          {/* Header section with gradient background */}
+          {/* Header section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -288,9 +329,12 @@ export default function About() {
                 {t("ABOUT_TITLE", "About Visual Right: AI Playground")}
               </h1>
               <p className="text-lg md:text-xl max-w-3xl mx-auto opacity-90">
-                Exploring the fascinating world of AI algorithms through interactive visualizations and simulations
+                {t(
+                  "ABOUT_SUBTITLE",
+                  "Exploring the fascinating world of AI algorithms through interactive visualizations and simulations"
+                )}
               </p>
-              <div className="mt-8">
+              <div className="mt-8 flex gap-4 justify-center">
                 <button
                   onClick={changeLanguageBox}
                   className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium backdrop-blur-sm transition-colors"
@@ -298,6 +342,15 @@ export default function About() {
                 >
                   {i18n.language === "en" ? "Switch to ไทย" : "Switch to English"}
                 </button>
+                <a
+                  href="https://twitter.com/intent/tweet?text=Discover Visual Right's mission to make AI education accessible!&url=https://www.visualright.org/about"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-2 bg-[#1DA1F2] hover:bg-[#1a91da] rounded-full text-sm font-medium text-white flex items-center"
+                  aria-label="Share on Twitter"
+                >
+                  <FaTwitter className="mr-2" /> Share
+                </a>
               </div>
             </div>
           </motion.div>
@@ -305,15 +358,15 @@ export default function About() {
           {/* Tab navigation */}
           <div className="flex justify-center mb-8 overflow-x-auto pb-2">
             <div className="inline-flex p-1 rounded-lg bg-gray-100 shadow-sm">
-              {['about', 'team', 'mission'].map((tab) => (
+              {["about", "team", "mission"].map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab as 'about' | 'team' | 'mission')}
-                  className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${activeTab === tab
-                    ? 'bg-white text-[#83AFC9] shadow-sm'
-                    : 'text-gray-600 hover:text-gray-800'}`}
+                  onClick={() => setActiveTab(tab as "about" | "team" | "mission")}
+                  className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${activeTab === tab ? "bg-white text-[#83AFC9] shadow-sm" : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  aria-current={activeTab === tab ? "page" : undefined}
                 >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  {t(tab.toUpperCase(), tab.charAt(0).toUpperCase() + tab.slice(1))}
                 </button>
               ))}
             </div>
@@ -329,55 +382,69 @@ export default function About() {
             className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden z-10 relative"
           >
             {/* About tab content */}
-            {activeTab === 'about' && (
+            {activeTab === "about" && (
               <div className="p-8">
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                   <div>
-                    <h2 className="text-2xl font-bold text-[#83AFC9] mb-6">Our Project</h2>
+                    <h2 className="text-2xl font-bold text-[#83AFC9] mb-6">
+                      {t("OUR_PROJECT", "Our Project: Interactive AI Visualizations")}
+                    </h2>
                     <div className="prose prose-lg max-w-none text-gray-700">
                       <p>
-                        {t("ABOUT_PROJECT", "Visual Right: AI Playground is an interactive educational platform designed to make complex algorithms and AI concepts accessible through hands-on visualizations and simulations.")}
+                        {t(
+                          "ABOUT_PROJECT",
+                          "Visual Right: AI Playground is an interactive educational platform designed to make complex algorithms and AI concepts accessible through hands-on visualizations and simulations."
+                        )}
                       </p>
                       <p>
-                        {t("ABOUT_FEATURES", "Our platform features interactive demonstrations of pathfinding algorithms, sorting visualizations, physics simulations, and image processing tools, all designed with a focus on learning through exploration.")}
+                        {t(
+                          "ABOUT_FEATURES",
+                          "Our platform features interactive demonstrations of pathfinding algorithms, sorting visualizations, physics simulations, and image processing tools, all designed with a focus on learning through exploration. Check out our <a href='/simulations' class='text-[#83AFC9] hover:underline'>simulations</a>."
+                        )}
                       </p>
                       <p>
-                        {t("ABOUT_GOAL", "Our goal is to bridge the gap between theoretical knowledge and practical understanding, making computer science and AI concepts more intuitive and engaging for students, educators, and enthusiasts alike.")}
+                        {t(
+                          "ABOUT_GOAL",
+                          "Our goal is to bridge the gap between theoretical knowledge and practical understanding, making computer science and AI concepts more intuitive and engaging for students, educators, and enthusiasts alike."
+                        )}
                       </p>
                     </div>
-
                     <div className="mt-8 flex flex-wrap gap-4">
                       <a
                         href="https://github.com/RiwRiwara/ptojext.git"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center px-4 py-2 border border-[#83AFC9] text-[#83AFC9] rounded-lg hover:bg-[#83AFC9] hover:text-white transition-colors"
+                        aria-label="View Visual Right on GitHub"
                       >
                         <FaGithub className="mr-2" /> View on GitHub
                       </a>
                       <a
-                        href="#"
+                        href="/simulations"
                         className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#83AFC9] to-sky-600 text-white rounded-lg hover:opacity-90 transition-opacity"
+                        aria-label="Explore Learning Resources"
                       >
                         <FaGraduationCap className="mr-2" /> Learning Resources
                       </a>
                     </div>
                   </div>
-
                   <div className="relative rounded-xl overflow-hidden shadow-lg h-[400px]">
                     <Image
                       src="/about/showcase.png"
-                      alt="AI Playground Project"
+                      alt="Interactive AI visualizations in Visual Right platform"
                       fill
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: "cover" }}
                       className="rounded-xl"
+                      loading="lazy"
                     />
                   </div>
                 </div>
 
                 {/* Technologies section */}
                 <div className="mt-16">
-                  <h2 className="text-2xl font-bold text-[#83AFC9] mb-6">Technologies</h2>
+                  <h2 className="text-2xl font-bold text-[#83AFC9] mb-6">
+                    {t("TECHNOLOGIES", "Technologies We Use")}
+                  </h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     {[
                       { name: "React & Next.js", icon: "/tech/react.svg", desc: "Frontend framework" },
@@ -387,7 +454,7 @@ export default function About() {
                       { name: "Matter.js", icon: "/tech/matter.svg", desc: "Physics engine" },
                       { name: "Canvas API", icon: "/tech/canvas.svg", desc: "Graphics rendering" },
                       { name: "WebGL", icon: "/tech/webgl.svg", desc: "3D graphics" },
-                      { name: "i18next", icon: "/tech/i18n.svg", desc: "Internationalization" }
+                      { name: "i18next", icon: "/tech/i18n.svg", desc: "Internationalization" },
                     ].map((tech, index) => (
                       <motion.div
                         key={tech.name}
@@ -397,7 +464,13 @@ export default function About() {
                         className="bg-gray-50 rounded-lg p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow"
                       >
                         <div className="w-12 h-12 mb-3 flex items-center justify-center">
-                          <Image src={tech.icon} alt={tech.name} width={40} height={40} />
+                          <Image
+                            src={tech.icon}
+                            alt={`${tech.name} icon`}
+                            width={40}
+                            height={40}
+                            loading="lazy"
+                          />
                         </div>
                         <h3 className="font-medium text-gray-900">{tech.name}</h3>
                         <p className="text-sm text-gray-500">{tech.desc}</p>
@@ -409,10 +482,11 @@ export default function About() {
             )}
 
             {/* Team tab content */}
-            {activeTab === 'team' && (
+            {activeTab === "team" && (
               <div className="p-8">
-                <h2 className="text-2xl font-bold text-[#83AFC9] mb-8 text-center">Meet Our Team</h2>
-
+                <h2 className="text-2xl font-bold text-[#83AFC9] mb-8 text-center">
+                  {t("MEET_OUR_TEAM", "Meet Our Team")}
+                </h2>
                 <div className="grid md:grid-cols-3 gap-8">
                   {teamMembers.map((member, index) => (
                     <motion.div
@@ -425,30 +499,57 @@ export default function About() {
                       <div className="h-48 relative">
                         <Image
                           src={member.image}
-                          alt={member.name}
+                          alt={`${member.name}, ${member.role} at Visual Right`}
                           fill
-                          style={{ objectFit: 'cover' }}
+                          style={{ objectFit: "cover" }}
+                          loading="lazy"
                         />
                       </div>
                       <div className="p-6">
                         <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
                         <p className="text-[#83AFC9] font-medium mb-3">{member.role}</p>
                         <p className="text-gray-600 text-sm mb-4">{member.bio}</p>
-
                         <div className="flex space-x-3">
                           {member.links.github && (
-                            <a href={member.links.github} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#83AFC9] transition-colors">
+                            <a
+                              href={member.links.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-gray-500 hover:text-[#83AFC9] transition-colors"
+                              aria-label={`Visit ${member.name}'s GitHub profile`}
+                            >
                               <FaGithub size={18} />
                             </a>
                           )}
                           {member.links.linkedin && (
-                            <a href={member.links.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#83AFC9] transition-colors">
+                            <a
+                              href={member.links.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-gray-500 hover:text-[#83AFC9] transition-colors"
+                              aria-label={`Visit ${member.name}'s LinkedIn profile`}
+                            >
                               <FaLinkedin size={18} />
                             </a>
                           )}
                           {member.links.email && (
-                            <a href={`mailto:${member.links.email}`} className="text-gray-500 hover:text-[#83AFC9] transition-colors">
+                            <a
+                              href={`mailto:${member.links.email}`}
+                              className="text-gray-500 hover:text-[#83AFC9] transition-colors"
+                              aria-label={`Email ${member.name}`}
+                            >
                               <FaEnvelope size={18} />
+                            </a>
+                          )}
+                          {member.links.portfolio && (
+                            <a
+                              href={member.links.portfolio}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-gray-500 hover:text-[#83AFC9] transition-colors"
+                              aria-label={`Visit ${member.name}'s portfolio`}
+                            >
+                              <FaGraduationCap size={18} />
                             </a>
                           )}
                         </div>
@@ -456,15 +557,20 @@ export default function About() {
                     </motion.div>
                   ))}
                 </div>
-
                 <div className="mt-12 bg-gray-50 rounded-xl p-8 text-center">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Support Our Team</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">
+                    {t("SUPPORT_OUR_TEAM", "Support Our Team")}
+                  </h3>
                   <p className="text-gray-600 max-w-2xl mx-auto mb-6">
-                    If you find this project helpful, consider supporting us!
+                    {t(
+                      "SUPPORT_TEXT",
+                      "If you find this project helpful, consider supporting us!"
+                    )}
                   </p>
                   <a
                     href="mailto:contact@visualright.ai"
                     className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#83AFC9] to-sky-600 text-white rounded-lg hover:opacity-90 transition-opacity"
+                    aria-label="Contact Visual Right"
                   >
                     Get in Touch
                   </a>
@@ -473,40 +579,61 @@ export default function About() {
             )}
 
             {/* Mission tab content */}
-            {activeTab === 'mission' && (
+            {activeTab === "mission" && (
               <div className="p-8">
                 <div className="max-w-3xl mx-auto">
-                  <h2 className="text-2xl font-bold text-[#83AFC9] mb-6 text-center">Our Mission & Vision</h2>
-
+                  <h2 className="text-2xl font-bold text-[#83AFC9] mb-6 text-center">
+                    {t("OUR_MISSION_VISION", "Our Mission & Vision")}
+                  </h2>
                   <div className="prose prose-lg max-w-none text-gray-700 mb-12">
-                    <h3>Mission</h3>
+                    <h3>{t("MISSION", "Mission")}</h3>
                     <p>
-                      Our mission is to democratize access to AI and computer science education through interactive, visual learning experiences. We believe that complex concepts become intuitive when you can see them in action and interact with them directly.
+                      {t(
+                        "MISSION_TEXT",
+                        "Our mission is to democratize access to AI and computer science education through interactive, visual learning experiences. We believe that complex concepts become intuitive when you can see them in action and interact with them directly."
+                      )}
                     </p>
-
-                    <h3>Vision</h3>
+                    <h3>{t("VISION", "Vision")}</h3>
                     <p>
-                      We envision a world where anyone, regardless of their background or prior knowledge, can understand and engage with the fundamental concepts that power modern technology. By making these concepts accessible and enjoyable to learn, we aim to inspire the next generation of innovators and problem-solvers.
+                      {t(
+                        "VISION_TEXT",
+                        "We envision a world where anyone, regardless of their background or prior knowledge, can understand and engage with the fundamental concepts that power modern technology. By making these concepts accessible and enjoyable to learn, we aim to inspire the next generation of innovators and problem-solvers."
+                      )}
                     </p>
-
-                    <h3>Values</h3>
+                    <h3>{t("VALUES", "Values")}</h3>
                     <ul>
-                      <li><strong>Accessibility:</strong> Making complex concepts understandable to everyone</li>
-                      <li><strong>Interactivity:</strong> Learning through hands-on exploration and experimentation</li>
-                      <li><strong>Innovation:</strong> Continuously improving our visualizations and simulations</li>
-                      <li><strong>Community:</strong> Building a supportive environment for learners and contributors</li>
-                      <li><strong>Open Source:</strong> Sharing knowledge and code with the world</li>
+                      <li>
+                        <strong>{t("ACCESSIBILITY", "Accessibility")}</strong>:{" "}
+                        {t("ACCESSIBILITY_TEXT", "Making complex concepts understandable to everyone")}
+                      </li>
+                      <li>
+                        <strong>{t("INTERACTIVITY", "Interactivity")}</strong>:{" "}
+                        {t("INTERACTIVITY_TEXT", "Learning through hands-on exploration and experimentation")}
+                      </li>
+                      <li>
+                        <strong>{t("INNOVATION", "Innovation")}</strong>:{" "}
+                        {t("INNOVATION_TEXT", "Continuously improving our visualizations and simulations")}
+                      </li>
+                      <li>
+                        <strong>{t("COMMUNITY", "Community")}</strong>:{" "}
+                        {t("COMMUNITY_TEXT", "Building a supportive environment for learners and contributors")}
+                      </li>
+                      <li>
+                        <strong>{t("OPEN_SOURCE", "Open Source")}</strong>:{" "}
+                        {t("OPEN_SOURCE_TEXT", "Sharing knowledge and code with the world")}
+                      </li>
                     </ul>
                   </div>
-
                   <div className="bg-gradient-to-r from-[#83AFC9]/10 to-sky-600/10 rounded-xl p-8 border border-[#83AFC9]/20">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4">Our Impact</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-4">
+                      {t("OUR_IMPACT", "Our Impact")}
+                    </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                       {[
-                        { metric: "0K+", label: "Monthly Users" },
-                        { metric: "0+", label: "Interactive Demos" },
-                        { metric: "0+", label: "Educational Institutions" },
-                        { metric: "0+", label: "Countries" }
+                        { metric: "0K+", label: t("MONTHLY_USERS", "Monthly Users") },
+                        { metric: "0+", label: t("INTERACTIVE_DEMOS", "Interactive Demos") },
+                        { metric: "0+", label: t("EDUCATIONAL_INSTITUTIONS", "Educational Institutions") },
+                        { metric: "0+", label: t("COUNTRIES", "Countries") },
                       ].map((stat) => (
                         <div key={stat.label}>
                           <p className="text-3xl font-bold text-[#83AFC9]">{stat.metric}</p>

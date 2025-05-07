@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from "react";
-import { Button } from "@heroui/react";
+import { Button, Slider, Card, CardBody, CardHeader, Divider } from "@heroui/react";
+import { FiImage, FiSliders } from "react-icons/fi";
 import { BlockMath } from "react-katex";
 // import "katex/dist/katex.min.css";
 import { GrayScaleTypes } from "@/components/image_enhancement/types";
@@ -33,12 +34,13 @@ const grayscaleTypes: GrayScaleTypes[] = [
 
 export default function GrayscaleTransformSection() {
   const [selected, setSelected] = useState<GrayKey>("linear");
-  const [param, setParam] = useState<number | undefined>(
-    grayscaleTypes.find((g) => g.key === selected)?.param?.default
-  );
+  // Initialize with a default value (0) to avoid undefined state
+  const [param, setParam] = useState<number>(grayscaleTypes.find((g) => g.key === "linear")?.param?.default || 0);
 
+  // Update param when selected transform changes
   useEffect(() => {
-    setParam(grayscaleTypes.find((t) => t.key === selected)?.param?.default);
+    const defaultValue = grayscaleTypes.find((t) => t.key === selected)?.param?.default || 0;
+    setParam(defaultValue);
   }, [selected]);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -63,14 +65,14 @@ export default function GrayscaleTransformSection() {
 
         switch (selected) {
           case "log": {
-            const c = param ?? 10;
-            gray = (c * Math.log1p(gray)) / Math.log(256);
+            // Using param directly since we've ensured it's never undefined
+            gray = (param * Math.log1p(gray)) / Math.log(256);
             gray = Math.min(255, gray);
             break;
           }
           case "power-law": {
-            const gamma = param ?? 0.5;
-            gray = 255 * Math.pow(gray / 255, gamma);
+            // Using param directly since we've ensured it's never undefined
+            gray = 255 * Math.pow(gray / 255, param);
             break;
           }
         }
@@ -92,57 +94,92 @@ export default function GrayscaleTransformSection() {
   const meta = grayscaleTypes.find((t) => t.key === selected)!;
 
   return (
-    <div className="container mx-auto flex flex-col gap-4 p-6">
-      <h1 className="text-base md:text-xl font-semibold ml-1 md:ml-2">
-        {meta.label}
-      </h1>
-
+    <div className="container mx-auto flex flex-col gap-6 p-6">
+      <div className="flex items-center gap-2 mb-2">
+        <FiImage className="text-primary" />
+        <h1 className="text-xl font-semibold">
+          {meta.label} Transform
+        </h1>
+      </div>
+      
       <div className="flex flex-col md:flex-row justify-center gap-6">
-        <canvas
-          ref={canvasRef}
-          className="mx-auto border rounded-xl shadow max-w-full"
-        />
+        <Card className="w-full md:w-1/2 shadow-md">
+          <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
+            <h4 className="text-sm font-medium text-gray-600">Preview</h4>
+          </CardHeader>
+          <CardBody className="overflow-visible py-4">
+            <canvas
+              ref={canvasRef}
+              className="mx-auto rounded-lg max-w-full"
+            />
+          </CardBody>
+        </Card>
 
-        <div className="flex flex-col gap-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
-            {grayscaleTypes.map((t) => (
-              <Button
-                key={t.key}
-                onClick={() => setSelected(t.key)}
-                className={`px-20 py-2 text-sm font-medium rounded-md transition ${
-                  selected === t.key
-                    ? "bg-indigo-600 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-indigo-100"
-                }`}
-              >
-                {t.label}
-              </Button>
-            ))}
-          </div>
-
-          <div className="bg-gray-50 p-6 rounded-lg space-y-4 drop-shadow-sm">
-            <p className="text-sm text-gray-700">{meta.description}</p>
-
-            <BlockMath>{meta.formula}</BlockMath>
-
-            {meta.param && (
-              <div className="space-y-1">
-                <label className="text-sm font-medium">
-                  {meta.param.label.replace(/\\/, "")} ={" "}
-                  <span className="font-mono">{param?.toFixed(2)}</span>
-                </label>
-                <input
-                  type="range"
-                  className="w-full accent-indigo-600"
-                  min={meta.param.min}
-                  max={meta.param.max}
-                  step={meta.param.step}
-                  value={param}
-                  onChange={(e) => setParam(parseFloat(e.target.value))}
-                />
+        <div className="flex flex-col gap-6 w-full md:w-1/2">
+          <Card className="shadow-md">
+            <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
+              <h4 className="text-sm font-medium text-gray-600">Transform Type</h4>
+            </CardHeader>
+            <CardBody>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                {grayscaleTypes.map((t) => (
+                  <Button
+                    key={t.key}
+                    onPress={() => setSelected(t.key)}
+                    color={selected === t.key ? "primary" : "default"}
+                    variant={selected === t.key ? "solid" : "bordered"}
+                    className="w-full"
+                  >
+                    {t.label}
+                  </Button>
+                ))}
               </div>
-            )}
-          </div>
+            </CardBody>
+          </Card>
+
+          <Card className="shadow-md">
+            <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
+              <h4 className="text-sm font-medium text-gray-600">Transform Details</h4>
+            </CardHeader>
+            <CardBody className="space-y-4">
+              <p className="text-sm text-gray-700">{meta.description}</p>
+              
+              <Divider className="my-2" />
+              
+              <div className="flex items-center gap-2">
+                <FiSliders className="text-primary" />
+                <h3 className="text-sm font-medium">Formula</h3>
+              </div>
+              <BlockMath>{meta.formula}</BlockMath>
+
+              {meta.param && (
+                <div className="space-y-3 pt-2">
+                  <div className="flex justify-between">
+                    <label className="text-sm font-medium flex items-center gap-2">
+                      <span>{meta.param.label.replace(/\\/, "")}</span>
+                    </label>
+                    <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">{param.toFixed(2)}</span>
+                  </div>
+                  <Slider
+                    size="sm"
+                    step={meta.param.step}
+                    minValue={meta.param.min}
+                    maxValue={meta.param.max}
+                    defaultValue={param}
+                    value={param}
+                    onChange={(value) => setParam(Number(value))}
+                    className="max-w-md"
+                    color="primary"
+                    showSteps={meta.param.step >= 0.5}
+                    marks={[
+                      { value: meta.param.min, label: meta.param.min.toString() },
+                      { value: meta.param.max, label: meta.param.max.toString() }
+                    ]}
+                  />
+                </div>
+              )}
+            </CardBody>
+          </Card>
         </div>
       </div>
     </div>

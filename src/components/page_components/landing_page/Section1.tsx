@@ -203,13 +203,14 @@ export default function Section1() {
               >
                 Explore Features
               </motion.button>
-              <motion.button
+              <motion.a
+                href="/about"
                 className="text-sm md:text-base px-6 py-3 border-2 border-[#83AFC9] text-[#83AFC9] rounded-full font-medium hover:bg-[#83AFC9] hover:text-white"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Learn More
-              </motion.button>
+                About Us
+              </motion.a>
             </motion.div>
           </motion.div>
         </motion.div>

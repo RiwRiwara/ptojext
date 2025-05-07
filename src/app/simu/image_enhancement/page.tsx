@@ -9,7 +9,7 @@ import ImageSubtractionSection from "@/components/image_enhancement/imageSubtrac
 import { Button } from "@nextui-org/button";
 
 export default function ImageEnhancementPage() {
-  const { t } = useTranslation("imageenchanted");
+  const { t } = useTranslation("imageenhancement");
 
   const sections = [
     { id: "grayscale", label: "Gray Level Transformation" },
@@ -41,7 +41,9 @@ export default function ImageEnhancementPage() {
             <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">
               Image Enhancement
             </h1>
-            <p className="text-gray-600">{t("mean")}</p>
+            <p>
+              {t("mean", "Image enhancement is the process of making images more useful (such as making images more visually appealing, bringing out specific features, removing noise from images and highlighting interesting details in images). ")}
+            </p>
           </div>
 
           {/* Navigation Buttons */}
@@ -50,7 +52,7 @@ export default function ImageEnhancementPage() {
               {sections.map(({ id, label, href }) => (
                 <Button
                   key={id}
-                  onClick={() => href ? window.location.href = href : scrollToSection(id)}
+                  onPress={() => href ? window.location.href = href : scrollToSection(id)}
                   className="w-full lg:w-fit py-2 mx-4 md:mx-0 text-sm font-medium rounded-md transition bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-gray-900"
                   aria-label={href ? `Navigate to ${label}` : `Scroll to ${label}`}
                 >

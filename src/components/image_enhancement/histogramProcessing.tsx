@@ -234,11 +234,11 @@ export default function HistogramProcessingSection() {
           ).map(({ key, label }) => (
             <Button
               key={key}
-              onClick={() => setMode(key)}
+              onPress={() => setMode(key)}
               className={`px-4 py-2 text-sm font-medium rounded-md transition ${
                 mode === key
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-blue-100"
+                  ? "bg-primary text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-primary"
               }`}
             >
               {label}
@@ -257,7 +257,7 @@ export default function HistogramProcessingSection() {
               step="0.1"
               value={gammaValue}
               onChange={(e) => setGammaValue(parseFloat(e.target.value))}
-              className="accent-blue-600"
+              className="accent-primary"
             />
           </div>
         )}
@@ -271,7 +271,7 @@ export default function HistogramProcessingSection() {
               step="1"
               value={logC}
               onChange={(e) => setLogC(parseFloat(e.target.value))}
-              className="accent-blue-600"
+              className="accent-primary"
             />
           </div>
         )}
