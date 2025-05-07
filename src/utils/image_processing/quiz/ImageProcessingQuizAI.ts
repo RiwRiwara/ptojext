@@ -27,19 +27,28 @@ import { getThaiTitle, getThaiDescription } from './partials/translations';
 const MODEL = 'gpt-4o-mini';
 
 export class QuizGenerator {
-    private readonly openai: OpenAI;
+    private predefinedQuizzes: QuizItem[] = [];
+    private availableThemes: QuizTheme[] = ['general', 'radiology', 'cardiology', 'neurology', 'oncology'];
+    private availableDifficulties: QuizDifficulty[] = ['beginner', 'intermediate', 'advanced'];
+    // Flag to track if API requests are failing and we need to use fallback data
+    private useLocalFallback = false;
 
     constructor() {
-        try {
-            const openaiClient = new OpenAIQuizClient();
-            this.openai = openaiClient.getClient();
-        } catch (error) {
-            console.error('Error initializing OpenAI client:', error);
-            this.openai = new OpenAI({
-                apiKey: '',
-                dangerouslyAllowBrowser: true,
-            });
+        // Initialize predefined quizzes for fallback
+        this.loadPredefinedQuizzes();
+        
+        // Check if we're in a development environment
+        if (process.env.NODE_ENV === 'development') {
+            console.info('Running in development environment');
         }
+    }
+    
+    /**
+     * Load predefined quizzes for fallback
+     */
+    private loadPredefinedQuizzes() {
+        // This could load from a local JSON file or define some basic quizzes
+        // For now, we'll just use an empty array and generate them on demand
     }
 
     /**
@@ -69,64 +78,36 @@ export class QuizGenerator {
     }
 
     /**
-     * Generates a single quiz using OpenAI with bilingual support.
+     * Generates a single quiz using the API route to OpenAI
      */
     private async generateSingleQuizWithAI(theme: QuizTheme, difficulty: QuizDifficulty, id: number): Promise<QuizItem> {
-        const adjustments = selectAdjustments(difficulty);
-        const prompt = createQuizPrompt(theme, difficulty, adjustments);
-
-        const response = await this.openai.chat.completions.create({
-            model: MODEL, // Updated to a more recent model
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.7,
-            max_tokens: 500,
-        });
-
-        const content = response.choices[0]?.message?.content;
-        if (!content) {
-            throw new Error('No content in OpenAI response');
-        }
-
-        let jsonMatch;
         try {
-            jsonMatch = JSON.parse(content.trim());
-        } catch (e) {
-            const jsonRegex = /{[\s\S]*}/;
-            const match = content.match(jsonRegex);
-            if (!match) {
-                throw new Error('No valid JSON found in response');
+            // Use the API route instead of calling OpenAI directly
+            const response = await fetch('/api/quiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    theme,
+                    difficulty,
+                    id,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('API route error:', errorData.error || response.statusText);
+                throw new Error(`API request failed: ${response.status}`);
             }
-            jsonMatch = JSON.parse(match[0]);
+
+            const quizItem = await response.json();
+            return quizItem;
+        } catch (error) {
+            console.error('Error in API quiz generation:', error);
+            // Fall back to local generation
+            return this.fallbackGenerateSingleQuiz(theme, difficulty, id);
         }
-
-        const complexityFactors = getDifficultyFactors(difficulty);
-        const { targetValues, tolerance } = generateTargetValues(adjustments, complexityFactors);
-
-        const title_en = jsonMatch.title_en || `${theme.charAt(0).toUpperCase() + theme.slice(1)} Image Enhancement Quiz`;
-        const description_en = jsonMatch.description_en || 'Adjust the image to enhance the visibility of important features.';
-        const title_th = jsonMatch.title_th || getThaiTitle(theme, title_en);
-        const description_th = jsonMatch.description_th || getThaiDescription(description_en);
-
-        const hint = generateHintForQuiz(adjustments, targetValues, theme);
-        const technical = adjustments.some((adj) =>
-            ['histogramEqualization', 'kernelType', 'subtractValue'].includes(adj)
-        );
-        const image = getImageForTheme(theme, id);
-
-        return {
-            id,
-            title: title_en,
-            description: description_en,
-            image,
-            technical,
-            targetValues,
-            tolerance,
-            hint,
-            title_en,
-            description_en,
-            title_th,
-            description_th,
-        };
     }
 
     /**
