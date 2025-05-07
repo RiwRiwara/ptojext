@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -23,10 +25,8 @@ export default function BottomComponent() {
     };
 
     return (
-        <footer className="relative mt-20 bg-gradient-to-b from-white via-gray-50 to-gray-100 pt-16 pb-8 border-t border-gray-200">
+        <footer className="relative   pt-16 pb-8 border-t border-gray-200 bg-white">
             {/* Decorative elements */}
-            <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-r from-blue-50 via-sky-50 to-purple-50 opacity-30" />
-            <div className="absolute top-0 right-0 w-1/3 h-32 bg-gradient-to-l from-blue-100 to-transparent opacity-20 rounded-bl-full" />
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">

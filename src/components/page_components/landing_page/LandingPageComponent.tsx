@@ -112,7 +112,7 @@ export default function LandingPageComponent() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0 -z-10 "
         style={{
           backgroundImage: 'radial-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px), radial-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px)',
           backgroundSize: '20px 20px',
@@ -146,16 +146,16 @@ export default function LandingPageComponent() {
       <section id="features" className="py-10 px-4 max-w-6xl mx-auto">
 
         <motion.div
-          className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md p-8 mb-20"
+          className="bg-white   rounded-2xl shadow-md p-8 mb-20"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
 
           {/* Tabs */}
-          <div className="flex justify-center mb-10 overflow-x-auto pb-2">
+          <div className="flex justify-center mb-10 overflow-x-auto pb-2 ">
 
-            <div className="inline-flex flex-col md:flex-row p-1 rounded-lg bg-gray-100 w-full justify-between ">
+            <div className="inline-flex flex-col md:flex-row p-1 rounded-lg bg-primary-50 w-full justify-between ">
               {featuresData.map((feature, index) => (
                 <button
                   key={index}
@@ -235,7 +235,7 @@ export default function LandingPageComponent() {
             <div className="absolute inset-0 bg-[#83AFC9] rounded-3xl transform -rotate-2"></div>
 
             <motion.div
-              className="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-lg p-8 md:p-12 overflow-hidden"
+              className="relative bg-white backdrop-blur-md rounded-2xl shadow-lg p-8 md:p-12 overflow-hidden"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}

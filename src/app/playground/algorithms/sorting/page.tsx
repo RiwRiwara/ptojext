@@ -338,8 +338,8 @@ export default function SortingVisualizerPage() {
 
   return (
     <BaseLayout>
-      <div className="min-h-screen bg-gray-50">
-        <main className="container mx-auto px-4 py-8">
+      <div className="py-4 bg-gray-50 rounded-md">
+        <main className="container mx-auto px-4 py-0">
           <Breadcrumb
             items={[
               { label: "Home", href: "/" },
@@ -349,7 +349,7 @@ export default function SortingVisualizerPage() {
             ]}
           />
 
-          <div className="mt-8 mb-8 ml-1 md:ml-0">
+          <div className="mt-4 mb-8 ml-1 md:ml-0">
             <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">Sorting Algorithm Visualizer</h1>
             <p className="text-gray-600">
               Visualize and understand how different sorting algorithms work step by step.
@@ -557,7 +557,6 @@ export default function SortingVisualizerPage() {
           </div>
 
         </main>
-        <BottomComponent />
       </div>
     </BaseLayout>
   );

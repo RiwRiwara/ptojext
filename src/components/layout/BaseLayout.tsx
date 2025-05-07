@@ -10,7 +10,7 @@ interface LayoutProps {
 const BaseLayout: React.FC<LayoutProps> = ({ children, className = "" }) => {
   return (
     <AuthProvider>
-      <div className={`pt-20 md:pt-18 bg-gray-50 ${className}`}>
+      <div className={`pt-16 md:pt-18  ${className}`}>
         <TopMenuSection />
         <main className="flex-1 w-full mx-auto">
           {children}

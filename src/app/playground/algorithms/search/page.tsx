@@ -369,8 +369,8 @@ export default function SearchVisualizerPage() {
 
   return (
     <BaseLayout>
-      <div className="min-h-screen ">
-        <main className="container mx-auto px-4 py-8">
+      <div className="py-4 bg-gray-50 rounded-md">
+        <main className="container mx-auto px-4 py-0">
           <Breadcrumb
             items={[
               { label: "Home", href: "/" },
@@ -543,7 +543,6 @@ export default function SearchVisualizerPage() {
           </div>
 
         </main>
-        <BottomComponent />
       </div>
     </BaseLayout>
   );

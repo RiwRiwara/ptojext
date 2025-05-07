@@ -222,9 +222,14 @@ export default function About() {
       ([entry]) => {
         if (runnerRef.current) {
           if (entry.isIntersecting) {
-            Runner.start(runnerRef.current, engine);
+            // Use Runner.run instead of Runner.start
+            if (runnerRef.current.enabled === false) {
+              runnerRef.current.enabled = true;
+            }
           } else {
-            Runner.stop(runnerRef.current);
+            if (runnerRef.current.enabled === true) {
+              runnerRef.current.enabled = false;
+            }
           }
         }
       },
@@ -248,57 +253,6 @@ export default function About() {
 
   return (
     <BaseLayout>
-      {/* SEO: Hreflang tags and structured data */}
-      <head>
-        <link rel="alternate" hrefLang="en" href="https://www.visualright.org/about?lang=en" />
-        <link rel="alternate" hrefLang="th" href="https://www.visualright.org/about?lang=th" />
-        <link rel="alternate" hrefLang="x-default" href="https://www.visualright.org/about" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "AboutPage",
-              name: "About Visual Right: AI Playground",
-              url: "https://www.visualright.org/about",
-              description: t(
-                "ABOUT_DESCRIPTION",
-                "Learn about Visual Right’s mission to make AI and computer science accessible through interactive visualizations, meet our team, and explore our technology."
-              ),
-              inLanguage: ["en", "th"],
-              publisher: {
-                "@type": "Organization",
-                name: "Visual Right",
-                url: "https://www.visualright.org",
-                logo: {
-                  "@type": "ImageObject",
-                  url: "https://www.visualright.org/logo.png",
-                  width: 200,
-                  height: 60,
-                },
-              },
-              mainEntity: [
-                {
-                  "@type": "Organization",
-                  name: "Visual Right",
-                  description: t(
-                    "ORGANIZATION_DESCRIPTION",
-                    "An educational platform for interactive AI and computer science visualizations."
-                  ),
-                  member: teamMembers.map((member) => ({
-                    "@type": "Person",
-                    name: member.name,
-                    jobTitle: member.role,
-                    description: member.bio,
-                    image: `https://www.visualright.org${member.image}`,
-                    sameAs: Object.values(member.links).filter(Boolean),
-                  })),
-                },
-              ],
-            }),
-          }}
-        />
-      </head>
 
       {/* Interactive background */}
       <div ref={sceneRef} className="absolute inset-0 pointer-events-auto z-0" aria-hidden="true" />
@@ -334,24 +288,6 @@ export default function About() {
                   "Exploring the fascinating world of AI algorithms through interactive visualizations and simulations"
                 )}
               </p>
-              <div className="mt-8 flex gap-4 justify-center">
-                <button
-                  onClick={changeLanguageBox}
-                  className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium backdrop-blur-sm transition-colors"
-                  aria-label={`Switch to ${i18n.language === "en" ? "Thai" : "English"}`}
-                >
-                  {i18n.language === "en" ? "Switch to ไทย" : "Switch to English"}
-                </button>
-                <a
-                  href="https://twitter.com/intent/tweet?text=Discover Visual Right's mission to make AI education accessible!&url=https://www.visualright.org/about"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-2 bg-[#1DA1F2] hover:bg-[#1a91da] rounded-full text-sm font-medium text-white flex items-center"
-                  aria-label="Share on Twitter"
-                >
-                  <FaTwitter className="mr-2" /> Share
-                </a>
-              </div>
             </div>
           </motion.div>
 
@@ -362,7 +298,7 @@ export default function About() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab as "about" | "team" | "mission")}
-                  className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${activeTab === tab ? "bg-white text-[#83AFC9] shadow-sm" : "text-gray-600 hover:text-gray-800"
+                  className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${activeTab === tab ? "bg-white text-primary-500 shadow-sm" : "text-gray-600 hover:text-gray-800"
                     }`}
                   aria-current={activeTab === tab ? "page" : undefined}
                 >
@@ -386,7 +322,7 @@ export default function About() {
               <div className="p-8">
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                   <div>
-                    <h2 className="text-2xl font-bold text-[#83AFC9] mb-6">
+                    <h2 className="text-2xl font-bold text-primary-500 mb-6">
                       {t("OUR_PROJECT", "Our Project: Interactive AI Visualizations")}
                     </h2>
                     <div className="prose prose-lg max-w-none text-gray-700">
@@ -399,7 +335,7 @@ export default function About() {
                       <p>
                         {t(
                           "ABOUT_FEATURES",
-                          "Our platform features interactive demonstrations of pathfinding algorithms, sorting visualizations, physics simulations, and image processing tools, all designed with a focus on learning through exploration. Check out our <a href='/simulations' class='text-[#83AFC9] hover:underline'>simulations</a>."
+                          "Our platform features interactive demonstrations of pathfinding algorithms, sorting visualizations, physics simulations, and image processing tools, all designed with a focus on learning through exploration. Check out our <a href='/simulations' class='text-primary-500 hover:underline'>simulations</a>."
                         )}
                       </p>
                       <p>
@@ -414,7 +350,7 @@ export default function About() {
                         href="https://github.com/RiwRiwara/ptojext.git"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center px-4 py-2 border border-[#83AFC9] text-[#83AFC9] rounded-lg hover:bg-[#83AFC9] hover:text-white transition-colors"
+                        className="inline-flex items-center px-4 py-2 border border-[#83AFC9] text-primary-500 rounded-lg hover:bg-[#83AFC9] hover:text-white transition-colors"
                         aria-label="View Visual Right on GitHub"
                       >
                         <FaGithub className="mr-2" /> View on GitHub
@@ -442,7 +378,7 @@ export default function About() {
 
                 {/* Technologies section */}
                 <div className="mt-16">
-                  <h2 className="text-2xl font-bold text-[#83AFC9] mb-6">
+                  <h2 className="text-2xl font-bold text-primary-500 mb-6">
                     {t("TECHNOLOGIES", "Technologies We Use")}
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -484,7 +420,7 @@ export default function About() {
             {/* Team tab content */}
             {activeTab === "team" && (
               <div className="p-8">
-                <h2 className="text-2xl font-bold text-[#83AFC9] mb-8 text-center">
+                <h2 className="text-2xl font-bold text-primary-500 mb-8 text-center">
                   {t("MEET_OUR_TEAM", "Meet Our Team")}
                 </h2>
                 <div className="grid md:grid-cols-3 gap-8">
@@ -507,7 +443,7 @@ export default function About() {
                       </div>
                       <div className="p-6">
                         <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
-                        <p className="text-[#83AFC9] font-medium mb-3">{member.role}</p>
+                        <p className="text-primary-500 font-medium mb-3">{member.role}</p>
                         <p className="text-gray-600 text-sm mb-4">{member.bio}</p>
                         <div className="flex space-x-3">
                           {member.links.github && (
@@ -515,7 +451,7 @@ export default function About() {
                               href={member.links.github}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-gray-500 hover:text-[#83AFC9] transition-colors"
+                              className="text-gray-500 hover:text-primary-500 transition-colors"
                               aria-label={`Visit ${member.name}'s GitHub profile`}
                             >
                               <FaGithub size={18} />
@@ -526,7 +462,7 @@ export default function About() {
                               href={member.links.linkedin}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-gray-500 hover:text-[#83AFC9] transition-colors"
+                              className="text-gray-500 hover:text-primary-500 transition-colors"
                               aria-label={`Visit ${member.name}'s LinkedIn profile`}
                             >
                               <FaLinkedin size={18} />
@@ -535,7 +471,7 @@ export default function About() {
                           {member.links.email && (
                             <a
                               href={`mailto:${member.links.email}`}
-                              className="text-gray-500 hover:text-[#83AFC9] transition-colors"
+                              className="text-gray-500 hover:text-primary-500 transition-colors"
                               aria-label={`Email ${member.name}`}
                             >
                               <FaEnvelope size={18} />
@@ -546,7 +482,7 @@ export default function About() {
                               href={member.links.portfolio}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-gray-500 hover:text-[#83AFC9] transition-colors"
+                              className="text-gray-500 hover:text-primary-500 transition-colors"
                               aria-label={`Visit ${member.name}'s portfolio`}
                             >
                               <FaGraduationCap size={18} />
@@ -582,44 +518,44 @@ export default function About() {
             {activeTab === "mission" && (
               <div className="p-8">
                 <div className="max-w-3xl mx-auto">
-                  <h2 className="text-2xl font-bold text-[#83AFC9] mb-6 text-center">
+                  <h2 className="text-2xl font-bold text-primary-500 mb-6 text-center">
                     {t("OUR_MISSION_VISION", "Our Mission & Vision")}
                   </h2>
                   <div className="prose prose-lg max-w-none text-gray-700 mb-12">
-                    <h3>{t("MISSION", "Mission")}</h3>
+                    <h3 className="text-xl font-bold text-primary-500 mb-1 mt-4">{t("MISSION", "Mission")}</h3>
                     <p>
                       {t(
                         "MISSION_TEXT",
                         "Our mission is to democratize access to AI and computer science education through interactive, visual learning experiences. We believe that complex concepts become intuitive when you can see them in action and interact with them directly."
                       )}
                     </p>
-                    <h3>{t("VISION", "Vision")}</h3>
+                    <h3 className="text-xl font-bold text-primary-500 mb-1 mt-4">{t("VISION", "Vision")}</h3>
                     <p>
                       {t(
                         "VISION_TEXT",
                         "We envision a world where anyone, regardless of their background or prior knowledge, can understand and engage with the fundamental concepts that power modern technology. By making these concepts accessible and enjoyable to learn, we aim to inspire the next generation of innovators and problem-solvers."
                       )}
                     </p>
-                    <h3>{t("VALUES", "Values")}</h3>
+                    <h3 className="text-xl font-bold text-primary-500 mb-1 mt-4">{t("VALUES", "Values")}</h3>
                     <ul>
                       <li>
-                        <strong>{t("ACCESSIBILITY", "Accessibility")}</strong>:{" "}
+                        <strong className="text-primary text-lg">{t("ACCESSIBILITY", "Accessibility")}</strong>:{" "}
                         {t("ACCESSIBILITY_TEXT", "Making complex concepts understandable to everyone")}
                       </li>
                       <li>
-                        <strong>{t("INTERACTIVITY", "Interactivity")}</strong>:{" "}
+                        <strong className="text-primary text-lg">{t("INTERACTIVITY", "Interactivity")}</strong>:{" "}
                         {t("INTERACTIVITY_TEXT", "Learning through hands-on exploration and experimentation")}
                       </li>
                       <li>
-                        <strong>{t("INNOVATION", "Innovation")}</strong>:{" "}
+                        <strong className="text-primary text-lg">{t("INNOVATION", "Innovation")}</strong>:{" "}
                         {t("INNOVATION_TEXT", "Continuously improving our visualizations and simulations")}
                       </li>
                       <li>
-                        <strong>{t("COMMUNITY", "Community")}</strong>:{" "}
+                        <strong className="text-primary text-lg">{t("COMMUNITY", "Community")}</strong>:{" "}
                         {t("COMMUNITY_TEXT", "Building a supportive environment for learners and contributors")}
                       </li>
                       <li>
-                        <strong>{t("OPEN_SOURCE", "Open Source")}</strong>:{" "}
+                        <strong className="text-primary text-lg">{t("OPEN_SOURCE", "Open Source")}</strong>:{" "}
                         {t("OPEN_SOURCE_TEXT", "Sharing knowledge and code with the world")}
                       </li>
                     </ul>
@@ -636,7 +572,7 @@ export default function About() {
                         { metric: "0+", label: t("COUNTRIES", "Countries") },
                       ].map((stat) => (
                         <div key={stat.label}>
-                          <p className="text-3xl font-bold text-[#83AFC9]">{stat.metric}</p>
+                          <p className="text-3xl font-bold text-primary-500">{stat.metric}</p>
                           <p className="text-gray-600">{stat.label}</p>
                         </div>
                       ))}
