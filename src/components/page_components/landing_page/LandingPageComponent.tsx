@@ -232,7 +232,7 @@ export default function LandingPageComponent() {
 
           {/* Featured Experience Section */}
           <div className="relative mb-0">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-3xl transform -rotate-2"></div>
+            <div className="absolute inset-0 bg-[#83AFC9] rounded-3xl transform -rotate-2"></div>
 
             <motion.div
               className="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-lg p-8 md:p-12 overflow-hidden"

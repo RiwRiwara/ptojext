@@ -594,7 +594,7 @@ export default function Section3({ controls }: Section3Props) {
 
 
       <motion.div
-        className="w-full max-w-6xl p-2 md:p-6 bg-white rounded-xl shadow-lg flex flex-col gap-2 md:gap-8"
+        className="w-full max-w-6xl p-2 md:p-6 bg-white rounded-xl shadow-md flex flex-col gap-2 md:gap-8"
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}

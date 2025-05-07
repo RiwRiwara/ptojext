@@ -19,6 +19,7 @@ const config: Config = {
       },
       colors: {
         primary: {
+          default: "#83AFC9",
           white: "#FFFFFF",
           "light-hover": "#DFDFE0",
           "light-active": "#BCBDBE",

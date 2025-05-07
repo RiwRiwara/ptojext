@@ -5,8 +5,8 @@
     "className": "playground-root",
     "children": [
       {
-        "name": "Visualization",
-        "className": "visualization",
+        "name": "Features",
+        "className": "Features",
         "children": [
           {
             "name": "Algorithms",
@@ -37,6 +37,11 @@
                 "name": "Image Enhancement",
                 "link": "/simu/image_enhancement",
                 "className": "image-enhancement"
+              },
+              {
+                "name": "Image Processing Quiz",
+                "link": "/simu/image_enhancement/quiz",
+                "className": "image-processing-quiz"
               }
             ]
           },

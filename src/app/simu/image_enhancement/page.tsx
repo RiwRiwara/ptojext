@@ -16,6 +16,7 @@ export default function ImageEnhancementPage() {
     { id: "histogram", label: "Histogram Processing" },
     { id: "sharpenSmooth", label: "Smoothing and Sharpening" },
     { id: "subtraction", label: "Image Subtraction" },
+    { id: "quiz", label: "Challenge Quiz", href: "/simu/image_enhancement/quiz" },
   ];
 
   const scrollToSection = (sectionId: string) => {
@@ -46,12 +47,12 @@ export default function ImageEnhancementPage() {
           {/* Navigation Buttons */}
           <nav className="block top-0 z-10 bg-white py-4 drop-shadow-md rounded-xl mb-4">
             <div className="container mx-auto flex flex-wrap gap-4 justify-center">
-              {sections.map(({ id, label }) => (
+              {sections.map(({ id, label, href }) => (
                 <Button
                   key={id}
-                  onClick={() => scrollToSection(id)}
+                  onClick={() => href ? window.location.href = href : scrollToSection(id)}
                   className="w-full lg:w-fit py-2 mx-4 md:mx-0 text-sm font-medium rounded-md transition bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-gray-900"
-                  aria-label={`Scroll to ${label}`}
+                  aria-label={href ? `Navigate to ${label}` : `Scroll to ${label}`}
                 >
                   {label}
                 </Button>
