@@ -50,8 +50,3 @@ This project proposes an interactive AI learning playground where users can expl
 1. **Interactive Simulations**: Users can manipulate inputs and parameters to see how AI algorithms respond.
 2. **Visualization Tools**: Step-by-step breakdown of data structures and algorithms in action.
 3. **Experiential Learning**: Hands-on environment for experimenting with AI models and their outcomes.
-
----
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.

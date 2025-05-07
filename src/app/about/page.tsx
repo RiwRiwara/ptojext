@@ -25,31 +25,31 @@ interface TeamMember {
 
 const teamMembers: TeamMember[] = [
   {
-    name: "Riw Awirut",
+    name: "Riw - Awirut Phoosaensaart",
     role: "Lead Developer",
     bio: "Full-stack developer with expertise in interactive visualizations and AI algorithms. Passionate about creating educational tools that make complex concepts accessible.",
     image: "/team/profile1.webp", // Changed to WebP for performance
     links: {
-      github: "https://github.com/riwara",
+      github: "https://github.com/RiwRiwara",
     },
   },
   {
-    name: "Gunn",
+    name: "Gunn - Jittapat Chanyarungroj",
     role: "Algorithm Specialist",
     bio: "Computer science researcher specializing in algorithm optimization and data structures. Contributes to the pathfinding and sorting visualizations.",
     image: "/team/profile2.webp",
     links: {
-      github: "https://github.com/Gunn",
+      github: "https://github.com/Gjittapat",
     },
   },
   {
-    name: "Punnapa",
+    name: "Punnapa - Thianchai Punnapa",
     role: "UI/UX Designer",
     bio: "Creative designer focused on crafting intuitive and accessible user experiences. Responsible for the visual identity and interactive elements of the platform.",
     image: "/team/profile3.webp",
     links: {
-      github: "https://github.com/Punnapa",
-      portfolio: "https://sarahjohnson.design",
+      github: "https://github.com/SEPIAZY",
+      // portfolio: "https://sarahjohnson.design",
     },
   },
 ];
@@ -63,10 +63,7 @@ export default function About() {
   const runnerRef = useRef<Runner | null>(null);
   const [activeTab, setActiveTab] = useState<"about" | "team" | "mission">("about");
 
-  const changeLanguageBox = () => {
-    const nextLanguage = i18n.language === "th" ? "en" : "th";
-    void i18n.changeLanguage(nextLanguage);
-  };
+
 
   useEffect(() => {
     if (!sceneRef.current) return;
