@@ -82,6 +82,7 @@ const childIcons: { [key: string]: JSX.Element } = {
   "About Us": <MdInfo className="text-sky-700" size={18} />,
   Support: <MdSupport className="text-sky-700" size={18} />,
   Pathfinding: <TbMathFunction className="text-purple-500" size={18} />,
+  "Sorting Quiz": <FaGamepad className="text-primary-600" size={18} />,
 };
 
 // Child Tree Component
