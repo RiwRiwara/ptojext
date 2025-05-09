@@ -21,6 +21,11 @@
                 "name": "Search",
                 "link": "/playground/algorithms/search",
                 "className": "search"
+              },
+              {
+                "name": "Sorting Quiz",
+                "link": "/playground/algorithms/sorting-quiz",
+                "className": "sorting-quiz"
               }
             ]
           },
