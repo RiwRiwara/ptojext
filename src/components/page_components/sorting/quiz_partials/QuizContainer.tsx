@@ -5,19 +5,13 @@ import { Card } from "@heroui/card";
 import { Progress } from "@heroui/progress";
 import { Select, SelectItem } from "@heroui/select";
 import { Tabs, Tab } from "@heroui/tabs";
-import { Spinner } from "@heroui/spinner";
-import { Badge } from "@heroui/badge";
-import { Tooltip } from "@heroui/tooltip";
 import { quizData, quizSettings } from "./quizData";
 import { QuizItem, QuizTheme, QuizDifficulty } from "./types";
-import ImageProcessor from "./ImageProcessor";
-// import AdjustmentControls from "./AdjustmentControls";
 import FeedbackModal from "./FeedbackModal";
-import Image from "next/image";
 import { FiEye, FiEyeOff, FiArrowLeft, FiArrowRight, FiCpu, FiCode, FiRefreshCw, FiGlobe, FiCoffee, FiAward, FiInfo, FiBarChart2 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import i18next from "@/utils/i18n.config";
+// import i18next from "@/utils/i18n.config";
 
 const QuizContainer: React.FC = () => {
   // Translation hook
@@ -163,7 +157,7 @@ const QuizContainer: React.FC = () => {
           aria-label="Quiz Mode"
           color="primary"
           selectedKey={quizMode}
-          onSelectionChange={(key: string) => setQuizMode(key as "analysis" | "coding")}
+          onSelectionChange={(key) => setQuizMode(key.toString() as "analysis" | "coding")}
           classNames={{
             tabList: "p-0 border-b-2 border-gray-200 gap-0 md:gap-4",
             tab: "px-4 py-2 rounded-t-lg font-medium",
