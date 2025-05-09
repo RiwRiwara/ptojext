@@ -74,7 +74,7 @@ const QuizContainer: React.FC = () => {
 
     let correct = true;
     let totalMatchPercentage = 0;
-    let totalChecks = 0;
+    const totalChecks = 0;
 
     // Check if the user's response matches the correct answer
     if (userResponse.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
