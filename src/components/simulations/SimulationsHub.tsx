@@ -2,10 +2,9 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 
-const PathfindingDemo = dynamic(() => import("./Pathfinding"), { ssr: false });
 
 const simulations = [
-  { key: "pathfinding", label: "Pathfinding", component: <PathfindingDemo /> },
+  { key: "pathfinding", label: "Pathfinding", component: <></> },
 ];
 
 const SimulationsHub: React.FC = () => {
