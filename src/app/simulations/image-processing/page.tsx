@@ -319,17 +319,20 @@ function ImageProcessingFlowComponent() {
           setProcessingQuality={setProcessingQuality}
           processImages={processImages}
           processing={processing}
-          renderLogPanel={renderLogPanel}
         />
       </ReactFlow>
     </div>
   );
 }
 
+import BaseLayout from '@/components/layout/BaseLayout';
+
 export default function ImageProcessingFlow() {
   return (
-    <ReactFlowProvider>
-      <ImageProcessingFlowComponent />
-    </ReactFlowProvider>
+    <BaseLayout>
+      <ReactFlowProvider>
+        <ImageProcessingFlowComponent />
+      </ReactFlowProvider>
+    </BaseLayout>
   );
 }

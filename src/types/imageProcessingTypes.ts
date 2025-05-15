@@ -52,6 +52,7 @@ export interface CropNodeData extends BaseNodeData {
   x: number;
   y: number;
   width: number;
+  title?: string;
   height: number;
 }
 
@@ -60,6 +61,7 @@ export interface CropNodeData extends BaseNodeData {
  */
 export interface RotateNodeData extends BaseNodeData {
   angle: number;
+  title?: string;
 }
 
 /**
@@ -67,6 +69,7 @@ export interface RotateNodeData extends BaseNodeData {
  */
 export interface SplitNodeData extends BaseNodeData {
   channel?: 'red' | 'green' | 'blue';
+  title?: string;
 }
 
 /**
@@ -74,6 +77,7 @@ export interface SplitNodeData extends BaseNodeData {
  */
 export interface DetectNodeData extends BaseNodeData {
   sensitivity: number;
+  title?: string;
 }
 
 /**
@@ -94,7 +98,7 @@ export interface ProcessingResult {
 /**
  * Node type discriminators
  */
-export type NodeType = 
+export type NodeType =
   | 'image'
   | 'filter'
   | 'adjust'
@@ -109,7 +113,7 @@ export type NodeType =
 /**
  * Union type for all node data types
  */
-export type NodeData = 
+export type NodeData =
   | ImageNodeData
   | FilterNodeData
   | AdjustNodeData
