@@ -61,6 +61,7 @@ export interface ArrayControlsProps {
   onToggleSorted: () => void;
   selectedAlgo: string;
   requiresSorted: boolean;
+  onSearch: () => void;
 }
 
 export interface VisualizationControlsProps {

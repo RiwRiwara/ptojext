@@ -17,7 +17,8 @@ const VisualizationControls: React.FC<VisualizationControlsProps> = ({
   totalSteps
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-4">
+    <div className="">
+      <hr className="my-4" />
       <h3 className="text-lg font-medium text-gray-700 mb-3">Visualization Controls</h3>
       
       <div className="flex flex-wrap justify-between items-center gap-2 mb-4">

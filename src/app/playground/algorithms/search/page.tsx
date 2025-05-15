@@ -11,7 +11,6 @@ import { AnimationStep, SearchAlgorithm } from "@/components/playground_componen
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { motion } from "framer-motion";
 import { FaInfoCircle, FaLightbulb, FaRegClock, FaMemory, FaCode, FaChalkboardTeacher } from "react-icons/fa";
-import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 
 const searchAlgorithms: SearchAlgorithm[] = [
   {
@@ -26,8 +25,8 @@ const searchAlgorithms: SearchAlgorithm[] = [
     colorScheme: {
       background: "#F8FBFD",
       defaultElement: "#94a3b8",
-      activeElement: "#6da5c0",
-      comparingElement: "#83AFC9",
+      activeElement: "#315971",
+      comparingElement: "#2e02d8",
       foundElement: "#10b981",
     },
     requiresSorted: false,
@@ -44,8 +43,8 @@ const searchAlgorithms: SearchAlgorithm[] = [
     colorScheme: {
       background: "#F8FBFD",
       defaultElement: "#94a3b8",
-      activeElement: "#83AFC9",
-      comparingElement: "#38bdf8",
+      activeElement: "#315971",
+      comparingElement: "#2e02d8",
       foundElement: "#10b981",
       lowBound: "#c4b5fd",
       highBound: "#f472b6",
@@ -64,8 +63,8 @@ const searchAlgorithms: SearchAlgorithm[] = [
     colorScheme: {
       background: "#F8FBFD",
       defaultElement: "#94a3b8",
-      activeElement: "#83AFC9",
-      comparingElement: "#0ea5e9",
+      activeElement: "#315971",
+      comparingElement: "#2e02d8",
       foundElement: "#10b981",
     },
     requiresSorted: true,
@@ -82,8 +81,8 @@ const searchAlgorithms: SearchAlgorithm[] = [
     colorScheme: {
       background: "#F8FBFD",
       defaultElement: "#94a3b8",
-      activeElement: "#83AFC9",
-      comparingElement: "#60a5fa",
+      activeElement: "#315971",
+      comparingElement: "#2e02d8",
       foundElement: "#10b981",
     },
     requiresSorted: true,
@@ -215,6 +214,37 @@ export default function SearchVisualizerPage() {
       // Start the animation
       setIsPlaying(true);
     }, 100);
+  };
+
+  // Handle search target
+  const handleSearchTarget = () => {
+    if (!selectedAlgo) return;
+    
+    // Reset the current steps and visualization
+    handleReset();
+    
+    // Generate the search steps for the current array and target value
+    let searchSteps;
+    switch (selectedAlgo) {
+      case 'linear-search':
+        searchSteps = SearchAlgorithms.linearSearch(array, target).steps;
+        break;
+      case 'binary-search':
+        searchSteps = SearchAlgorithms.binarySearch(array, target).steps;
+        break;
+      case 'jump-search':
+        searchSteps = SearchAlgorithms.jumpSearch(array, target).steps;
+        break;
+      case 'interpolation-search':
+        searchSteps = SearchAlgorithms.interpolationSearch(array, target).steps;
+        break;
+      default:
+        searchSteps = SearchAlgorithms.linearSearch(array, target).steps;
+    }
+    setSteps(searchSteps);
+    setCurrentStep(0);
+    setCurrentHighlightedLine(searchSteps[0]?.type || null);
+    setIsPlaying(true);
   };
 
   // Toggle sorted/unsorted array
@@ -396,30 +426,36 @@ export default function SearchVisualizerPage() {
                 onSelectAlgorithm={handleSelectAlgorithm}
               />
 
-              <ArrayControls
-                arraySize={arraySize}
-                onArraySizeChange={handleArraySizeChange}
-                onGenerateArray={generateArray}
-                target={target}
-                onTargetChange={handleTargetChange}
-                isSorted={isSorted}
-                onToggleSorted={handleToggleSorted}
-                selectedAlgo={selectedAlgo}
-                requiresSorted={selectedAlgoData?.requiresSorted || false}
-              />
+              <div className="bg-white rounded-lg shadow-md p-4">
+                
+                <div className="space-y-4">
+                  <ArrayControls
+                    arraySize={arraySize}
+                    onArraySizeChange={handleArraySizeChange}
+                    onGenerateArray={generateArray}
+                    target={target}
+                    onTargetChange={handleTargetChange}
+                    isSorted={isSorted}
+                    onToggleSorted={handleToggleSorted}
+                    selectedAlgo={selectedAlgo}
+                    requiresSorted={selectedAlgoData?.requiresSorted || false}
+                    onSearch={handleSearchTarget}
+                  />
 
-              <VisualizationControls
-                onPlay={handlePlay}
-                onPause={handlePause}
-                onStepForward={handleStepForward}
-                onStepBackward={handleStepBackward}
-                onReset={handleReset}
-                isPlaying={isPlaying}
-                speed={speed}
-                onSpeedChange={setSpeed}
-                currentStep={currentStep}
-                totalSteps={steps.length}
-              />
+                  <VisualizationControls
+                    onPlay={handlePlay}
+                    onPause={handlePause}
+                    onStepForward={handleStepForward}
+                    onStepBackward={handleStepBackward}
+                    onReset={handleReset}
+                    isPlaying={isPlaying}
+                    speed={speed}
+                    onSpeedChange={setSpeed}
+                    currentStep={currentStep}
+                    totalSteps={steps.length}
+                  />
+                </div>
+              </div>
 
               {/* Algorithm Info Card */}
               {selectedAlgoData && (
@@ -532,8 +568,6 @@ export default function SearchVisualizerPage() {
                 transition={{ duration: 0.3, delay: 0.1 }}
                 className="bg-white rounded-lg shadow-md p-4"
               >
-
-
                 <CodeDisplay
                   selectedAlgo={selectedAlgo}
                   currentHighlightedLine={currentHighlightedLine}

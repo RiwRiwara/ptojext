@@ -29,7 +29,6 @@ export default function ImageConvolutionPage() {
           </div>
           <ImageConvolutionMap />
         </main>
-        <BottomComponent />
       </div>
     </BaseLayout>
   );

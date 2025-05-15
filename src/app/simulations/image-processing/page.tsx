@@ -314,12 +314,12 @@ function ImageProcessingFlowComponent() {
         )}
 
         {/* Control Panel */}
-        <ControlPanel
+        {/* <ControlPanel
           processingQuality={processingQuality}
           setProcessingQuality={setProcessingQuality}
           processImages={processImages}
           processing={processing}
-        />
+        /> */}
       </ReactFlow>
     </div>
   );
