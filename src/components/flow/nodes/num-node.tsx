@@ -9,8 +9,8 @@ import {
     NodeHeaderActions,
     NodeHeaderMenuAction,
 } from '@/components/flow/node-header';
-import { Button } from '@/components/flow/ui/button';
-import { DropdownMenuItem } from '@/components/flow/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 
 export type NumNode = Node<{
     value: number;

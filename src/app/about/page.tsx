@@ -332,8 +332,12 @@ export default function About() {
                       <p>
                         {t(
                           "ABOUT_FEATURES",
-                          "Our platform features interactive demonstrations of pathfinding algorithms, sorting visualizations, physics simulations, and image processing tools, all designed with a focus on learning through exploration. Check out our <a href='/simulations' class='text-primary-500 hover:underline'>simulations</a>."
+                          "Our platform features interactive demonstrations of pathfinding algorithms, sorting visualizations, physics simulations, and image processing tools, all designed with a focus on learning through exploration. Check out our "
                         )}
+                        <a href="/simulations" className="text-primary-500 hover:underline">
+                          simulations
+                        </a>
+                        .
                       </p>
                       <p>
                         {t(

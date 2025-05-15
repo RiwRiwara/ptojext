@@ -5,12 +5,12 @@ import { EllipsisVertical, Trash } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
-import { Button, ButtonProps } from "@/components/flow/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-} from "@/components/flow/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 /* NODE HEADER -------------------------------------------------------------- */
 
@@ -27,7 +27,7 @@ export const NodeHeader = forwardRef<HTMLElement, NodeHeaderProps>(
         ref={ref}
         {...props}
         className={cn(
-          "flex items-center justify-between gap-2 px-3 py-2",
+          "flex items-center justify-between gap-2 px-2 py-2",
           // Remove or modify these classes if you modify the padding in the
           // `<BaseNode />` component.
           className,
