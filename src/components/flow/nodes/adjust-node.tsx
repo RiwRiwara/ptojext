@@ -90,7 +90,7 @@ export function AdjustNode({ id, data }: AdjustNodeProps) {
         </div>
       </div>
 
-      <footer className="bg-gray-100 -m-5">
+      <footer className="bg-gray-100 -m-2 mt-2">
         <LabeledHandle title="in" id="in" type="target" position={Position.Left} />
         <LabeledHandle title="out" id="out" type="source" position={Position.Right} />
       </footer>

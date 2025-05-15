@@ -13,7 +13,7 @@ type ProcessingFunction = {
   rotate: (imageData: ImageData, nodeData: RotateNodeData) => ImageData;
   split: (imageData: ImageData, nodeData: SplitNodeData) => ImageData;
   detect: (imageData: ImageData, nodeData: DetectNodeData) => ImageData;
-  output: (imageData: ImageData) => ImageData;
+  result_image: (imageData: ImageData) => ImageData; // Renamed from output
 };
 
 const processingFunctions: ProcessingFunction = {
@@ -32,22 +32,91 @@ const processingFunctions: ProcessingFunction = {
     if (!imageData) return new ImageData(1, 1);
 
     let result = imageData;
+    console.log(nodeData);
 
     switch (nodeData.type) {
       case 'blur':
-        result = ImageProcessing.applyBlur(result, nodeData.intensity || 1);
+        // Get the blur algorithm or default to 'gaussian'
+        const blurAlgorithm = nodeData.blurAlgorithm || 'gaussian';
+        // Calculate intensity based on kernel size and algorithm
+        // We'll adapt our existing applyBlur function for different algorithms
+        let blurIntensity = 1;
+
+        // Customize blur intensity based on kernel size and algorithm
+        if (typeof nodeData.kernelSize === 'number') {
+          switch(blurAlgorithm) {
+            case 'gaussian':
+              // For gaussian, factor in sigma if available
+              const sigma = typeof nodeData.sigma === 'number' ? nodeData.sigma : 2;
+              blurIntensity = nodeData.kernelSize * (sigma / 2);
+              break;
+            case 'box':
+              blurIntensity = nodeData.kernelSize * 0.8;
+              break;
+            case 'stack':
+              blurIntensity = nodeData.kernelSize * 1.2;
+              break;
+            case 'motion':
+              // For motion blur, factor in the angle
+              blurIntensity = nodeData.kernelSize * 0.9;
+              // Note: Our current implementation can't factor in angle
+              // but we're acknowledging it's set in the UI
+              break;
+          }
+        }
+        
+        // Use our existing applyBlur with the calculated intensity
+        result = ImageProcessing.applyBlur(result, blurIntensity);
         break;
+        
       case 'sharpen':
-        result = ImageProcessing.applySharpen(result, nodeData.intensity || 1);
+        // Use strength parameter if available
+        const strength = typeof nodeData.strength === 'number' ? nodeData.strength : 1;
+        result = ImageProcessing.applySharpen(result, strength);
         break;
+        
       case 'grayscale':
+        // Apply basic grayscale first
         result = ImageProcessing.applyGrayscale(result);
+        
+        // Then adjust intensity if specified
+        if (typeof nodeData.intensity === 'number' && nodeData.intensity < 100) {
+          // If intensity is less than 100%, blend back with original
+          const factor = nodeData.intensity / 100;
+          const originalData = new Uint8ClampedArray(imageData.data);
+          const resultData = result.data;
+          
+          for (let i = 0; i < resultData.length; i += 4) {
+            resultData[i] = resultData[i] * factor + originalData[i] * (1 - factor);
+            resultData[i + 1] = resultData[i + 1] * factor + originalData[i + 1] * (1 - factor);
+            resultData[i + 2] = resultData[i + 2] * factor + originalData[i + 2] * (1 - factor);
+          }
+        }
         break;
+        
       case 'sepia':
-        result = ImageProcessing.applySepia(result, nodeData.intensity || 1);
+        // Use intensity parameter if available
+        const sepiaIntensity = typeof nodeData.intensity === 'number' ? nodeData.intensity : 100;
+        result = ImageProcessing.applySepia(result, sepiaIntensity);
         break;
+        
       case 'invert':
+        // Apply basic invert
         result = ImageProcessing.applyInvert(result);
+        
+        // Then adjust opacity if specified
+        if (typeof nodeData.opacity === 'number' && nodeData.opacity < 100) {
+          // If opacity is less than 100%, blend back with original
+          const factor = nodeData.opacity / 100;
+          const originalData = new Uint8ClampedArray(imageData.data);
+          const resultData = result.data;
+          
+          for (let i = 0; i < resultData.length; i += 4) {
+            resultData[i] = resultData[i] * factor + originalData[i] * (1 - factor);
+            resultData[i + 1] = resultData[i + 1] * factor + originalData[i + 1] * (1 - factor);
+            resultData[i + 2] = resultData[i + 2] * factor + originalData[i + 2] * (1 - factor);
+          }
+        }
         break;
     }
 
@@ -55,6 +124,7 @@ const processingFunctions: ProcessingFunction = {
   },
   adjust: (imageData: ImageData, nodeData: AdjustNodeData): ImageData => {
     if (!imageData) return new ImageData(1, 1);
+    console.log(nodeData);
 
     let result = imageData;
 
@@ -98,7 +168,7 @@ const processingFunctions: ProcessingFunction = {
     const result = ImageProcessing.detectObjects(imageData, nodeData.sensitivity);
     return result.imageData;
   },
-  output: (imageData: ImageData) => {
+  result_image: (imageData: ImageData) => {
     return imageData;
   }
 };
@@ -255,25 +325,25 @@ export function useImageProcessingFlow() {
       const results: ProcessingResult = {};
       const newCache: Record<string, { imageData: ImageData; hash: string }> = {};
 
-      // Find nodes that need processing (start at outputs and work backwards)
-      const outputNodes = nodes.filter(node => node.type === 'output');
+      // Find nodes that need processing (start at result image nodes and work backwards)
+      const resultImageNodes = nodes.filter(node => node.type === 'result_image');
 
       // Process in a web worker or with setTimeout for UI responsiveness
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      // Process each output node and all its dependencies
-      for (const outputNode of outputNodes) {
-        const result = await processNode(outputNode.id, nodes, edges, processed, newCache);
+      // Process each result image node and all its dependencies
+      for (const resultImageNode of resultImageNodes) {
+        const result = await processNode(resultImageNode.id, nodes, edges, processed, newCache);
 
         if (result) {
           // Convert ImageData to URL with controlled quality
-          results[outputNode.id] = ImageProcessing.imageDataToUrl(result);
+          results[resultImageNode.id] = ImageProcessing.imageDataToUrl(result);
 
           // Update the node data to display the processed image
           setNodes(currentNodes =>
             currentNodes.map(node =>
-              node.id === outputNode.id
-                ? { ...node, data: { ...node.data, imageUrl: results[outputNode.id] } }
+              node.id === resultImageNode.id
+                ? { ...node, data: { ...node.data, imageUrl: results[resultImageNode.id] } }
                 : node
             )
           );

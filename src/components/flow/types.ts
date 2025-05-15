@@ -8,7 +8,7 @@ import type {
   RotateNodeData,
   SplitNodeData,
   DetectNodeData,
-  OutputNodeData,
+  ResultImageNodeData,
   NodeType as ProcessingNodeType,
   NodeData as ProcessingNodeData,
   ProcessingResult as ImageProcessingResult
@@ -24,7 +24,7 @@ export type {
   RotateNodeData,
   SplitNodeData,
   DetectNodeData,
-  OutputNodeData
+  ResultImageNodeData
 };
 
 // Export the ProcessingResult type for use in components
@@ -72,7 +72,7 @@ export type CropNode = Node<CropNodeData>;
 export type RotateNode = Node<RotateNodeData>;
 export type SplitNode = Node<SplitNodeData>;
 export type DetectNode = Node<DetectNodeData>;
-export type OutputNode = Node<OutputNodeData>;
+export type ResultImageNode = Node<ResultImageNodeData>;
 export type NumNode = Node<NumNodeData>;
 export type SumNode = Node<SumNodeData>;
 

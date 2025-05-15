@@ -29,11 +29,6 @@ export function ImageNode({ id, data }: ImageNodeProps) {
     <BaseNode className="w-64">
       <NodeHeader>
         <NodeHeaderTitle>{data.title || 'Image'}</NodeHeaderTitle>
-        <NodeHeaderActions>
-          <NodeHeaderMenuAction label="Open node menu">
-            <DropdownMenuItem onSelect={handleDelete}>Delete</DropdownMenuItem>
-          </NodeHeaderMenuAction>
-        </NodeHeaderActions>
       </NodeHeader>
 
       <div className="my-2 p-1 flex justify-center">
@@ -52,8 +47,8 @@ export function ImageNode({ id, data }: ImageNodeProps) {
         )}
       </div>
 
-      <footer className="bg-gray-100 -m-5">
-        <LabeledHandle title="out" type="source" position={Position.Right} />
+      <footer className="bg-gray-100 -m-2 rounded-b-md">
+        <LabeledHandle title="output" type="source" position={Position.Right} />
       </footer>
     </BaseNode>
   );

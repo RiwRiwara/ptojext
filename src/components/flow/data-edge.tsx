@@ -32,7 +32,7 @@ export type DataEdge<T extends Node = Node> = Edge<{
 }>;
 
 export function DataEdge({
-  data = { path: "bezier" },
+  data = { path: "step" },
   id,
   markerEnd,
   source,
@@ -46,7 +46,7 @@ export function DataEdge({
 }: EdgeProps<DataEdge>) {
   const nodeData = useStore((state) => state.nodeLookup.get(source)?.data);
   const [edgePath, labelX, labelY] = getPath({
-    type: data.path ?? "bezier",
+    type: data.path ?? "step",
     sourceX,
     sourceY,
     sourcePosition,

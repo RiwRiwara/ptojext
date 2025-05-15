@@ -19,11 +19,21 @@ export interface ImageNodeData extends BaseNodeData {
 }
 
 /**
+ * Blur algorithm options
+ */
+export type BlurAlgorithm = 'gaussian' | 'box' | 'stack' | 'motion' | 'motion';
+
+/**
  * Filter node data type with different filter operations
  */
 export interface FilterNodeData extends BaseNodeData {
   type: 'blur' | 'sharpen' | 'grayscale' | 'sepia' | 'invert';
   intensity?: number;
+  blurAlgorithm?: BlurAlgorithm;
+  kernelSize?: number;
+  sigma?: number;
+  angle?: number; // For motion blur
+  title?: string;
 }
 
 /**
@@ -67,10 +77,11 @@ export interface DetectNodeData extends BaseNodeData {
 }
 
 /**
- * Output node data type for final processed image
+ * Result image node data type for final processed image
  */
-export interface OutputNodeData extends BaseNodeData {
+export interface ResultImageNodeData extends BaseNodeData {
   imageUrl?: string;
+  title?: string;
 }
 
 /**
@@ -91,7 +102,7 @@ export type NodeType =
   | 'rotate'
   | 'split'
   | 'detect'
-  | 'output'
+  | 'result_image'   // Renamed from 'output'
   | 'num'
   | 'sum';
 
@@ -106,4 +117,4 @@ export type NodeData =
   | RotateNodeData
   | SplitNodeData
   | DetectNodeData
-  | OutputNodeData;
+  | ResultImageNodeData;

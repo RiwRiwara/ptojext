@@ -1,7 +1,6 @@
 "use client";
 import '@xyflow/react/dist/style.css';
 import { useCallback, useState, useEffect } from 'react';
-import { Image, Filter, Sliders, UploadCloud, Layers, Crop, RotateCw, Split, Wand2, BrainCircuit, Download } from 'lucide-react';
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -14,13 +13,19 @@ import {
   Edge,
   Node,
   Panel,
+  EdgeTypes,
+  Connection,
 } from '@xyflow/react';
 
 // Import node components
 import { ImageNode } from '@/components/flow/nodes/image-node';
 import { FilterNode } from '@/components/flow/nodes/filter-node';
 import { AdjustNode } from '@/components/flow/nodes/adjust-node';
-import { OutputNode } from '@/components/flow/nodes/output-node';
+import { ResultImageNode } from '@/components/flow/nodes/result-image-node';
+import { CropNode } from '@/components/flow/nodes/crop-node';
+import { RotateNode } from '@/components/flow/nodes/rotate-node';
+import { SplitNode } from '@/components/flow/nodes/split-node';
+import { DetectNode } from '@/components/flow/nodes/detect-node';
 
 // Import edge component
 import { DataEdge } from '@/components/flow/data-edge';
@@ -30,22 +35,24 @@ import { NodePanel } from '@/components/flow/node-panel';
 
 // Import the image processing hook
 import { useImageProcessingFlow } from '@/hooks/useImageProcessingFlow';
+import ProcessingPanel from '@/components/flow/panel/ProcessingPanel';
+import ControlPanel from '@/components/flow/panel/ControlPanel';
 
 const nodeTypes = {
   image: ImageNode,
-  filter: FilterNode,
   adjust: AdjustNode,
-  output: OutputNode,
-  camera: ImageNode, // Reuse ImageNode for camera
-  crop: FilterNode, // Temporarily reuse FilterNode
-  rotate: FilterNode, // Temporarily reuse FilterNode
-  split: FilterNode, // Temporarily reuse FilterNode
-  detect: FilterNode, // Temporarily reuse FilterNode
-  sharpen: FilterNode, // Reuse FilterNode
+  result_image: ResultImageNode,
+  filter: FilterNode,
+  sharpen_filter: FilterNode,
+  camera: ImageNode,
+  crop: CropNode,
+  rotate: RotateNode,
+  split: SplitNode,
+  detect: DetectNode,
 };
 
 const edgeTypes = {
-  data: DataEdge,
+  step: DataEdge,
 };
 
 // Fixed sample images to choose from
@@ -57,7 +64,6 @@ const sampleImages = [
 
 // Initial nodes with fixed input and output nodes
 const initialNodes: Node[] = [
-  // Input node (fixed position on the left)
   {
     id: 'input',
     type: 'image',
@@ -69,19 +75,21 @@ const initialNodes: Node[] = [
     },
     position: { x: 50, y: 200 },
     draggable: false,
+    deletable: false,
   },
-  // Output node (fixed position on the right)
   {
     id: 'output',
-    type: 'output',
+    type: 'result_image',
     data: {
       imageUrl: '',
+      title: 'Result Image',
       isFixed: true,
       selectable: false,
     },
     position: { x: 750, y: 200 },
     draggable: false,
-  }
+    deletable: false,
+  },
 ];
 
 // No initial edges
@@ -90,24 +98,27 @@ const initialEdges: Edge[] = [];
 function ImageProcessingFlowComponent() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [selectedImage, setSelectedImage] = useState(0); // Index of selected sample image
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(1000);
+  const [processing, setProcessing] = useState(false);
+  const [logMessages, setLogMessages] = useState<string[]>([]);
   const {
     processedImages,
-    processing,
     processFlow,
     processingQuality,
-    setProcessingQuality
+    setProcessingQuality,
   } = useImageProcessingFlow();
 
   // Update input image when selection changes
   useEffect(() => {
-    setNodes(nodes => nodes.map(node =>
-      node.id === 'input'
-        ? { ...node, data: { ...node.data, imageUrl: sampleImages[selectedImage] } }
-        : node
-    ));
+    setNodes((nodes) =>
+      nodes.map((node) =>
+        node.id === 'input'
+          ? { ...node, data: { ...node.data, imageUrl: sampleImages[selectedImage] } }
+          : node
+      )
+    );
 
-    // Process after a short delay to allow image to load
     const timeoutId = setTimeout(() => {
       processFlow();
     }, 200);
@@ -115,32 +126,168 @@ function ImageProcessingFlowComponent() {
     return () => clearTimeout(timeoutId);
   }, [selectedImage, setNodes, processFlow]);
 
-  // Process when edges change
+  // Update viewport width on resize
+  useEffect(() => {
+    const updateViewportDimensions = () => {
+      const viewportElement = document.querySelector('.react-flow');
+      if (viewportElement) {
+        setViewportWidth(viewportElement.clientWidth);
+      }
+    };
+
+    updateViewportDimensions();
+    window.addEventListener('resize', updateViewportDimensions);
+    return () => window.removeEventListener('resize', updateViewportDimensions);
+  }, []);
+
+  // Maintain proper spacing between input and output nodes
+  const adjustFixedNodesPositions = useCallback(() => {
+    const minMargin = 100;
+    const inputX = minMargin;
+    const outputX = Math.max(750, viewportWidth - minMargin - 300); // Adjust for node width
+
+    setNodes((currentNodes) =>
+      currentNodes.map((node) => {
+        if (node.id === 'input') {
+          return { ...node, position: { ...node.position, x: inputX } };
+        } else if (node.id === 'output') {
+          return { ...node, position: { ...node.position, x: outputX } };
+        }
+        return node;
+      })
+    );
+  }, [setNodes, viewportWidth]);
+
+  // Adjust positions when viewport or edges change
+  useEffect(() => {
+    adjustFixedNodesPositions();
+  }, [viewportWidth, edges, adjustFixedNodesPositions]);
+
+  // Custom onConnect with validation and step edge type
+  const onConnect: OnConnect = useCallback(
+    (params: Connection) => {
+      const sourceNode = nodes.find((node) => node.id === params.source);
+      const targetNode = nodes.find((node) => node.id === params.target);
+
+      if (!sourceNode || !targetNode) {
+        console.warn('Invalid connection: Source or target node not found');
+        return;
+      }
+
+      // Prevent connections to the input node
+      if (targetNode.id === 'input') {
+        console.warn('Cannot connect to input node');
+        return;
+      }
+
+      // Prevent connections from the output node
+      if (sourceNode.id === 'output') {
+        console.warn('Cannot connect from output node');
+        return;
+      }
+
+      // Prevent self-connections
+      if (params.source === params.target) {
+        console.warn('Cannot connect node to itself');
+        return;
+      }
+
+      // Prevent cycles (basic cycle detection)
+      const hasCycle = (nodeId: string, targetId: string, edges: Edge[]): boolean => {
+        const visited = new Set<string>();
+        const stack = [targetId];
+
+        while (stack.length > 0) {
+          const current = stack.pop()!;
+          if (current === nodeId) return true;
+          if (visited.has(current)) continue;
+          visited.add(current);
+
+          const outgoingEdges = edges.filter((edge) => edge.source === current);
+          for (const edge of outgoingEdges) {
+            stack.push(edge.target);
+          }
+        }
+        return false;
+      };
+
+      if (hasCycle(params.source, params.target, edges)) {
+        console.warn('Connection would create a cycle');
+        return;
+      }
+
+      // Add the edge with type 'step'
+      setEdges((edges) =>
+        addEdge(
+          {
+            ...params,
+            type: 'step',
+            data: { key: 'imageUrl' },
+            animated: true,
+            style: { strokeWidth: 2 },
+          },
+          edges
+        )
+      );
+
+      // Trigger processing after connection
+      setTimeout(() => {
+        processFlow();
+        adjustFixedNodesPositions();
+      }, 100);
+    },
+    [setEdges, nodes, edges, processFlow, adjustFixedNodesPositions]
+  );
+
+  // Process images when edges change
   useEffect(() => {
     if (edges.length > 0) {
-      // Process after a short delay to allow for multiple changes
       const timeoutId = setTimeout(() => {
         processFlow();
       }, 300);
-
       return () => clearTimeout(timeoutId);
     }
   }, [edges, processFlow]);
 
-  const onConnect: OnConnect = useCallback(
-    (params) => {
-      setEdges((edges) => {
-        const newEdges = addEdge({ type: 'data', data: { key: 'imageUrl' }, ...params }, edges);
-        return newEdges;
-      });
-    },
-    [setEdges],
-  );
+  // Handle node drag stop
+  const onNodeDragStop = useCallback(() => {
+    setTimeout(adjustFixedNodesPositions, 100);
+  }, [adjustFixedNodesPositions]);
 
-  // Function to manually trigger image processing
-  const processImages = useCallback(() => {
-    processFlow();
+  // Handle viewport changes
+  const onViewportChange = useCallback(() => {
+    setTimeout(adjustFixedNodesPositions, 100);
+  }, [adjustFixedNodesPositions]);
+
+  // Manual process trigger
+  const processImages = useCallback(async () => {
+    setProcessing(true);
+    setLogMessages((prev) => [...prev, 'Starting image processing...']);
+    try {
+      // Process the flow to update the result image
+      await processFlow();
+      setLogMessages((prev) => [...prev, 'Image processing completed successfully.']);
+    } catch (error) {
+      setLogMessages((prev) => [...prev, `Error during processing: ${error instanceof Error ? error.message : 'Unknown error'}`]);
+    } finally {
+      setProcessing(false);
+    }
   }, [processFlow]);
+
+  const renderLogPanel = useCallback(() => (
+    <div className="mt-2 bg-white p-2 rounded-lg shadow-lg max-h-40 overflow-y-auto">
+      <h3 className="text-sm font-medium mb-1">Processing Logs</h3>
+      {logMessages.length === 0 ? (
+        <p className="text-xs text-muted-foreground">No logs available.</p>
+      ) : (
+        <ul className="space-y-1 text-xs">
+          {logMessages.map((msg, index) => (
+            <li key={index} className="border-b border-gray-100 pb-1">{msg}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  ), [logMessages]);
 
   return (
     <div className="h-screen w-screen relative">
@@ -150,6 +297,9 @@ function ImageProcessingFlowComponent() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onNodeDragStop={onNodeDragStop}
+        onMove={onViewportChange}
+        onViewportChange={onViewportChange}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
@@ -158,58 +308,24 @@ function ImageProcessingFlowComponent() {
         <Controls />
         <NodePanel />
 
-
         {/* Processing status indicator */}
         {processing && (
-          <Panel position="bottom-right" className="p-2">
-            <div className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg animate-pulse">
-              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Processing...
-            </div>
-          </Panel>
+          <ProcessingPanel />
         )}
 
         {/* Control Panel */}
-        <Panel position="top-center" className="p-2">
-          <div className="bg-white p-3 rounded-lg shadow-lg flex flex-col gap-3">
-            {/* Quality Selection */}
-            <div className="space-y-2">
-              <div className="text-sm font-medium">Processing Quality</div>
-              <div className="flex gap-2">
-                {['Low', 'Medium', 'High'].map((quality) => (
-                  <button
-                    key={quality}
-                    className={`px-3 py-1 text-xs rounded ${processingQuality === quality.toLowerCase() ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}
-                    onClick={() => setProcessingQuality(quality.toLowerCase() as 'low' | 'medium' | 'high')}
-                  >
-                    {quality}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Manual Process Button */}
-            <button
-              onClick={processImages}
-              disabled={processing}
-              className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded font-medium transition-all disabled:opacity-50"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-              </svg>
-              Process Now
-            </button>
-          </div>
-        </Panel>
+        <ControlPanel
+          processingQuality={processingQuality}
+          setProcessingQuality={setProcessingQuality}
+          processImages={processImages}
+          processing={processing}
+          renderLogPanel={renderLogPanel}
+        />
       </ReactFlow>
     </div>
   );
 }
 
-// Wrap the component with ReactFlowProvider
 export default function ImageProcessingFlow() {
   return (
     <ReactFlowProvider>

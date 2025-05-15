@@ -55,7 +55,8 @@ html {
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 220.9 39.3% 11%;
+    --primary: 201 35.9% 64.7%;
+    /* Updated to #83AFC9 */
     --primary-foreground: 210 20% 98%;
     --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 220.9 39.3% 11%;
@@ -83,7 +84,7 @@ html {
     --card-foreground: 210 20% 98%;
     --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 20% 98%;
-    --primary: 210 20% 98%;
+    --primary: 201 35.9% 64.7%;
     --primary-foreground: 220.9 39.3% 11%;
     --secondary: 215 27.9% 16.9%;
     --secondary-foreground: 210 20% 98%;
@@ -102,4 +103,32 @@ html {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+}
+
+/* .react-flow__node.react-flow__node-output {
+  border: none;
+} */
+
+
+.react-flow__handle {
+  background-color: #83afc9;
+}
+
+.react-flow__handle.connectionindicator:hover {
+  pointer-events: all;
+  border-color: #83afc9;
+  background-color: white;
+}
+
+.react-flow__handle.connectionindicator:focus,
+.react-flow__handle.connectingfrom,
+.react-flow__handle.connectingto {
+  border-color: #83afc9;
+}
+
+.custom-large-handle {
+  width: 15px !important;
+  height: 15px !important;
+  background-color: #83afc9 !important;
+  color: #83afc9 !important;
 }

@@ -30,8 +30,8 @@ interface NodeType {
 const nodeTypes: NodeType[] = [
   // Filter nodes
   {
-    type: "filter",
-    label: "Blur Filter",
+    type: "filter", 
+    label: "Filter",
     icon: <Filter className="h-4 w-4" />,
     data: { type: "blur", intensity: 50 } as FilterNodeData,
     category: "filter",
@@ -44,14 +44,6 @@ const nodeTypes: NodeType[] = [
     data: { brightness: 0, contrast: 0, saturation: 0 } as AdjustNodeData,
     category: "filter",
     description: "Adjusts brightness, contrast, and saturation",
-  },
-  {
-    type: "filter",
-    label: "Sharpen",
-    icon: <Wand2 className="h-4 w-4" />,
-    data: { type: "sharpen", intensity: 50 } as FilterNodeData,
-    category: "filter",
-    description: "Enhances image sharpness",
   },
   // Transform nodes
   {
