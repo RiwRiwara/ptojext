@@ -37,7 +37,7 @@ export const LabeledHandle = forwardRef<HTMLDivElement, LabeledHandleProps>(
       variant = "default",
       disabled = false,
       size = "md",
-      connection_count = 1,
+      connection_count,
       id,
       ...props
     },

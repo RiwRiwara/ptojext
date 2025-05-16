@@ -21,7 +21,7 @@ export const BaseHandle = forwardRef<HTMLDivElement, BaseHandleProps>(
       size = "md",
       disabled = false,
       shape = "circle",
-      connection_count = 1,
+      connection_count = 5,
       ...props
     },
     ref

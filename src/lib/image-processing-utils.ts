@@ -518,6 +518,518 @@ export const loadImage = async (url: string): Promise<ImageData> => {
   });
 };
 
+// Apply threshold filter
+export const applyThreshold = (
+  imageData: ImageData,
+  threshold: number,
+  inverted: boolean = false
+): ImageData => {
+  const data = imageData.data;
+  
+  for (let i = 0; i < data.length; i += 4) {
+    // Calculate pixel brightness
+    const brightness = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    
+    // Apply threshold
+    let value = brightness >= threshold ? 255 : 0;
+    
+    // Apply inversion if needed
+    if (inverted) value = 255 - value;
+    
+    data[i] = value;
+    data[i + 1] = value;
+    data[i + 2] = value;
+  }
+  
+  return imageData;
+};
+
+// Apply edge detection
+export const applyEdgeDetection = (
+  imageData: ImageData,
+  algorithm: 'sobel' | 'canny' | 'prewitt' | 'roberts' = 'sobel',
+  threshold: number = 50
+): ImageData => {
+  // First convert to grayscale for edge detection
+  const grayscale = applyGrayscale(new ImageData(
+    new Uint8ClampedArray(imageData.data),
+    imageData.width,
+    imageData.height
+  ));
+  
+  const data = new Uint8ClampedArray(grayscale.data);
+  const width = imageData.width;
+  const height = imageData.height;
+  const resultData = imageData.data;
+  
+  // Different kernels for different edge detection algorithms
+  let kernelX: number[][] = [];
+  let kernelY: number[][] = [];
+  
+  switch (algorithm) {
+    case 'sobel':
+      kernelX = [
+        [-1, 0, 1],
+        [-2, 0, 2],
+        [-1, 0, 1]
+      ];
+      kernelY = [
+        [-1, -2, -1],
+        [0, 0, 0],
+        [1, 2, 1]
+      ];
+      break;
+      
+    case 'prewitt':
+      kernelX = [
+        [-1, 0, 1],
+        [-1, 0, 1],
+        [-1, 0, 1]
+      ];
+      kernelY = [
+        [-1, -1, -1],
+        [0, 0, 0],
+        [1, 1, 1]
+      ];
+      break;
+      
+    case 'roberts':
+      kernelX = [
+        [1, 0],
+        [0, -1]
+      ];
+      kernelY = [
+        [0, 1],
+        [-1, 0]
+      ];
+      break;
+      
+    case 'canny':
+      // For Canny, we'll use a simplified implementation with a Sobel operator and thresholding
+      kernelX = [
+        [-1, 0, 1],
+        [-2, 0, 2],
+        [-1, 0, 1]
+      ];
+      kernelY = [
+        [-1, -2, -1],
+        [0, 0, 0],
+        [1, 2, 1]
+      ];
+      // In full implementation, Canny also does non-maximum suppression and hysteresis thresholding
+      break;
+  }
+  
+  // Apply edge detection
+  for (let y = 1; y < height - 1; y++) {
+    for (let x = 1; x < width - 1; x++) {
+      const pixelIndex = (y * width + x) * 4;
+      
+      // Apply convolution for X and Y directions
+      let pixelX = 0;
+      let pixelY = 0;
+      
+      const kernelSize = kernelX.length;
+      const kernelOffset = Math.floor(kernelSize / 2);
+      
+      for (let ky = 0; ky < kernelSize; ky++) {
+        for (let kx = 0; kx < kernelSize; kx++) {
+          if (algorithm === 'roberts' && (kx >= 2 || ky >= 2)) continue;
+          
+          const pixelPosX = x + kx - kernelOffset;
+          const pixelPosY = y + ky - kernelOffset;
+          
+          if (pixelPosX >= 0 && pixelPosX < width && pixelPosY >= 0 && pixelPosY < height) {
+            const kernelPixelIndex = (pixelPosY * width + pixelPosX) * 4;
+            const value = data[kernelPixelIndex];
+            
+            pixelX += value * kernelX[ky][kx];
+            pixelY += value * kernelY[ky][kx];
+          }
+        }
+      }
+      
+      // Calculate magnitude
+      let magnitude = Math.sqrt(pixelX * pixelX + pixelY * pixelY);
+      
+      // Apply threshold adjustment for Canny
+      if (algorithm === 'canny') {
+        magnitude = magnitude > threshold ? 255 : 0;
+      } else {
+        // Normalize the magnitude
+        magnitude = Math.min(255, magnitude);
+      }
+      
+      // Set pixel values
+      resultData[pixelIndex] = magnitude;
+      resultData[pixelIndex + 1] = magnitude;
+      resultData[pixelIndex + 2] = magnitude;
+    }
+  }
+  
+  return imageData;
+};
+
+// Apply noise reduction
+export const applyNoiseReduction = (
+  imageData: ImageData,
+  algorithm: 'median' | 'gaussian' | 'bilateral' = 'gaussian',
+  intensity: number = 50
+): ImageData => {
+  const data = new Uint8ClampedArray(imageData.data);
+  const width = imageData.width;
+  const height = imageData.height;
+  
+  switch (algorithm) {
+    case 'gaussian':
+      // Reuse our existing Gaussian blur with intensity control
+      return applyBlur(imageData, intensity);
+      
+    case 'median':
+      // Apply median filter with kernel size based on intensity
+      const kernelSize = Math.max(3, Math.min(7, Math.floor(intensity / 20) * 2 + 3));
+      const kernelOffset = Math.floor(kernelSize / 2);
+      
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const pixelIndex = (y * width + x) * 4;
+          
+          const rValues: number[] = [];
+          const gValues: number[] = [];
+          const bValues: number[] = [];
+          
+          // Gather pixel values in the kernel area
+          for (let ky = -kernelOffset; ky <= kernelOffset; ky++) {
+            for (let kx = -kernelOffset; kx <= kernelOffset; kx++) {
+              const pixelPosX = Math.min(width - 1, Math.max(0, x + kx));
+              const pixelPosY = Math.min(height - 1, Math.max(0, y + ky));
+              
+              const neighborIndex = (pixelPosY * width + pixelPosX) * 4;
+              
+              rValues.push(data[neighborIndex]);
+              gValues.push(data[neighborIndex + 1]);
+              bValues.push(data[neighborIndex + 2]);
+            }
+          }
+          
+          // Sort values and get median
+          rValues.sort((a, b) => a - b);
+          gValues.sort((a, b) => a - b);
+          bValues.sort((a, b) => a - b);
+          
+          const medianIndex = Math.floor(rValues.length / 2);
+          
+          // Apply median values
+          imageData.data[pixelIndex] = rValues[medianIndex];
+          imageData.data[pixelIndex + 1] = gValues[medianIndex];
+          imageData.data[pixelIndex + 2] = bValues[medianIndex];
+        }
+      }
+      return imageData;
+      
+    case 'bilateral':
+      // Simplified bilateral filter (computationally expensive)
+      // Combines spatial closeness and color similarity
+      const spatialSigma = intensity / 10;
+      const colorSigma = intensity / 5;
+      const radius = Math.ceil(spatialSigma * 2);
+      
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const pixelIndex = (y * width + x) * 4;
+          
+          let sumR = 0, sumG = 0, sumB = 0;
+          let totalWeight = 0;
+          
+          // Center pixel values
+          const centerR = data[pixelIndex];
+          const centerG = data[pixelIndex + 1];
+          const centerB = data[pixelIndex + 2];
+          
+          // Process pixels in the radius
+          for (let ky = -radius; ky <= radius; ky++) {
+            for (let kx = -radius; kx <= radius; kx++) {
+              const pixelPosX = Math.min(width - 1, Math.max(0, x + kx));
+              const pixelPosY = Math.min(height - 1, Math.max(0, y + ky));
+              
+              const neighborIndex = (pixelPosY * width + pixelPosX) * 4;
+              
+              // Compute spatial weight
+              const spatialDistance = Math.sqrt(kx * kx + ky * ky);
+              const spatialWeight = Math.exp(-(spatialDistance * spatialDistance) / (2 * spatialSigma * spatialSigma));
+              
+              // Compute color weight
+              const neighborR = data[neighborIndex];
+              const neighborG = data[neighborIndex + 1];
+              const neighborB = data[neighborIndex + 2];
+              
+              const colorDistance = Math.sqrt(
+                (centerR - neighborR) * (centerR - neighborR) +
+                (centerG - neighborG) * (centerG - neighborG) +
+                (centerB - neighborB) * (centerB - neighborB)
+              );
+              
+              const colorWeight = Math.exp(-(colorDistance * colorDistance) / (2 * colorSigma * colorSigma));
+              
+              // Combined weight
+              const weight = spatialWeight * colorWeight;
+              
+              // Accumulate weighted values
+              sumR += neighborR * weight;
+              sumG += neighborG * weight;
+              sumB += neighborB * weight;
+              totalWeight += weight;
+            }
+          }
+          
+          // Apply weighted average
+          imageData.data[pixelIndex] = sumR / totalWeight;
+          imageData.data[pixelIndex + 1] = sumG / totalWeight;
+          imageData.data[pixelIndex + 2] = sumB / totalWeight;
+        }
+      }
+      return imageData;
+  }
+  
+  return imageData;
+};
+
+// Apply histogram equalization
+export const applyHistogramEqualization = (
+  imageData: ImageData,
+  mode: 'global' | 'adaptive' = 'global',
+  clipLimit: number = 2.0
+): ImageData => {
+  const data = imageData.data;
+  const width = imageData.width;
+  const height = imageData.height;
+  
+  if (mode === 'global') {
+    // Global histogram equalization
+    // 1. Calculate histogram and cumulative distribution
+    const histogram = new Array(256).fill(0);
+    const totalPixels = width * height;
+    
+    // Build histogram
+    for (let i = 0; i < data.length; i += 4) {
+      const brightness = Math.round((data[i] + data[i + 1] + data[i + 2]) / 3);
+      histogram[brightness]++;
+    }
+    
+    // Calculate cumulative distribution function
+    const cdf = new Array(256).fill(0);
+    cdf[0] = histogram[0];
+    for (let i = 1; i < 256; i++) {
+      cdf[i] = cdf[i - 1] + histogram[i];
+    }
+    
+    // Normalize CDF
+    const cdfMin = cdf.find(x => x > 0) || 0;
+    const lookupTable = new Array(256).fill(0);
+    for (let i = 0; i < 256; i++) {
+      lookupTable[i] = Math.round(((cdf[i] - cdfMin) / (totalPixels - cdfMin)) * 255);
+    }
+    
+    // Apply lookup table to the image
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      
+      // Calculate new values using the lookup table
+      data[i] = lookupTable[r];
+      data[i + 1] = lookupTable[g];
+      data[i + 2] = lookupTable[b];
+    }
+  } else if (mode === 'adaptive') {
+    // Adaptive histogram equalization (simplified CLAHE)
+    // This is a simplified version - full CLAHE is more complex
+    
+    // Convert to grayscale first
+    const grayData = new Uint8ClampedArray(width * height);
+    for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+      grayData[j] = Math.round((data[i] + data[i + 1] + data[i + 2]) / 3);
+    }
+    
+    // Divide image into tiles (8x8 grid)
+    const tileSize = Math.floor(Math.min(width, height) / 8);
+    const numTilesX = Math.ceil(width / tileSize);
+    const numTilesY = Math.ceil(height / tileSize);
+    
+    // Process each tile
+    for (let tileY = 0; tileY < numTilesY; tileY++) {
+      for (let tileX = 0; tileX < numTilesX; tileX++) {
+        const startX = tileX * tileSize;
+        const startY = tileY * tileSize;
+        const endX = Math.min(startX + tileSize, width);
+        const endY = Math.min(startY + tileSize, height);
+        
+        // Calculate histogram for this tile
+        const histogram = new Array(256).fill(0);
+        let tilePixels = 0;
+        
+        for (let y = startY; y < endY; y++) {
+          for (let x = startX; x < endX; x++) {
+            const idx = y * width + x;
+            histogram[grayData[idx]]++;
+            tilePixels++;
+          }
+        }
+        
+        // Apply clipping if needed
+        if (clipLimit > 0) {
+          const clipThreshold = Math.max(1, (clipLimit * tilePixels) / 256);
+          let clippedSum = 0;
+          
+          // Clip histogram and count clipped pixels
+          for (let i = 0; i < 256; i++) {
+            if (histogram[i] > clipThreshold) {
+              clippedSum += histogram[i] - clipThreshold;
+              histogram[i] = clipThreshold;
+            }
+          }
+          
+          // Redistribute clipped pixels
+          const redistributeAmount = Math.floor(clippedSum / 256);
+          for (let i = 0; i < 256; i++) {
+            histogram[i] += redistributeAmount;
+          }
+        }
+        
+        // Calculate cumulative distribution function
+        const cdf = new Array(256).fill(0);
+        cdf[0] = histogram[0];
+        for (let i = 1; i < 256; i++) {
+          cdf[i] = cdf[i - 1] + histogram[i];
+        }
+        
+        // Normalize CDF
+        const cdfMin = cdf.find(x => x > 0) || 0;
+        const lookupTable = new Array(256).fill(0);
+        for (let i = 0; i < 256; i++) {
+          lookupTable[i] = Math.round(((cdf[i] - cdfMin) / (tilePixels - cdfMin)) * 255);
+        }
+        
+        // Apply lookup table to the tile
+        for (let y = startY; y < endY; y++) {
+          for (let x = startX; x < endX; x++) {
+            const pixelIndex = (y * width + x) * 4;
+            const grayValue = grayData[y * width + x];
+            const newValue = lookupTable[grayValue];
+            
+            // Calculate the ratio of change to apply to RGB channels
+            const ratio = grayValue === 0 ? 1 : newValue / grayValue;
+            
+            // Apply ratio to original colors to maintain color relationships
+            data[pixelIndex] = Math.min(255, Math.max(0, data[pixelIndex] * ratio));
+            data[pixelIndex + 1] = Math.min(255, Math.max(0, data[pixelIndex + 1] * ratio));
+            data[pixelIndex + 2] = Math.min(255, Math.max(0, data[pixelIndex + 2] * ratio));
+          }
+        }
+      }
+    }
+  }
+  
+  return imageData;
+};
+
+// Apply color quantization (reducing number of colors)
+export const applyColorQuantization = (
+  imageData: ImageData,
+  colors: number = 8,
+  dithering: boolean = true
+): ImageData => {
+  const data = imageData.data;
+  const width = imageData.width;
+  const height = imageData.height;
+  
+  // Clamp colors to valid range
+  colors = Math.max(2, Math.min(256, colors));
+  
+  // Create color palette (simplified technique - uniform quantization)
+  // More advanced methods use median cut, octree, or k-means
+  const levels = Math.ceil(Math.pow(colors, 1/3));
+  const step = 256 / levels;
+  
+  // Create quantization function
+  const quantize = (value: number) => {
+    return Math.floor(value / step) * step;
+  };
+  
+  // Apply quantization
+  if (dithering) {
+    // Floyd-Steinberg dithering
+    const tempData = new Uint8ClampedArray(data.length);
+    for (let i = 0; i < data.length; i++) {
+      tempData[i] = data[i];
+    }
+    
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const idx = (y * width + x) * 4;
+        
+        // Get original pixel values
+        const oldR = tempData[idx];
+        const oldG = tempData[idx + 1];
+        const oldB = tempData[idx + 2];
+        
+        // Quantize
+        const newR = quantize(oldR);
+        const newG = quantize(oldG);
+        const newB = quantize(oldB);
+        
+        // Set new values
+        data[idx] = newR;
+        data[idx + 1] = newG;
+        data[idx + 2] = newB;
+        
+        // Calculate quantization error
+        const errR = oldR - newR;
+        const errG = oldG - newG;
+        const errB = oldB - newB;
+        
+        // Distribute error to neighboring pixels
+        // Right pixel
+        if (x < width - 1) {
+          tempData[(y * width + x + 1) * 4] += errR * 7 / 16;
+          tempData[(y * width + x + 1) * 4 + 1] += errG * 7 / 16;
+          tempData[(y * width + x + 1) * 4 + 2] += errB * 7 / 16;
+        }
+        
+        // Bottom-left pixel
+        if (y < height - 1 && x > 0) {
+          tempData[((y + 1) * width + x - 1) * 4] += errR * 3 / 16;
+          tempData[((y + 1) * width + x - 1) * 4 + 1] += errG * 3 / 16;
+          tempData[((y + 1) * width + x - 1) * 4 + 2] += errB * 3 / 16;
+        }
+        
+        // Bottom pixel
+        if (y < height - 1) {
+          tempData[((y + 1) * width + x) * 4] += errR * 5 / 16;
+          tempData[((y + 1) * width + x) * 4 + 1] += errG * 5 / 16;
+          tempData[((y + 1) * width + x) * 4 + 2] += errB * 5 / 16;
+        }
+        
+        // Bottom-right pixel
+        if (y < height - 1 && x < width - 1) {
+          tempData[((y + 1) * width + x + 1) * 4] += errR * 1 / 16;
+          tempData[((y + 1) * width + x + 1) * 4 + 1] += errG * 1 / 16;
+          tempData[((y + 1) * width + x + 1) * 4 + 2] += errB * 1 / 16;
+        }
+      }
+    }
+  } else {
+    // Simple quantization without dithering
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = quantize(data[i]);
+      data[i + 1] = quantize(data[i + 1]);
+      data[i + 2] = quantize(data[i + 2]);
+    }
+  }
+  
+  return imageData;
+};
+
 // URL cache for previously generated data URLs
 const urlCache = new Map<ImageData, string>();
 

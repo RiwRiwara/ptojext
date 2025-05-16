@@ -8,6 +8,11 @@ import type {
   RotateNodeData,
   SplitNodeData,
   DetectNodeData,
+  ThresholdNodeData,
+  EdgeDetectionNodeData,
+  NoiseReductionNodeData,
+  HistogramEqualizationNodeData,
+  ColorQuantizationNodeData,
   ResultImageNodeData,
   NodeType as ProcessingNodeType,
   NodeData as ProcessingNodeData,
@@ -24,6 +29,11 @@ export type {
   RotateNodeData,
   SplitNodeData,
   DetectNodeData,
+  ThresholdNodeData,
+  EdgeDetectionNodeData,
+  NoiseReductionNodeData,
+  HistogramEqualizationNodeData,
+  ColorQuantizationNodeData,
   ResultImageNodeData
 };
 

@@ -1,9 +1,22 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useReactFlow, Edge, Node } from '@xyflow/react';
 import * as ImageProcessing from '@/lib/image-processing-utils';
-import { ImageNodeData, FilterNodeData, AdjustNodeData, CropNodeData, RotateNodeData, SplitNodeData, DetectNodeData } from '@/types/imageProcessingTypes';
+import { 
+  ImageNodeData, 
+  FilterNodeData, 
+  AdjustNodeData, 
+  CropNodeData, 
+  RotateNodeData, 
+  SplitNodeData, 
+  DetectNodeData,
+  ThresholdNodeData,
+  EdgeDetectionNodeData,
+  NoiseReductionNodeData,
+  HistogramEqualizationNodeData,
+  ColorQuantizationNodeData
+} from '@/types/imageProcessingTypes';
 
 type ProcessingFunction = {
   image: (imageData: ImageData, nodeData: ImageNodeData) => Promise<ImageData>;
@@ -13,6 +26,11 @@ type ProcessingFunction = {
   rotate: (imageData: ImageData, nodeData: RotateNodeData) => ImageData;
   split: (imageData: ImageData, nodeData: SplitNodeData) => ImageData;
   detect: (imageData: ImageData, nodeData: DetectNodeData) => ImageData;
+  threshold: (imageData: ImageData, nodeData: ThresholdNodeData) => ImageData;
+  edge_detection: (imageData: ImageData, nodeData: EdgeDetectionNodeData) => ImageData;
+  noise_reduction: (imageData: ImageData, nodeData: NoiseReductionNodeData) => ImageData;
+  histogram_equalization: (imageData: ImageData, nodeData: HistogramEqualizationNodeData) => ImageData;
+  color_quantization: (imageData: ImageData, nodeData: ColorQuantizationNodeData) => ImageData;
   result_image: (imageData: ImageData) => ImageData; // Renamed from output
 };
 
@@ -168,6 +186,66 @@ const processingFunctions: ProcessingFunction = {
     const result = ImageProcessing.detectObjects(imageData, nodeData.sensitivity);
     return result.imageData;
   },
+  threshold: (imageData: ImageData, nodeData: ThresholdNodeData): ImageData => {
+    if (!imageData) return new ImageData(1, 1);
+    console.log(nodeData);
+
+    // Apply threshold filter with threshold value and inversion flag
+    return ImageProcessing.applyThreshold(
+      imageData,
+      nodeData.threshold,
+      nodeData.inverted
+    );
+  },
+
+  edge_detection: (imageData: ImageData, nodeData: EdgeDetectionNodeData): ImageData => {
+    if (!imageData) return new ImageData(1, 1);
+    console.log(nodeData);
+
+    // Apply edge detection with selected algorithm and threshold
+    return ImageProcessing.applyEdgeDetection(
+      imageData,
+      nodeData.algorithm,
+      nodeData.threshold
+    );
+  },
+
+  noise_reduction: (imageData: ImageData, nodeData: NoiseReductionNodeData): ImageData => {
+    if (!imageData) return new ImageData(1, 1);
+    console.log(nodeData);
+
+    // Apply noise reduction with selected algorithm and intensity
+    return ImageProcessing.applyNoiseReduction(
+      imageData,
+      nodeData.algorithm,
+      nodeData.intensity
+    );
+  },
+
+  histogram_equalization: (imageData: ImageData, nodeData: HistogramEqualizationNodeData): ImageData => {
+    if (!imageData) return new ImageData(1, 1);
+    console.log(nodeData);
+
+    // Apply histogram equalization with selected mode and clip limit
+    return ImageProcessing.applyHistogramEqualization(
+      imageData,
+      nodeData.mode,
+      nodeData.clipLimit
+    );
+  },
+
+  color_quantization: (imageData: ImageData, nodeData: ColorQuantizationNodeData): ImageData => {
+    if (!imageData) return new ImageData(1, 1);
+    console.log(nodeData);
+
+    // Apply color quantization with number of colors and dithering flag
+    return ImageProcessing.applyColorQuantization(
+      imageData,
+      nodeData.colors,
+      nodeData.dithering
+    );
+  },
+
   result_image: (imageData: ImageData) => {
     return imageData;
   }
@@ -233,7 +311,7 @@ export function useImageProcessingFlow() {
     return ctx.getImageData(0, 0, newWidth, newHeight);
   }, [getQualityFactor]);
 
-  // Function to process a single node with caching
+  // Function to process a single node with enhanced caching and stability
   const processNode = useCallback(async (
     nodeId: string,
     nodes: Node[],
@@ -262,11 +340,21 @@ export function useImageProcessingFlow() {
     if (incomingEdges.length > 0) {
       // Get the source node from the first edge (for now we just use the first input)
       const sourceNodeId = incomingEdges[0].source;
-      // Process the source node
-      inputImageData = await processNode(sourceNodeId, nodes, edges, processed, newCache);
-      // If we have a result in the cache, use its hash as part of our hash
-      if (newCache[sourceNodeId]) {
-        inputHash = newCache[sourceNodeId].hash;
+      
+      // First check if we already have this source node in the processed cache
+      // This prevents unnecessary reprocessing of the same node
+      if (processed[sourceNodeId]) {
+        inputImageData = processed[sourceNodeId];
+        if (newCache[sourceNodeId]) {
+          inputHash = newCache[sourceNodeId].hash;
+        }
+      } else {
+        // Process the source node if not already processed
+        inputImageData = await processNode(sourceNodeId, nodes, edges, processed, newCache);
+        // If we have a result in the cache, use its hash as part of our hash
+        if (newCache[sourceNodeId]) {
+          inputHash = newCache[sourceNodeId].hash;
+        }
       }
     }
 
@@ -279,7 +367,7 @@ export function useImageProcessingFlow() {
       nodeData: Record<string, unknown>
     ) => Promise<ImageData> | ImageData;
 
-    // Check if we have this result in cache
+    // Enhanced cache checking with more stable identity comparison
     if (processedCache[nodeId] && processedCache[nodeId].hash === completeHash) {
       // We can reuse the cached result
       processed[nodeId] = processedCache[nodeId].imageData;
@@ -313,9 +401,36 @@ export function useImageProcessingFlow() {
     }
   }, [getNodeParamsHash, processedCache, resizeForProcessing]);
 
-  // Process the entire flow with optimizations
+  // Time tracking for throttling image processing
+  const lastProcessTime = useRef(0);
+  const processingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Process the entire flow with optimizations and throttling
   const processFlow = useCallback(async () => {
-    if (processing) return; // Prevent multiple concurrent processing
+    // Clear any pending processing timeout
+    if (processingTimeoutRef.current) {
+      clearTimeout(processingTimeoutRef.current);
+      processingTimeoutRef.current = null;
+    }
+
+    // Throttle processing to prevent excessive updates
+    const now = Date.now();
+    const timeSinceLastProcess = now - lastProcessTime.current;
+    
+    if (processing) {
+      // If already processing, schedule for later
+      processingTimeoutRef.current = setTimeout(() => processFlow(), 300);
+      return;
+    }
+    
+    // Throttle to max once per 150ms for performance
+    if (timeSinceLastProcess < 150) {
+      processingTimeoutRef.current = setTimeout(() => processFlow(), 150 - timeSinceLastProcess);
+      return;
+    }
+    
+    // Start processing and update timestamp
+    lastProcessTime.current = now;
     setProcessing(true);
 
     try {
@@ -327,10 +442,7 @@ export function useImageProcessingFlow() {
 
       // Find nodes that need processing (start at result image nodes and work backwards)
       const resultImageNodes = nodes.filter(node => node.type === 'result_image');
-
-      // Process in a web worker or with setTimeout for UI responsiveness
-      await new Promise(resolve => setTimeout(resolve, 0));
-
+      
       // Process each result image node and all its dependencies
       for (const resultImageNode of resultImageNodes) {
         const result = await processNode(resultImageNode.id, nodes, edges, processed, newCache);
@@ -338,31 +450,44 @@ export function useImageProcessingFlow() {
         if (result) {
           // Convert ImageData to URL with controlled quality
           results[resultImageNode.id] = ImageProcessing.imageDataToUrl(result);
-
-          // Update the node data to display the processed image
-          setNodes(currentNodes =>
-            currentNodes.map(node =>
-              node.id === resultImageNode.id
-                ? { ...node, data: { ...node.data, imageUrl: results[resultImageNode.id] } }
-                : node
-            )
-          );
-        }
-      }
-
-      // Update visible intermediate nodes' images
-      for (const nodeId in processed) {
-        if (processed[nodeId]) {
-          results[nodeId] = ImageProcessing.imageDataToUrl(processed[nodeId]);
-
-          // Update node display 
-          setNodes(currentNodes =>
-            currentNodes.map(node =>
-              node.id === nodeId && (node.type === 'image' || node.type === 'filter' || node.type === 'adjust')
-                ? { ...node, data: { ...node.data, imageUrl: results[nodeId] } }
-                : node
-            )
-          );
+          
+          // Build a batch update for nodes to prevent multiple re-renders
+          const nodesToUpdate: Node[] = [];
+          
+          // Add result node to update batch
+          nodesToUpdate.push({
+            ...nodes.find(n => n.id === resultImageNode.id)!,
+            data: {
+              ...nodes.find(n => n.id === resultImageNode.id)!.data,
+              imageUrl: results[resultImageNode.id]
+            }
+          });
+          
+          // Add intermediary nodes to the batch update
+          for (const nodeId in processed) {
+            if (processed[nodeId] && nodeId !== resultImageNode.id) {
+              const node = nodes.find(n => n.id === nodeId);
+              if (node && (node.type === 'image' || node.type === 'filter' || node.type === 'adjust')) {
+                results[nodeId] = ImageProcessing.imageDataToUrl(processed[nodeId]);
+                nodesToUpdate.push({
+                  ...node,
+                  data: {
+                    ...node.data,
+                    imageUrl: results[nodeId]
+                  }
+                });
+              }
+            }
+          }
+          
+          // Apply all updates in a single operation to reduce re-renders
+          setNodes(currentNodes => {
+            const nodeMap = new Map(currentNodes.map(node => [node.id, node]));
+            nodesToUpdate.forEach(updatedNode => {
+              nodeMap.set(updatedNode.id, updatedNode);
+            });
+            return Array.from(nodeMap.values());
+          });
         }
       }
 
@@ -376,7 +501,7 @@ export function useImageProcessingFlow() {
     } finally {
       setProcessing(false);
     }
-  }, [getNodes, getEdges, processNode, setNodes, processing, setProcessedImages, setProcessedCache, ImageProcessing ]);
+  }, [getNodes, getEdges, processNode, setNodes, processing, setProcessedImages, setProcessedCache]);
 
   return {
     processedImages,

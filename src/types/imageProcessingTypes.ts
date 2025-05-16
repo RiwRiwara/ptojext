@@ -78,6 +78,7 @@ export interface SplitNodeData extends BaseNodeData {
 export interface DetectNodeData extends BaseNodeData {
   sensitivity: number;
   title?: string;
+  detectedObjects?: DetectedObject[];
 }
 
 /**
@@ -106,9 +107,64 @@ export type NodeType =
   | 'rotate'
   | 'split'
   | 'detect'
+  | 'threshold'
+  | 'edge_detection'
+  | 'noise_reduction'
+  | 'histogram_equalization'
+  | 'color_quantization'
   | 'result_image'   // Renamed from 'output'
   | 'num'
   | 'sum';
+
+/**
+ * Threshold node data type for binary thresholding
+ */
+export interface ThresholdNodeData extends BaseNodeData {
+  threshold: number; // 0-255
+  inverted: boolean; // Whether to invert the result
+  title?: string;
+}
+
+/**
+ * Edge Detection node data type
+ */
+export interface DetectedObject {
+  name: string;
+  confidence: number;
+}
+
+export interface EdgeDetectionNodeData extends BaseNodeData {
+  algorithm: 'sobel' | 'canny' | 'prewitt' | 'roberts';
+  threshold?: number; // For canny edge detection
+  title?: string;
+}
+
+/**
+ * Noise Reduction node data type
+ */
+export interface NoiseReductionNodeData extends BaseNodeData {
+  algorithm: 'median' | 'gaussian' | 'bilateral';
+  intensity: number; // 0-100
+  title?: string;
+}
+
+/**
+ * Histogram Equalization node data type
+ */
+export interface HistogramEqualizationNodeData extends BaseNodeData {
+  mode: 'global' | 'adaptive';
+  clipLimit?: number; // For adaptive histogram equalization
+  title?: string;
+}
+
+/**
+ * Color Quantization node data type
+ */
+export interface ColorQuantizationNodeData extends BaseNodeData {
+  colors: number; // Number of colors to reduce to
+  dithering: boolean; // Whether to apply dithering
+  title?: string;
+}
 
 /**
  * Union type for all node data types
@@ -121,4 +177,9 @@ export type NodeData =
   | RotateNodeData
   | SplitNodeData
   | DetectNodeData
+  | ThresholdNodeData
+  | EdgeDetectionNodeData
+  | NoiseReductionNodeData
+  | HistogramEqualizationNodeData
+  | ColorQuantizationNodeData
   | ResultImageNodeData;

@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { type NodeProps, Position, useReactFlow } from '@xyflow/react';
 
 import { BaseNode } from '@/components/flow/base-node';
@@ -11,8 +11,9 @@ import {
   NodeHeaderMenuAction,
 } from '@/components/flow/node-header';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
+
 import type { AdjustNodeData } from '@/components/flow/types';
 
 type AdjustNodeProps = NodeProps & {
@@ -21,22 +22,63 @@ type AdjustNodeProps = NodeProps & {
 
 export function AdjustNode({ id, data }: AdjustNodeProps) {
   const { updateNodeData, setNodes } = useReactFlow();
+  const [localBrightness, setLocalBrightness] = useState(data.brightness || 0);
+  const [localContrast, setLocalContrast] = useState(data.contrast || 0);
+  const [localSaturation, setLocalSaturation] = useState(data.saturation || 0);
+  
+  // Track if we're currently adjusting a slider
+  const isAdjusting = useRef(false);
+  const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Sync local state with node data if it changes externally
+  useEffect(() => {
+    if (!isAdjusting.current) {
+      setLocalBrightness(data.brightness || 0);
+      setLocalContrast(data.contrast || 0);
+      setLocalSaturation(data.saturation || 0);
+    }
+  }, [data]);
 
   const handleDelete = useCallback(() => {
     setNodes((nodes) => nodes.filter((node) => node.id !== id));
   }, [id, setNodes]);
 
+  // Debounced update function that only updates the actual node data
+  // when slider interaction stops
+  const debouncedUpdate = useCallback(() => {
+    if (updateTimeoutRef.current) {
+      clearTimeout(updateTimeoutRef.current);
+    }
+
+    updateTimeoutRef.current = setTimeout(() => {
+      isAdjusting.current = false;
+      updateNodeData(id, { 
+        ...data, 
+        brightness: localBrightness,
+        contrast: localContrast,
+        saturation: localSaturation 
+      });
+    }, 300); // 300ms debounce
+  }, [id, data, updateNodeData, localBrightness, localContrast, localSaturation]);
+
+  // Handle slider changes by updating local state without triggering immediate node updates
   const handleBrightnessChange = useCallback((value: number[]) => {
-    updateNodeData(id, { ...data, brightness: value[0] });
-  }, [id, data, updateNodeData]);
+    isAdjusting.current = true;
+    setLocalBrightness(value[0]);
+    debouncedUpdate();
+  }, [debouncedUpdate]);
 
   const handleContrastChange = useCallback((value: number[]) => {
-    updateNodeData(id, { ...data, contrast: value[0] });
-  }, [id, data, updateNodeData]);
+    isAdjusting.current = true;
+    setLocalContrast(value[0]);
+    debouncedUpdate();
+  }, [debouncedUpdate]);
 
   const handleSaturationChange = useCallback((value: number[]) => {
-    updateNodeData(id, { ...data, saturation: value[0] });
-  }, [id, data, updateNodeData]);
+    isAdjusting.current = true;
+    setLocalSaturation(value[0]);
+    debouncedUpdate();
+  }, [debouncedUpdate]);
 
   return (
     <BaseNode className="w-64">
@@ -51,10 +93,10 @@ export function AdjustNode({ id, data }: AdjustNodeProps) {
 
       <div className="p-2 space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="brightness">Brightness: {data.brightness || 0}</Label>
+          <Label htmlFor="brightness">Brightness: {localBrightness}</Label>
           <Slider
             id="brightness"
-            defaultValue={[data.brightness || 0]}
+            value={[localBrightness]}
             min={-100}
             max={100}
             step={1}
@@ -64,10 +106,10 @@ export function AdjustNode({ id, data }: AdjustNodeProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="contrast">Contrast: {data.contrast || 0}</Label>
+          <Label htmlFor="contrast">Contrast: {localContrast}</Label>
           <Slider
             id="contrast"
-            defaultValue={[data.contrast || 0]}
+            value={[localContrast]}
             min={-100}
             max={100}
             step={1}
@@ -77,10 +119,10 @@ export function AdjustNode({ id, data }: AdjustNodeProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="saturation">Saturation: {data.saturation || 0}</Label>
+          <Label htmlFor="saturation">Saturation: {localSaturation}</Label>
           <Slider
             id="saturation"
-            defaultValue={[data.saturation || 0]}
+            value={[localSaturation]}
             min={-100}
             max={100}
             step={1}

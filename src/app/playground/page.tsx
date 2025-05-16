@@ -13,10 +13,10 @@ import { FiCode, FiImage, FiGrid, FiLayers, FiPlay, FiPlus, FiSave, FiSettings, 
 const playgroundCategories = [
   {
     id: "image-processing",
-    title: "Image Processing",
-    description: "Experiment with various image processing techniques like filtering, enhancement, and segmentation",
+    title: "Image Processing Pipeline (Beta)",
+    description: "Play with image processing pipeline drag and drop",
     icon: <FiImage className="text-2xl text-primary" />,
-    href: "/simu/image_enhancement/quiz",
+    href: "/simulations/image-processing",
     comingSoon: false,
   },
   {

@@ -1,13 +1,14 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, DragEvent } from "react";
 import { useReactFlow } from "@xyflow/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Filter, Sliders, Layers, Crop, RotateCw, Split, Wand2, BrainCircuit, ChevronDown, ChevronUp } from "lucide-react";
+import { Filter, Sliders, Layers, Crop, RotateCw, Split, Wand2, BrainCircuit, ChevronDown, ChevronUp, Grid, ZapIcon, Waves, BarChart3, Palette } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useDnD } from "@/contexts/DnDContext";
 import { 
   NodeTypes,
   FilterNodeData,
@@ -15,7 +16,12 @@ import {
   CropNodeData,
   RotateNodeData,
   SplitNodeData,
-  DetectNodeData 
+  DetectNodeData,
+  ThresholdNodeData,
+  EdgeDetectionNodeData,
+  NoiseReductionNodeData,
+  HistogramEqualizationNodeData,
+  ColorQuantizationNodeData 
 } from './types';
 
 interface NodeType {
@@ -45,6 +51,30 @@ const nodeTypes: NodeType[] = [
     category: "filter",
     description: "Adjusts brightness, contrast, and saturation",
   },
+  {
+    type: "threshold",
+    label: "Threshold",
+    icon: <Grid className="h-4 w-4" />,
+    data: { threshold: 128, inverted: false } as ThresholdNodeData,
+    category: "filter",
+    description: "Converts image to black and white based on threshold",
+  },
+  {
+    type: "edge_detection",
+    label: "Edge Detection",
+    icon: <ZapIcon className="h-4 w-4" />,
+    data: { algorithm: "sobel", threshold: 50 } as EdgeDetectionNodeData,
+    category: "filter",
+    description: "Detects edges in the image using various algorithms",
+  },
+  {
+    type: "noise_reduction",
+    label: "Noise Reduction",
+    icon: <Waves className="h-4 w-4" />,
+    data: { algorithm: "gaussian", intensity: 50 } as NoiseReductionNodeData,
+    category: "filter",
+    description: "Reduces noise in the image using various algorithms",
+  },
   // Transform nodes
   {
     type: "crop",
@@ -70,6 +100,22 @@ const nodeTypes: NodeType[] = [
     category: "transform",
     description: "Splits image into color channels",
   },
+  {
+    type: "histogram_equalization",
+    label: "Histogram Equalization",
+    icon: <BarChart3 className="h-4 w-4" />,
+    data: { mode: "global", clipLimit: 2.0 } as HistogramEqualizationNodeData,
+    category: "transform",
+    description: "Enhances contrast using histogram equalization",
+  },
+  {
+    type: "color_quantization",
+    label: "Color Quantization",
+    icon: <Palette className="h-4 w-4" />,
+    data: { colors: 8, dithering: true } as ColorQuantizationNodeData,
+    category: "transform",
+    description: "Reduces the number of colors in the image",
+  },
   // AI nodes
   {
     type: "detect",
@@ -82,9 +128,11 @@ const nodeTypes: NodeType[] = [
 ];
 
 export function NodePanel() {
-  const { getNodes, addNodes, screenToFlowPosition } = useReactFlow();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const reactFlowInstance = useReactFlow();
+  const { screenToFlowPosition, getNodes, addNodes } = reactFlowInstance;
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { setNodeType, setNodeData } = useDnD();
 
   const addNode = useCallback(
     (nodeType: NodeType) => {
@@ -112,13 +160,24 @@ export function NodePanel() {
     node.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleDragStart = (event: DragEvent<HTMLButtonElement>, nodeType: NodeType) => {
+    event.dataTransfer.setData('application/reactflow', nodeType.type);
+    event.dataTransfer.effectAllowed = 'move';
+    
+    // Set the node type and data in the DnD context
+    setNodeType(nodeType.type);
+    setNodeData(nodeType.data);
+  };
+
   const renderNodeButton = (nodeType: NodeType) => (
     <Tooltip key={nodeType.type}>
       <TooltipTrigger asChild>
         <Button
           variant="outline"
-          className="w-full justify-start gap-2 hover:bg-accent/50 transition-colors"
+          className="w-full justify-start gap-2 hover:bg-accent/50 transition-colors cursor-grab active:cursor-grabbing"
           onClick={() => addNode(nodeType)}
+          draggable
+          onDragStart={(e) => handleDragStart(e, nodeType)}
           aria-label={`Add ${nodeType.label} node`}
         >
           {nodeType.icon}
@@ -135,7 +194,7 @@ export function NodePanel() {
     <TooltipProvider>
       <Card
         className={cn(
-          "fixed top-5 left-5 w-80 shadow-xl transition-all duration-300 z-10 bg-gradient-to-b from-background to-background/95",
+          "fixed top-20 left-5 w-80 shadow-xl transition-all duration-300 z-10 bg-gradient-to-b from-background to-background/95 rounded-lg border-slate-200 dark:border-slate-800",
           isCollapsed ? "h-16" : "max-h-[80vh] overflow-y-auto"
         )}
       >
