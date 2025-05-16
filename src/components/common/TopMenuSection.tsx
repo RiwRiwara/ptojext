@@ -22,11 +22,28 @@ export default function Overlay() {
 
   // Auth handlers
   const handleLogin = async (username: string, password: string) => {
-    if (login) await login();
-    setLoginOpen(false);
+    try {
+      if (login) {
+        const success = await login(username, password);
+        if (success) setLoginOpen(false);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Login failed. Please try again.");
+    }
   };
+  
   const handleRegister = async (username: string, password: string) => {
-    setRegisterOpen(false);
+    try {
+      // For now, use the same login function for registration
+      if (login) {
+        const success = await login(username, password);
+        if (success) setRegisterOpen(false);
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error("Registration failed. Please try again.");
+    }
   };
 
   const [settingsOpen, setSettingsOpen] = useState(false);

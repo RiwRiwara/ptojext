@@ -16,6 +16,8 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { useObjectDetection } from '@/hooks/useObjectDetection';
+import { WithPremiumFeature } from '@/components/auth/withPremiumFeature';
+import { FaLock, FaCrown } from 'react-icons/fa';
 import type { DetectNodeData } from '@/components/flow/types';
 
 type DetectNodeProps = NodeProps & {
@@ -98,16 +100,26 @@ export function DetectNode({ id, data, selected }: DetectNodeProps) {
         </div>
 
         <div className="flex justify-between items-center mt-4">
-          <Label className="text-xs">AI Detection</Label>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={performObjectDetection}
-            disabled={isProcessing}
-            className="text-xs h-7"
+          <div className="flex items-center gap-1">
+            <Label className="text-xs">AI Detection</Label>
+            <FaCrown className="text-amber-400 h-3 w-3" title="Premium Feature" />
+          </div>
+          
+          <WithPremiumFeature 
+            featureName="AI Object Detection"
+            description="Our advanced computer vision AI can identify objects in your images. This feature requires authentication to prevent abuse of computing resources."
+            showLockIcon={false}
           >
-            {isProcessing ? 'Analyzing...' : 'Detect Objects'}
-          </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={performObjectDetection}
+              disabled={isProcessing}
+              className="text-xs h-7"
+            >
+              {isProcessing ? 'Analyzing...' : 'Detect Objects'}
+            </Button>
+          </WithPremiumFeature>
         </div>
 
         {data.detectedObjects && data.detectedObjects.length > 0 ? (
@@ -126,6 +138,10 @@ export function DetectNode({ id, data, selected }: DetectNodeProps) {
           <div className="text-xs text-muted-foreground">
             <p>Higher sensitivity detects more objects but may include false positives.</p>
             <p className="mt-1 italic">Click Detect Objects to analyze the image</p>
+            <div className="flex items-center mt-2 text-xs text-amber-600 bg-amber-50 p-1.5 rounded border border-amber-100">
+              <FaLock className="mr-1 h-3 w-3 flex-shrink-0" />
+              <span>Premium feature - requires sign in</span>
+            </div>
           </div>
         )}
       </div>

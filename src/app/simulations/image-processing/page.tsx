@@ -184,17 +184,8 @@ function ImageProcessingFlowComponent() {
     const inputX = minMargin;
     const outputX = Math.max(750, viewportWidth - minMargin - 300); // Adjust for node width
 
-    setNodes((currentNodes) =>
-      currentNodes.map((node) => {
-        if (node.id === 'input') {
-          return { ...node, position: { ...node.position, x: inputX } };
-        } else if (node.id === 'output') {
-          return { ...node, position: { ...node.position, x: outputX } };
-        }
-        return node;
-      })
-    );
-  }, [setNodes, viewportWidth]);
+
+  }, [viewportWidth]);
 
   // Adjust positions when viewport or edges change
   useEffect(() => {

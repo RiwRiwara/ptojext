@@ -81,6 +81,7 @@
     "lucide-react": "^0.510.0",
     "matter-js": "^0.20.0",
     "next": "15.0.1",
+    "next-auth": "^4.24.11",
     "next-i18next": "^15.4.1",
     "openai": "^4.97.0",
     "pixi.js": "^7.4.2",

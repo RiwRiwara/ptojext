@@ -103,7 +103,7 @@ const SettingDropdownTree: React.FC<SettingDropdownTreeProps> = ({
                 </button>
               </div>
             ) : (
-              <div className="w-full bg-white rounded-lg p-4 shadow-sm border border-gray-100 opacity-20 pointer-events-none">
+              <div className="w-full bg-white rounded-lg p-4 shadow-sm border border-gray-100 ">
                 <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1.5">
                   <FiUser className="text-[#83AFC9]" /> Account Access
                 </h3>
