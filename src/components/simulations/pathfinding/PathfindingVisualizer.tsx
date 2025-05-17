@@ -816,7 +816,7 @@ export const PathfindingVisualizer = () => {
                             </Select>
 
                             {mazeType === 'random' && (
-                                <div className="w-full flex items-center gap-2">
+                                <div className="w-full flex items-center gap-2 mt-2 mb-2">
                                     <Label htmlFor="maze-density" className="w-24">Density: {mazeDensity}%</Label>
                                     <Slider
                                         id="maze-density"

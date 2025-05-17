@@ -167,7 +167,7 @@ export const QuizSection = () => {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Test Your Knowledge</CardTitle>
+          <CardTitle>Data Structure Test</CardTitle>
           <CardDescription>Answer questions to test your understanding of data structures</CardDescription>
         </CardHeader>
         <CardContent>

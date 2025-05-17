@@ -9,6 +9,7 @@ import { DominoEffectVisualization } from '@/components/simulations/linear-struc
 import { StackOfCardsVisualization } from '@/components/simulations/linear-structures/StackOfCardsVisualization';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
+import Breadcrumb from "@/components/common/Breadcrumb";
 
 const LinearStructuresSimulation = () => {
   const [activeTab, setActiveTab] = useState("timeline");
@@ -25,15 +26,28 @@ const LinearStructuresSimulation = () => {
   return (
     <BaseLayout>
       <div className="container mx-auto px-4 py-8">
+        <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Learn", href: "" },
+              { label: "Linear Data Structure", href: "" }
+            ]}
+            className="mt-16"
+          />
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-3xl font-bold mb-2">Linear Data Structures Visualization</h1>
-          <p className="text-gray-600 mb-8">
-            Explore different visualizations of linear data structures and algorithms where elements are arranged in a straight, sequential order.
-          </p>
+          <div className="mt-8 mb-8 ml-1 md:ml-0">
+            <h1 className="text-4xl font-bold text-[#83AFC9] mb-2 mt-4">
+              Linear Data Structures Visualization
+            </h1>
+            <p className="text-gray-600">
+              Explore different visualizations of linear data structures and algorithms where elements are arranged in a straight, sequential order.
+            </p>
+          </div>
         </motion.div>
 
         <Tabs defaultValue="timeline" value={activeTab} onValueChange={setActiveTab} className="w-full">
