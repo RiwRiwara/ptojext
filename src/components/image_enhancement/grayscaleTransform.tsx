@@ -1,13 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from "react";
-import { Button, Slider, Card, CardBody, CardHeader, Divider } from "@heroui/react";
-import { FiImage, FiSliders } from "react-icons/fi";
+import {
+  Button,
+  Slider,
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+} from "@heroui/react";
+import { FiImage, FiSliders, FiUpload, FiRepeat } from "react-icons/fi";
 import { BlockMath } from "react-katex";
-// import "katex/dist/katex.min.css";
 import { GrayScaleTypes } from "@/components/image_enhancement/types";
+import UploadImage from "@/components/image_enhancement/enhanceImageUpload";
 
 type GrayKey = "linear" | "log" | "power-law";
+type Mode = "default" | "upload";
 
 const grayscaleTypes: GrayScaleTypes[] = [
   {
@@ -34,16 +42,19 @@ const grayscaleTypes: GrayScaleTypes[] = [
 
 export default function GrayscaleTransformSection() {
   const [selected, setSelected] = useState<GrayKey>("linear");
-  // Initialize with a default value (0) to avoid undefined state
-  const [param, setParam] = useState<number>(grayscaleTypes.find((g) => g.key === "linear")?.param?.default || 0);
-
-  // Update param when selected transform changes
-  useEffect(() => {
-    const defaultValue = grayscaleTypes.find((t) => t.key === selected)?.param?.default || 0;
-    setParam(defaultValue);
-  }, [selected]);
+  const [param, setParam] = useState<number>(
+    grayscaleTypes.find((g) => g.key === "linear")?.param?.default || 0
+  );
+  const [mode, setMode] = useState<Mode>("default");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const defaultValue =
+      grayscaleTypes.find((t) => t.key === selected)?.param?.default || 0;
+    setParam(defaultValue);
+  }, [selected]);
 
   const applyTransform = useCallback(
     (img: HTMLImageElement) => {
@@ -64,17 +75,13 @@ export default function GrayscaleTransformSection() {
         let gray = 0.299 * r + 0.587 * g + 0.114 * b;
 
         switch (selected) {
-          case "log": {
-            // Using param directly since we've ensured it's never undefined
+          case "log":
             gray = (param * Math.log1p(gray)) / Math.log(256);
             gray = Math.min(255, gray);
             break;
-          }
-          case "power-law": {
-            // Using param directly since we've ensured it's never undefined
+          case "power-law":
             gray = 255 * Math.pow(gray / 255, param);
             break;
-          }
         }
 
         data[i] = data[i + 1] = data[i + 2] = gray;
@@ -87,38 +94,81 @@ export default function GrayscaleTransformSection() {
 
   useEffect(() => {
     const img = new Image();
-    img.src = "/mri.jpg";
+    if (mode === "default") {
+      img.src = "/mri.jpg";
+    } else if (uploadedImageUrl) {
+      img.src = uploadedImageUrl;
+    } else {
+      return;
+    }
     img.onload = () => applyTransform(img);
-  }, [applyTransform]);
+  }, [param, selected, uploadedImageUrl, mode, applyTransform]);
 
   const meta = grayscaleTypes.find((t) => t.key === selected)!;
 
   return (
     <div className="container mx-auto flex flex-col gap-6 p-6">
+      <div className="flex items-center gap-3">
+        {mode === "default" ? (
+          <Button
+            color="primary"
+            variant="solid"
+            onPress={() => {
+              setMode("upload");
+              setUploadedImageUrl(null);
+            }}
+            startContent={<FiUpload />}
+          >
+            Upload your image
+          </Button>
+        ) : (
+          <Button
+            color="primary"
+            variant="bordered"
+            onPress={() => {
+              setMode("default");
+              setUploadedImageUrl(null);
+            }}
+            startContent={<FiRepeat />}
+          >
+            Back to default image
+          </Button>
+        )}
+      </div>
+
       <div className="flex items-center gap-2 mb-2">
         <FiImage className="text-primary" />
-        <h1 className="text-xl font-semibold">
-          {meta.label} Transform
-        </h1>
+        <h1 className="text-xl font-semibold">{meta.label} Transform</h1>
       </div>
-      
+
       <div className="flex flex-col md:flex-row justify-center gap-6">
-        <Card className="w-full md:w-1/2 shadow-md">
-          <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
-            <h4 className="text-sm font-medium text-gray-600">Preview</h4>
-          </CardHeader>
-          <CardBody className="overflow-visible py-4">
-            <canvas
-              ref={canvasRef}
-              className="mx-auto rounded-lg max-w-full"
+        {mode === "upload" && !uploadedImageUrl ? (
+          <div className="w-full md:w-1/2">
+            <UploadImage
+              title="Upload image for grayscale transformation"
+              onImageUpload={(src) => setUploadedImageUrl(src)}
             />
-          </CardBody>
-        </Card>
+          </div>
+        ) : (
+          <Card className="w-full md:w-1/2 shadow-md">
+            <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
+              <h4 className="text-sm font-medium text-gray-600">Preview</h4>
+            </CardHeader>
+            <CardBody className="overflow-visible py-4">
+              <canvas
+                ref={canvasRef}
+                className="mx-auto rounded-lg max-w-full"
+              />
+            </CardBody>
+          </Card>
+        )}
 
         <div className="flex flex-col gap-6 w-full md:w-1/2">
           <Card className="shadow-md">
             <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
-              <h4 className="text-sm font-medium text-gray-600">Transform Type</h4>
+              <h4 className="text-sm font-medium text-gray-600">
+                Transform Type
+              </h4>
             </CardHeader>
             <CardBody>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -139,13 +189,15 @@ export default function GrayscaleTransformSection() {
 
           <Card className="shadow-md">
             <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
-              <h4 className="text-sm font-medium text-gray-600">Transform Details</h4>
+              <h4 className="text-sm font-medium text-gray-600">
+                Transform Details
+              </h4>
             </CardHeader>
-            <CardBody className="space-y-4">
+            <CardBody className="space-y-4 pb-8">
               <p className="text-sm text-gray-700">{meta.description}</p>
-              
+
               <Divider className="my-2" />
-              
+
               <div className="flex items-center gap-2">
                 <FiSliders className="text-primary" />
                 <h3 className="text-sm font-medium">Formula</h3>
@@ -158,7 +210,9 @@ export default function GrayscaleTransformSection() {
                     <label className="text-sm font-medium flex items-center gap-2">
                       <span>{meta.param.label.replace(/\\/, "")}</span>
                     </label>
-                    <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">{param.toFixed(2)}</span>
+                    <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
+                      {param.toFixed(2)}
+                    </span>
                   </div>
                   <Slider
                     size="sm"
@@ -172,8 +226,14 @@ export default function GrayscaleTransformSection() {
                     color="primary"
                     showSteps={meta.param.step >= 0.5}
                     marks={[
-                      { value: meta.param.min, label: meta.param.min.toString() },
-                      { value: meta.param.max, label: meta.param.max.toString() }
+                      {
+                        value: meta.param.min,
+                        label: meta.param.min.toString(),
+                      },
+                      {
+                        value: meta.param.max,
+                        label: meta.param.max.toString(),
+                      },
                     ]}
                   />
                 </div>

@@ -16,7 +16,11 @@ export default function ImageEnhancementPage() {
     { id: "histogram", label: "Histogram Processing" },
     { id: "sharpenSmooth", label: "Smoothing and Sharpening" },
     { id: "subtraction", label: "Image Subtraction" },
-    { id: "quiz", label: "Challenge Quiz", href: "/simu/image_enhancement/quiz" },
+    {
+      id: "quiz",
+      label: "Challenge Quiz",
+      href: "/simu/image_enhancement/quiz",
+    },
   ];
 
   const scrollToSection = (sectionId: string) => {
@@ -42,7 +46,10 @@ export default function ImageEnhancementPage() {
               Image Enhancement
             </h1>
             <p>
-              {t("mean", "Image enhancement is the process of making images more useful (such as making images more visually appealing, bringing out specific features, removing noise from images and highlighting interesting details in images). ")}
+              {t(
+                "mean",
+                "Image enhancement is the process of making images more useful (such as making images more visually appealing, bringing out specific features, removing noise from images and highlighting interesting details in images). "
+              )}
             </p>
           </div>
 
@@ -52,9 +59,13 @@ export default function ImageEnhancementPage() {
               {sections.map(({ id, label, href }) => (
                 <Button
                   key={id}
-                  onPress={() => href ? window.location.href = href : scrollToSection(id)}
+                  onPress={() =>
+                    href ? (window.location.href = href) : scrollToSection(id)
+                  }
                   className="w-full lg:w-fit py-2 mx-4 md:mx-0 text-sm font-medium rounded-md transition bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-gray-900"
-                  aria-label={href ? `Navigate to ${label}` : `Scroll to ${label}`}
+                  aria-label={
+                    href ? `Navigate to ${label}` : `Scroll to ${label}`
+                  }
                 >
                   {label}
                 </Button>
@@ -71,7 +82,7 @@ export default function ImageEnhancementPage() {
               <div className="flex items-center gap-6 bg-indigo-50 p-6">
                 <div className="bg-indigo-600 h-8 w-1 rounded-full"></div>
                 <h2 className="text-lg md:text-2xl font-semibold">
-                  Apply Grayscale Transformations to Your Image
+                  Grayscale Transformations
                 </h2>
               </div>
 
@@ -92,7 +103,10 @@ export default function ImageEnhancementPage() {
               <HistogramProcessingSection />
             </section>
 
-            <section id="sharpenSmooth" className="bg-white rounded-xl drop-shadow-md">
+            <section
+              id="sharpenSmooth"
+              className="bg-white rounded-xl drop-shadow-md"
+            >
               <div className="flex items-center gap-6 bg-green-50 p-6">
                 <div className="bg-green-600 h-8 w-1 rounded-full"></div>
                 <h2 className="text-lg md:text-2xl font-semibold">
@@ -103,7 +117,10 @@ export default function ImageEnhancementPage() {
               <SharpenSmoothTransformSection />
             </section>
 
-            <section id="subtraction" className="bg-white rounded-xl drop-shadow-md">
+            <section
+              id="subtraction"
+              className="bg-white rounded-xl drop-shadow-md"
+            >
               <div className="flex items-center gap-6 bg-purple-50 p-6">
                 <div className="bg-purple-600 h-8 w-1 rounded-full"></div>
                 <h2 className="text-xl md:text-2xl font-semibold text-center">
