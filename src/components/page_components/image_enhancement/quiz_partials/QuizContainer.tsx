@@ -18,11 +18,10 @@ import { FiEye, FiEyeOff, FiArrowLeft, FiArrowRight, FiCpu, FiRefreshCw, FiGlobe
 import { motion, AnimatePresence } from "framer-motion";
 import { QuizGenerator, QuizTheme, QuizDifficulty, GenerateQuizOptions } from "@/utils/image_processing/quiz/ImageProcessingQuizAI";
 import { useTranslation } from "react-i18next";
-import i18next from "@/utils/i18n.config";
 
 const QuizContainer: React.FC = () => {
   // Translation hook
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("imageQuizTranslations");
 
   // Quiz generator instance
   const quizGenerator = React.useMemo(() => new QuizGenerator(), []);

@@ -9,7 +9,7 @@ import ImageSubtractionSection from "@/components/image_enhancement/imageSubtrac
 import { Button } from "@nextui-org/button";
 
 export default function ImageEnhancementPage() {
-  const { t } = useTranslation("imageenhancement");
+  const { t } = useTranslation("imageenchanted");
 
   const sections = [
     { id: "grayscale", label: "Gray Level Transformation" },

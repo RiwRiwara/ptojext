@@ -261,7 +261,7 @@ export default function About() {
             <Breadcrumb
               items={[
                 { label: t("HOME", "Home"), href: "/" },
-                { label: t("ABOUT_US", "About Us") },
+                { label: t("ABOUT_TITLE", "About Us") },
               ]}
             />
           </div>

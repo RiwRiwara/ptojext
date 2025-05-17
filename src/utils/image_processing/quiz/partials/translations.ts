@@ -60,10 +60,10 @@ export const medicalTerms: Record<string, string> = {
  * Generates a Thai title based on the English title and theme
  */
 export function getThaiTitle(theme: QuizTheme, englishTitle: string): string {
-    const quizKeys = Object.keys(resources.en.translation).filter((key) => key.includes('quiz') && key.includes('Title'));
+    const quizKeys = Object.keys(resources.en.imageQuizTranslations ).filter((key) => key.includes('quiz') && key.includes('Title'));
     for (const key of quizKeys) {
-        if ((resources.en.translation as TranslationResource)[key] === englishTitle && (resources.th.translation as TranslationResource)[key]) {
-            return (resources.th.translation as TranslationResource)[key];
+        if ((resources.en.imageQuizTranslations as TranslationResource)[key] === englishTitle && (resources.th.imageQuizTranslations as TranslationResource)[key]) {
+            return (resources.th.imageQuizTranslations as TranslationResource)[key];
         }
     }
 
@@ -93,10 +93,10 @@ export function getThaiTitle(theme: QuizTheme, englishTitle: string): string {
  * Generates a Thai description based on the English description
  */
 export function getThaiDescription(englishDescription: string): string {
-    const quizKeys = Object.keys(resources.en.translation).filter((key) => key.includes('quiz') && key.includes('Description'));
+    const quizKeys = Object.keys(resources.en.imageQuizTranslations).filter((key) => key.includes('quiz') && key.includes('Description'));
     for (const key of quizKeys) {
-        if ((resources.en.translation as TranslationResource)[key] === englishDescription && (resources.th.translation as TranslationResource)[key]) {
-            return (resources.th.translation as TranslationResource)[key];
+        if ((resources.en.imageQuizTranslations as TranslationResource)[key] === englishDescription && (resources.th.imageQuizTranslations as TranslationResource)[key]) {
+            return (resources.th.imageQuizTranslations as TranslationResource)[key];
         }
     }
 

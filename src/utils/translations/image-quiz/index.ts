@@ -1,4 +1,5 @@
+
 import en from './en.json';
 import th from './th.json';
 
-export const sortQuizTranslations = { en, th };
+export const imageQuizTranslations = { en, th };

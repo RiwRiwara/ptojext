@@ -1,0 +1,71 @@
+{
+  "quizTitle": "Image Enhancement Quiz",
+  "predefinedQuizzes": "Predefined Quizzes",
+  "aiGeneratedQuiz": "AI-Generated Quiz",
+  "medicalSpecialty": "Medical Specialty",
+  "challengeLevel": "Challenge Level",
+  "generateNewAiQuiz": "Generate New AI Quiz",
+  "aiGeneratingQuiz": "AI Generating Quiz...",
+  "checkAnswer": "Check Answer",
+  "showHintImage": "Show Hint Image",
+  "hideHintImage": "Hide Hint Image",
+  "hintImageTitle": "Hint Image (Correctly Enhanced)",
+  "hintImageDescription": "This shows the image with the correct enhancement values applied",
+  "quizComplete": "Quiz Complete!",
+  "finalScore": "Your final score: {{score}} out of {{total}}",
+  "restartQuiz": "Restart Quiz",
+  "previous": "Previous",
+  "next": "Next",
+  "question": "Question {{current}} of {{total}}",
+  "score": "Score: {{score}}",
+  "attempts": "Attempts: {{current}}/{{max}}",
+  "currentScore": "Current Score: {{score}}",
+  
+  "general": "General Medical",
+  "radiology": "Radiology",
+  "cardiology": "Cardiology",
+  "neurology": "Neurology",
+  "oncology": "Oncology",
+  
+  "beginner": "Beginner",
+  "intermediate": "Intermediate",
+  "advanced": "Advanced",
+  
+  "aiGeneratedFor": "AI-generated for {{specialty}} specialty at {{level}} level",
+  
+  "quiz1Title": "Enhance Chest X-ray",
+  "quiz1Description": "Adjust the contrast to improve the visibility of lung structures in this chest X-ray.",
+  "quiz1Hint": "Try increasing the contrast to make the lung structures more visible against the background.",
+  
+  "quiz2Title": "Brighten Dark MRI",
+  "quiz2Description": "Increase the brightness to reveal details in this underexposed brain MRI.",
+  "quiz2Hint": "Increasing brightness will help reveal details in the darker regions of the image.",
+  
+  "quiz3Title": "Adjust Gamma in CT Scan",
+  "quiz3Description": "Modify the gamma correction to enhance the visibility of soft tissues in this abdominal CT scan.",
+  "quiz3Hint": "Gamma correction can help balance the midtones without affecting the darkest and brightest parts too much.",
+  
+  "quiz4Title": "Equalize Histogram in Ultrasound",
+  "quiz4Description": "Apply histogram equalization to improve the contrast in this ultrasound image.",
+  "quiz4Hint": "Histogram equalization redistributes intensity values to improve overall contrast in images with poor contrast.",
+  
+  "quiz5Title": "Apply Smoothing to Noisy Image",
+  "quiz5Description": "Use a smoothing filter to reduce noise in this medical image while preserving important details.",
+  "quiz5Hint": "Smoothing filters can help reduce noise but may blur important details. Try different kernel sizes.",
+  
+  "quiz6Title": "Sharpen Radiograph",
+  "quiz6Description": "Apply a sharpening filter to enhance the edges in this bone radiograph.",
+  "quiz6Hint": "Sharpening enhances edges and can make boundaries between structures more visible.",
+  
+  "quiz7Title": "Detect Boundaries in Retinal Scan",
+  "quiz7Description": "Use edge detection to highlight the boundaries between different structures in this retinal scan.",
+  "quiz7Hint": "Edge detection can help identify the boundaries between different structures in the retina.",
+  
+  "quiz8Title": "Isolate Contrast Medium in Angiogram",
+  "quiz8Description": "Use image subtraction to isolate the contrast medium in this angiogram.",
+  "quiz8Hint": "Adjust the subtraction value until only the blood vessels with contrast medium are visible.",
+  
+  "quiz9Title": "Combination Enhancement for Chest X-ray",
+  "quiz9Description": "Apply a combination of contrast, brightness, and gamma adjustments to enhance this chest X-ray for better diagnosis.",
+  "quiz9Hint": "A combination of adjustments can reveal both bone structure and soft tissue details."
+}
