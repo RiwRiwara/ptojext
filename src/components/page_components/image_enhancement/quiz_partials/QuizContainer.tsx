@@ -327,7 +327,6 @@ const QuizContainer: React.FC = () => {
           classNames={{
             tabList: "p-0 border-b-2 border-gray-200 gap-4",
             tab: "px-4 py-2 rounded-t-lg font-medium",
-            tabContent: "p-4",
           }}
         >
           <Tab
