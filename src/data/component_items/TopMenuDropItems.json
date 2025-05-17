@@ -35,6 +35,22 @@
             ]
           },
           {
+            "name": "Data Structures",
+            "className": "data-structures",
+            "children": [
+              {
+                "name": "Learn Data Structures",
+                "link": "/learn/data-structures",
+                "className": "learn-data-structures"
+              },
+              {
+                "name": "Linear Structures",
+                "link": "/simulations/linear-structures",
+                "className": "linear-structures"
+              }
+            ]
+          },
+          {
             "name": "Image processing",
             "className": "image-processing",
             "children": [
@@ -52,6 +68,17 @@
                 "name": "Image Processing Quiz",
                 "link": "/simu/image_enhancement/quiz",
                 "className": "image-processing-quiz"
+              }
+            ]
+          },
+          {
+            "name": "Pathfinding",
+            "className": "pathfinding",
+            "children": [
+              {
+                "name": "Pathfinding",
+                "link": "/simulations/pathfinding",
+                "className": "pathfinding"
               }
             ]
           },
