@@ -22,6 +22,14 @@ import {
   FaEye,
   // FaChalkboardTeacher,
 } from "react-icons/fa";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+} from "@heroui/drawer";
+import { Button } from "@nextui-org/button";
 
 const sortingAlgorithms: SortingAlgorithm[] = [
   {
@@ -374,8 +382,8 @@ export default function SortingVisualizerPage() {
           <Breadcrumb
             items={[
               { label: "Home", href: "/" },
-              // { label: "Playground", href: "/playground" },
-              // { label: "Algorithms", href: "/playground/algorithms" },
+              { label: "Playground", href: "" },
+              { label: "Algorithms", href: "" },
               { label: "Sorting", href: "/playground/algorithms/sorting" },
             ]}
           />

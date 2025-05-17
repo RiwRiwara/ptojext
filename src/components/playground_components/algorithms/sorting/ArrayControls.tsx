@@ -65,7 +65,7 @@ export default function ArrayControls({
                     <div className="flex justify-end">
                             <Button
                             onPress={onRandomize}
-                            className="flex items-center justify-center gap-1 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-all disabled:opacity-50 text-sm"
+                            className="flex items-center justify-center gap-1 px-6 py-2 bg-[#83AFC9] text-white rounded-md transition-all disabled:opacity-50 text-sm"
                             disabled={isPlaying}
                         >
                             <FaRandom size={14} />

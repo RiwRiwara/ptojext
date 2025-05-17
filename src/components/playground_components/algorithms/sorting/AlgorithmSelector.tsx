@@ -14,11 +14,9 @@ export default function AlgorithmSelector({
   onAlgoChange,
   algoData,
 }: AlgorithmSelectorProps) {
+
   return (
     <section className="mb-4">
-      {/* <h2 className="text-base lg:text-lg font-semibold text-gray-800 mb-4">
-        Select Algorithm
-      </h2> */}
       <div className="flex flex-col md:flex-row gap-3">
         {algorithms.map((algo) => (
           <Button
@@ -38,6 +36,7 @@ export default function AlgorithmSelector({
             <p className="text-sm">{selectedAlgo === algo.key && (<span>{algo.description}</span>)}</p>
         ))} */}
       </div>
+
       {algoData && (
         <div className="mt-6 bg-gray-50 p-4 rounded-md">
           <p className="text-gray-600 text-sm">{algoData.description}</p>

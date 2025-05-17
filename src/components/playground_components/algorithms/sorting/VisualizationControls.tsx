@@ -42,9 +42,9 @@ export default function VisualizationControls({
                 <div className="flex flex-row gap-2">
                     <Button
                     onClick={() => setIsPlaying(!isPlaying)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-md shadow-md transition-all ${isPlaying
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-md transition-all ${isPlaying
                         ? "bg-amber-600 text-white hover:bg-amber-700"
-                        : "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-[#83AFC9] text-white"
                         }`}
                 >
                     {isPlaying ? <FaPause /> : <FaPlay />}
@@ -53,7 +53,7 @@ export default function VisualizationControls({
 
                     <Button
                     onClick={onReset}
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all disabled:opacity-50"
                     disabled={isPlaying}
                 >
                     <FaRedo />
@@ -94,7 +94,7 @@ export default function VisualizationControls({
                         step="0.1"
                         value={speed}
                         onChange={(e) => setSpeed(Number(e.target.value))}
-                        className="w-full h-2 bg-gray-300 rounded-lg cursor-pointer accent-indigo-600"
+                        className="w-full h-2 bg-gray-300 rounded-lg cursor-pointer accent-[#83AFC9]"
                     />
                     <span className="text-sm text-gray-600 w-10 text-right">
                         {speed.toFixed(1)}x

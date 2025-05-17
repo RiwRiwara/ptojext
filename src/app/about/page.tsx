@@ -43,7 +43,7 @@ const teamMembers: TeamMember[] = [
     },
   },
   {
-    name: "Yayee - Thianchai Punnapa",
+    name: "Yayee - Punnapa Thianchai",
     role: "Frontend Developer",
     bio: "Creative designer focused on crafting intuitive and accessible user experiences. Responsible for the visual identity and interactive elements of the platform.",
     image: "/team/profile3.webp",
@@ -437,7 +437,7 @@ export default function About() {
                           src={member.image}
                           alt={`${member.name}, ${member.role} at Visual Right`}
                           fill
-                          style={{ objectFit: "cover" }}
+                          style={{ objectFit: "cover"}}
                           loading="lazy"
                         />
                       </div>
