@@ -2,7 +2,7 @@ import React, { useState, memo, useCallback, useMemo, FC, useEffect } from "reac
 import { motion, AnimatePresence } from "framer-motion";
 import useMeasure from "react-use-measure";
 import { IoSearch, IoClose, IoChevronDown } from "react-icons/io5";
-import { FaCode, FaImage, FaSort, FaMagic, FaSearch, FaChartBar, FaGamepad, FaSpinner } from "react-icons/fa";
+import { FaCode, FaImage, FaSort, FaMagic, FaSearch, FaChartBar, FaGamepad, FaSpinner, FaSitemap, FaTrain } from "react-icons/fa";
 import { MdOutlineCategory, MdInfo, MdSupport } from "react-icons/md";
 import { AiOutlineRobot } from "react-icons/ai";
 import { TbMathFunction, TbBrain } from "react-icons/tb";
@@ -84,6 +84,9 @@ const childIcons: { [key: string]: JSX.Element } = {
   Pathfinding: <TbMathFunction className="text-purple-500" size={18} />,
   "Sorting Quiz": <FaGamepad className="text-primary-600" size={18} />,
   "Search Quiz": <FaGamepad className="text-primary-600" size={18} />,
+  "Learn Data Structures" : <FaSitemap className="text-orange-600" size={18} />,
+  "Linear Structures": <FaTrain className="text-orange-600" size={18} />,
+  "Playground": <FaGamepad className="text-primary-600" size={18} />,
 };
 
 // Child Tree Component
