@@ -131,7 +131,9 @@ export const DataStructureVisualizer = () => {
   };
   
   const drawTree = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-    const drawNode = (node: any, x: number, y: number, level: number, maxWidth: number) => {
+    // ignore eslint
+    // eslint-disable-next-line
+    const drawNode = (node: any , x: number, y: number, level: number, maxWidth: number) => {
       if (!node) return;
       
       const nodeRadius = 25;

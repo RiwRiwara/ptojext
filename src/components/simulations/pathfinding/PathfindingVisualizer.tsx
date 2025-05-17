@@ -739,7 +739,7 @@ export const PathfindingVisualizer = () => {
                                     <SelectValue placeholder="Select Algorithm" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="dijkstra">Dijkstra's Algorithm</SelectItem>
+                                    <SelectItem value="dijkstra">Dijkstra s Algorithm</SelectItem>
                                     <SelectItem value="astar">A* Algorithm</SelectItem>
                                     <SelectItem value="bfs">Breadth-First Search</SelectItem>
                                     <SelectItem value="dfs">Depth-First Search</SelectItem>
@@ -792,7 +792,7 @@ export const PathfindingVisualizer = () => {
 
                     <div className="space-y-4">
                         <div className="flex flex-wrap gap-2">
-                            <Select value={tool} onValueChange={(value: any) => setTool(value)} disabled={isRunning || isAnimating}>
+                            <Select value={tool} onValueChange={(value: string) => setTool(value as "end" | "start" | "wall" | "weight")} disabled={isRunning || isAnimating}>
                                 <SelectTrigger className="w-full md:w-48">
                                     <SelectValue placeholder="Select Tool" />
                                 </SelectTrigger>

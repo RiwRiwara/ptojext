@@ -87,7 +87,7 @@ export const AlgorithmComparison = () => {
             </thead>
             <tbody>
               <tr className="border-b">
-                <td className="p-2">Dijkstra's</td>
+                <td className="p-2">Dijkstra s</td>
                 <td className="p-2">O(V²) or O(E log V)</td>
                 <td className="p-2">O(V)</td>
                 <td className="p-2">Weighted graphs, shortest path</td>

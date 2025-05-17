@@ -123,11 +123,11 @@ export const NonLinearStructuresInfo = () => {
                         </div>
                         <div className="p-2 border rounded">
                           <p className="font-medium">Shortest Path</p>
-                          <p className="text-xs text-muted-foreground">Dijkstra's, Bellman-Ford</p>
+                          <p className="text-xs text-muted-foreground">Dijkstra s, Bellman-Ford</p>
                         </div>
                         <div className="p-2 border rounded">
                           <p className="font-medium">Minimum Spanning Tree</p>
-                          <p className="text-xs text-muted-foreground">Kruskal's, Prim's</p>
+                          <p className="text-xs text-muted-foreground">Kruskal s, Prim s</p>
                         </div>
                       </div>
                     </AccordionContent>

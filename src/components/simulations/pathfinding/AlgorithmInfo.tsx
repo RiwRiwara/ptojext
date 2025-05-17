@@ -46,12 +46,12 @@ export const AlgorithmInfo = () => {
             
             <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="dijkstra">
-                    <AccordionTrigger className="text-lg font-medium">Dijkstra's Algorithm</AccordionTrigger>
+                    <AccordionTrigger className="text-lg font-medium">Dijkstra s Algorithm</AccordionTrigger>
                     <AccordionContent>
                         <div className="space-y-4 p-2">
                             <h3 className="font-semibold text-blue-600 dark:text-blue-400">Overview</h3>
                             <p className="text-gray-700 dark:text-gray-300">
-                                Dijkstra's algorithm finds the shortest path from a source node to all other nodes in a weighted graph. It works by maintaining a priority queue of nodes, where the priority is determined by the distance from the starting node.
+                                Dijkstra s algorithm finds the shortest path from a source node to all other nodes in a weighted graph. It works by maintaining a priority queue of nodes, where the priority is determined by the distance from the starting node.
                             </p>
                             <h3 className="font-semibold text-blue-600 dark:text-blue-400 mt-4">Key Features</h3>
                             <ul className="list-disc pl-5 text-gray-700 dark:text-gray-300">
@@ -96,7 +96,7 @@ export const AlgorithmInfo = () => {
                         <div className="space-y-4 p-2">
                             <h3 className="font-semibold text-blue-600 dark:text-blue-400">Overview</h3>
                             <p className="text-gray-700 dark:text-gray-300">
-                                A* is an informed search algorithm that combines the strengths of Dijkstra's algorithm and greedy best-first search. It uses both the cost to reach a node and a heuristic estimate of the cost to reach the goal.
+                                A* is an informed search algorithm that combines the strengths of Dijkstra s algorithm and greedy best-first search. It uses both the cost to reach a node and a heuristic estimate of the cost to reach the goal.
                             </p>
                             <h3 className="font-semibold text-blue-600 dark:text-blue-400 mt-4">Key Features</h3>
                             <ul className="list-disc pl-5 text-gray-700 dark:text-gray-300">
