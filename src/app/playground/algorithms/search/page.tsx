@@ -7,10 +7,21 @@ import AlgorithmSelector from "@/components/playground_components/algorithms/sea
 import ArrayControls from "@/components/playground_components/algorithms/search/ArrayControls";
 import VisualizationControls from "@/components/playground_components/algorithms/search/VisualizationControls";
 import CodeDisplay from "@/components/playground_components/algorithms/search/CodeDisplay";
-import { AnimationStep, SearchAlgorithm } from "@/components/playground_components/algorithms/search/types";
+import {
+  AnimationStep,
+  SearchAlgorithm,
+} from "@/components/playground_components/algorithms/search/types";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { motion } from "framer-motion";
-import { FaInfoCircle, FaLightbulb, FaRegClock, FaMemory, FaCode, FaChalkboardTeacher } from "react-icons/fa";
+import {
+  FaEye,
+  FaInfoCircle,
+  FaLightbulb,
+  FaRegClock,
+  FaMemory,
+  FaCode,
+  FaChalkboardTeacher,
+} from "react-icons/fa";
 
 const searchAlgorithms: SearchAlgorithm[] = [
   {
@@ -100,7 +111,9 @@ export default function SearchVisualizerPage() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [speed, setSpeed] = useState<number>(5);
-  const [currentHighlightedLine, setCurrentHighlightedLine] = useState<string | null>(null);
+  const [currentHighlightedLine, setCurrentHighlightedLine] = useState<
+    string | null
+  >(null);
 
   // Animation interval reference
   const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -125,7 +138,10 @@ export default function SearchVisualizerPage() {
 
     // Set a random target from the array or a random number
     const randomIndex = Math.floor(Math.random() * newArray.length);
-    const randomTarget = Math.random() < 0.7 ? newArray[randomIndex] : Math.floor(Math.random() * max) + 1;
+    const randomTarget =
+      Math.random() < 0.7
+        ? newArray[randomIndex]
+        : Math.floor(Math.random() * max) + 1;
 
     setArray(newArray);
     setTarget(randomTarget);
@@ -189,22 +205,22 @@ export default function SearchVisualizerPage() {
       let result;
 
       switch (selectedAlgo) {
-        case 'linear-search':
+        case "linear-search":
           result = SearchAlgorithms.linearSearch(array, value);
           break;
-        case 'binary-search':
+        case "binary-search":
           result = SearchAlgorithms.binarySearch(array, value);
           break;
-        case 'jump-search':
+        case "jump-search":
           result = SearchAlgorithms.jumpSearch(array, value);
           break;
-        case 'interpolation-search':
+        case "interpolation-search":
           result = SearchAlgorithms.interpolationSearch(array, value);
           break;
         default:
           // If no algorithm is selected, default to linear search
           result = SearchAlgorithms.linearSearch(array, value);
-          setSelectedAlgo('linear-search');
+          setSelectedAlgo("linear-search");
       }
 
       setSteps(result.steps);
@@ -219,23 +235,23 @@ export default function SearchVisualizerPage() {
   // Handle search target
   const handleSearchTarget = () => {
     if (!selectedAlgo) return;
-    
+
     // Reset the current steps and visualization
     handleReset();
-    
+
     // Generate the search steps for the current array and target value
     let searchSteps;
     switch (selectedAlgo) {
-      case 'linear-search':
+      case "linear-search":
         searchSteps = SearchAlgorithms.linearSearch(array, target).steps;
         break;
-      case 'binary-search':
+      case "binary-search":
         searchSteps = SearchAlgorithms.binarySearch(array, target).steps;
         break;
-      case 'jump-search':
+      case "jump-search":
         searchSteps = SearchAlgorithms.jumpSearch(array, target).steps;
         break;
-      case 'interpolation-search':
+      case "interpolation-search":
         searchSteps = SearchAlgorithms.interpolationSearch(array, target).steps;
         break;
       default:
@@ -300,16 +316,16 @@ export default function SearchVisualizerPage() {
     let result;
 
     switch (selectedAlgo) {
-      case 'linear-search':
+      case "linear-search":
         result = SearchAlgorithms.linearSearch(array, target);
         break;
-      case 'binary-search':
+      case "binary-search":
         result = SearchAlgorithms.binarySearch(array, target);
         break;
-      case 'jump-search':
+      case "jump-search":
         result = SearchAlgorithms.jumpSearch(array, target);
         break;
-      case 'interpolation-search':
+      case "interpolation-search":
         result = SearchAlgorithms.interpolationSearch(array, target);
         break;
       default:
@@ -399,35 +415,104 @@ export default function SearchVisualizerPage() {
 
   return (
     <BaseLayout>
-      <div className="py-4 bg-gray-50 rounded-md">
+      <div className="py-4 bg-white rounded-md">
         <main className="container mx-auto px-4 py-0">
           <Breadcrumb
             items={[
               { label: "Home", href: "/" },
-              { label: "Playground", href: "/playground" },
-              { label: "Algorithms", href: "/playground/algorithms" },
-              { label: "Search", href: "/playground/algorithms/search" },
+              { label: "Playground", href: "" },
+              { label: "Algorithms", href: "" },
+              { label: "Search", href: "" },
             ]}
           />
 
           <div className="mt-8 mb-8 ml-1 md:ml-0">
-            <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">Search Algorithm Visualizer</h1>
+            <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">
+              Search Algorithm Visualizer
+            </h1>
             <p className="text-gray-600">
-              Visualize and understand how different search algorithms work step by step.
+              Visualize and understand how different search algorithms work step
+              by step.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left column - Algorithm selection and controls */}
-            <div className="lg:col-span-1 space-y-6">
-              <AlgorithmSelector
-                algorithms={searchAlgorithms}
-                selectedAlgo={selectedAlgo}
-                onSelectAlgorithm={handleSelectAlgorithm}
-              />
+          <div className="flex flex-col gap-6">
+            {/* Top column - Algorithm selection */}
+            <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+              {/* Visualization area */}
+              <div className="w-full md:w-[60%]">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white border rounded-lg shadow-md p-4 min-h-[970px]"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <FaEye className="text-[#83AFC9]" />
+                    <h3 className="text-base md:text-lg font-medium text-gray-700">
+                      Algorithm Visualization
+                    </h3>
+                  </div>
 
-              <div className="bg-white rounded-lg shadow-md p-4">
-                
+                  <AlgorithmSelector
+                    algorithms={searchAlgorithms}
+                    selectedAlgo={selectedAlgo}
+                    onSelectAlgorithm={handleSelectAlgorithm}
+                  />
+
+                  <ArrayControls
+                    arraySize={arraySize}
+                    onArraySizeChange={handleArraySizeChange}
+                    onGenerateArray={generateArray}
+                    target={target}
+                    onTargetChange={handleTargetChange}
+                    isSorted={isSorted}
+                    onToggleSorted={handleToggleSorted}
+                    selectedAlgo={selectedAlgo}
+                    requiresSorted={selectedAlgoData?.requiresSorted || false}
+                    onSearch={handleSearchTarget}
+                  />
+
+                  <SearchVisualizer
+                    array={array}
+                    target={target}
+                    steps={steps}
+                    currentStep={currentStep}
+                    colorScheme={
+                      selectedAlgoData?.colorScheme ||
+                      searchAlgorithms[0].colorScheme
+                    }
+                    speed={speed}
+                    isPlaying={isPlaying}
+                    isSorted={isSorted}
+                    onSearch={handleSearch}
+                  />
+                </motion.div>
+              </div>
+
+              {/* Code display */}
+              <div className="w-full md:w-[40%]">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="bg-white border rounded-lg shadow-md p-4 h-[970px]"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <FaCode className="text-[#83AFC9]" />
+                    <h3 className="text-base md:text-lg font-medium text-gray-700">
+                      Algorithm Code
+                    </h3>
+                  </div>
+
+                  <CodeDisplay
+                    selectedAlgo={selectedAlgo}
+                    currentHighlightedLine={currentHighlightedLine}
+                  />
+                </motion.div>
+              </div>
+
+              {/* <div className="bg-white rounded-lg shadow-md p-4">
                 <div className="space-y-4">
                   <ArrayControls
                     arraySize={arraySize}
@@ -455,10 +540,10 @@ export default function SearchVisualizerPage() {
                     totalSteps={steps.length}
                   />
                 </div>
-              </div>
+              </div> */}
 
               {/* Algorithm Info Card */}
-              {selectedAlgoData && (
+              {/* {selectedAlgoData && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -537,12 +622,11 @@ export default function SearchVisualizerPage() {
                     </ul>
                   </div>
                 </motion.div>
-              )}
+              )} */}
             </div>
 
             {/* Right column - Visualization and code */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Visualization area */}
+            {/* <div className="lg:col-span-2 space-y-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -561,7 +645,6 @@ export default function SearchVisualizerPage() {
                 />
               </motion.div>
 
-              {/* Code display */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -573,9 +656,89 @@ export default function SearchVisualizerPage() {
                   currentHighlightedLine={currentHighlightedLine}
                 />
               </motion.div>
-            </div>
-          </div>
+            </div> */}
 
+            {selectedAlgoData && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white border rounded-lg shadow-md p-4"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <FaInfoCircle className="text-[#83AFC9]" />
+                    <h3 className="text-lg font-medium text-gray-700">Complexity Analysis</h3>
+                  </div>
+
+                  <p className="text-gray-600 text-sm mb-4">{selectedAlgoData.description}</p>
+
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                      <FaRegClock className="text-[#83AFC9]" /> <span>Time Complexity</span>
+                    </h4>
+                    <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
+                      <div className="bg-white p-2 rounded border border-gray-200">
+                        <span className="text-gray-500 block">Best Case</span>
+                        <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.time.best}</span>
+                      </div>
+                      <div className="bg-white p-2 rounded border border-gray-200">
+                        <span className="text-gray-500 block">Average</span>
+                        <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.time.average}</span>
+                      </div>
+                      <div className="bg-white p-2 rounded border border-gray-200">
+                        <span className="text-gray-500 block">Worst Case</span>
+                        <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.time.worst}</span>
+                      </div>
+                    </div>
+
+                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                      <FaMemory className="text-[#83AFC9]" /> <span>Space Complexity</span>
+                    </h4>
+                    <div className="bg-white p-2 rounded border border-gray-200 text-xs mb-3">
+                      <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.space}</span>
+                    </div>
+
+                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                      <FaLightbulb className="text-[#83AFC9]" /> <span>Best Used When</span>
+                    </h4>
+                    <ul className="list-disc pl-5 text-sm text-gray-600">
+                      {selectedAlgo === 'linear-search' && (
+                        <>
+                          <li>The array is unsorted</li>
+                          <li>The array is small</li>
+                          <li>Simplicity is preferred over efficiency</li>
+                          <li>You need to find all occurrences of an element</li>
+                        </>
+                      )}
+                      {selectedAlgo === 'binary-search' && (
+                        <>
+                          <li>The array is sorted</li>
+                          <li>The array is large</li>
+                          <li>Efficiency is important</li>
+                          <li>You need to find a single occurrence quickly</li>
+                        </>
+                      )}
+                      {selectedAlgo === 'jump-search' && (
+                        <>
+                          <li>The array is sorted</li>
+                          <li>Binary search is too complex for the use case</li>
+                          <li>You need better performance than linear search</li>
+                          <li>The array is medium to large sized</li>
+                        </>
+                      )}
+                      {selectedAlgo === 'interpolation-search' && (
+                        <>
+                          <li>The array is sorted</li>
+                          <li>Elements are uniformly distributed</li>
+                          <li>You need better average performance than binary search</li>
+                          <li>The array is large</li>
+                        </>
+                      )}
+                    </ul>
+                  </div>
+                </motion.div>
+              )}
+          </div>
         </main>
       </div>
     </BaseLayout>

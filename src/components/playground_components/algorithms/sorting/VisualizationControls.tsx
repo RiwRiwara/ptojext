@@ -37,9 +37,10 @@ export default function VisualizationControls({
     onNextStep,
 }: VisualizationControlsProps) {
     return (
-        <section className="mb-8 sticky top-0 bg-white rounded-lg shadow-sm p-4 z-10">
-            <div className="flex flex-wrap items-center gap-4">
-                <Button
+        <section>
+            <div className="flex flex-row items-center gap-4 lg:gap-8 mb-2 md:mb-0">
+                <div className="flex flex-row gap-2">
+                    <Button
                     onClick={() => setIsPlaying(!isPlaying)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-md shadow-md transition-all ${isPlaying
                         ? "bg-amber-600 text-white hover:bg-amber-700"
@@ -47,39 +48,45 @@ export default function VisualizationControls({
                         }`}
                 >
                     {isPlaying ? <FaPause /> : <FaPlay />}
-                    {isPlaying ? "Pause" : "Play"}
-                </Button>
-                <Button
+                    {/* {isPlaying ? "Pause" : "Play"} */}
+                    </Button>
+
+                    <Button
                     onClick={onReset}
                     className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-all disabled:opacity-50"
                     disabled={isPlaying}
                 >
                     <FaRedo />
-                    Reset
-                </Button>
-                <div className="flex items-center gap-2">
-                    <Button
-                        onClick={onPrevStep}
-                        className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all disabled:opacity-50"
-                        disabled={isPlaying || currentStep <= 0}
-                    >
-                        <FaStepBackward />
-                        Prev
+                    {/* Reset */}
                     </Button>
-                    <span className="text-sm font-medium mx-2">
-                        Step {currentStep + 1} of {Math.max(totalSteps, 1)}
-                    </span>
-                    <Button
-                        onClick={onNextStep}
-                        className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all disabled:opacity-50"
-                        disabled={isPlaying || currentStep >= totalSteps - 1}
-                    >
-                        Next
-                        <FaStepForward />
-                    </Button>
+
+                    {/* <div className="flex items-center gap-2">
+                        <Button
+                            onClick={onPrevStep}
+                            className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all disabled:opacity-50"
+                            disabled={isPlaying || currentStep <= 0}
+                        >
+                            <FaStepBackward />
+                            Prev
+                        </Button>
+
+                        <span className="text-sm font-medium mx-2">
+                            Step {currentStep + 1} of {Math.max(totalSteps, 1)}
+                        </span>
+                        
+                        <Button
+                            onClick={onNextStep}
+                            className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all disabled:opacity-50"
+                            disabled={isPlaying || currentStep >= totalSteps - 1}
+                        >
+                            Next
+                            <FaStepForward />
+                        </Button>
+                    </div> */}
                 </div>
-                <div className="flex items-center gap-2 min-w-[200px]">
-                    <MdSpeed className="text-gray-600" />
+                
+                <div className="flex items-center gap-2 min-w-[100px] justify-end">
+                    <MdSpeed className="text-gray-600 hidden md:flex" />
                     <input
                         type="range"
                         min="0.1"
@@ -93,7 +100,6 @@ export default function VisualizationControls({
                         {speed.toFixed(1)}x
                     </span>
                 </div>
-
             </div>
         </section>
     );

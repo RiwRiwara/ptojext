@@ -76,7 +76,7 @@ const SearchVisualizer: React.FC<SearchVisualizerProps> = ({
   };
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-md p-4 mb-4">
+    <div className="w-full bg-white border rounded-lg shadow-md p-4 mb-4">
       <div className="mb-4">
         <h3 className="text-lg font-medium text-gray-700 mb-2">
           Searching for: <span className="font-bold text-[#83AFC9]">{target}</span>

@@ -196,7 +196,7 @@ export default function LandingPageComponent() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: featureIndex * 0.1 }}
                   >
-                    <Card className="p-6 flex flex-col items-center text-center h-full  hover:shadow-lg  duration-300 ease-soft-spring">
+                    <Card className="p-6 flex flex-col items-center text-center h-full  duration-300 ease-soft-spring">
                       <div className="text-4xl mb-4">{feature.icon}</div>
                       <h3 className="font-bold text-xl mb-2 text-gray-800">{feature.title}</h3>
                       <p className="text-gray-700">{feature.description}</p>

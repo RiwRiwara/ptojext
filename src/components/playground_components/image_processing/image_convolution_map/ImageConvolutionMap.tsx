@@ -40,7 +40,7 @@ export default function ImageConvolutionMap() {
         <div className="p-6 flex flex-col gap-6 items-center flex-wrap">
           <div className="flex-1 flex justify-center">
             <CanvasGridRenderImage
-              initialRows={40}
+              initialRows={50}
               initialCols={40}
               initialCellSize={8}
               image="https://visualright.blob.core.windows.net/images/image_3.jpeg"

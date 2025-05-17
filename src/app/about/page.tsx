@@ -43,13 +43,12 @@ const teamMembers: TeamMember[] = [
     },
   },
   {
-    name: "Punnapa - Thianchai Punnapa",
-    role: "UI/UX Designer",
+    name: "Yayee - Thianchai Punnapa",
+    role: "Frontend Developer",
     bio: "Creative designer focused on crafting intuitive and accessible user experiences. Responsible for the visual identity and interactive elements of the platform.",
     image: "/team/profile3.webp",
     links: {
       github: "https://github.com/SEPIAZY",
-      // portfolio: "https://sarahjohnson.design",
     },
   },
 ];

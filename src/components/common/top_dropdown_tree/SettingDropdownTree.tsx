@@ -132,7 +132,7 @@ const SettingDropdownTree: React.FC<SettingDropdownTreeProps> = ({
               <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1.5">
                 <FaGlobe className="text-[#83AFC9]" /> Language
               </h3>
-              <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
+              <div className="flex items-center justify-between bg-gray-50 p-2 rounded-lg gap-4">
                 <div className="flex items-center gap-2">
                   {currentLang === "en" ? (
                     <>
