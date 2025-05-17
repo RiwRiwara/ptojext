@@ -17,12 +17,12 @@ const VisualizationControls: React.FC<VisualizationControlsProps> = ({
   totalSteps
 }) => {
   return (
-    <div className="">
-      <hr className="my-4" />
-      <h3 className="text-lg font-medium text-gray-700 mb-3">Visualization Controls</h3>
+    <div>
+      {/* <hr className="my-4" /> */}
+      {/* <h3 className="text-lg font-medium text-gray-700 mb-3">Visualization Controls</h3> */}
       
       <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -89,7 +89,7 @@ const VisualizationControls: React.FC<VisualizationControlsProps> = ({
           >
             <FaRedo />
           </motion.button>
-        </div>
+        </div> */}
         
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Speed:</span>
@@ -105,17 +105,17 @@ const VisualizationControls: React.FC<VisualizationControlsProps> = ({
         </div>
       </div>
       
-      <div className="w-full bg-gray-200 rounded-full h-2.5">
+      {/* <div className="w-full bg-gray-200 rounded-full h-2.5">
         <div
           className="bg-[#83AFC9] h-2.5 rounded-full transition-all duration-300"
           style={{ width: `${(currentStep / (totalSteps - 1)) * 100}%` }}
         ></div>
-      </div>
+      </div> */}
       
-      <div className="flex justify-between mt-2 text-xs text-gray-500">
+      {/* <div className="flex justify-between mt-2 text-xs text-gray-500">
         <span>Step {currentStep + 1}</span>
         <span>Total Steps: {totalSteps}</span>
-      </div>
+      </div> */}
     </div>
   );
 };
