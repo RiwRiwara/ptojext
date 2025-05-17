@@ -437,7 +437,6 @@ export default function SearchVisualizerPage() {
           </div>
 
           <div className="flex flex-col gap-6">
-            {/* Top column - Algorithm selection */}
             <div className="flex flex-col md:flex-row gap-2 md:gap-4">
               {/* Visualization area */}
               <div className="w-full md:w-[60%]">
