@@ -41,30 +41,43 @@ export default function ArrayControls({
     onRemoveElement,
 }: ArrayControlsProps) {
     return (
-        <div className="space-y-4">
-            <div className="flex flex-col gap-3">
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium text-gray-700">Array Size</label>
-                    <div className="flex items-center gap-2">
-                        <input
-                            type="range"
-                            min="5"
-                            max="50"
-                            value={arraySize}
-                            onChange={(e) => onArraySizeChange(parseInt(e.target.value))}
+        <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                <div className="grid grid-cols-2 items-center gap-2 bg-white border shadow-md rounded-md p-4">
+                    <div>
+                       <label className="text-sm font-medium text-gray-700">Array Size</label>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="range"
+                                min="5"
+                                max="50"
+                                value={arraySize}
+                                onChange={(e) => onArraySizeChange(parseInt(e.target.value))}
+                                disabled={isPlaying}
+                                className="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                            />
+                            <span className="text-sm font-medium text-gray-700 text-center">
+                                {arraySize}
+                            </span>
+                        </div> 
+                    </div>
+
+                    <div className="flex justify-end">
+                            <Button
+                            onPress={onRandomize}
+                            className="flex items-center justify-center gap-1 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-all disabled:opacity-50 text-sm"
                             disabled={isPlaying}
-                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                        />
-                        <span className="text-sm font-medium text-gray-700 min-w-[30px] text-center">
-                            {arraySize}
-                        </span>
+                        >
+                            <FaRandom size={14} />
+                            <span className="hidden sm:inline">Randomize</span>
+                        </Button>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
+                {/* <div className="flex flex-wrap gap-2 justify-center lg:justify-end">
                     <Button
                         onPress={onRandomize}
-                        className="flex items-center justify-center gap-1 px-3 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-all disabled:opacity-50 text-sm"
+                        className="flex items-center justify-center gap-1 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-all disabled:opacity-50 text-sm"
                         disabled={isPlaying}
                     >
                         <FaRandom size={14} />
@@ -125,19 +138,18 @@ export default function ArrayControls({
                             Remove
                         </Button>
                     )}
-                </div>
-            </div>
+                </div> */}
 
-            {onCustomArray && setCustomArrayInput && (
-                <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Custom Array</label>
+                {onCustomArray && setCustomArrayInput && (
+                <div className="bg-white border shadow-md rounded-md p-4">
+                    <label className="flex text-sm font-medium text-gray-700 mb-1">Custom Array</label>
                     <div className="flex gap-2">
                         <input
                             type="text"
                             value={customArrayInput}
                             onChange={(e) => setCustomArrayInput(e.target.value)}
                             placeholder="e.g., 5, 2, 8, 1, 9"
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#83AFC9] text-sm"
+                            className="flex-1 w-[20px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#83AFC9] text-sm"
                             disabled={isPlaying}
                         />
                         <Button
@@ -151,6 +163,9 @@ export default function ArrayControls({
                     {inputError && <p className="mt-1 text-xs text-red-500">{inputError}</p>}
                 </div>
             )}
+            </div>
+
+            
 
             {currentArray.length > 0 && (
                 <div className="mt-4 p-3 bg-gray-100 rounded-md">

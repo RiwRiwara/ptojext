@@ -7,11 +7,21 @@ import AlgorithmSelector from "@/components/playground_components/algorithms/sor
 import ArrayControls from "@/components/playground_components/algorithms/sorting/ArrayControls";
 import VisualizationControls from "@/components/playground_components/algorithms/sorting/VisualizationControls";
 import CodeDisplay from "@/components/playground_components/algorithms/sorting/CodeDisplay";
-import { AnimationStep, SortingAlgorithm } from "@/components/playground_components/algorithms/sorting/types";
+import {
+  AnimationStep,
+  SortingAlgorithm,
+} from "@/components/playground_components/algorithms/sorting/types";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { motion } from "framer-motion";
-import { FaInfoCircle, FaLightbulb, FaRegClock, FaMemory, FaCode, FaChalkboardTeacher } from "react-icons/fa";
-import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
+import {
+  FaInfoCircle,
+  FaLightbulb,
+  FaRegClock,
+  FaMemory,
+  FaCode,
+  FaEye,
+  // FaChalkboardTeacher,
+} from "react-icons/fa";
 
 const sortingAlgorithms: SortingAlgorithm[] = [
   {
@@ -104,7 +114,9 @@ const sortingAlgorithms: SortingAlgorithm[] = [
 export default function SortingVisualizerPage() {
   // State for array and visualization
   const [currentArray, setCurrentArray] = useState<number[]>([]);
-  const [initialArray, setInitialArray] = useState<number[]>([10, 5, 8, 3, 1, 6, 12, 4, 15]);
+  const [initialArray, setInitialArray] = useState<number[]>([
+    10, 5, 8, 3, 1, 6, 12, 4, 15,
+  ]);
   const [selectedAlgo, setSelectedAlgo] = useState<string>("bubble-sort");
   const [animationSteps, setAnimationSteps] = useState<AnimationStep[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -122,7 +134,8 @@ export default function SortingVisualizerPage() {
     comparisons: 0,
     runtime: 0, // in ms
   });
-  const [currentHighlightedLine, setCurrentHighlightedLine] = useState<number>(-1);
+  const [currentHighlightedLine, setCurrentHighlightedLine] =
+    useState<number>(-1);
 
   // Animation interval reference
   const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -147,7 +160,7 @@ export default function SortingVisualizerPage() {
   // Initialize array
   useEffect(() => {
     randomizeArray();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update current array when initial array changes
@@ -165,7 +178,10 @@ export default function SortingVisualizerPage() {
 
   // Handle array size change
   const handleArraySizeChange = useCallback((size: number) => {
-    const newArray = Array.from({ length: size }, () => Math.floor(Math.random() * 100) + 1);
+    const newArray = Array.from(
+      { length: size },
+      () => Math.floor(Math.random() * 100) + 1
+    );
     setInitialArray(newArray);
     setCurrentStep(0);
     setIsPlaying(false);
@@ -175,7 +191,10 @@ export default function SortingVisualizerPage() {
   // Randomize array
   const randomizeArray = useCallback(() => {
     const size = initialArray.length;
-    const newArray = Array.from({ length: size }, () => Math.floor(Math.random() * 100) + 1);
+    const newArray = Array.from(
+      { length: size },
+      () => Math.floor(Math.random() * 100) + 1
+    );
     setInitialArray(newArray);
     setCurrentStep(0);
     setIsPlaying(false);
@@ -194,7 +213,10 @@ export default function SortingVisualizerPage() {
   const handleCustomArraySubmit = useCallback((input: string) => {
     try {
       const parsedArray = JSON.parse(`[${input}]`);
-      if (!Array.isArray(parsedArray) || parsedArray.some(item => typeof item !== 'number')) {
+      if (
+        !Array.isArray(parsedArray) ||
+        parsedArray.some((item) => typeof item !== "number")
+      ) {
         setInputError("Invalid input. Please enter comma-separated numbers.");
         return;
       }
@@ -229,50 +251,56 @@ export default function SortingVisualizerPage() {
     setCurrentStep(animationSteps.length - 1);
 
     // Update algorithm stats
-    const swaps = animationSteps.filter(step => step.type === 'swap').length;
-    const comparisons = animationSteps.filter(step => step.type === 'compare').length;
+    const swaps = animationSteps.filter((step) => step.type === "swap").length;
+    const comparisons = animationSteps.filter(
+      (step) => step.type === "compare"
+    ).length;
     const runtime = Math.round((animationSteps.length / speed) * 100); // Simulated runtime in ms
 
     setAlgorithmStats({
       swaps,
       comparisons,
-      runtime
+      runtime,
     });
   }, [animationSteps, speed]);
 
   // Handle bar click to start sorting from a specific position
-  const handleBarClick = useCallback((index: number) => {
-    if (isPlaying) return;
+  const handleBarClick = useCallback(
+    (index: number) => {
+      if (isPlaying) return;
 
-    // Reset animation state
-    setCurrentStep(0);
-    setIsPlaying(false);
-    setCurrentHighlightedLine(-1);
+      // Reset animation state
+      setCurrentStep(0);
+      setIsPlaying(false);
+      setCurrentHighlightedLine(-1);
 
-    // Run the sorting algorithm with a small delay to allow state updates
-    setTimeout(() => {
-      // Get animation steps for the selected algorithm
-      const sorter = new SortingAlgorithms([...initialArray]);
-      const steps = sorter.getAnimationSteps(selectedAlgo);
-      setAnimationSteps(steps);
+      // Run the sorting algorithm with a small delay to allow state updates
+      setTimeout(() => {
+        // Get animation steps for the selected algorithm
+        const sorter = new SortingAlgorithms([...initialArray]);
+        const steps = sorter.getAnimationSteps(selectedAlgo);
+        setAnimationSteps(steps);
 
-      // Set the current step to the first step that involves the clicked index
-      const targetStep = steps.findIndex(step =>
-        step.from === index || step.to === index
-      );
+        // Set the current step to the first step that involves the clicked index
+        const targetStep = steps.findIndex(
+          (step) => step.from === index || step.to === index
+        );
 
-      if (targetStep !== -1) {
-        setCurrentStep(Math.max(0, targetStep));
-        const stepType = steps[targetStep]?.type as keyof typeof codeHighlightMap;
-        if (stepType && stepType in codeHighlightMap) {
-          setCurrentHighlightedLine(codeHighlightMap[stepType]);
+        if (targetStep !== -1) {
+          setCurrentStep(Math.max(0, targetStep));
+          const stepType = steps[targetStep]
+            ?.type as keyof typeof codeHighlightMap;
+          if (stepType && stepType in codeHighlightMap) {
+            setCurrentHighlightedLine(codeHighlightMap[stepType]);
+          }
         }
-      }
 
-      // Start the animation
-      setIsPlaying(true);
-    }, 100);
-  }, [initialArray, selectedAlgo, isPlaying, codeHighlightMap]);
+        // Start the animation
+        setIsPlaying(true);
+      }, 100);
+    },
+    [initialArray, selectedAlgo, isPlaying, codeHighlightMap]
+  );
 
   // Effect to update code highlighting when animation step changes
   useEffect(() => {
@@ -285,7 +313,8 @@ export default function SortingVisualizerPage() {
       const stepType = animationSteps[currentStep]?.type;
       if (stepType && stepType in codeHighlightMap) {
         // Use type assertion to safely access the code highlight map
-        const lineNumber = codeHighlightMap[stepType as keyof typeof codeHighlightMap];
+        const lineNumber =
+          codeHighlightMap[stepType as keyof typeof codeHighlightMap];
         setCurrentHighlightedLine(lineNumber);
       }
     }
@@ -295,7 +324,8 @@ export default function SortingVisualizerPage() {
     (step: number) => {
       setCurrentStep(step);
       if (step < animationSteps.length) {
-        const stepType = animationSteps[step]?.type as keyof typeof codeHighlightMap;
+        const stepType = animationSteps[step]
+          ?.type as keyof typeof codeHighlightMap;
         if (stepType && stepType in codeHighlightMap) {
           setCurrentHighlightedLine(codeHighlightMap[stepType]);
         }
@@ -339,37 +369,155 @@ export default function SortingVisualizerPage() {
 
   return (
     <BaseLayout>
-      <div className="py-4 bg-gray-50 rounded-md">
+      <div className="py-4 bg-white rounded-md">
         <main className="container mx-auto px-4 py-0">
           <Breadcrumb
             items={[
               { label: "Home", href: "/" },
-              { label: "Playground", href: "/playground" },
-              { label: "Algorithms", href: "/playground/algorithms" },
+              // { label: "Playground", href: "/playground" },
+              // { label: "Algorithms", href: "/playground/algorithms" },
               { label: "Sorting", href: "/playground/algorithms/sorting" },
             ]}
           />
 
           <div className="mt-4 mb-8 ml-1 md:ml-0">
-            <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">Sorting Algorithm Visualizer</h1>
+            <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">
+              Sorting Algorithm Visualizer
+            </h1>
             <p className="text-gray-600">
-              Visualize and understand how different sorting algorithms work step by step.
+              Visualize and understand how different sorting algorithms work
+              step by step.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left column - Algorithm selection and controls */}
-            <div className="lg:col-span-1 space-y-6">
-              <AlgorithmSelector
-                algorithms={sortingAlgorithms}
-                selectedAlgo={selectedAlgo}
-                onAlgoChange={handleAlgorithmSelect}
-              />
+          <div className="flex flex-col gap-6">
+            {/* Top column - Algorithm selection */}
+            <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+              {/* Visualization area */}
+              <div className="w-full md:w-[60%]">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white border rounded-lg shadow-md p-4 min-h-[900px]"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <FaEye className="text-[#83AFC9]" />
+                    <h3 className="text-base md:text-lg font-medium text-gray-700">
+                      Algorithm Visualization
+                    </h3>
+                  </div>
 
-              <div className="bg-white rounded-lg shadow-md p-4">
+                  <AlgorithmSelector
+                    algorithms={sortingAlgorithms}
+                    selectedAlgo={selectedAlgo}
+                    onAlgoChange={handleAlgorithmSelect}
+                  />
+
+                  <ArrayControls
+                    arraySize={initialArray.length}
+                    onArraySizeChange={handleArraySizeChange}
+                    onRandomize={randomizeArray}
+                    onCustomArray={handleCustomArraySubmit}
+                    customArrayInput={customArrayInput}
+                    setCustomArrayInput={setCustomArrayInput}
+                    inputError={inputError}
+                  />
+
+                  {/* Step explanation */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {showExplanation && currentStep < animationSteps.length && (
+                      <div className="mb-3 p-3 bg-blue-50 border border-blue-100 rounded-lg text-sm">
+                        <div className="flex items-start">
+                          {/* <FaInfoCircle className="text-[#83AFC9] mt-0.5 mr-2 flex-shrink-0" /> */}
+                          <div>
+                            <strong>Step {currentStep + 1} :</strong>{" "}
+                            {animationSteps[currentStep]?.type === "compare" &&
+                              "Comparing elements"}
+                            {animationSteps[currentStep]?.type === "swap" &&
+                              "Swapping elements"}
+                            {animationSteps[currentStep]?.type === "select" &&
+                              "Selecting element"}
+                            {animationSteps[currentStep]?.type === "set" &&
+                              "Setting value"}{" "}
+                            {typeof animationSteps[currentStep]?.from !==
+                              "undefined" &&
+                              `at index ${animationSteps[currentStep].from}`}
+                            {typeof animationSteps[currentStep]?.to !==
+                              "undefined" &&
+                              ` and index ${animationSteps[currentStep].to}`}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      {/* <div className="flex items-center gap-2 mb-3">
+                        <FaRegClock className="text-[#83AFC9]" />
+                        <h3 className="text-base font-medium text-gray-700">
+                          Visualization Controls
+                        </h3>
+                      </div> */}
+
+                      <VisualizationControls
+                        isPlaying={isPlaying}
+                        setIsPlaying={setIsPlaying}
+                        currentStep={currentStep}
+                        totalSteps={animationSteps.length}
+                        speed={speed}
+                        setSpeed={setSpeed}
+                        showCode={true}
+                        setShowCode={setShowCode}
+                        onReset={resetArray}
+                        onPrevStep={goToPrevStep}
+                        onNextStep={goToNextStep}
+                      />
+                    </div>
+                  </div>
+
+                  <PixiSortingVisualizer
+                    blocks={currentArray}
+                    animationSteps={animationSteps}
+                    isPlaying={isPlaying}
+                    speed={speed}
+                    currentStep={currentStep}
+                    onStepChange={handleStepChange}
+                    onSortingComplete={handleSortingComplete}
+                    onBarClick={handleBarClick}
+                    colorScheme={selectedAlgoData?.colorScheme}
+                  />
+                </motion.div>
+              </div>
+
+              {/* Code display */}
+              <div className="w-full md:w-[40%]">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="bg-white border rounded-lg shadow-md p-4 h-[900px]"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <FaCode className="text-[#83AFC9]" />
+                    <h3 className="text-base md:text-lg font-medium text-gray-700">
+                      Algorithm Code
+                    </h3>
+                  </div>
+
+                  <CodeDisplay
+                    selectedAlgo={selectedAlgo}
+                    customAlgorithm={customAlgorithm}
+                    setCustomAlgorithm={setCustomAlgorithm}
+                    isPlaying={isPlaying}
+                    currentHighlightedLine={currentHighlightedLine}
+                  />
+                </motion.div>
+              </div>
+
+              {/* <div className="bg-white rounded-lg shadow-md p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <FaChalkboardTeacher className="text-[#83AFC9]" />
-                  <h3 className="text-lg font-medium text-gray-700">Array Controls</h3>
+                  <h3 className="text-base lg:text-lg font-medium text-gray-700">Array Controls</h3>
                 </div>
 
                 <ArrayControls
@@ -381,9 +529,9 @@ export default function SortingVisualizerPage() {
                   setCustomArrayInput={setCustomArrayInput}
                   inputError={inputError}
                 />
-              </div>
+              </div> */}
 
-              <div className="bg-white rounded-lg shadow-md p-4">
+              {/* <div className="bg-white rounded-lg shadow-md p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <FaRegClock className="text-[#83AFC9]" />
                   <h3 className="text-lg font-medium text-gray-700">Visualization Controls</h3>
@@ -402,107 +550,15 @@ export default function SortingVisualizerPage() {
                   onPrevStep={goToPrevStep}
                   onNextStep={goToNextStep}
                 />
-              </div>
-
-              {selectedAlgoData && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                  className="bg-white rounded-lg shadow-md p-4"
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <FaInfoCircle className="text-[#83AFC9]" />
-                    <h3 className="text-lg font-medium text-gray-700">Complexity Analysis</h3>
-                  </div>
-
-                  <div className="space-y-3">
-                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                      <FaRegClock className="text-[#83AFC9]" /> <span>Time Complexity</span>
-                    </h4>
-                    <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
-                      <div className="bg-white p-2 rounded-md border border-gray-200">
-                        <span className="text-gray-500 block">Best Case</span>
-                        <span className="font-mono font-medium text-base">{selectedAlgoData?.complexity.time.best}</span>
-                      </div>
-                      <div className="bg-white p-2 rounded-md border border-gray-200">
-                        <span className="text-gray-500 block">Average</span>
-                        <span className="font-mono font-medium text-base">{selectedAlgoData?.complexity.time.average}</span>
-                      </div>
-                      <div className="bg-white p-2 rounded-md border border-gray-200">
-                        <span className="text-gray-500 block">Worst Case</span>
-                        <span className="font-mono font-medium text-base">{selectedAlgoData?.complexity.time.worst}</span>
-                      </div>
-                    </div>
-
-                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                      <FaMemory className="text-[#83AFC9]" /> <span>Space Complexity</span>
-                    </h4>
-                    <div className="bg-white p-2 rounded border border-gray-200 text-xs mb-3">
-                      <span className="font-mono font-medium text-base">{selectedAlgoData?.complexity.space}</span>
-                    </div>
-
-                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                      <FaLightbulb className="text-[#83AFC9]" /> <span>Best Used When</span>
-                    </h4>
-                    <ul className="list-disc pl-5 text-sm text-gray-600">
-                      {selectedAlgo === 'bubble-sort' && (
-                        <>
-                          <li>Educational purposes - easy to understand</li>
-                          <li>Small datasets</li>
-                          <li>Array is already almost sorted</li>
-                        </>
-                      )}
-                      {selectedAlgo === 'insertion-sort' && (
-                        <>
-                          <li>Small datasets</li>
-                          <li>Array is already partially sorted</li>
-                          <li>Memory usage is a concern</li>
-                        </>
-                      )}
-                      {selectedAlgo === 'selection-sort' && (
-                        <>
-                          <li>Small datasets</li>
-                          <li>Minimizing swaps is important</li>
-                          <li>Memory usage is a concern</li>
-                        </>
-                      )}
-                      {selectedAlgo === 'merge-sort' && (
-                        <>
-                          <li>Large datasets</li>
-                          <li>Stable sorting is required</li>
-                          <li>Predictable performance is needed</li>
-                        </>
-                      )}
-                      {selectedAlgo === 'quick-sort' && (
-                        <>
-                          <li>Average case performance matters</li>
-                          <li>In-place sorting is preferred</li>
-                          <li>Not concerned about worst-case scenarios</li>
-                        </>
-                      )}
-                      {selectedAlgo === 'heap-sort' && (
-                        <>
-                          <li>Guaranteed O(n log n) is required</li>
-                          <li>In-place sorting is preferred</li>
-                          <li>Maximum/minimum values needed quickly</li>
-                        </>
-                      )}
-                    </ul>
-                  </div>
-                </motion.div>
-              )}
+              </div> */}
             </div>
 
-            {/* Right column - Visualization and code */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Visualization area */}
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 space-y-6 md:space-y-0 gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                {/* Step explanation */}
                 {showExplanation && currentStep < animationSteps.length && (
                   <div className="mb-3 p-3 bg-yellow-50 border border-yellow-100 rounded-lg text-sm">
                     <div className="flex items-start">
@@ -534,7 +590,6 @@ export default function SortingVisualizerPage() {
                 />
               </motion.div>
 
-              {/* Code display */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -554,9 +609,110 @@ export default function SortingVisualizerPage() {
                   currentHighlightedLine={currentHighlightedLine}
                 />
               </motion.div>
-            </div>
-          </div>
+            </div> */}
 
+            {selectedAlgoData && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                className="bg-white rounded-lg border shadow-md p-4"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <FaInfoCircle className="text-[#83AFC9]" />
+                  <h3 className="text-lg font-medium text-gray-700">
+                    Complexity Analysis
+                  </h3>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                    <FaRegClock className="text-[#83AFC9]" />{" "}
+                    <span>Time Complexity</span>
+                  </h4>
+                  <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
+                    <div className="bg-white p-2 rounded-md border border-gray-200">
+                      <span className="text-gray-500 block">Best Case</span>
+                      <span className="font-mono font-medium text-base">
+                        {selectedAlgoData?.complexity.time.best}
+                      </span>
+                    </div>
+                    <div className="bg-white p-2 rounded-md border border-gray-200">
+                      <span className="text-gray-500 block">Average</span>
+                      <span className="font-mono font-medium text-base">
+                        {selectedAlgoData?.complexity.time.average}
+                      </span>
+                    </div>
+                    <div className="bg-white p-2 rounded-md border border-gray-200">
+                      <span className="text-gray-500 block">Worst Case</span>
+                      <span className="font-mono font-medium text-base">
+                        {selectedAlgoData?.complexity.time.worst}
+                      </span>
+                    </div>
+                  </div>
+
+                  <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                    <FaMemory className="text-[#83AFC9]" />{" "}
+                    <span>Space Complexity</span>
+                  </h4>
+                  <div className="bg-white p-2 rounded border border-gray-200 text-xs mb-3">
+                    <span className="font-mono font-medium text-base">
+                      {selectedAlgoData?.complexity.space}
+                    </span>
+                  </div>
+
+                  <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                    <FaLightbulb className="text-[#83AFC9]" />{" "}
+                    <span>Best Used When</span>
+                  </h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-600">
+                    {selectedAlgo === "bubble-sort" && (
+                      <>
+                        <li>Educational purposes - easy to understand</li>
+                        <li>Small datasets</li>
+                        <li>Array is already almost sorted</li>
+                      </>
+                    )}
+                    {selectedAlgo === "insertion-sort" && (
+                      <>
+                        <li>Small datasets</li>
+                        <li>Array is already partially sorted</li>
+                        <li>Memory usage is a concern</li>
+                      </>
+                    )}
+                    {selectedAlgo === "selection-sort" && (
+                      <>
+                        <li>Small datasets</li>
+                        <li>Minimizing swaps is important</li>
+                        <li>Memory usage is a concern</li>
+                      </>
+                    )}
+                    {selectedAlgo === "merge-sort" && (
+                      <>
+                        <li>Large datasets</li>
+                        <li>Stable sorting is required</li>
+                        <li>Predictable performance is needed</li>
+                      </>
+                    )}
+                    {selectedAlgo === "quick-sort" && (
+                      <>
+                        <li>Average case performance matters</li>
+                        <li>In-place sorting is preferred</li>
+                        <li>Not concerned about worst-case scenarios</li>
+                      </>
+                    )}
+                    {selectedAlgo === "heap-sort" && (
+                      <>
+                        <li>Guaranteed O(n log n) is required</li>
+                        <li>In-place sorting is preferred</li>
+                        <li>Maximum/minimum values needed quickly</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              </motion.div>
+            )}
+          </div>
         </main>
       </div>
     </BaseLayout>

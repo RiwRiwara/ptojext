@@ -1,0 +1,8 @@
+{
+  "quiz_type": "Sorting Algorithms Quiz",
+  "desc": "แบบทดสอบนี้ออกแบบมาเพื่อทดสอบความเข้าใจเกี่ยวกับ sorting algorithm คอนเซ็ปและเทคนิค หากคุณต้องการความช่วยเหลือ สามารถทบทวนได้ที่",
+  "sub_title": "Sorting Algorithms Quiz",
+  "mode_choice": "การวิเคราะห์ความซับซ้อน",
+  "mode_code": "แบบทดสอบโค้ด",
+  "hint": "แสดงคำใบ้"
+}

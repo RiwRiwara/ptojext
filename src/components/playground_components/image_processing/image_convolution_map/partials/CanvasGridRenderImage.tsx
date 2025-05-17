@@ -156,14 +156,14 @@ export default function CanvasGridRenderImage({
       <div className="flex flex-row gap-4 shadow-sm p-2 rounded text-xs md:text-sm">
         <div>
           <label>Rows: {rows}</label>
-          <Slider minValue={1} maxValue={200} value={rows}
+          <Slider minValue={1} maxValue={50} value={rows}
             aria-label="Rows slider"
             onChange={(value) => handleChangeRows(Array.isArray(value) ? value[0] : value)}
           />
         </div>
         <div>
           <label>Columns: {cols}</label>
-          <Slider minValue={1} maxValue={117} value={cols}
+          <Slider minValue={1} maxValue={40} value={cols}
             aria-label="Cols slider"
             onChange={(value) => handleChangeCols(Array.isArray(value) ? value[0] : value)}
           />

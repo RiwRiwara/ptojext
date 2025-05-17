@@ -82,7 +82,7 @@ const CodeDisplay: React.FC<CodeDisplayProps> = ({
                     />
                 </div>
             ) : (
-                <pre className="p-4 text-sm overflow-x-auto">
+                <pre className="p-4 text-sm overflow-x-auto h-[770px]">
                     <code>
                         {formatPythonCode(algorithmCodeSnippets[selectedAlgo] || "")}
                     </code>

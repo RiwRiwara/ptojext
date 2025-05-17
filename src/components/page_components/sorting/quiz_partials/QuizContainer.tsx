@@ -271,9 +271,9 @@ const QuizContainer: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Quiz Generator Controls */}
-      <Card className="p-6 mb-6 bg-white rounded-lg shadow-sm border border-gray-100">
+      <Card className="p-6 mb-6 bg-white rounded-xl shadow-sm border">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Sorting Algorithms Quiz</h2>
+          <h2 className="text-xl font-bold">{t("sub_title")}</h2>
           <Button
             variant="ghost"
             onPress={toggleLanguage}
@@ -383,7 +383,7 @@ const QuizContainer: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="mb-6 bg-white p-6 rounded-lg shadow-sm border border-gray-100"
+              className="mb-6 bg-white p-6 rounded-lg shadow-sm border"
             >
               {quizMode === "coding" ? (
                 <h2 className="text-lg md:text-2xl font-bold mb-2">

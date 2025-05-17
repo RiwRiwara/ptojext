@@ -11,9 +11,9 @@ const SortingQuizPage: React.FC = () => {
         <Breadcrumb
           items={[
             { label: "Home", href: "/" },
-            { label: "Playground", href: "/playground" },
-            { label: "Algorithms", href: "/playground/algorithms" },
-            { label: "Quiz", href: "/playground/algorithms/sorting-quiz" },
+            { label: "Playground", href: "" },
+            { label: "Algorithms", href: "" },
+            { label: "Quiz", href: "" },
           ]}
         />
 

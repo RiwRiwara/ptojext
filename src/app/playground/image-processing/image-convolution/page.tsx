@@ -7,7 +7,7 @@ import ImageConvolutionMap from "@/components/playground_components/image_proces
 export default function ImageConvolutionPage() {
   return (
     <BaseLayout>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         <main className="container mx-auto px-4 py-8">
           <Breadcrumb
             items={[

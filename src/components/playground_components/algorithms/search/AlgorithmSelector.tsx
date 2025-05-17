@@ -9,9 +9,9 @@ const AlgorithmSelector: React.FC<AlgorithmSelectorProps> = ({
   onSelectAlgorithm
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-      <h3 className="text-lg font-medium text-gray-700 mb-3">Select Algorithm</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div className="bg-white border rounded-lg shadow-md p-4 mb-4">
+      {/* <h3 className="text-lg font-medium text-gray-700 mb-3">Select Algorithm</h3> */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 justify-center">
         {algorithms.map((algo) => (
           <motion.button
             key={algo.key}
@@ -24,23 +24,28 @@ const AlgorithmSelector: React.FC<AlgorithmSelectorProps> = ({
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            <div className="font-medium">{algo.label}</div>
-            <div className="text-xs mt-1 opacity-90">
-              {selectedAlgo === algo.key ? (
-                algo.description
-              ) : (
-                <span className="line-clamp-1">{algo.description}</span>
+            <div>
+              <div className="flex justify-center text-sm font-medium">{algo.label}</div>
+
+              {/* <div className="text-xs mt-1 opacity-90">
+                {selectedAlgo === algo.key ? (
+                  algo.description
+                ) : (
+                  <span className="line-clamp-1">{algo.description}</span>
+                )}
+              </div> */}
+
+              {algo.requiresSorted && (
+                <div className="flex justify-center text-xs mt-1 font-medium">
+                  {selectedAlgo === algo.key ? (
+                    <span className="bg-white/20 text-white px-2 py-0.5 rounded-full">Requires sorted array</span>
+                  ) : (
+                    <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">Requires sorted array</span>
+                  )}
+                </div>
               )}
             </div>
-            {algo.requiresSorted && (
-              <div className="text-xs mt-1 font-medium">
-                {selectedAlgo === algo.key ? (
-                  <span className="bg-white/20 text-white px-2 py-0.5 rounded-full">Requires sorted array</span>
-                ) : (
-                  <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">Requires sorted array</span>
-                )}
-              </div>
-            )}
+            
           </motion.button>
         ))}
       </div>

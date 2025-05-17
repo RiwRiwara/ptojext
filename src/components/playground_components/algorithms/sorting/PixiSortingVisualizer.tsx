@@ -585,15 +585,15 @@ export default function PixiSortingVisualizer({
   return (
     <div className="relative w-full h-full flex flex-col">
       {/* Step Description Banner */}
-      <div className="w-full flex justify-center mb-2">
+      {/* <div className="w-full flex justify-center mb-2">
         <div className="bg-indigo-100 text-indigo-900 font-semibold rounded-lg px-4 py-2 shadow border border-indigo-200 text-center text-base min-h-[2.5rem]">
           {stepDescription}
         </div>
-      </div>
+      </div> */}
       <div
         ref={pixiContainerRef}
         className="w-full h-full rounded-xl shadow-md overflow-hidden border border-gray-200 bg-gradient-to-b from-gray-50 to-gray-100"
-        style={{ minHeight: 320, minWidth: 320 }}
+        style={{ minHeight: 220, minWidth: 220 }}
       />
       {/* Tooltip overlays for each bar */}
       <div className="pointer-events-none absolute inset-0 z-10">
@@ -625,7 +625,7 @@ export default function PixiSortingVisualizer({
       </div>
       {/* Real-time Array State Visualization */}
       <div className="w-full flex flex-col items-center mt-6 mb-2">
-        <div className="font-semibold text-gray-700 mb-1">Array State (Live)</div>
+        <div className="text-sm lg:text-base font-semibold text-gray-700 mb-1">Array State (Live)</div>
         <div className="flex flex-wrap gap-2 justify-center bg-gray-50 rounded-lg px-4 py-2 shadow-inner border border-gray-200">
           {Array.from({ length: blocks.length }, (_, idx) => {
             const val = valueMapRef.current.get(idx) ?? 0;
