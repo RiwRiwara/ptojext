@@ -74,8 +74,22 @@ export default function LandingPageComponent() {
     }
   }, [handleScroll, isLowPerformanceDevice]);
 
+  // TypeScript interfaces for features data
+  interface Feature {
+    icon: string;
+    title: string;
+    description: string;
+    url?: string; // Optional URL property
+  }
+
+  interface FeatureCategory {
+    title: string;
+    description: string;
+    features: Feature[];
+  }
+
   // Features data for tabs
-  const featuresData = [
+  const featuresData: FeatureCategory[] = [
     {
       title: t("algo-visual"),
       description: t("algo-visual-sub"),
@@ -161,22 +175,26 @@ export default function LandingPageComponent() {
 
       {/* INTRO SECTION */}
       <section className="py-4 flex flex-col items-center text-center gap-6">
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="bg-gradient-to-r from-[#83AFC9] to-[#83AFC9] text-white px-5 py-2 rounded-full text-sm md:text-xl font-medium mb-4"
         >
-          {t("intro-button")}
-        </motion.h1>
-        <motion.p
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-sm md:text-lg max-w-2xl mx-6 md:mx-auto text-gray-700 leading-relaxed"
-        >
-          {t("intro-sub")}
-        </motion.p>
+          <motion.h1
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="text-2xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-blue-900 mb-4 mt-2 md:mt-16"
+          >
+            Interactive Learning Reimagined
+          </motion.h1>
+          <p className="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
+            Our interactive playground helps you visualize and understand
+            complex concepts through engaging simulations and hands-on
+            experiences.
+          </p>
+        </motion.div>
       </section>
 
       {/* FEATURES TAB SECTION */}
@@ -239,13 +257,16 @@ export default function LandingPageComponent() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: featureIndex * 0.1 }}
                     >
-                      <Card className="p-6 flex flex-col items-center text-center h-full  duration-300 ease-soft-spring">
+                      <a
+                        href={feature.url || ""}
+                        className="p-6 flex flex-col items-center text-center h-full  duration-300 ease-soft-spring border border-gray-200 rounded-lg shadow-sm"
+                      >
                         <div className="text-4xl mb-4">{feature.icon}</div>
                         <h3 className="font-bold text-xl mb-2 text-gray-800">
                           {feature.title}
                         </h3>
                         <p className="text-gray-700">{feature.description}</p>
-                      </Card>
+                      </a>
                     </motion.div>
                   )
                 )}

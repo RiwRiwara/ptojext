@@ -504,7 +504,7 @@ export default function About() {
                     )}
                   </p>
                   <a
-                    href="mailto:contact@visualright.ai"
+                    href="mailto:contact@visualright.com"
                     className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#83AFC9] to-sky-600 text-white rounded-lg hover:opacity-90 transition-opacity"
                     aria-label="Contact Visual Right"
                   >
