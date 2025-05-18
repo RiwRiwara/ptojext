@@ -72,6 +72,17 @@
             ]
           },
           {
+            "name": "Reinforcement Learning",
+            "className": "reinforcement-learning",
+            "children": [
+              {
+                "name": "Reinforcement Learning",
+                "link": "/simulations/reinforcement-learning",
+                "className": "reinforcement-learning"
+              }
+            ]
+          },
+          {
             "name": "Pathfinding",
             "className": "pathfinding",
             "children": [
@@ -81,17 +92,17 @@
                 "className": "pathfinding"
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "name": "Playground",
+        "className": "playground",
+        "children": [
           {
-            "name": "Playground",
-            "className": "playground",
-            "children": [
-              {
-                "name": "Playground",
-                "link": "/playground",
-                "className": "playground-algorithms"
-              }
-            ]
+            "name": "Image Processing Pipeline",
+            "link": "/simulations/image-processing",
+            "className": "playground-algorithms"
           }
         ]
       },
@@ -99,6 +110,11 @@
         "name": "information",
         "className": "information",
         "children": [
+          {
+            "name": "Beta features",
+            "link": "/beta-features",
+            "className": "information-beta"
+          },
           {
             "name": "Changelog",
             "link": "/roadmap",

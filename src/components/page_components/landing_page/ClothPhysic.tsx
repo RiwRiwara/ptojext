@@ -3,10 +3,11 @@ import { motion, AnimationControls } from "framer-motion";
 import '@/utils/i18n.config';
 import { useTranslation } from "react-i18next";
 import { useRef, useEffect, useState, useCallback } from "react";
-import Matter, { MouseConstraint, Engine, Render, Runner, Constraint, Body, Mouse, World, Vector } from "matter-js";
 import { VscRepoForcePush } from "react-icons/vsc";
 import { CgRedo } from "react-icons/cg";
 import { FaScrewdriver } from "react-icons/fa";
+
+import Matter, { MouseConstraint, Engine, Render, Runner, Constraint, Body, Mouse, World, Vector } from "matter-js";
 
 interface ClothPhysicProps {
   controls: AnimationControls;
