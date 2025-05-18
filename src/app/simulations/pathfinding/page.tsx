@@ -25,6 +25,7 @@ import {
   FiCompass,
 } from "react-icons/fi";
 import Breadcrumb from "@/components/common/Breadcrumb";
+import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 
 const PathfindingPage = () => {
   const [activeTab, setActiveTab] = useState("visualizer");
@@ -44,7 +45,7 @@ const PathfindingPage = () => {
 
   return (
     <BaseLayout>
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8">
         <Breadcrumb
           items={[
             { label: "Home", href: "/" },
@@ -212,7 +213,8 @@ const PathfindingPage = () => {
             </div>
           </div>
         </Tabs>
-      </div>
+      </main>
+      <BottomComponent/>
     </BaseLayout>
   );
 };

@@ -25,6 +25,7 @@ import {
   FiHelpCircle,
 } from "react-icons/fi";
 import Breadcrumb from "@/components/common/Breadcrumb";
+import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 
 const DataStructuresPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -488,6 +489,7 @@ const DataStructuresPage = () => {
           </Tabs>
         </div>
       </main>
+      <BottomComponent/>
     </BaseLayout>
   );
 };
