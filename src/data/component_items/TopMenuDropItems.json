@@ -79,6 +79,21 @@
                 "name": "Reinforcement Learning",
                 "link": "/simulations/reinforcement-learning",
                 "className": "reinforcement-learning"
+              },
+              {
+                "name": "Reinforcement Learning simulation",
+                "link": "/simulations/reinforcement-learning/simulation",
+                "className": "reinforcement-learning-simulation"
+              },
+              {
+                "name": "Reinforcement Learning comparison",
+                "link": "/simulations/reinforcement-learning/comparison",
+                "className": "reinforcement-learning-comparison"
+              },
+              {
+                "name": "Reinforcement Learning info",
+                "link": "/simulations/reinforcement-learning/info",
+                "className": "reinforcement-learning-info"
               }
             ]
           },
