@@ -15,11 +15,13 @@ import BottomComponent from "@/components/page_components/landing_page/BottomCom
 const ParticleBackground = () => {
   useEffect(() => {
     const particles: Particle[] = [];
-    const colors = ['#4CC9F0', '#4361EE', '#3A0CA3', '#7209B7', '#F72585'];
-    const canvas = document.getElementById('particle-canvas') as HTMLCanvasElement;
+    const colors = ["#4CC9F0", "#4361EE", "#3A0CA3", "#7209B7", "#F72585"];
+    const canvas = document.getElementById(
+      "particle-canvas"
+    ) as HTMLCanvasElement;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const resizeCanvas = () => {
@@ -27,7 +29,7 @@ const ParticleBackground = () => {
       canvas.height = window.innerHeight * 2;
     };
 
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
 
     // Define the Particle class first before using it
@@ -107,11 +109,13 @@ const ParticleBackground = () => {
     animate();
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener("resize", resizeCanvas);
     };
   }, []);
 
-  return <canvas id="particle-canvas" className="fixed inset-0 -z-10 opacity-60" />;
+  return (
+    <canvas id="particle-canvas" className="fixed inset-0 -z-10 opacity-60" />
+  );
 };
 
 // Reveal section animation
@@ -136,20 +140,23 @@ const RevealSection = ({ children }: { children: React.ReactNode }) => {
 // Loading progress animation with SEO-friendly content
 const LoadingProgress = () => {
   const [progress, setProgress] = useState(0);
-  const [loadingText, setLoadingText] = useState('Loading AI Interactive Playground...');
+  const [loadingText, setLoadingText] = useState(
+    "Loading AI Interactive Playground..."
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (progress < 100) {
-        setProgress(prev => {
+        setProgress((prev) => {
           const increment = Math.floor(Math.random() * 15) + 5;
           const newProgress = Math.min(prev + increment, 100);
 
           // Update loading text with SEO-optimized phrases
-          if (newProgress > 85) setLoadingText('Finalizing Web Application...');
-          else if (newProgress > 60) setLoadingText('Initializing Interactive Physics Simulations...');
-          else if (newProgress > 30) setLoadingText('Loading ...');
-          else setLoadingText('Almost ready...');
+          if (newProgress > 85) setLoadingText("Finalizing Web Application...");
+          else if (newProgress > 60)
+            setLoadingText("Initializing Interactive Physics Simulations...");
+          else if (newProgress > 30) setLoadingText("Loading ...");
+          else setLoadingText("Almost ready...");
 
           return newProgress;
         });
@@ -192,33 +199,33 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <Suspense fallback={
-      <div className="fixed inset-0 flex flex-col items-center justify-center bg-background/95 backdrop-blur-md z-50">
-        <Card className="p-8 shadow-lg flex flex-col items-center gap-6 bg-content1/90 border-0">
-          <motion.div
-            initial={{ rotate: 0 }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-          >
-            <Spinner
-              size="lg"
-              color="primary"
-              className="h-10 w-10"
-            />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="flex flex-col items-center"
-          >
-            <p className="text-lg font-medium mb-4">Preparing your experience...</p>
-            <LoadingProgress />
-          </motion.div>
-        </Card>
-      </div>}>
+    <Suspense
+      fallback={
+        <div className="fixed inset-0 flex flex-col items-center justify-center bg-background/95 backdrop-blur-md z-50">
+          <Card className="p-8 shadow-lg flex flex-col items-center gap-6 bg-content1/90 border-0">
+            <motion.div
+              initial={{ rotate: 0 }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+            >
+              <Spinner size="lg" color="primary" className="h-10 w-10" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="flex flex-col items-center"
+            >
+              <p className="text-lg font-medium mb-4">
+                Preparing your experience...
+              </p>
+              <LoadingProgress />
+            </motion.div>
+          </Card>
+        </div>
+      }
+    >
       <AnimatePresence mode="wait">
-
         <motion.div
           key="content"
           initial={{ opacity: 0 }}
@@ -231,24 +238,33 @@ export default function LandingPage() {
             className="fixed inset-0 bg-gradient-to-b from-transparent to-white/30 pointer-events-none -z-10"
             animate={{
               background: [
-                'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3))',
-                'linear-gradient(to bottom, transparent, rgba(235,245,255,0.3))',
-                'linear-gradient(to bottom, transparent, rgba(245,235,255,0.3))',
-                'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3))'
-              ]
+                "linear-gradient(to bottom, transparent, rgba(255,255,255,0.3))",
+                "linear-gradient(to bottom, transparent, rgba(235,245,255,0.3))",
+                "linear-gradient(to bottom, transparent, rgba(245,235,255,0.3))",
+                "linear-gradient(to bottom, transparent, rgba(255,255,255,0.3))",
+              ],
             }}
-            transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
           />
           <motion.div
             className="fixed inset-0 opacity-30 pointer-events-none -z-5"
             style={{
-              backgroundImage: 'radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0, rgba(99, 102, 241, 0) 70%)'
+              backgroundImage:
+                "radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0, rgba(99, 102, 241, 0) 70%)",
             }}
             animate={{
               scale: [1, 1.1, 1],
-              opacity: [0.2, 0.3, 0.2]
+              opacity: [0.2, 0.3, 0.2],
             }}
-            transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
           />
           <BaseLayout>
             <Section1 />

@@ -40,17 +40,11 @@ export default function ImageEnhancementPage() {
               { label: "Image Enhancement" },
             ]}
           />
-
           <div className="mt-8 mb-8 ml-1 md:ml-0">
             <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">
               Image Enhancement
             </h1>
-            <p>
-              {t(
-                "mean",
-                "Image enhancement is the process of making images more useful (such as making images more visually appealing, bringing out specific features, removing noise from images and highlighting interesting details in images). "
-              )}
-            </p>
+            <p>{t("mean")}</p>
           </div>
 
           {/* Navigation Buttons */}

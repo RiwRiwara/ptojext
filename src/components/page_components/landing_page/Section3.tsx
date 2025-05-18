@@ -5,6 +5,7 @@ import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
 import { FiRefreshCw, FiInfo } from "react-icons/fi";
 import { Tooltip } from "react-tooltip";
+import { useTranslation } from "react-i18next";
 
 class PriorityQueue<T> {
   private items: T[] = [];
@@ -63,7 +64,7 @@ export default function Section3({ controls }: Section3Props) {
   const cellSize = cellSizeValue;
   const start = { x: 0, y: 0 };
   const end = { x: cols - 1, y: rows - 1 };
-
+  const { t } = useTranslation("landingPageTranslations");
   const isPathPossible = (grid: number[][]) => {
     // Check if a path exists using BFS
     const queue: { x: number; y: number }[] = [{ ...start }];
@@ -81,7 +82,7 @@ export default function Section3({ controls }: Section3Props) {
         { x: current.x + 1, y: current.y },
         { x: current.x - 1, y: current.y },
         { x: current.x, y: current.y + 1 },
-        { x: current.x, y: current.y - 1 }
+        { x: current.x, y: current.y - 1 },
       ];
 
       for (const neighbor of neighbors) {
@@ -116,7 +117,8 @@ export default function Section3({ controls }: Section3Props) {
       // Generate walls randomly based on wall density
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-          if ((i === start.y && j === start.x) || (i === end.y && j === end.x)) continue;
+          if ((i === start.y && j === start.x) || (i === end.y && j === end.x))
+            continue;
           if (Math.random() < wallDensity / 100) grid[i][j] = 1;
         }
       }
@@ -185,7 +187,10 @@ export default function Section3({ controls }: Section3Props) {
       statsContainer.position.set(5, app.screen.height - 25);
       app.stage.addChild(statsContainer);
 
-      const heuristic = (a: { x: number; y: number }, b: { x: number; y: number }) => {
+      const heuristic = (
+        a: { x: number; y: number },
+        b: { x: number; y: number }
+      ) => {
         return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
       };
 
@@ -218,7 +223,11 @@ export default function Section3({ controls }: Section3Props) {
 
         gScore.set(`${start.x},${start.y}`, 0);
         fScore.set(`${start.x},${start.y}`, heuristic(start, end));
-        openSet.push({ x: start.x, y: start.y, f: fScore.get(`${start.x},${start.y}`)! });
+        openSet.push({
+          x: start.x,
+          y: start.y,
+          f: fScore.get(`${start.x},${start.y}`)!,
+        });
 
         cells[start.y][start.x].tint = 0x68d391;
         cells[end.y][end.x].tint = 0xf687b3;
@@ -588,12 +597,9 @@ export default function Section3({ controls }: Section3Props) {
           A* vs. Dijkstra
         </motion.h1>
         <p className="text-sm md:text-md md:text-lg text-gray-600 max-w-3xl mx-auto font-medium">
-          Visualize and compare these two popular pathfinding algorithms in real-time.
-          Watch how they explore the grid differently to find the optimal path.
+          {t("dijkstra")}
         </p>
       </motion.div>
-
-
 
       <motion.div
         className="w-full max-w-6xl p-2 md:p-6 bg-white rounded-xl shadow-md flex flex-col gap-2 md:gap-8"
@@ -604,7 +610,9 @@ export default function Section3({ controls }: Section3Props) {
         {/* Visualization Controls */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 bg-gray-50 rounded-lg mb-2">
           <div className="flex flex-col gap-2">
-            <label className="text-xs md:text-sm font-medium text-gray-700">Animation Speed</label>
+            <label className="text-xs md:text-sm font-medium text-gray-700">
+              Animation Speed
+            </label>
             <div className="flex items-center gap-2">
               <input
                 type="range"
@@ -614,12 +622,16 @@ export default function Section3({ controls }: Section3Props) {
                 onChange={(e) => setSpeed(Number(e.target.value))}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#83AFC9]"
               />
-              <span className="text-xs text-gray-500 w-12 text-right">{speed}ms</span>
+              <span className="text-xs text-gray-500 w-12 text-right">
+                {speed}ms
+              </span>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs md:text-sm font-medium text-gray-700">Wall Density</label>
+            <label className="text-xs md:text-sm font-medium text-gray-700">
+              Wall Density
+            </label>
             <div className="flex items-center gap-2">
               <input
                 type="range"
@@ -629,12 +641,16 @@ export default function Section3({ controls }: Section3Props) {
                 onChange={(e) => setWallDensity(Number(e.target.value))}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#83AFC9]"
               />
-              <span className="text-xs text-gray-500 w-12 text-right">{wallDensity}%</span>
+              <span className="text-xs text-gray-500 w-12 text-right">
+                {wallDensity}%
+              </span>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs md:text-sm font-medium text-gray-700">Cell Size</label>
+            <label className="text-xs md:text-sm font-medium text-gray-700">
+              Cell Size
+            </label>
             <div className="flex items-center gap-2">
               <input
                 type="range"
@@ -644,7 +660,9 @@ export default function Section3({ controls }: Section3Props) {
                 onChange={(e) => setCellSizeValue(Number(e.target.value))}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#83AFC9]"
               />
-              <span className="text-xs text-gray-500 w-12 text-right">{cellSizeValue}px</span>
+              <span className="text-xs text-gray-500 w-12 text-right">
+                {cellSizeValue}px
+              </span>
             </div>
           </div>
         </div>
@@ -652,7 +670,7 @@ export default function Section3({ controls }: Section3Props) {
         {/* New Grid Button */}
         <div className="flex justify-center mb-2">
           <button
-            onClick={() => setRefreshTrigger(prev => prev + 1)}
+            onClick={() => setRefreshTrigger((prev) => prev + 1)}
             className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-medium text-sm md:text-base py-2 px-4 rounded-lg transition-colors duration-200"
           >
             <FiRefreshCw className="animate-spin-slow" />
@@ -667,9 +685,14 @@ export default function Section3({ controls }: Section3Props) {
               <h3 className="ml-2 md:ml-0 text-lg md:text-2xl font-semibold text-indigo-700 tracking-tight">
                 A* Algorithm
               </h3>
-              <span className="text-xs md:text-sm px-3 md:px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">Uses heuristics</span>
+              <span className="text-xs md:text-sm px-3 md:px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">
+                Uses heuristics
+              </span>
             </div>
-            <div ref={aStarCanvasRef} className="border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"></div>
+            <div
+              ref={aStarCanvasRef}
+              className="border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"
+            ></div>
           </div>
 
           <div className="flex flex-col items-center">
@@ -677,9 +700,14 @@ export default function Section3({ controls }: Section3Props) {
               <h3 className="ml-2 md:ml-0 text-lg md:text-2xl font-semibold text-purple-700 tracking-tight">
                 Dijkstra Algorithm
               </h3>
-              <span className="text-xs md:text-sm px-3 md:px-2 py-1 bg-purple-50 text-purple-700 rounded-full">Uniform cost search</span>
+              <span className="text-xs md:text-sm px-3 md:px-2 py-1 bg-purple-50 text-purple-700 rounded-full">
+                Uniform cost search
+              </span>
             </div>
-            <div ref={dijkstraCanvasRef} className="border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"></div>
+            <div
+              ref={dijkstraCanvasRef}
+              className="border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"
+            ></div>
           </div>
         </div>
 

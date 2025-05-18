@@ -1,0 +1,60 @@
+{
+  "sorting-title": "Sorting Algorithm Visualizer",
+  "sorting-subtitle": "Visualize and understand how different sorting algorithms work step by step.",
+  "desc-bubble-sort": "A simple comparison-based algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.",
+  "desc-selection-sort": "Selection sort repeatedly finds the minimum element from the unsorted part of the array and places it at the beginning.",
+  "desc-insertion-sort": "Insertion sort builds the sorted array one item at a time, inserting each element into its correct position.",
+  "desc-merge-sort": "A divide-and-conquer algorithm that splits the array into smaller subarrays, sorts them, and merges them back together.",
+  "desc-quick-sort": "A fast divide-and-conquer algorithm that picks a pivot, partitions the array, and recursively sorts the subarrays.",
+  "algo-visual": "Algorithm Visualization",
+  "algo-code": "Algorithm Code",
+  "step": "Step {{number}}:",
+  "step-compare": "Comparing elements",
+  "step-swap": "Swapping elements",
+  "step-select": "Selecting element",
+  "step-set": "Setting value",
+  "step-index": "at index {{from}}",
+  "step-index-to": "and index {{to}}",
+  "complexity-title": "Complexity Analysis",
+  "complexity-time": "Time Complexity",
+  "complexity-space": "Space Complexity",
+  "complexity-best": "Best Case",
+  "complexity-average": "Average",
+  "complexity-worst": "Worst Case",
+  "complexity-usage": "Best Used When",
+  "bubble-usage": [
+    "Educational purposes - easy to understand",
+    "Small datasets",
+    "Array is already almost sorted"
+  ],
+  "insertion-usage": [
+    "Small datasets",
+    "Array is already partially sorted",
+    "Memory usage is a concern"
+  ],
+  "selection-usage": [
+    "Small datasets",
+    "Minimizing swaps is important",
+    "Memory usage is a concern"
+  ],
+  "merge-usage": [
+    "Large datasets",
+    "Stable sorting is required",
+    "Predictable performance is needed"
+  ],
+  "quick-usage": [
+    "Average case performance matters",
+    "In-place sorting is preferred",
+    "Not concerned about worst-case scenarios"
+  ],
+  "heap-usage": [
+    "Guaranteed O(n log n) is required",
+    "In-place sorting is preferred",
+    "Maximum/minimum values needed quickly"
+  ],
+  "input-error": "Invalid input. Please enter comma-separated numbers.",
+  "breadcrumb-home": "Home",
+  "breadcrumb-playground": "Playground",
+  "breadcrumb-algorithms": "Algorithms",
+  "breadcrumb-sorting": "Sorting"
+}
