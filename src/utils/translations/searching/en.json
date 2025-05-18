@@ -1,0 +1,38 @@
+{
+  "title": "Search Algorithm Visualizer",
+  "subtitle": "Visualize and understand how different search algorithms work step by step.",
+  "section-visual": "Algorithm Visualization",
+  "section-code": "Algorithm Code",
+  "complexity-title": "Complexity Analysis",
+  "complexity-time": "Time Complexity",
+  "complexity-space": "Space Complexity",
+  "complexity-best-used": "Best Used When",
+  "best-case": "Best Case",
+  "average-case": "Average",
+  "worst-case": "Worst Case",
+
+  "desc-linear-search": "A simple search algorithm that checks each element of the array until it finds the target or reaches the end.",
+  "desc-binary-search": "An efficient search algorithm that works on sorted arrays by repeatedly dividing the search interval in half.",
+  "desc-jump-search": "A search algorithm that works on sorted arrays by jumping ahead by fixed steps and then using linear search.",
+  "desc-interpolation-search": "An improved variant of binary search that works on uniformly distributed sorted arrays using position estimation.",
+
+  "best-linear-search-1": "The array is unsorted",
+  "best-linear-search-2": "The array is small",
+  "best-linear-search-3": "Simplicity is preferred over efficiency",
+  "best-linear-search-4": "You need to find all occurrences of an element",
+
+  "best-binary-search-1": "The array is sorted",
+  "best-binary-search-2": "The array is large",
+  "best-binary-search-3": "Efficiency is important",
+  "best-binary-search-4": "You need to find a single occurrence quickly",
+
+  "best-jump-search-1": "The array is sorted",
+  "best-jump-search-2": "Binary search is too complex for the use case",
+  "best-jump-search-3": "You need better performance than linear search",
+  "best-jump-search-4": "The array is medium to large sized",
+
+  "best-interpolation-search-1": "The array is sorted",
+  "best-interpolation-search-2": "Elements are uniformly distributed",
+  "best-interpolation-search-3": "You need better average performance than binary search",
+  "best-interpolation-search-4": "The array is large"
+}

@@ -5,6 +5,8 @@ import { imageQuizTranslations } from "./image-quiz";
 import { sortQuizTranslations } from "./sort-quiz";
 import { landingPageTranslations } from "./landing-page";
 import { sortingPageTranslations } from "./sorting";
+import { searchingPageTranslations } from "./searching";
+import { dataStructurePageTranslations } from "./data-structures";
 export const resources = {
   en: {
     common: commonTranslations.en,
@@ -14,6 +16,8 @@ export const resources = {
     sortQuizTranslations: sortQuizTranslations.en,
     imageQuizTranslations: imageQuizTranslations.en,
     sortingPageTranslations: sortingPageTranslations.en,
+    searchingPageTranslations: searchingPageTranslations.en,
+    dataStructurePageTranslations: dataStructurePageTranslations.en,
   },
   th: {
     common: commonTranslations.th,
@@ -23,5 +27,7 @@ export const resources = {
     sortQuizTranslations: sortQuizTranslations.th,
     imageQuizTranslations: imageQuizTranslations.th,
     sortingPageTranslations: sortingPageTranslations.th,
+    searchingPageTranslations: searchingPageTranslations.th,
+    dataStructurePageTranslations: dataStructurePageTranslations.th,
   },
 };

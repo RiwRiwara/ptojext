@@ -22,7 +22,7 @@ import {
   FaCode,
   FaChalkboardTeacher,
 } from "react-icons/fa";
-
+import { useTranslation } from "react-i18next";
 const searchAlgorithms: SearchAlgorithm[] = [
   {
     key: "linear-search",
@@ -114,6 +114,7 @@ export default function SearchVisualizerPage() {
   const [currentHighlightedLine, setCurrentHighlightedLine] = useState<
     string | null
   >(null);
+  const { t } = useTranslation("searchingPageTranslations");
 
   // Animation interval reference
   const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -428,17 +429,13 @@ export default function SearchVisualizerPage() {
 
           <div className="mt-8 mb-8 ml-1 md:ml-0">
             <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">
-              Search Algorithm Visualizer
+              {t("title")}
             </h1>
-            <p className="text-gray-600">
-              Visualize and understand how different search algorithms work step
-              by step.
-            </p>
+            <p className="text-gray-600">{t("subtitle")}</p>
           </div>
 
           <div className="flex flex-col gap-6">
             <div className="flex flex-col md:flex-row gap-2 md:gap-4">
-              {/* Visualization area */}
               <div className="w-full md:w-[60%]">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -449,7 +446,7 @@ export default function SearchVisualizerPage() {
                   <div className="flex items-center gap-2 mb-3">
                     <FaEye className="text-[#83AFC9]" />
                     <h3 className="text-base md:text-lg font-medium text-gray-700">
-                      Algorithm Visualization
+                      {t("algo-visualization")}
                     </h3>
                   </div>
 
@@ -474,16 +471,16 @@ export default function SearchVisualizerPage() {
 
                   <div className="flex justify-end">
                     <VisualizationControls
-                    onPlay={handlePlay}
-                    onPause={handlePause}
-                    onStepForward={handleStepForward}
-                    onStepBackward={handleStepBackward}
-                    onReset={handleReset}
-                    isPlaying={isPlaying}
-                    speed={speed}
-                    onSpeedChange={setSpeed}
-                    currentStep={currentStep}
-                    totalSteps={steps.length}
+                      onPlay={handlePlay}
+                      onPause={handlePause}
+                      onStepForward={handleStepForward}
+                      onStepBackward={handleStepBackward}
+                      onReset={handleReset}
+                      isPlaying={isPlaying}
+                      speed={speed}
+                      onSpeedChange={setSpeed}
+                      currentStep={currentStep}
+                      totalSteps={steps.length}
                     />
                   </div>
 
@@ -504,7 +501,6 @@ export default function SearchVisualizerPage() {
                 </motion.div>
               </div>
 
-              {/* Code display */}
               <div className="w-full md:w-[40%]">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -515,7 +511,7 @@ export default function SearchVisualizerPage() {
                   <div className="flex items-center gap-2 mb-3">
                     <FaCode className="text-[#83AFC9]" />
                     <h3 className="text-base md:text-lg font-medium text-gray-700">
-                      Algorithm Code
+                      {t("algo-code")}
                     </h3>
                   </div>
 
@@ -528,84 +524,105 @@ export default function SearchVisualizerPage() {
             </div>
 
             {selectedAlgoData && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-white border rounded-lg shadow-md p-4"
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <FaInfoCircle className="text-[#83AFC9]" />
-                    <h3 className="text-lg font-medium text-gray-700">Complexity Analysis</h3>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white border rounded-lg shadow-md p-4"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <FaInfoCircle className="text-[#83AFC9]" />
+                  <h3 className="text-lg font-medium text-gray-700">
+                    {t("complexity-analysis")}
+                  </h3>
+                </div>
+
+                <p className="text-gray-600 text-sm mb-4">
+                  {t(`desc-${selectedAlgo}`)}
+                </p>
+
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                    <FaRegClock className="text-[#83AFC9]" />{" "}
+                    <span>{t("time-complexity")}</span>
+                  </h4>
+                  <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
+                    <div className="bg-white p-2 rounded border border-gray-200">
+                      <span className="text-gray-500 block">
+                        {t("best-case")}
+                      </span>
+                      <span className="font-mono font-medium text-base">
+                        {selectedAlgoData.complexity.time.best}
+                      </span>
+                    </div>
+                    <div className="bg-white p-2 rounded border border-gray-200">
+                      <span className="text-gray-500 block">
+                        {t("average")}
+                      </span>
+                      <span className="font-mono font-medium text-base">
+                        {selectedAlgoData.complexity.time.average}
+                      </span>
+                    </div>
+                    <div className="bg-white p-2 rounded border border-gray-200">
+                      <span className="text-gray-500 block">
+                        {t("worst-case")}
+                      </span>
+                      <span className="font-mono font-medium text-base">
+                        {selectedAlgoData.complexity.time.worst}
+                      </span>
+                    </div>
                   </div>
 
-                  <p className="text-gray-600 text-sm mb-4">{selectedAlgoData.description}</p>
-
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                      <FaRegClock className="text-[#83AFC9]" /> <span>Time Complexity</span>
-                    </h4>
-                    <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
-                      <div className="bg-white p-2 rounded border border-gray-200">
-                        <span className="text-gray-500 block">Best Case</span>
-                        <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.time.best}</span>
-                      </div>
-                      <div className="bg-white p-2 rounded border border-gray-200">
-                        <span className="text-gray-500 block">Average</span>
-                        <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.time.average}</span>
-                      </div>
-                      <div className="bg-white p-2 rounded border border-gray-200">
-                        <span className="text-gray-500 block">Worst Case</span>
-                        <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.time.worst}</span>
-                      </div>
-                    </div>
-
-                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                      <FaMemory className="text-[#83AFC9]" /> <span>Space Complexity</span>
-                    </h4>
-                    <div className="bg-white p-2 rounded border border-gray-200 text-xs mb-3">
-                      <span className="font-mono font-medium text-base">{selectedAlgoData.complexity.space}</span>
-                    </div>
-
-                    <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                      <FaLightbulb className="text-[#83AFC9]" /> <span>Best Used When</span>
-                    </h4>
-                    <ul className="list-disc pl-5 text-sm text-gray-600">
-                      {selectedAlgo === 'linear-search' && (
-                        <>
-                          <li>The array is unsorted</li>
-                          <li>The array is small</li>
-                          <li>Simplicity is preferred over efficiency</li>
-                          <li>You need to find all occurrences of an element</li>
-                        </>
-                      )}
-                      {selectedAlgo === 'binary-search' && (
-                        <>
-                          <li>The array is sorted</li>
-                          <li>The array is large</li>
-                          <li>Efficiency is important</li>
-                          <li>You need to find a single occurrence quickly</li>
-                        </>
-                      )}
-                      {selectedAlgo === 'jump-search' && (
-                        <>
-                          <li>The array is sorted</li>
-                          <li>Binary search is too complex for the use case</li>
-                          <li>You need better performance than linear search</li>
-                          <li>The array is medium to large sized</li>
-                        </>
-                      )}
-                      {selectedAlgo === 'interpolation-search' && (
-                        <>
-                          <li>The array is sorted</li>
-                          <li>Elements are uniformly distributed</li>
-                          <li>You need better average performance than binary search</li>
-                          <li>The array is large</li>
-                        </>
-                      )}
-                    </ul>
+                  <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                    <FaMemory className="text-[#83AFC9]" />{" "}
+                    <span>{t("space-complexity")}</span>
+                  </h4>
+                  <div className="bg-white p-2 rounded border border-gray-200 text-xs mb-3">
+                    <span className="font-mono font-medium text-base">
+                      {selectedAlgoData.complexity.space}
+                    </span>
                   </div>
-                </motion.div>
+
+                  <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
+                    <FaLightbulb className="text-[#83AFC9]" />{" "}
+                    <span>{t("best-used-when")}</span>
+                  </h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-600">
+                    {selectedAlgo === "linear-search" && (
+                      <>
+                        <li>{t("best-linear-search-1")}</li>
+                        <li>{t("best-linear-search-2")}</li>
+                        <li>{t("best-linear-search-3")}</li>
+                        <li>{t("best-linear-search-4")}</li>
+                      </>
+                    )}
+                    {selectedAlgo === "binary-search" && (
+                      <>
+                        <li>{t("best-binary-search-1")}</li>
+                        <li>{t("best-binary-search-2")}</li>
+                        <li>{t("best-binary-search-3")}</li>
+                        <li>{t("best-binary-search-4")}</li>
+                      </>
+                    )}
+                    {selectedAlgo === "jump-search" && (
+                      <>
+                        <li>{t("best-jump-search-1")}</li>
+                        <li>{t("best-jump-search-2")}</li>
+                        <li>{t("best-jump-search-3")}</li>
+                        <li>{t("best-jump-search-4")}</li>
+                      </>
+                    )}
+                    {selectedAlgo === "interpolation-search" && (
+                      <>
+                        <li>{t("best-interpolation-search-1")}</li>
+                        <li>{t("best-interpolation-search-2")}</li>
+                        <li>{t("best-interpolation-search-3")}</li>
+                        <li>{t("best-interpolation-search-4")}</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              </motion.div>
             )}
           </div>
         </main>

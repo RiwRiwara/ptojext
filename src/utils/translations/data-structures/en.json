@@ -1,0 +1,121 @@
+{
+  "title": "Data Structures",
+  "subtitle": "Explore and understand the fundamentals of data structures - the building blocks that organize and store data in computer memory. Learn how different structures optimize for different operations and use cases.",
+  "tabs": {
+    "overview": "Overview",
+    "types": "Types",
+    "visualizer": "Visualizer",
+    "quiz": "Quiz"
+  },
+  "overview": {
+    "heading": "Understanding Data Structures",
+    "description": "The foundation of efficient algorithms and programming",
+    "why_heading": "Why Data Structures Matter",
+    "why_points": [
+      "They determine the way data is organized in memory",
+      "They impact algorithm efficiency and performance",
+      "Different structures optimize for different operations (insertion, deletion, search)",
+      "The right structure can dramatically improve application performance"
+    ],
+    "linear": {
+      "title": "Linear Data Structures",
+      "description": "Elements arranged sequentially, with each element having at most two neighbors.",
+      "learn_more": "Learn more →"
+    },
+    "nonlinear": {
+      "title": "Non-Linear Data Structures",
+      "description": "Elements arranged hierarchically or in a network, with elements having multiple connections.",
+      "learn_more": "Learn more →"
+    },
+    "learning_path": {
+      "title": "Learning Path",
+      "description": "Follow this path to master data structures",
+      "steps": [
+        {
+          "title": "Start with Overview",
+          "description": "Understand the basics of data structures"
+        },
+        {
+          "title": "Explore Linear Structures",
+          "description": "Arrays, lists, stacks, queues, and more"
+        },
+        {
+          "title": "Dive into Non-Linear Structures",
+          "description": "Trees, graphs, heaps, and more"
+        },
+        {
+          "title": "Test Your Knowledge",
+          "description": "Quiz yourself on key concepts"
+        },
+        {
+          "title": "Try the Interactive Visualizer",
+          "description": "See data structures in action"
+        }
+      ],
+      "button": "Go to Interactive Visualizer"
+    },
+    "comparison": {
+      "title": "Choosing the Right Data Structure",
+      "description": "Compare common operations across different data structures",
+      "headers": [
+        "Data Structure",
+        "Access",
+        "Search",
+        "Insertion",
+        "Deletion",
+        "Use When"
+      ],
+      "rows": [
+        {
+          "structure": "Array",
+          "access": "O(1)",
+          "search": "O(n)",
+          "insertion": "O(n)",
+          "deletion": "O(n)",
+          "use_when": "You need fast access by index"
+        },
+        {
+          "structure": "Linked List",
+          "access": "O(n)",
+          "search": "O(n)",
+          "insertion": "O(1)",
+          "deletion": "O(1)",
+          "use_when": "You need efficient insertions/deletions"
+        },
+        {
+          "structure": "Hash Table",
+          "access": "N/A",
+          "search": "O(1) avg",
+          "insertion": "O(1) avg",
+          "deletion": "O(1) avg",
+          "use_when": "You need fast lookup by key"
+        },
+        {
+          "structure": "Binary Tree",
+          "access": "O(log n)",
+          "search": "O(log n)",
+          "insertion": "O(log n)",
+          "deletion": "O(log n)",
+          "use_when": "You need hierarchical relationships"
+        },
+        {
+          "structure": "Graph",
+          "access": "O(1)",
+          "search": "O(V+E)",
+          "insertion": "O(1)",
+          "deletion": "O(V+E)",
+          "use_when": "You need to represent complex relationships"
+        }
+      ]
+    }
+  },
+  "types": {
+    "linear": "Linear Data Structures",
+    "nonlinear": "Non-Linear Data Structures"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "learn": "Learn",
+    "data_structure": "Data Structure"
+  }
+}

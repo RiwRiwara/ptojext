@@ -26,6 +26,7 @@ import {
 } from "react-icons/fi";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
+import { useTranslation } from "react-i18next";
 
 const DataStructuresPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -33,6 +34,7 @@ const DataStructuresPage = () => {
   const [isClient, setIsClient] = useState(false);
   const overviewRef = useRef<HTMLDivElement>(null);
   const visualizerRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation("dataStructurePageTranslations");
 
   useEffect(() => {
     setIsClient(true);
@@ -66,14 +68,9 @@ const DataStructuresPage = () => {
 
         <div className="mt-8 mb-8 ml-1 md:ml-0">
           <h1 className="text-4xl font-bold text-[#83AFC9] mb-2 mt-4">
-            Data Structures
+            {t("title")}
           </h1>
-          <p className="text-gray-600">
-            Explore and understand the fundamentals of data structures - the
-            building blocks that organize and store data in computer memory.
-            Learn how different structures optimize for different operations and
-            use cases.
-          </p>
+          <p className="text-gray-600">{t("subtitle")}</p>
         </div>
 
         <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm py-2 border-b mb-6">
@@ -88,28 +85,28 @@ const DataStructuresPage = () => {
                 className="flex items-center gap-2 rounded-md"
               >
                 <FiBook className="h-4 w-4" />
-                <span>Overview</span>
+                <span>{t("tabs.overview")}</span>
               </TabsTrigger>
               <TabsTrigger
                 value="types"
                 className="flex items-center gap-2 rounded-md"
               >
                 <FiList className="h-4 w-4" />
-                <span>Types</span>
+                <span>{t("tabs.types")}</span>
               </TabsTrigger>
               <TabsTrigger
                 value="visualizer"
                 className="flex items-center gap-2 rounded-md"
               >
                 <FiActivity className="h-4 w-4" />
-                <span>Visualizer</span>
+                <span>{t("tabs.visualizer")}</span>
               </TabsTrigger>
               <TabsTrigger
                 value="quiz"
                 className="flex items-center gap-2 rounded-md"
               >
                 <FiHelpCircle className="h-4 w-4" />
-                <span>Quiz</span>
+                <span>{t("tabs.quiz")}</span>
               </TabsTrigger>
             </TabsList>
 
@@ -118,49 +115,37 @@ const DataStructuresPage = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <Card className="lg:col-span-2">
                     <CardHeader>
-                      <CardTitle>Understanding Data Structures</CardTitle>
+                      <CardTitle>{t("overview.heading")}</CardTitle>
                       <CardDescription>
-                        The foundation of efficient algorithms and programming
+                        {t("overview.description")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <p>
-                        Data structures are specialized formats for organizing,
-                        processing, retrieving, and storing data. They provide a
-                        means to manage large amounts of data efficiently for
-                        various uses.
-                      </p>
+                      <p>{t("overview.body")}</p>
 
                       <div className="space-y-2 mt-4">
                         <h3 className="font-semibold">
-                          Why Data Structures Matter
+                          {t("overview.why_heading")}
                         </h3>
                         <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                          <li>
-                            They determine the way data is organized in memory
-                          </li>
-                          <li>
-                            They impact algorithm efficiency and performance
-                          </li>
-                          <li>
-                            Different structures optimize for different
-                            operations (insertion, deletion, search)
-                          </li>
-                          <li>
-                            The right structure can dramatically improve
-                            application performance
-                          </li>
+                          {(
+                            t("overview.why_points", {
+                              returnObjects: true,
+                            }) as string[]
+                          ).map((point, idx) => (
+                            <li key={idx}>{point}</li>
+                          ))}
                         </ul>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
                           <h3 className="font-semibold flex items-center gap-2 text-blue-700">
-                            <FiList /> Linear Data Structures
+                            <FiList />
+                            {t("overview.linear.title")}
                           </h3>
                           <p className="text-sm mt-2 text-gray-700">
-                            Elements arranged sequentially, with each element
-                            having at most two neighbors.
+                            {t("overview.linear.description")}
                           </p>
                           <Button
                             variant="link"
@@ -170,17 +155,17 @@ const DataStructuresPage = () => {
                             }}
                             className="p-0 mt-2 text-blue-600 h-auto"
                           >
-                            Learn more →
+                            {t("overview.linear.learn_more")}
                           </Button>
                         </div>
 
                         <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
                           <h3 className="font-semibold flex items-center gap-2 text-purple-700">
-                            <FiGrid /> Non-Linear Data Structures
+                            <FiGrid />
+                            {t("overview.nonlinear.title")}
                           </h3>
                           <p className="text-sm mt-2 text-gray-700">
-                            Elements arranged hierarchically or in a network,
-                            with elements having multiple connections.
+                            {t("overview.nonlinear.description")}
                           </p>
                           <Button
                             variant="link"
@@ -190,7 +175,7 @@ const DataStructuresPage = () => {
                             }}
                             className="p-0 mt-2 text-purple-600 h-auto"
                           >
-                            Learn more →
+                            {t("overview.nonlinear.learn_more")}
                           </Button>
                         </div>
                       </div>
@@ -199,82 +184,32 @@ const DataStructuresPage = () => {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle>Learning Path</CardTitle>
+                      <CardTitle>{t("overview.learning_path.title")}</CardTitle>
                       <CardDescription>
-                        Follow this path to master data structures
+                        {t("overview.learning_path.description")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        <div className="flex items-start gap-3">
-                          <div className="bg-green-100 rounded-full p-1 mt-0.5">
-                            <FiCheckCircle className="text-green-600 h-4 w-4" />
+                        {(
+                          t("overview.learning_path.steps", {
+                            returnObjects: true,
+                          }) as { title: string; description: string }[]
+                        ).map((step, idx) => (
+                          <div key={idx} className="flex items-start gap-3">
+                            <div className="bg-green-100 rounded-full p-1 mt-0.5">
+                              <FiCheckCircle className="text-green-600 h-4 w-4" />
+                            </div>
+                            <div>
+                              <h3 className="font-medium text-sm">
+                                {step.title}
+                              </h3>
+                              <p className="text-xs text-gray-500">
+                                {step.description}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="font-medium text-sm">
-                              Start with Overview
-                            </h3>
-                            <p className="text-xs text-gray-500">
-                              Understand the basics of data structures
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-start gap-3">
-                          <div className="bg-green-100 rounded-full p-1 mt-0.5">
-                            <FiCheckCircle className="text-green-600 h-4 w-4" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-sm">
-                              Explore Linear Structures
-                            </h3>
-                            <p className="text-xs text-gray-500">
-                              Arrays, lists, stacks, queues, and more
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-start gap-3">
-                          <div className="bg-green-100 rounded-full p-1 mt-0.5">
-                            <FiCheckCircle className="text-green-600 h-4 w-4" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-sm">
-                              Dive into Non-Linear Structures
-                            </h3>
-                            <p className="text-xs text-gray-500">
-                              Trees, graphs, heaps, and more
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-start gap-3">
-                          <div className="bg-green-100 rounded-full p-1 mt-0.5">
-                            <FiCheckCircle className="text-green-600 h-4 w-4" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-sm">
-                              Test Your Knowledge
-                            </h3>
-                            <p className="text-xs text-gray-500">
-                              Quiz yourself on key concepts
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-start gap-3">
-                          <div className="bg-green-100 rounded-full p-1 mt-0.5">
-                            <FiCheckCircle className="text-green-600 h-4 w-4" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-sm">
-                              Try the Interactive Visualizer
-                            </h3>
-                            <p className="text-xs text-gray-500">
-                              See data structures in action
-                            </p>
-                          </div>
-                        </div>
+                        ))}
                       </div>
 
                       <div className="mt-6">
@@ -288,7 +223,7 @@ const DataStructuresPage = () => {
                           }}
                           className="w-full"
                         >
-                          Go to Interactive Visualizer
+                          {t("overview.learning_path.button")}
                         </Button>
                       </div>
                     </CardContent>
@@ -297,9 +232,9 @@ const DataStructuresPage = () => {
 
                 <Card className="mt-6">
                   <CardHeader>
-                    <CardTitle>Choosing the Right Data Structure</CardTitle>
+                    <CardTitle>{t("overview.comparison.title")}</CardTitle>
                     <CardDescription>
-                      Compare common operations across different data structures
+                      {t("overview.comparison.description")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -307,145 +242,55 @@ const DataStructuresPage = () => {
                       <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                              Data Structure
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                              Access
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                              Search
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                              Insertion
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                              Deletion
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                              Use When
-                            </th>
+                            {(
+                              t("overview.comparison.headers", {
+                                returnObjects: true,
+                              }) as string[]
+                            ).map((header, idx) => (
+                              <th
+                                key={idx}
+                                scope="col"
+                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                              >
+                                {header}
+                              </th>
+                            ))}
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              Array
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(1)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(n)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(n)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(n)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              You need fast access by index
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              Linked List
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(n)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(n)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(1)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(1)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              You need efficient insertions/deletions
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              Hash Table
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              N/A
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(1) avg
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(1) avg
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(1) avg
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              You need fast lookup by key
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              Binary Tree
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(log n)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(log n)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(log n)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(log n)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              You need hierarchical relationships
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              Graph
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(1)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(V+E)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(1)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              O(V+E)
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              You need to represent complex relationships
-                            </td>
-                          </tr>
+                          {(
+                            t("overview.comparison.rows", {
+                              returnObjects: true,
+                            }) as {
+                              structure: string;
+                              access: string;
+                              search: string;
+                              insertion: string;
+                              deletion: string;
+                              use_when: string;
+                            }[]
+                          ).map((row, idx) => (
+                            <tr key={idx}>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {row.structure}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {row.access}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {row.search}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {row.insertion}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {row.deletion}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {row.use_when}
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
@@ -461,10 +306,10 @@ const DataStructuresPage = () => {
                 >
                   <TabsList className="mb-6 w-full">
                     <TabsTrigger value="linear" className="flex-1">
-                      Linear Data Structures
+                      {t("types.linear")}
                     </TabsTrigger>
                     <TabsTrigger value="nonlinear" className="flex-1">
-                      Non-Linear Data Structures
+                      {t("types.nonlinear")}
                     </TabsTrigger>
                   </TabsList>
 
@@ -489,7 +334,7 @@ const DataStructuresPage = () => {
           </Tabs>
         </div>
       </main>
-      <BottomComponent/>
+      <BottomComponent />
     </BaseLayout>
   );
 };
