@@ -1,41 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import BaseLayout from "@/components/layout/BaseLayout";
-import { ReinforcementLearningVisualizer } from "@/components/simulations/reinforcement-learning/ReinforcementLearningVisualizer";
-import { ReinforcementLearningComparison } from "@/components/simulations/reinforcement-learning/ReinforcementLearningComparison";
-import { ReinforcementLearningInfo } from "@/components/simulations/reinforcement-learning/ReinforcementLearningInfo";
-import { MatterJSRLEnvironment } from "@/components/simulations/reinforcement-learning/environments/MatterJSRLEnvironment";
-import {
-  FiBarChart2,
-  FiInfo,
-  FiCode,
-  FiTarget,
-  FiRefreshCw,
-  FiSettings,
-  FiPlay,
-  FiPause,
-} from "react-icons/fi";
+import { FiBarChart2, FiInfo, FiTarget, FiCode, FiArrowRight } from "react-icons/fi";
 import { FaBrain } from "react-icons/fa";
 import Breadcrumb from "@/components/common/Breadcrumb";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const ReinforcementLearningPage = () => {
-  const [activeTab, setActiveTab] = useState("visualizer");
   const [isClient, setIsClient] = useState(false);
-  const [usePhysics, setUsePhysics] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentEnvironment, setCurrentEnvironment] = useState<"gridworld" | "cartpole">("gridworld");
 
   useEffect(() => {
     setIsClient(true);
@@ -110,124 +87,166 @@ const ReinforcementLearningPage = () => {
           </div>
         </motion.div>
 
-        <Separator className="my-6" />
-
-        <Tabs
-          defaultValue="visualizer"
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="w-full"
-        >
-          <TabsList className="grid grid-cols-1 md:grid-cols-3 mb-8">
-            <TabsTrigger value="visualizer" className="flex items-center gap-2">
-              <FaBrain className="h-4 w-4" />
-              <span>Interactive Simulator</span>
-            </TabsTrigger>
-            <TabsTrigger value="comparison" className="flex items-center gap-2">
-              <FiBarChart2 className="h-4 w-4" />
-              <span>Algorithm Comparison</span>
-            </TabsTrigger>
-            <TabsTrigger value="info" className="flex items-center gap-2">
-              <FiInfo className="h-4 w-4" />
-              <span>Learning Concepts</span>
-            </TabsTrigger>
-          </TabsList>
-
-          <Card className="border-t-4 border-t-green-500" >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Simulation Card */}
+          <Card className="flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                {activeTab === "visualizer" && (
-                  <>
-                    <FaBrain className="h-5 w-5 text-green-500" />
-                    Interactive Reinforcement Learning Simulator
-                  </>
-                )}
-                {activeTab === "comparison" && (
-                  <>
-                    <FiBarChart2 className="h-5 w-5 text-green-500" />
-                    Algorithm Performance Comparison
-                  </>
-                )}
-                {activeTab === "info" && (
-                  <>
-                    <FiInfo className="h-5 w-5 text-green-500" />
-                    Reinforcement Learning Explained
-                  </>
-                )}
+                <FiTarget className="h-5 w-5 text-green-500" />
+                Interactive Simulation
               </CardTitle>
               <CardDescription>
-                {activeTab === "visualizer" &&
-                  "Observe how agents learn optimal policies through trial and error in different environments."}
-                {activeTab === "comparison" &&
-                  "Compare the performance, efficiency, and use cases of different reinforcement learning algorithms."}
-                {activeTab === "info" &&
-                  "Learn about the theory, applications, and implementation details of reinforcement learning."}
+                Observe how agents learn optimal policies through trial and error in different environments.
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <TabsContent value="visualizer" className="mt-0">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-     
-
-                  {/* Visualization Area - Takes 9/12 of the space on large screens */}
-                  <div className="lg:col-span-9">
-                    {usePhysics ? (
-                      <div className="relative aspect-video w-full border rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-900">
-                        <MatterJSRLEnvironment 
-                          width={800}
-                          height={600} 
-                          isPlaying={isPlaying}
-                          environmentType={currentEnvironment}
-                        />
-                      </div>
-                    ) : (
-                      <ReinforcementLearningVisualizer />
-                    )}
+            <CardContent className="flex-grow">
+              <div className="aspect-video w-full rounded-md bg-gray-100 dark:bg-gray-900 flex items-center justify-center overflow-hidden">
+                <motion.div
+                  className="relative w-16 h-16 bg-green-500 rounded-md"
+                  animate={{
+                    x: [-20, 20, -20],
+                    y: [0, -20, 0],
+                    rotate: [0, 5, -5, 0],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatType: "loop"
+                  }}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center text-white">
+                    <FaBrain className="h-6 w-6" />
                   </div>
-                </div>
-              </TabsContent>
-              <TabsContent value="comparison" className="mt-0">
-                <ReinforcementLearningComparison />
-              </TabsContent>
-              <TabsContent value="info" className="mt-0">
-                <ReinforcementLearningInfo />
-              </TabsContent>
+                </motion.div>
+              </div>
             </CardContent>
+            <CardFooter>
+              <Button asChild className="w-full">
+                <Link href="/simulations/reinforcement-learning/simulation" className="flex items-center justify-center gap-2">
+                  <span>Launch Simulator</span>
+                  <FiArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardFooter>
           </Card>
 
-          {/* Educational context at the bottom */}
-          <div className="mt-12 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-semibold mb-4">
-              Real-World Applications
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <h3 className="font-semibold text-lg mb-2 text-green-600 dark:text-green-400">
-                  Game AI
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300">
-                  Reinforcement learning enables game characters to learn and adapt to player behavior, creating more challenging and dynamic gameplay experiences.
-                </p>
+          {/* Comparison Card */}
+          <Card className="flex flex-col">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FiBarChart2 className="h-5 w-5 text-blue-500" />
+                Algorithm Comparison
+              </CardTitle>
+              <CardDescription>
+                Compare the performance, efficiency, and use cases of different reinforcement learning algorithms.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <div className="aspect-video w-full rounded-md bg-gray-100 dark:bg-gray-900 flex items-center justify-center overflow-hidden">
+                <motion.div 
+                  className="w-3/4 h-24 relative"
+                  animate={{
+                    opacity: [0.7, 1, 0.7]
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: "loop"
+                  }}
+                >
+                  <div className="absolute bottom-0 left-0 w-8 h-12 bg-blue-500 rounded-t-md"></div>
+                  <div className="absolute bottom-0 left-12 w-8 h-16 bg-purple-500 rounded-t-md"></div>
+                  <div className="absolute bottom-0 left-24 w-8 h-20 bg-green-500 rounded-t-md"></div>
+                  <div className="absolute bottom-0 left-36 w-8 h-8 bg-red-500 rounded-t-md"></div>
+                </motion.div>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-2 text-green-600 dark:text-green-400">
-                  Robotics & Control
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300">
-                  Robots use reinforcement learning to master complex tasks like walking, grasping objects, or navigating unfamiliar environments through trial and error.
-                </p>
+            </CardContent>
+            <CardFooter>
+              <Button asChild className="w-full">
+                <Link href="/simulations/reinforcement-learning/comparison" className="flex items-center justify-center gap-2">
+                  <span>View Comparison</span>
+                  <FiArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
+
+          {/* Info Card */}
+          <Card className="flex flex-col">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FiInfo className="h-5 w-5 text-purple-500" />
+                Learning Resources
+              </CardTitle>
+              <CardDescription>
+                Learn about the theory, applications, and implementation details of reinforcement learning.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <div className="aspect-video w-full rounded-md bg-gray-100 dark:bg-gray-900 flex items-center justify-center overflow-hidden">
+                <motion.div
+                  className="grid grid-cols-3 gap-2 w-3/4"
+                  animate={{
+                    y: [0, -5, 0]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatType: "loop"
+                  }}
+                >
+                  <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded col-span-2"></div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded col-span-2"></div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded col-span-2"></div>
+                </motion.div>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-2 text-green-600 dark:text-green-400">
-                  Resource Management
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300">
-                  From optimizing data center cooling to managing electricity grids, RL helps systems learn efficient resource allocation strategies that adapt to changing conditions.
-                </p>
-              </div>
+            </CardContent>
+            <CardFooter>
+              <Button asChild className="w-full">
+                <Link href="/simulations/reinforcement-learning/info" className="flex items-center justify-center gap-2">
+                  <span>Explore Resources</span>
+                  <FiArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+
+        {/* Educational context at the bottom */}
+        <div className="mt-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+          <h2 className="text-xl font-semibold mb-4">
+            Real-World Applications
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <h3 className="font-semibold text-lg mb-2 text-green-600 dark:text-green-400">
+                Game AI
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                Reinforcement learning enables game characters to learn and adapt to player behavior, creating more challenging and dynamic gameplay experiences.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg mb-2 text-green-600 dark:text-green-400">
+                Robotics & Control
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                Robots use reinforcement learning to master complex tasks like walking, grasping objects, or navigating unfamiliar environments through trial and error.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg mb-2 text-green-600 dark:text-green-400">
+                Resource Management
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                From optimizing data center cooling to managing electricity grids, RL helps systems learn efficient resource allocation strategies that adapt to changing conditions.
+              </p>
             </div>
           </div>
-        </Tabs>
+        </div>
       </div>
     </BaseLayout>
   );

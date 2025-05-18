@@ -137,23 +137,28 @@ export default function LandingPageComponent() {
 
       {/* INTRO SECTION */}
       <section className="py-4 flex flex-col items-center text-center gap-6">
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+
+
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="bg-gradient-to-r from-[#83AFC9] to-[#83AFC9] text-white px-5 py-2 rounded-full text-sm md:text-xl font-medium mb-4"
         >
-          Interactive Learning Reimagined
-        </motion.h1>
-        <motion.p
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-sm md:text-lg max-w-2xl mx-6 md:mx-auto text-gray-700 leading-relaxed"
-        >
-          Our interactive playground helps you visualize and understand complex concepts
-          through engaging simulations and hands-on experiences.
-        </motion.p>
+          <motion.h1
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="text-2xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-blue-900 mb-4 mt-2 md:mt-16"
+          >
+            Interactive Learning Reimagined
+
+          </motion.h1>
+          <p className="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
+            Our interactive playground helps you visualize and understand complex concepts
+            through engaging simulations and hands-on experiences.
+          </p>
+        </motion.div>
       </section>
 
       {/* FEATURES TAB SECTION */}
