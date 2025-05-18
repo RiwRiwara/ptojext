@@ -73,20 +73,34 @@ export default function LandingPageComponent() {
     }
   }, [handleScroll, isLowPerformanceDevice]);
 
+  // TypeScript interfaces for features data
+  interface Feature {
+    icon: string;
+    title: string;
+    description: string;
+    url?: string; // Optional URL property
+  }
+
+  interface FeatureCategory {
+    title: string;
+    description: string;
+    features: Feature[];
+  }
+
   // Features data for tabs
-  const featuresData = [
+  const featuresData: FeatureCategory[] = [
     {
       title: "Algorithm Visualization",
       description: "Step through complex algorithms visually and understand how they work internally through our intuitive visualizations.",
       features: [
-        { icon: "🔍", title: "Pathfinding", description: "Watch A* and Dijkstra's algorithms find paths in real-time" },
-        { icon: "📊", title: "Sorting", description: "Compare different sorting algorithms side by side" },
-        { icon: "🌳", title: "Data Structures", description: "Explore trees, graphs, and other complex structures visually" }
+        { icon: "🔍", title: "Pathfinding", description: "Watch A* and Dijkstra's algorithms find paths in real-time", url: '/simulations/pathfinding' },
+        { icon: "📊", title: "Sorting", description: "Compare different sorting algorithms side by side", url: '/playground/algorithms/sorting' },
+        { icon: "🌳", title: "Data Structures", description: "Explore trees, graphs, and other complex structures visually", url: '/learn/data-structures' }
       ]
     },
 
     {
-      title: "AI Experimentation",
+      title: "AI Experimentation  (coming soon)",
       description: "Explore the world of AI through hands-on interactive demos that make complex concepts approachable and engaging.",
       features: [
         { icon: "🧠", title: "Neural Networks", description: "Visualize how neural networks learn and make predictions" },
@@ -95,10 +109,10 @@ export default function LandingPageComponent() {
       ]
     },
     {
-      title: "Interactive Physics",
+      title: "Interactive Physics (coming soon)",
       description: "Experiment with our interactive cloth simulation powered by Matter.js. Control physics properties, manipulate objects, and see real-time reactions.",
       features: [
-        { icon: "✂️", title: "Cutting Action", description: "Cut through the cloth with improved detection radius and visual feedback" },
+        { icon: "✂️", title: "Cutting Action (On development)", description: "Cut through the cloth with improved detection radius and visual feedback" },
         { icon: "🧲", title: "Adjustable Pins", description: "Drag and move pins at cloth corners to create different cloth behaviors" },
         { icon: "🎚️", title: "Physics Controls", description: "Adjust stiffness, friction and particle size to simulate different materials" }
       ]
@@ -196,11 +210,11 @@ export default function LandingPageComponent() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: featureIndex * 0.1 }}
                   >
-                    <Card className="p-6 flex flex-col items-center text-center h-full  duration-300 ease-soft-spring">
+                    <a href={feature.url || ''} className="p-6 flex flex-col items-center text-center h-full  duration-300 ease-soft-spring border border-gray-200 rounded-lg shadow-sm" >
                       <div className="text-4xl mb-4">{feature.icon}</div>
                       <h3 className="font-bold text-xl mb-2 text-gray-800">{feature.title}</h3>
                       <p className="text-gray-700">{feature.description}</p>
-                    </Card>
+                    </a>
                   </motion.div>
                 ))}
               </div>

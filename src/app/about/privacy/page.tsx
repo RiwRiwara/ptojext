@@ -123,7 +123,7 @@ export default function PrivacyPolicy() {
                 If you have any questions about this Privacy Policy, please contact us at:
               </p>
               <p>
-                <a href="mailto:contact@visualright.ai" className="text-[#83AFC9] hover:underline">contact@visualright.ai</a>
+                <a href="mailto:contact@visualright.com" className="text-[#83AFC9] hover:underline">contact@visualright.com</a>
               </p>
 
               <p className="text-gray-500 mt-8">
