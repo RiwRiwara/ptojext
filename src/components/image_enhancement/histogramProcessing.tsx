@@ -1,7 +1,7 @@
 "use client";
-import { Button } from "@nextui-org/button"; // ensure this is imported
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { Button } from "@nextui-org/button";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -12,7 +12,9 @@ import {
   TooltipItem,
 } from "chart.js";
 import { BlockMath } from "react-katex";
-import "katex/dist/katex.min.css";
+import UploadImage from "@/components/image_enhancement/enhanceImageUpload";
+import { FiUpload } from "react-icons/fi";
+import { Slider } from "@nextui-org/slider";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip);
 
@@ -26,10 +28,13 @@ export default function HistogramProcessingSection() {
   const [originalHist, setOriginalHist] = useState<number[]>([]);
   const [transformedHist, setTransformedHist] = useState<number[]>([]);
   const [equalizedHist, setEqualizedHist] = useState<number[]>([]);
-  const [mode, setMode] = useState<TransformMode>("linear");
+  const [grayOriginal, setGrayOriginal] = useState<number[]>([]);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [inputMode, setInputMode] = useState<"default" | "upload">("default");
+
+  const [transformMode, setTransformMode] = useState<TransformMode>("linear");
   const [gammaValue, setGammaValue] = useState(1.0);
   const [logC, setLogC] = useState(30);
-  const [grayOriginal, setGrayOriginal] = useState<number[]>([]);
 
   const processImage = useCallback((img: HTMLImageElement) => {
     if (
@@ -38,6 +43,7 @@ export default function HistogramProcessingSection() {
       !equalizedCanvasRef.current
     )
       return;
+
     const origCtx = originalCanvasRef.current.getContext("2d");
     const transCtx = transformedCanvasRef.current.getContext("2d");
     const eqCtx = equalizedCanvasRef.current.getContext("2d");
@@ -60,7 +66,6 @@ export default function HistogramProcessingSection() {
     const data = imgData.data;
 
     const gray = new Array(img.width * img.height);
-
     for (let i = 0, j = 0; i < data.length; i += 4, j++) {
       gray[j] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
     }
@@ -72,12 +77,11 @@ export default function HistogramProcessingSection() {
 
     applyTransformation(gray);
     applyEqualization(gray);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const applyTransformation = useCallback(
     (gray: number[]) => {
-      if (!transformedCanvasRef.current) return;
+      if (!transformedCanvasRef.current || !gray.length) return;
       const ctx = transformedCanvasRef.current.getContext("2d");
       if (!ctx) return;
 
@@ -86,11 +90,11 @@ export default function HistogramProcessingSection() {
       const imgData = ctx.getImageData(0, 0, width, height);
       const data = imgData.data;
 
-      const minGray = gray.reduce((a, b) => Math.min(a, b), Infinity);
-      const maxGray = gray.reduce((a, b) => Math.max(a, b), -Infinity);
+      const minGray = gray.reduce((min, val) => Math.min(min, val), Infinity);
+      const maxGray = gray.reduce((max, val) => Math.max(max, val), -Infinity);
 
       const transformed = gray.map((val) => {
-        switch (mode) {
+        switch (transformMode) {
           case "linear":
             return ((val - minGray) * 255) / (maxGray - minGray);
           case "gamma":
@@ -113,12 +117,11 @@ export default function HistogramProcessingSection() {
       transformed.forEach((v) => hist[Math.floor(v)]++);
       setTransformedHist(hist);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mode, gammaValue, logC]
+    [transformMode, gammaValue, logC]
   );
 
   const applyEqualization = useCallback((gray: number[]) => {
-    if (!equalizedCanvasRef.current) return;
+    if (!equalizedCanvasRef.current || !gray.length) return;
     const ctx = equalizedCanvasRef.current.getContext("2d");
     if (!ctx) return;
 
@@ -134,7 +137,7 @@ export default function HistogramProcessingSection() {
       hist.slice(0, i + 1).reduce((sum, v) => sum + v, 0)
     );
     const cdfMin = cdf.find((c) => c > 0) ?? 0;
-    const totalPixels = gray.length;
+    const totalPixels = gray.length || 1;
 
     const equalized = gray.map((value) => {
       const val = Math.floor(value);
@@ -155,15 +158,15 @@ export default function HistogramProcessingSection() {
 
   useEffect(() => {
     const img = new Image();
-    img.src = "/mri.jpg";
+    img.src = imageSrc || "/mri.jpg";
     img.onload = () => processImage(img);
-  }, [processImage]);
+  }, [imageSrc, inputMode, processImage]);
 
   useEffect(() => {
     if (grayOriginal.length > 0) {
       applyTransformation(grayOriginal);
     }
-  }, [mode, gammaValue, logC, grayOriginal, applyTransformation]);
+  }, [transformMode, gammaValue, logC, grayOriginal, applyTransformation]);
 
   const histOptions = {
     responsive: true,
@@ -180,9 +183,7 @@ export default function HistogramProcessingSection() {
           display: true,
           text: "Pixel Intensity (0-255)",
           color: "#4b5563",
-          font: {
-            size: 12,
-          },
+          font: { size: 12 },
         },
       },
       y: {
@@ -190,9 +191,7 @@ export default function HistogramProcessingSection() {
           display: true,
           text: "Frequency",
           color: "#4b5563",
-          font: {
-            size: 12,
-          },
+          font: { size: 12 },
         },
       },
     },
@@ -210,7 +209,7 @@ export default function HistogramProcessingSection() {
   });
 
   const dynamicFormula = () => {
-    switch (mode) {
+    switch (transformMode) {
       case "linear":
         return "s = \\frac{r - \\min}{\\max - \\min} \\cdot 255";
       case "gamma":
@@ -224,131 +223,169 @@ export default function HistogramProcessingSection() {
 
   return (
     <div className="container mx-auto flex flex-col gap-8 p-4 pt-8">
-      {/* Select Transform */}
-      <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-        <div className="flex flex-wrap justify-center gap-2">
-          {(
-            [
-              { key: "linear", label: "Linear Stretch" },
-              { key: "gamma", label: "Gamma Correction" },
-              { key: "log", label: "Logarithmic Transform" },
-            ] as { key: TransformMode; label: string }[]
-          ).map(({ key, label }) => (
-            <Button
-              key={key}
-              onPress={() => setMode(key)}
-              className={`px-4 py-2 text-sm font-medium rounded-md transition ${
-                mode === key
-                  ? "bg-primary text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-primary"
-              }`}
-            >
-              {label}
-            </Button>
-          ))}
-        </div>
-
-        {/* Dynamic Sliders */}
-        {mode === "gamma" && (
-          <div className="flex items-center gap-2">
-            <label className="text-sm">Gamma: {gammaValue.toFixed(2)}</label>
-            <input
-              type="range"
-              min="0.1"
-              max="5"
-              step="0.1"
-              value={gammaValue}
-              onChange={(e) => setGammaValue(parseFloat(e.target.value))}
-              className="accent-primary"
-            />
-          </div>
-        )}
-        {mode === "log" && (
-          <div className="flex items-center gap-2">
-            <label className="text-sm">c: {logC}</label>
-            <input
-              type="range"
-              min="1"
-              max="300"
-              step="1"
-              value={logC}
-              onChange={(e) => setLogC(parseFloat(e.target.value))}
-              className="accent-primary"
-            />
-          </div>
+      <div className="flex justify-start mb-4">
+        {inputMode === "default" ? (
+          <Button
+            color="primary"
+            variant="solid"
+            onPress={() => {
+              setInputMode("upload");
+              setImageSrc(null); // only clear when going to upload mode
+            }}
+            startContent={<FiUpload />}
+          >
+            Upload your image
+          </Button>
+        ) : (
+          <Button
+            color="primary"
+            variant="bordered"
+            onPress={() => {
+              setInputMode("default");
+              // don't clear imageSrc here
+            }}
+            startContent={<FiUpload />}
+          >
+            Back to default image
+          </Button>
         )}
       </div>
 
-      {/* Dynamic Formula */}
-      <div className="text-center text-gray-700 text-sm">
-        <BlockMath>{dynamicFormula()}</BlockMath>
-      </div>
-
-      {/* Images and Histograms */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Original */}
-        <div className="flex flex-col items-center gap-4">
-          <h2 className="text-base md:text-lg font-semibold text-gray-700">
-            Original Image
-          </h2>
-          <canvas
-            ref={originalCanvasRef}
-            className="border rounded-xl shadow max-w-full"
-          />
-          <h3 className="text-sm font-medium text-gray-600">
-            Original Histogram
-          </h3>
-          <div className="w-full">
-            <Bar
-              options={histOptions}
-              data={createHistData(originalHist)}
-              height={150}
-            />
+      {inputMode === "upload" && !imageSrc ? (
+        <UploadImage
+          title="Upload image for histogram processing"
+          onImageUpload={(src) => setImageSrc(src)}
+        />
+      ) : (
+        <>
+          <div className="text-center text-gray-700 text-sm">
+            <BlockMath>{dynamicFormula()}</BlockMath>
           </div>
-        </div>
 
-        {/* Transformed */}
-        <div className="flex flex-col items-center gap-4">
-          <h2 className="text-base md:text-lg font-semibold text-gray-700 capitalize">
-            {mode} Transformed
-          </h2>
-          <canvas
-            ref={transformedCanvasRef}
-            className="border rounded-xl shadow max-w-full"
-          />
-          <h3 className="text-sm font-medium text-gray-600 capitalize">
-            {mode} Histogram
-          </h3>
-          <div className="w-full">
-            <Bar
-              options={histOptions}
-              data={createHistData(transformedHist)}
-              height={150}
-            />
-          </div>
-        </div>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-2">
+              {(["linear", "gamma", "log"] as TransformMode[]).map((key) => (
+                <Button
+                  key={key}
+                  onPress={() => setTransformMode(key)}
+                  className={`px-4 py-2 text-sm font-medium rounded-md transition ${
+                    transformMode === key
+                      ? "bg-primary text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-primary"
+                  }`}
+                >
+                  {key === "linear"
+                    ? "Linear Stretch"
+                    : key === "gamma"
+                    ? "Gamma Correction"
+                    : "Logarithmic Transform"}
+                </Button>
+              ))}
+            </div>
 
-        {/* Equalized */}
-        <div className="flex flex-col items-center gap-4">
-          <h2 className="text-base md:text-lg font-semibold text-gray-700">
-            Equalized Image
-          </h2>
-          <canvas
-            ref={equalizedCanvasRef}
-            className="border rounded-xl shadow max-w-full"
-          />
-          <h3 className="text-sm font-medium text-gray-600">
-            Equalized Histogram
-          </h3>
-          <div className="w-full">
-            <Bar
-              options={histOptions}
-              data={createHistData(equalizedHist)}
-              height={150}
-            />
+            {transformMode === "gamma" && (
+              <div className="w-full max-w-sm">
+                <label className="text-sm font-medium mb-1 block">
+                  Gamma:{" "}
+                  <span className="font-mono">{gammaValue.toFixed(2)}</span>
+                </label>
+                <Slider
+                  step={0.1}
+                  minValue={0.1}
+                  maxValue={5}
+                  value={gammaValue}
+                  onChange={(v) => setGammaValue(Number(v))}
+                  className="w-full"
+                  color="primary"
+                  size="sm"
+                  showSteps={false}
+                  marks={[
+                    { value: 0.1, label: "0.1" },
+                    { value: 5, label: "5" },
+                  ]}
+                />
+              </div>
+            )}
+            {transformMode === "log" && (
+              <div className="flex items-center gap-2">
+                <label className="text-sm">c: {logC}</label>
+                <Slider
+                  size="sm"
+                  step={1}
+                  minValue={1}
+                  maxValue={300}
+                  defaultValue={logC}
+                  value={logC}
+                  onChange={(value) => setLogC(Number(value))}
+                  className="w-full"
+                  color="primary"
+                  showSteps={true}
+                  marks={[
+                    { value: 1, label: "1" },
+                    { value: 300, label: "300" },
+                  ]}
+                />
+              </div>
+            )}
           </div>
-        </div>
-      </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="text-base md:text-lg font-semibold text-gray-700">
+                Original Image
+              </h2>
+              <canvas
+                ref={originalCanvasRef}
+                className="border rounded-xl shadow max-w-full"
+              />
+              <h3 className="text-sm font-medium text-gray-600">
+                Original Histogram
+              </h3>
+              <Bar
+                options={histOptions}
+                data={createHistData(originalHist)}
+                height={150}
+              />
+            </div>
+
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="text-base md:text-lg font-semibold text-gray-700 capitalize">
+                {transformMode} Transformed
+              </h2>
+              <canvas
+                ref={transformedCanvasRef}
+                className="border rounded-xl shadow max-w-full"
+              />
+              <h3 className="text-sm font-medium text-gray-600 capitalize">
+                {transformMode} Histogram
+              </h3>
+              <Bar
+                options={histOptions}
+                data={createHistData(transformedHist)}
+                height={150}
+              />
+            </div>
+
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="text-base md:text-lg font-semibold text-gray-700">
+                Equalized Image
+              </h2>
+              <canvas
+                ref={equalizedCanvasRef}
+                className="border rounded-xl shadow max-w-full"
+              />
+              <h3 className="text-sm font-medium text-gray-600">
+                Equalized Histogram
+              </h3>
+              <Bar
+                options={histOptions}
+                data={createHistData(equalizedHist)}
+                height={150}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

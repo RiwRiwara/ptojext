@@ -3,20 +3,24 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { BlockMath } from "react-katex";
 import "katex/dist/katex.min.css";
+import UploadImage from "./enhanceImageUpload";
+import { Button } from "@nextui-org/button";
+import { FiUpload } from "react-icons/fi";
+import { Slider } from "@nextui-org/slider";
 
 const methods = [
   {
     key: "sharpen",
     label: "Sharpen",
     description: "Enhances edges by emphasizing pixel intensity differences.",
-    formula: `G = I + \\alpha (I - \\text{blurred}(I))`,
+    formula: `G = I + \alpha (I - \text{blurred}(I))`,
     param: { label: "α", min: 0.1, max: 10.0, step: 0.1, default: 1.0 },
   },
   {
     key: "smooth",
     label: "Smooth",
     description: "Reduces noise by averaging nearby pixel values.",
-    formula: `G = \\frac{1}{9} \\sum I(x, y)`,
+    formula: `G = \frac{1}{9} \sum I(x, y)`,
     param: { label: "Kernel Size", min: 1, max: 10, step: 1, default: 3 },
   },
 ];
@@ -24,6 +28,9 @@ const methods = [
 export default function SharpenSmoothTransformSection() {
   const [selected, setSelected] = useState("sharpen");
   const [param, setParam] = useState(1.0);
+  const [mode, setMode] = useState<"default" | "upload">("default");
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   function generateBoxKernel(size: number): number[][] {
@@ -144,85 +151,128 @@ export default function SharpenSmoothTransformSection() {
 
   useEffect(() => {
     const img = new Image();
-    img.src = "/people.jpg";
+    img.src = uploadedImage || "/people.jpg";
     img.onload = () => applyTransform(img);
-  }, [applyTransform]);
+  }, [uploadedImage, applyTransform]);
 
   const meta = methods.find((m) => m.key === selected)!;
 
   return (
-    <section className="flex flex-col md:flex-row gap-6 mx-auto p-6">
-      <div className="w-full md:w-1/2 flex flex-col gap-4">
-        <h2 className="text-base md:text-xl font-semibold capitalize">
-          {selected}
-        </h2>
-        <canvas
-          ref={canvasRef}
-          className="w-full rounded-xl drop-shadow-md mx-auto"
-        />
+    <section className="flex flex-col gap-6 mx-auto p-6">
+      <div className="flex items-center gap-3">
+        {mode === "default" ? (
+          <Button
+            color="primary"
+            variant="solid"
+            onPress={() => {
+              setMode("upload");
+              setUploadedImage(null); // or setUploadedImageUrl(null)
+            }}
+            startContent={<FiUpload />}
+          >
+            Upload your image
+          </Button>
+        ) : (
+          <Button
+            color="primary"
+            variant="bordered"
+            onPress={() => {
+              setMode("default");
+              setUploadedImage(null); // or setUploadedImageUrl(null)
+            }}
+            startContent={<FiUpload />}
+          >
+            Back to default image
+          </Button>
+        )}
       </div>
 
-      <div className="w-full md:w-1/2 flex flex-col gap-4">
-        {/* Center the Method Buttons */}
-        <div className="w-full grid grid-cols-2 gap-4 mt-0 md:mt-10">
-          {methods.map((m) => (
-            <button
-              key={m.key}
-              className={`px-4 py-2 rounded-md transition ${
-                selected === m.key
-                  ? "bg-green-600 text-white"
-                  : "bg-gray-200 hover:bg-green-100"
-              }`}
-              onClick={() => {
-                setSelected(m.key);
-                setParam(m.param.default);
-              }}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
+      {mode === "upload" && !uploadedImage ? (
+        <UploadImage
+          title="Upload image for sharpen/smooth transform"
+          onImageUpload={(src) => setUploadedImage(src)}
+        />
+      ) : (
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="w-full md:w-1/2 flex flex-col gap-4">
+            <h2 className="text-base md:text-xl font-semibold capitalize">
+              {selected}
+            </h2>
+            <canvas
+              ref={canvasRef}
+              className="w-full rounded-xl drop-shadow-md mx-auto"
+            />
+          </div>
 
-        {/* Centered Control Panel */}
-        <div className="w-full bg-gray-100 p-4 rounded-md shadow space-y-4">
-          <p className="text-gray-700">{meta.description}</p>
-          <label className="block mt-4 font-medium">
-            {meta.param.label}: {param.toFixed(2)}
-          </label>
-          <input
-            type="range"
-            className="w-full accent-green-600"
-            min={meta.param.min}
-            max={meta.param.max}
-            step={meta.param.step}
-            value={param}
-            onChange={(e) => setParam(parseFloat(e.target.value))}
-          />
+          <div className="w-full md:w-1/2 flex flex-col gap-4">
+            <div className="w-full grid grid-cols-2 gap-4 mt-0 md:mt-10">
+              {methods.map((m) => (
+                <Button
+                  key={m.key}
+                  onPress={() => {
+                    setSelected(m.key);
+                    setParam(m.param.default);
+                  }}
+                  className={`px-4 py-2 text-sm font-medium rounded-md transition ${
+                    selected === m.key
+                      ? "bg-primary text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-primary hover:text-white"
+                  }`}
+                >
+                  {m.label}
+                </Button>
+              ))}
+            </div>
 
-          {/* Visual Explanation */}
-          <div className="bg-white p-4 rounded shadow-inner">
-            {selected === "sharpen" ? (
-              <div className="text-sm space-y-2 w-full text-center">
-                <BlockMath>{meta.formula}</BlockMath>
-                <div className="text-gray-600">
-                  α = <span className="font-semibold">{param.toFixed(2)}</span>
-                </div>
-                <div className="text-xs text-gray-500 italic">
-                  Sharpening emphasizes edges by subtracting a blurred version
-                  from the original image and amplifying the difference using α.
-                </div>
+            <div className="w-full bg-gray-100 p-4 rounded-md shadow space-y-4">
+              <p className="text-gray-700">{meta.description}</p>
+              <label className="block mt-4 font-medium">
+                {meta.param.label}: {param.toFixed(2)}
+              </label>
+              <Slider
+                size="sm"
+                step={meta.param.step}
+                minValue={meta.param.min}
+                maxValue={meta.param.max}
+                defaultValue={param}
+                value={param}
+                onChange={(value) => setParam(Number(value))}
+                className="w-full"
+                color="primary"
+                showSteps={meta.param.step >= 0.5}
+                marks={[
+                  { value: meta.param.min, label: meta.param.min.toString() },
+                  { value: meta.param.max, label: meta.param.max.toString() },
+                ]}
+              />
+
+              <div className="bg-white p-4 rounded shadow-inner">
+                {selected === "sharpen" ? (
+                  <div className="text-sm space-y-2 w-full text-center">
+                    <BlockMath>{meta.formula}</BlockMath>
+                    <div className="text-gray-600">
+                      α ={" "}
+                      <span className="font-semibold">{param.toFixed(2)}</span>
+                    </div>
+                    <div className="text-xs text-gray-500 italic">
+                      Sharpening emphasizes edges by subtracting a blurred
+                      version from the original image and amplifying the
+                      difference using α.
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2 flex flex-col items-center">
+                    <div className="text-sm text-gray-700">
+                      Averaging Kernel (size: {param}×{param}):
+                    </div>
+                    {renderKernelMatrix(generateBoxKernel(param as number))}
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="space-y-2 flex flex-col items-center">
-                <div className="text-sm text-gray-700">
-                  Averaging Kernel (size: {param}×{param}):
-                </div>
-                {renderKernelMatrix(generateBoxKernel(param as number))}
-              </div>
-            )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
