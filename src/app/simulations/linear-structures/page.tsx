@@ -10,6 +10,7 @@ import { StackOfCardsVisualization } from '@/components/simulations/linear-struc
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import Breadcrumb from "@/components/common/Breadcrumb";
+import BottomComponent from '@/components/page_components/landing_page/BottomComponent';
 
 const LinearStructuresSimulation = () => {
   const [activeTab, setActiveTab] = useState("timeline");
@@ -25,7 +26,7 @@ const LinearStructuresSimulation = () => {
 
   return (
     <BaseLayout>
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8">
         <Breadcrumb
             items={[
               { label: "Home", href: "/" },
@@ -131,7 +132,8 @@ const LinearStructuresSimulation = () => {
             </CardContent>
           </Card>
         </Tabs>
-      </div>
+      </main>
+      <BottomComponent/>
     </BaseLayout>
   );
 };

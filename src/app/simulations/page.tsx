@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import BaseLayout from "@/components/layout/BaseLayout";
+import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 
 const simulations = [
   {
@@ -12,7 +13,7 @@ const simulations = [
 
 const SimulationsDashboard: React.FC = () => (
   <BaseLayout>
-    <div className="max-w-2xl mx-auto p-4">
+    <main className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Real-World Problem Simulations</h1>
       <div className="grid gap-4">
         {simulations.map(sim => (
@@ -22,7 +23,8 @@ const SimulationsDashboard: React.FC = () => (
           </Link>
         ))}
       </div>
-    </div>
+    </main>
+    <BottomComponent/>
   </BaseLayout>
 );
 

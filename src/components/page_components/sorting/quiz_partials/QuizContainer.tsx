@@ -273,7 +273,7 @@ const QuizContainer: React.FC = () => {
       {/* Quiz Generator Controls */}
       <Card className="p-6 mb-6 bg-white rounded-xl shadow-sm border">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">{t("sub_title")}</h2>
+          <h2 className="text-xl font-bold">Sorting Algorithms Quiz</h2>
           <Button
             variant="ghost"
             onPress={toggleLanguage}
