@@ -30,96 +30,96 @@ import {
   DrawerFooter,
 } from "@heroui/drawer";
 import { Button } from "@nextui-org/button";
-
-const sortingAlgorithms: SortingAlgorithm[] = [
-  {
-    key: "bubble-sort",
-    label: "Bubble Sort",
-    description:
-      "A simple comparison-based algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order.",
-    complexity: {
-      time: { best: "O(n)", average: "O(n²)", worst: "O(n²)" },
-      space: "O(1)",
-    },
-    colorScheme: {
-      background: "#F8FBFD",
-      defaultBar: "#94a3b8",
-      activeBar: "#83AFC9",
-      comparingBar: "#60a5fa",
-      sortedBar: "#10b981",
-    },
-  },
-  {
-    key: "selection-sort",
-    label: "Selection Sort",
-    description:
-      "Selection sort repeatedly finds the minimum element from the unsorted part of the array and places it at the beginning.",
-    complexity: {
-      time: { best: "O(n²)", average: "O(n²)", worst: "O(n²)" },
-      space: "O(1)",
-    },
-    colorScheme: {
-      background: "#F8FBFD",
-      defaultBar: "#94a3b8",
-      activeBar: "#6da5c0",
-      comparingBar: "#83AFC9",
-      sortedBar: "#10b981",
-    },
-  },
-  {
-    key: "insertion-sort",
-    label: "Insertion Sort",
-    description:
-      "Insertion sort builds the sorted array one item at a time, inserting each element into its correct position.",
-    complexity: {
-      time: { best: "O(n)", average: "O(n²)", worst: "O(n²)" },
-      space: "O(1)",
-    },
-    colorScheme: {
-      background: "#F8FBFD",
-      defaultBar: "#94a3b8",
-      activeBar: "#83AFC9",
-      comparingBar: "#93c5da",
-      sortedBar: "#10b981",
-    },
-  },
-  {
-    key: "merge-sort",
-    label: "Merge Sort",
-    description:
-      "A divide-and-conquer algorithm that splits the array into smaller subarrays, sorts them, and merges them back together.",
-    complexity: {
-      time: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" },
-      space: "O(n)",
-    },
-    colorScheme: {
-      background: "#F8FBFD",
-      defaultBar: "#94a3b8",
-      activeBar: "#83AFC9",
-      comparingBar: "#38bdf8",
-      sortedBar: "#10b981",
-    },
-  },
-  {
-    key: "quick-sort",
-    label: "Quick Sort",
-    description:
-      "A fast divide-and-conquer algorithm that picks a pivot, partitions the array, and recursively sorts the subarrays.",
-    complexity: {
-      time: { best: "O(n log n)", average: "O(n log n)", worst: "O(n²)" },
-      space: "O(log n)",
-    },
-    colorScheme: {
-      background: "#F8FBFD",
-      defaultBar: "#94a3b8",
-      activeBar: "#83AFC9",
-      comparingBar: "#64748b",
-      sortedBar: "#10b981",
-    },
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function SortingVisualizerPage() {
+  const { t } = useTranslation("sortingPageTranslations");
+  const sortingAlgorithms: SortingAlgorithm[] = [
+    {
+      key: "bubble-sort",
+      label: "Bubble Sort",
+      description: t("desc-bubble-sort"),
+      complexity: {
+        time: { best: "O(n)", average: "O(n²)", worst: "O(n²)" },
+        space: "O(1)",
+      },
+      colorScheme: {
+        background: "#F8FBFD",
+        defaultBar: "#94a3b8",
+        activeBar: "#83AFC9",
+        comparingBar: "#60a5fa",
+        sortedBar: "#10b981",
+      },
+    },
+    {
+      key: "selection-sort",
+      label: "Selection Sort",
+      description: t("desc-selection-sort"),
+      complexity: {
+        time: { best: "O(n²)", average: "O(n²)", worst: "O(n²)" },
+        space: "O(1)",
+      },
+      colorScheme: {
+        background: "#F8FBFD",
+        defaultBar: "#94a3b8",
+        activeBar: "#6da5c0",
+        comparingBar: "#83AFC9",
+        sortedBar: "#10b981",
+      },
+    },
+    {
+      key: "insertion-sort",
+      label: "Insertion Sort",
+      description: t("desc-insertion-sort"),
+      complexity: {
+        time: { best: "O(n)", average: "O(n²)", worst: "O(n²)" },
+        space: "O(1)",
+      },
+      colorScheme: {
+        background: "#F8FBFD",
+        defaultBar: "#94a3b8",
+        activeBar: "#83AFC9",
+        comparingBar: "#93c5da",
+        sortedBar: "#10b981",
+      },
+    },
+    {
+      key: "merge-sort",
+      label: "Merge Sort",
+      description: t("desc-merge-sort"),
+      complexity: {
+        time: {
+          best: "O(n log n)",
+          average: "O(n log n)",
+          worst: "O(n log n)",
+        },
+        space: "O(n)",
+      },
+      colorScheme: {
+        background: "#F8FBFD",
+        defaultBar: "#94a3b8",
+        activeBar: "#83AFC9",
+        comparingBar: "#38bdf8",
+        sortedBar: "#10b981",
+      },
+    },
+    {
+      key: "quick-sort",
+      label: "Quick Sort",
+      description: t("desc-quick-sort"),
+      complexity: {
+        time: { best: "O(n log n)", average: "O(n log n)", worst: "O(n²)" },
+        space: "O(log n)",
+      },
+      colorScheme: {
+        background: "#F8FBFD",
+        defaultBar: "#94a3b8",
+        activeBar: "#83AFC9",
+        comparingBar: "#64748b",
+        sortedBar: "#10b981",
+      },
+    },
+  ];
   // State for array and visualization
   const [currentArray, setCurrentArray] = useState<number[]>([]);
   const [initialArray, setInitialArray] = useState<number[]>([
@@ -390,18 +390,13 @@ export default function SortingVisualizerPage() {
 
           <div className="mt-4 mb-8 ml-1 md:ml-0">
             <h1 className="text-3xl font-bold text-[#83AFC9] mb-2 mt-4">
-              Sorting Algorithm Visualizer
+              {t("sorting-title")}
             </h1>
-            <p className="text-gray-600">
-              Visualize and understand how different sorting algorithms work
-              step by step.
-            </p>
+            <p className="text-gray-600">{t("sorting-subtitle")}</p>
           </div>
 
           <div className="flex flex-col gap-6">
-            {/* Top column - Algorithm selection */}
             <div className="flex flex-col md:flex-row gap-2 md:gap-4">
-              {/* Visualization area */}
               <div className="w-full md:w-[60%]">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -412,7 +407,7 @@ export default function SortingVisualizerPage() {
                   <div className="flex items-center gap-2 mb-3">
                     <FaEye className="text-[#83AFC9]" />
                     <h3 className="text-base md:text-lg font-medium text-gray-700">
-                      Algorithm Visualization
+                      {t("algo-visual")}
                     </h3>
                   </div>
 
@@ -432,41 +427,38 @@ export default function SortingVisualizerPage() {
                     inputError={inputError}
                   />
 
-                  {/* Step explanation */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {showExplanation && currentStep < animationSteps.length && (
                       <div className="mb-3 p-3 bg-blue-50 border border-blue-100 rounded-lg text-sm">
                         <div className="flex items-start">
-                          {/* <FaInfoCircle className="text-[#83AFC9] mt-0.5 mr-2 flex-shrink-0" /> */}
                           <div>
-                            <strong>Step {currentStep + 1} :</strong>{" "}
+                            <strong>
+                              {t("step", { number: currentStep + 1 })}
+                            </strong>{" "}
                             {animationSteps[currentStep]?.type === "compare" &&
-                              "Comparing elements"}
+                              t("step-compare")}
                             {animationSteps[currentStep]?.type === "swap" &&
-                              "Swapping elements"}
+                              t("step-swap")}
                             {animationSteps[currentStep]?.type === "select" &&
-                              "Selecting element"}
+                              t("step-select")}
                             {animationSteps[currentStep]?.type === "set" &&
-                              "Setting value"}{" "}
+                              t("step-set")}{" "}
                             {typeof animationSteps[currentStep]?.from !==
                               "undefined" &&
-                              `at index ${animationSteps[currentStep].from}`}
+                              t("step-from", {
+                                index: animationSteps[currentStep].from,
+                              })}
                             {typeof animationSteps[currentStep]?.to !==
                               "undefined" &&
-                              ` and index ${animationSteps[currentStep].to}`}
+                              t("step-to", {
+                                index: animationSteps[currentStep].to,
+                              })}
                           </div>
                         </div>
                       </div>
                     )}
 
                     <div>
-                      {/* <div className="flex items-center gap-2 mb-3">
-                        <FaRegClock className="text-[#83AFC9]" />
-                        <h3 className="text-base font-medium text-gray-700">
-                          Visualization Controls
-                        </h3>
-                      </div> */}
-
                       <VisualizationControls
                         isPlaying={isPlaying}
                         setIsPlaying={setIsPlaying}
@@ -497,7 +489,6 @@ export default function SortingVisualizerPage() {
                 </motion.div>
               </div>
 
-              {/* Code display */}
               <div className="w-full md:w-[40%]">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -508,7 +499,7 @@ export default function SortingVisualizerPage() {
                   <div className="flex items-center gap-2 mb-3">
                     <FaCode className="text-[#83AFC9]" />
                     <h3 className="text-base md:text-lg font-medium text-gray-700">
-                      Algorithm Code
+                      {t("algo-code")}
                     </h3>
                   </div>
 
@@ -521,103 +512,7 @@ export default function SortingVisualizerPage() {
                   />
                 </motion.div>
               </div>
-
-              {/* <div className="bg-white rounded-lg shadow-md p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <FaChalkboardTeacher className="text-[#83AFC9]" />
-                  <h3 className="text-base lg:text-lg font-medium text-gray-700">Array Controls</h3>
-                </div>
-
-                <ArrayControls
-                  arraySize={initialArray.length}
-                  onArraySizeChange={handleArraySizeChange}
-                  onRandomize={randomizeArray}
-                  onCustomArray={handleCustomArraySubmit}
-                  customArrayInput={customArrayInput}
-                  setCustomArrayInput={setCustomArrayInput}
-                  inputError={inputError}
-                />
-              </div> */}
-
-              {/* <div className="bg-white rounded-lg shadow-md p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <FaRegClock className="text-[#83AFC9]" />
-                  <h3 className="text-lg font-medium text-gray-700">Visualization Controls</h3>
-                </div>
-
-                <VisualizationControls
-                  isPlaying={isPlaying}
-                  setIsPlaying={setIsPlaying}
-                  currentStep={currentStep}
-                  totalSteps={animationSteps.length}
-                  speed={speed}
-                  setSpeed={setSpeed}
-                  showCode={true}
-                  setShowCode={setShowCode}
-                  onReset={resetArray}
-                  onPrevStep={goToPrevStep}
-                  onNextStep={goToNextStep}
-                />
-              </div> */}
             </div>
-
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 space-y-6 md:space-y-0 gap-6">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {showExplanation && currentStep < animationSteps.length && (
-                  <div className="mb-3 p-3 bg-yellow-50 border border-yellow-100 rounded-lg text-sm">
-                    <div className="flex items-start">
-                      <FaInfoCircle className="text-[#83AFC9] mt-0.5 mr-2 flex-shrink-0" />
-                      <div>
-                        <strong>Step {currentStep + 1} :</strong> {' '}
-                        {animationSteps[currentStep]?.type === 'compare' && 'Comparing elements'}
-                        {animationSteps[currentStep]?.type === 'swap' && 'Swapping elements'}
-                        {animationSteps[currentStep]?.type === 'select' && 'Selecting element'}
-                        {animationSteps[currentStep]?.type === 'set' && 'Setting value'}
-                        {' '}
-                        {typeof animationSteps[currentStep]?.from !== 'undefined' && `at index ${animationSteps[currentStep].from}`}
-                        {typeof animationSteps[currentStep]?.to !== 'undefined' && ` and index ${animationSteps[currentStep].to}`}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <PixiSortingVisualizer
-                  blocks={currentArray}
-                  animationSteps={animationSteps}
-                  isPlaying={isPlaying}
-                  speed={speed}
-                  currentStep={currentStep}
-                  onStepChange={handleStepChange}
-                  onSortingComplete={handleSortingComplete}
-                  onBarClick={handleBarClick}
-                  colorScheme={selectedAlgoData?.colorScheme}
-                />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
-                className="bg-white rounded-lg shadow-md p-4"
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <FaCode className="text-[#83AFC9]" />
-                  <h3 className="text-lg font-medium text-gray-700">Algorithm Code</h3>
-                </div>
-
-                <CodeDisplay
-                  selectedAlgo={selectedAlgo}
-                  customAlgorithm={customAlgorithm}
-                  setCustomAlgorithm={setCustomAlgorithm}
-                  isPlaying={isPlaying}
-                  currentHighlightedLine={currentHighlightedLine}
-                />
-              </motion.div>
-            </div> */}
 
             {selectedAlgoData && (
               <motion.div
@@ -629,30 +524,36 @@ export default function SortingVisualizerPage() {
                 <div className="flex items-center gap-2 mb-3">
                   <FaInfoCircle className="text-[#83AFC9]" />
                   <h3 className="text-lg font-medium text-gray-700">
-                    Complexity Analysis
+                    {t("complexity-title")}
                   </h3>
                 </div>
 
                 <div className="space-y-3">
                   <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                    <FaRegClock className="text-[#83AFC9]" />{" "}
-                    <span>Time Complexity</span>
+                    <FaRegClock className="text-[#83AFC9]" />
+                    <span>{t("complexity-time")}</span>
                   </h4>
                   <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
                     <div className="bg-white p-2 rounded-md border border-gray-200">
-                      <span className="text-gray-500 block">Best Case</span>
+                      <span className="text-gray-500 block">
+                        {t("complexity-best")}
+                      </span>
                       <span className="font-mono font-medium text-base">
                         {selectedAlgoData?.complexity.time.best}
                       </span>
                     </div>
                     <div className="bg-white p-2 rounded-md border border-gray-200">
-                      <span className="text-gray-500 block">Average</span>
+                      <span className="text-gray-500 block">
+                        {t("complexity-average")}
+                      </span>
                       <span className="font-mono font-medium text-base">
                         {selectedAlgoData?.complexity.time.average}
                       </span>
                     </div>
                     <div className="bg-white p-2 rounded-md border border-gray-200">
-                      <span className="text-gray-500 block">Worst Case</span>
+                      <span className="text-gray-500 block">
+                        {t("complexity-worst")}
+                      </span>
                       <span className="font-mono font-medium text-base">
                         {selectedAlgoData?.complexity.time.worst}
                       </span>
@@ -660,8 +561,8 @@ export default function SortingVisualizerPage() {
                   </div>
 
                   <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                    <FaMemory className="text-[#83AFC9]" />{" "}
-                    <span>Space Complexity</span>
+                    <FaMemory className="text-[#83AFC9]" />
+                    <span>{t("complexity-space")}</span>
                   </h4>
                   <div className="bg-white p-2 rounded border border-gray-200 text-xs mb-3">
                     <span className="font-mono font-medium text-base">
@@ -670,51 +571,24 @@ export default function SortingVisualizerPage() {
                   </div>
 
                   <h4 className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                    <FaLightbulb className="text-[#83AFC9]" />{" "}
-                    <span>Best Used When</span>
+                    <FaLightbulb className="text-[#83AFC9]" />
+                    <span>{t("complexity-usage")}</span>
                   </h4>
                   <ul className="list-disc pl-5 text-sm text-gray-600">
-                    {selectedAlgo === "bubble-sort" && (
-                      <>
-                        <li>Educational purposes - easy to understand</li>
-                        <li>Small datasets</li>
-                        <li>Array is already almost sorted</li>
-                      </>
-                    )}
-                    {selectedAlgo === "insertion-sort" && (
-                      <>
-                        <li>Small datasets</li>
-                        <li>Array is already partially sorted</li>
-                        <li>Memory usage is a concern</li>
-                      </>
-                    )}
-                    {selectedAlgo === "selection-sort" && (
-                      <>
-                        <li>Small datasets</li>
-                        <li>Minimizing swaps is important</li>
-                        <li>Memory usage is a concern</li>
-                      </>
-                    )}
-                    {selectedAlgo === "merge-sort" && (
-                      <>
-                        <li>Large datasets</li>
-                        <li>Stable sorting is required</li>
-                        <li>Predictable performance is needed</li>
-                      </>
-                    )}
-                    {selectedAlgo === "quick-sort" && (
-                      <>
-                        <li>Average case performance matters</li>
-                        <li>In-place sorting is preferred</li>
-                        <li>Not concerned about worst-case scenarios</li>
-                      </>
-                    )}
-                    {selectedAlgo === "heap-sort" && (
-                      <>
-                        <li>Guaranteed O(n log n) is required</li>
-                        <li>In-place sorting is preferred</li>
-                        <li>Maximum/minimum values needed quickly</li>
-                      </>
+                    {[0, 1, 2].map((i) =>
+                      selectedAlgo === "bubble-sort" ? (
+                        <li key={i}>{t(`bubble-usage.${i}`)}</li>
+                      ) : selectedAlgo === "insertion-sort" ? (
+                        <li key={i}>{t(`insertion-usage.${i}`)}</li>
+                      ) : selectedAlgo === "selection-sort" ? (
+                        <li key={i}>{t(`selection-usage.${i}`)}</li>
+                      ) : selectedAlgo === "merge-sort" ? (
+                        <li key={i}>{t(`merge-usage.${i}`)}</li>
+                      ) : selectedAlgo === "quick-sort" ? (
+                        <li key={i}>{t(`quick-usage.${i}`)}</li>
+                      ) : selectedAlgo === "heap-sort" ? (
+                        <li key={i + 1}>{t(`heap-usage-${i + 1}`)}</li>
+                      ) : null
                     )}
                   </ul>
                 </div>

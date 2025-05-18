@@ -8,9 +8,11 @@ import {
   FcOrgUnit,
 } from "react-icons/fc";
 import Image from "next/image";
-import { isMobileOrLowSpec, getOptimalAnimationSettings } from "@/utils/deviceDetection";
-
-
+import {
+  isMobileOrLowSpec,
+  getOptimalAnimationSettings,
+} from "@/utils/deviceDetection";
+import { useTranslation } from "react-i18next";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -56,7 +58,7 @@ export default function Section1() {
   const [isClient, setIsClient] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLowPerformanceDevice, setIsLowPerformanceDevice] = useState(false);
-
+  const { t } = useTranslation("landingPageTranslations");
   // Get optimal animation settings based on device capability
   const animationSettings = useMemo(() => {
     return getOptimalAnimationSettings();
@@ -80,8 +82,8 @@ export default function Section1() {
 
     // Only add mouse tracking on non-mobile devices to save performance
     if (!isLowPerformanceDevice) {
-      window.addEventListener('mousemove', handleMouseMove);
-      return () => window.removeEventListener('mousemove', handleMouseMove);
+      window.addEventListener("mousemove", handleMouseMove);
+      return () => window.removeEventListener("mousemove", handleMouseMove);
     }
   }, [isLowPerformanceDevice]);
 
@@ -102,17 +104,21 @@ export default function Section1() {
           <motion.div
             className="absolute inset-0 opacity-30 -z-10 pointer-events-none"
             style={{
-              background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.1) 25%, transparent 50%)`
+              background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.1) 25%, transparent 50%)`,
             }}
             animate={{ opacity: [0.2, 0.3, 0.2] }}
-            transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
           />
         ) : (
           // Static gradient for mobile/low-performance devices
           <div
             className="absolute inset-0 opacity-25 -z-10 pointer-events-none"
             style={{
-              background: `radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.1) 25%, transparent 50%)`
+              background: `radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.1) 25%, transparent 50%)`,
             }}
           />
         )}
@@ -145,10 +151,7 @@ export default function Section1() {
               />
             </motion.div>
 
-            <motion.div
-              className="relative px-10"
-              variants={itemVariants}
-            >
+            <motion.div className="relative px-10" variants={itemVariants}>
               <motion.span
                 className="default-blue font-bold flex flex-row justify-center gap-1 md:gap-2 text-4xl md:text-7xl"
                 variants={containerVariants}
@@ -161,7 +164,7 @@ export default function Section1() {
                       variants={letterVariants}
                       // Disable hover animations on mobile for better performance
                       {...(!isLowPerformanceDevice && {
-                        whileHover: { scale: 1.3, y: -5 }
+                        whileHover: { scale: 1.3, y: -5 },
                       })}
                     >
                       {letter}
@@ -172,10 +175,12 @@ export default function Section1() {
               <motion.div
                 className="h-1 w-0 bg-gradient-to-r from-sky-700 via-[#83AFC9] to-sky-50 mx-auto rounded-full mt-3"
                 // Simpler animation for mobile
-                animate={{ width: isLowPerformanceDevice ? "60%" : ["0%", "80%", "60%"] }}
+                animate={{
+                  width: isLowPerformanceDevice ? "60%" : ["0%", "80%", "60%"],
+                }}
                 transition={{
                   duration: isLowPerformanceDevice ? 1 : 2,
-                  delay: isLowPerformanceDevice ? 0.5 : 1
+                  delay: isLowPerformanceDevice ? 0.5 : 1,
                 }}
               />
             </motion.div>
@@ -186,7 +191,7 @@ export default function Section1() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.6 }}
             >
-              Experience interactive simulations and visualizations that make learning intuitive and engaging
+              {t("intro")}
             </motion.p>
 
             <motion.div
@@ -199,9 +204,14 @@ export default function Section1() {
                 className="text-sm md:text-base px-6 py-3 bg-[#83AFC9] text-white rounded-full font-medium shadow-lg hover:shadow-xl"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => window.scrollTo({ top: window.innerHeight * 0.8, behavior: 'smooth' })}
+                onClick={() =>
+                  window.scrollTo({
+                    top: window.innerHeight * 0.8,
+                    behavior: "smooth",
+                  })
+                }
               >
-                Explore Features
+                {t("explore-button")}
               </motion.button>
               <motion.a
                 href="/about"
@@ -209,7 +219,7 @@ export default function Section1() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                About Us
+                {t("about-button")}
               </motion.a>
             </motion.div>
           </motion.div>
@@ -221,12 +231,20 @@ export default function Section1() {
             <motion.div
               className="absolute top-20 right-20 w-16 h-16 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 opacity-20 blur-xl"
               animate={{ y: [0, -20, 0], opacity: [0.2, 0.3, 0.2] }}
-              transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
             />
             <motion.div
               className="absolute bottom-40 left-20 w-24 h-24 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-20 blur-xl"
               animate={{ y: [0, 20, 0], opacity: [0.2, 0.25, 0.2] }}
-              transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
             />
           </>
         )}
