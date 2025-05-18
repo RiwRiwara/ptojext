@@ -187,12 +187,10 @@ export default function LandingPageComponent() {
             transition={{ duration: 0.8 }}
             className="text-2xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#83AFC9] to-blue-900 mb-4 mt-2 md:mt-16"
           >
-            Interactive Learning Reimagined
+            {t("intro-button")}
           </motion.h1>
           <p className="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
-            Our interactive playground helps you visualize and understand
-            complex concepts through engaging simulations and hands-on
-            experiences.
+            {t("intro-sub")}
           </p>
         </motion.div>
       </section>
