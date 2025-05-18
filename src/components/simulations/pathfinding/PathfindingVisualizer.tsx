@@ -8,7 +8,8 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
-import { FiPlay, FiSquare, FiCircle, FiGrid, FiEdit, FiCrosshair, FiInfo } from 'react-icons/fi';
+import { FiPlay, FiSquare, FiCircle, FiGrid, FiEdit, FiCrosshair, FiInfo, FiBarChart2 } from 'react-icons/fi';
+import Link from 'next/link';
 
 // Types
 type Cell = [number, number];
@@ -716,15 +717,27 @@ export const PathfindingVisualizer = () => {
         <div className="space-y-6">
             {/* Algorithm selection and info */}
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-2 flex items-center">
-                    <FiInfo className="mr-2" />
-                    Current Algorithm: {algorithm === 'astar' ? 'A*' :
-                        algorithm === 'bfs' ? 'Breadth-First Search' :
-                            algorithm === 'dfs' ? 'Depth-First Search' :
-                                algorithm === 'greedy' ? 'Greedy Best-First Search' :
-                                    'Dijkstra\'s Algorithm'}
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{currentAlgorithmInfo}</p>
+                <div className="flex flex-col md:flex-row justify-between gap-4 mb-4">
+                    <div className="flex-1">
+                        <h3 className="text-lg font-semibold mb-2 flex items-center">
+                            <FiInfo className="mr-2" />
+                            Current Algorithm: {algorithm === 'astar' ? 'A*' :
+                                algorithm === 'bfs' ? 'Breadth-First Search' :
+                                    algorithm === 'dfs' ? 'Depth-First Search' :
+                                        algorithm === 'greedy' ? 'Greedy Best-First Search' :
+                                            'Dijkstra\'s Algorithm'}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{currentAlgorithmInfo}</p>
+                    </div>
+                    
+                    <div className="flex items-center">
+                        <Link href="/simulations/pathfinding/compare">
+                            <Button variant="outline" size="sm" className="flex items-center gap-2">
+                                <FiBarChart2 className="w-4 h-4" /> Compare Algorithms
+                            </Button>
+                        </Link>
+                    </div>
+                </div>
             </div>
 
             {/* Control panel */}
@@ -869,8 +882,8 @@ export const PathfindingVisualizer = () => {
                                 onClick={() => handleCellClick(r, c)}
                                 onMouseEnter={(e) => handleMouseEnter(r, c, e)}
                             >
-                                {(start[0] === r && start[1] === c) && <span className="flex h-full items-center justify-center text-xs">S</span>}
-                                {(end[0] === r && end[1] === c) && <span className="flex h-full items-center justify-center text-xs">E</span>}
+                                {(start[0] === r && start[1] === c) && <span key={`start-${r}-${c}`} className="flex h-full items-center justify-center text-xs">S</span>}
+                                {(end[0] === r && end[1] === c) && <span key={`end-${r}-${c}`} className="flex h-full items-center justify-center text-xs">E</span>}
                             </motion.div>
                         ))
                     )}

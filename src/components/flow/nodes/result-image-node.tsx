@@ -139,14 +139,16 @@ export function ResultImageNode({ data }: ResultImageNodeProps) {
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-4xl p-0 bg-transparent border-none">
-          <DialogTitle className="sr-only">{data.title || 'Result Image'}</DialogTitle>
-          <div className="relative">
+          <DialogTitle className="sr-only" key="dialog-title">{data.title || 'Result Image'}</DialogTitle>
+          <div className="relative" key="dialog-content">
             <img
+              key="result-image"
               src={data.imageUrl}
               alt={data.title || 'Result Image'}
               className="max-w-full max-h-[80vh] object-contain rounded-lg"
             />
             <Button
+              key="close-button"
               variant="secondary"
               size="sm"
               className="absolute top-2 left-2"
