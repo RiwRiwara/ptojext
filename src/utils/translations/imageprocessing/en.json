@@ -1,5 +1,7 @@
 {
   "whatisimageconvolution": "What is Image Convolution?",
   "mean": "Image convolution is a mathematical operation that is used to manipulate images by applying a mathematical kernel to each pixel of the image. It is a fundamental operation in image processing and computer vision.",
-  "mean_sub": "Convolution of an image is the process of viewing an image as a matrix of pixels arranged in a row. For example, we might have 1s for black and 0s for white. Then we would use something called a filter (a yellow square, which is a 3x3 matrix of filter values) to convolution the image, and the result would be a red matrix."
+  "mean_sub": "Convolution of an image is the process of viewing an image as a matrix of pixels arranged in a row. For example, we might have 1s for black and 0s for white. Then we would use something called a filter (a yellow square, which is a 3x3 matrix of filter values) to convolution the image, and the result would be a red matrix.",
+  "title": "Image Convolution",
+  "title-sub": "Learn how image filters work by exploring convolution matrices and their effects on pixels"
 }

@@ -1,0 +1,90 @@
+{
+  "title": "Linear Data Structures Visualization",
+  "title-sub": "Explore different visualizations of linear data structures and algorithms where elements are arranged in a straight, sequential order.",
+  "linear-card-title": "About Linear Data Structures",
+  "linear-card-desc": "Key concepts and applications",
+  "linear-what-title": "What are Linear Data Structures?",
+  "linear-what-body": "Linear data structures organize elements in a sequential manner where each element has a unique predecessor and successor (except the first and last elements). Common examples include arrays, linked lists, stacks, and queues.",
+  "linear-key-title": "Key Characteristics",
+  "linear-key-points": [
+    "Elements are arranged in a sequential order",
+    "Data is processed in a linear fashion (one after another)",
+    "Simple to implement and understand",
+    "Memory utilization is predictable",
+    "Traversal is straightforward (forward or backward)"
+  ],
+  "linear-app-title": "Real-world Applications",
+  "linear-app-points": [
+    "Music playlists (songs arranged sequentially)",
+    "Browser history (visited pages in order)",
+    "Task scheduling (operations in sequence)",
+    "Undo/Redo functionality in applications",
+    "Call stacks in programming languages"
+  ],
+  "timeline-desc": "A sequential representation of elements in a horizontal line, ideal for visualizing arrays and linked lists.",
+  "train-desc": "Data represented as connected train cars, emphasizing the one-directional flow of information.",
+  "domino-desc": "Demonstrates sequential processing where each action triggers the next in a linear fashion.",
+  "stack-desc": "A vertical stack structure showing LIFO (Last In, First Out) operations common in stack data structures.",
+
+  "timeline-title": "What is a Timeline?",
+  "timeline-sub": "A timeline is a linear representation of data elements arranged sequentially. Each element has a fixed position and can be accessed directly by its index.",
+  "timeline-ops-title": "Operations",
+  "timeline-ops": [
+    "Access: O(1) - Direct access to any element",
+    "Insert: O(n) - May require shifting elements",
+    "Delete: O(n) - May require shifting elements",
+    "Search: O(n) - In the worst case"
+  ],
+  "timeline-app-title": "Applications",
+  "timeline-app-desc": "Arrays, linked lists, and sequential data processing such as timelines in project management, historical events, and step-by-step guides.",
+
+  "train-title": "Linked List Representation",
+  "train-subtitle": "Train as a Linked List",
+  "train-sub": "The train visualization represents a linked list, where each car (node) contains data and is connected to the next car in sequence. The engine serves as a pointer to the head of the list.",
+  "train-ops-title": "Operations",
+  "train-ops": [
+    "Access: O(n) - Must traverse from head",
+    "Insert at head: O(1) - Constant time",
+    "Insert at tail: O(1) - If tail pointer exists",
+    "Delete: O(1) - If node reference exists"
+  ],
+  "train-app-title": "Applications",
+  "train-app-desc": "Linked lists are used in symbol tables, dynamic memory allocation, implementing data structures like stacks and queues, and representing sequential processes with potential insertions/deletions.",
+  "domino-title": "Sequential Processing",
+  "domino-subtitle": "Domino Effect as Sequential Processing",
+  "domino-sub": "The domino effect illustrates how sequential processing works in computing - one task triggers the next in a predefined order. This is similar to how linear algorithms execute steps one after another.",
+  "domino-ops-title": "Key Characteristics",
+  "domino-ops": [
+    "Each step depends on the completion of the previous step",
+    "Processing follows a single path of execution",
+    "Easy to understand and track the flow of operations",
+    "Tasks must wait for preceding tasks to complete"
+  ],
+  "domino-app-title": "Applications",
+  "domino-app-desc": "Sequential processing is used in batch processing, compilers, initialization sequences, algorithm implementation, and any process where the order of operations is critical.",
+  "stack-title": "Understanding Stack Data Structure",
+  "stack-what-title": "What is a Stack?",
+  "stack-what-desc": "A stack is a linear data structure that follows the Last In, First Out (LIFO) principle. Like a stack of cards, elements can only be added or removed from the top of the stack.",
+  "stack-ops-title": "Key Operations",
+  "stack-ops": [
+    "Push: Add an element to the top of the stack - O(1)",
+    "Pop: Remove the top element from the stack - O(1)",
+    "Peek/Top: View the top element without removing it - O(1)",
+    "isEmpty: Check if the stack is empty - O(1)"
+  ],
+  "stack-limit-title": "Limitations",
+  "stack-limit": [
+    "Access is restricted to the topmost element",
+    "Random access is not allowed",
+    "Can have overflow (in fixed-size implementations)",
+    "Requires additional operations for complex tasks"
+  ],
+  "stack-app-title": "Real-world Applications",
+  "stack-apps": [
+    "Function call stack in programming languages",
+    "Undo/Redo operations in editors",
+    "Browser history (back button)",
+    "Expression evaluation and syntax parsing",
+    "Backtracking algorithms (maze solving, game states)"
+  ]
+}
