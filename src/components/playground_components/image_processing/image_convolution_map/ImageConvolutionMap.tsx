@@ -21,9 +21,9 @@ export default function ImageConvolutionMap() {
 
   return (
     <div
-    // className="w-full flex flex-col justify-center mx-auto gap-8"
-    // className="grid grid-cols-1 md:grid-cols-2 gap-6"
-    className="flex flex-col md:flex-row gap-6 justify-center mx-auto"
+      // className="w-full flex flex-col justify-center mx-auto gap-8"
+      // className="grid grid-cols-1 md:grid-cols-2 gap-6"
+      className="flex flex-col md:flex-row gap-6 justify-center mx-auto"
     >
       {/* Section 1: Introduction */}
       <div className="w-full md:w-1/4 bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">

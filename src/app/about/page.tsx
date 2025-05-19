@@ -2,11 +2,26 @@
 import BaseLayout from "@/components/layout/BaseLayout";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { useTranslation } from "react-i18next";
-import Matter, { Engine, Render, World, Bodies, Runner, Mouse, MouseConstraint, Body } from "matter-js";
+import Matter, {
+  Engine,
+  Render,
+  World,
+  Bodies,
+  Runner,
+  Mouse,
+  MouseConstraint,
+  Body,
+} from "matter-js";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaGithub, FaLinkedin, FaEnvelope, FaGraduationCap, FaTwitter } from "react-icons/fa";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaEnvelope,
+  FaGraduationCap,
+  FaTwitter,
+} from "react-icons/fa";
 import BottomComponent from "@/components/page_components/landing_page/BottomComponent";
 
 // Team member data
@@ -56,13 +71,13 @@ const teamMembers: TeamMember[] = [
 // SEO is handled in metadata.ts file
 
 export default function About() {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("aboutPageTranslations");
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<Engine | null>(null);
   const runnerRef = useRef<Runner | null>(null);
-  const [activeTab, setActiveTab] = useState<"about" | "team" | "mission">("about");
-
-
+  const [activeTab, setActiveTab] = useState<"about" | "team" | "mission">(
+    "about"
+  );
 
   useEffect(() => {
     if (!sceneRef.current) return;
@@ -94,32 +109,49 @@ export default function About() {
         isStatic: true,
         render: { fillStyle: "transparent", visible: false },
       }), // Top
-      Bodies.rectangle(window.innerWidth / 2, window.innerHeight, window.innerWidth, 50, {
-        isStatic: true,
-        render: { fillStyle: "transparent", visible: false },
-      }), // Bottom
+      Bodies.rectangle(
+        window.innerWidth / 2,
+        window.innerHeight,
+        window.innerWidth,
+        50,
+        {
+          isStatic: true,
+          render: { fillStyle: "transparent", visible: false },
+        }
+      ), // Bottom
       Bodies.rectangle(0, window.innerHeight / 2, 50, window.innerHeight, {
         isStatic: true,
         render: { fillStyle: "transparent", visible: false },
       }), // Left
-      Bodies.rectangle(window.innerWidth, window.innerHeight / 2, 50, window.innerHeight, {
-        isStatic: true,
-        render: { fillStyle: "transparent", visible: false },
-      }), // Right
+      Bodies.rectangle(
+        window.innerWidth,
+        window.innerHeight / 2,
+        50,
+        window.innerHeight,
+        {
+          isStatic: true,
+          render: { fillStyle: "transparent", visible: false },
+        }
+      ), // Right
     ];
 
     // Optimize circle count for mobile
     const circleCount = window.innerWidth < 768 ? 10 : 15; // Reduced from 20
     const circles = Array.from({ length: circleCount }, (_, index) => {
-      return Bodies.circle(Math.random() * window.innerWidth, Math.random() * window.innerHeight, 20, {
-        restitution: 0.8,
-        friction: 0.001,
-        frictionAir: 0.001,
-        render: {
-          fillStyle: "rgba(99, 102, 241, 0.5)",
-        },
-        label: `circle-${index}`,
-      });
+      return Bodies.circle(
+        Math.random() * window.innerWidth,
+        Math.random() * window.innerHeight,
+        20,
+        {
+          restitution: 0.8,
+          friction: 0.001,
+          frictionAir: 0.001,
+          render: {
+            fillStyle: "rgba(99, 102, 241, 0.5)",
+          },
+          label: `circle-${index}`,
+        }
+      );
     });
 
     // Add a bouncing square
@@ -243,15 +275,18 @@ export default function About() {
       render.canvas.remove();
       World.remove(engine.world, mouseConstraint);
       render.canvas.removeEventListener("mousemove", handleMouseMove);
-      render.canvas.removeEventListener("mouseleave", () => { });
+      render.canvas.removeEventListener("mouseleave", () => {});
     };
   }, []);
 
   return (
     <BaseLayout>
-
       {/* Interactive background */}
-      <div ref={sceneRef} className="absolute inset-0 pointer-events-auto z-0" aria-hidden="true" />
+      <div
+        ref={sceneRef}
+        className="absolute inset-0 pointer-events-auto z-0"
+        aria-hidden="true"
+      />
 
       {/* Main content */}
       <div className="py-12 px-4 sm:px-6 lg:px-8 relative min-h-screen">
@@ -276,11 +311,11 @@ export default function About() {
             <div className="absolute inset-0 bg-pattern opacity-10" />
             <div className="relative z-10 px-8 py-16 md:py-20 text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                {t("ABOUT_TITLE", "About Visual Right: AI Playground")}
+                {t("about-title")}
               </h1>
               <p className="text-lg md:text-xl max-w-3xl mx-auto opacity-90">
                 {t(
-                  "ABOUT_SUBTITLE",
+                  "about-sub",
                   "Exploring the fascinating world of AI algorithms through interactive visualizations and simulations"
                 )}
               </p>
@@ -293,12 +328,20 @@ export default function About() {
               {["about", "team", "mission"].map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab as "about" | "team" | "mission")}
-                  className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${activeTab === tab ? "bg-white text-primary-500 shadow-sm" : "text-gray-600 hover:text-gray-800"
-                    }`}
+                  onClick={() =>
+                    setActiveTab(tab as "about" | "team" | "mission")
+                  }
+                  className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
+                    activeTab === tab
+                      ? "bg-white text-primary-500 shadow-sm"
+                      : "text-gray-600 hover:text-gray-800"
+                  }`}
                   aria-current={activeTab === tab ? "page" : undefined}
                 >
-                  {t(tab.toUpperCase(), tab.charAt(0).toUpperCase() + tab.slice(1))}
+                  {t(
+                    tab.toUpperCase(),
+                    tab.charAt(0).toUpperCase() + tab.slice(1)
+                  )}
                 </button>
               ))}
             </div>
@@ -319,21 +362,19 @@ export default function About() {
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                   <div>
                     <h2 className="text-2xl font-bold text-primary-500 mb-6">
-                      {t("OUR_PROJECT", "Our Project: Interactive AI Visualizations")}
+                      {t("about-our-project")}
                     </h2>
                     <div className="prose prose-lg max-w-none text-gray-700">
-                      <p>
-                        {t(
-                          "ABOUT_PROJECT",
-                          "Visual Right: AI Playground is an interactive educational platform designed to make complex algorithms and AI concepts accessible through hands-on visualizations and simulations."
-                        )}
-                      </p>
+                      <p>{t("about-our-project-sub")}</p>
                       <p>
                         {t(
                           "ABOUT_FEATURES",
                           "Our platform features interactive demonstrations of pathfinding algorithms, sorting visualizations, physics simulations, and image processing tools, all designed with a focus on learning through exploration. Check out our "
                         )}
-                        <a href="/simulations" className="text-primary-500 hover:underline">
+                        <a
+                          href="/simulations"
+                          className="text-primary-500 hover:underline"
+                        >
                           simulations
                         </a>
                         .
@@ -383,14 +424,46 @@ export default function About() {
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     {[
-                      { name: "React & Next.js", icon: "/tech/react.svg", desc: "Frontend framework" },
-                      { name: "TypeScript", icon: "/tech/typescript.svg", desc: "Type-safe JavaScript" },
-                      { name: "Tailwind CSS", icon: "/tech/tailwind.svg", desc: "Utility-first CSS" },
-                      { name: "Framer Motion", icon: "/tech/framer.svg", desc: "Animation library" },
-                      { name: "Matter.js", icon: "/tech/matter.svg", desc: "Physics engine" },
-                      { name: "Canvas API", icon: "/tech/canvas.svg", desc: "Graphics rendering" },
-                      { name: "WebGL", icon: "/tech/webgl.svg", desc: "3D graphics" },
-                      { name: "i18next", icon: "/tech/i18n.svg", desc: "Internationalization" },
+                      {
+                        name: "React & Next.js",
+                        icon: "/tech/react.svg",
+                        desc: "Frontend framework",
+                      },
+                      {
+                        name: "TypeScript",
+                        icon: "/tech/typescript.svg",
+                        desc: "Type-safe JavaScript",
+                      },
+                      {
+                        name: "Tailwind CSS",
+                        icon: "/tech/tailwind.svg",
+                        desc: "Utility-first CSS",
+                      },
+                      {
+                        name: "Framer Motion",
+                        icon: "/tech/framer.svg",
+                        desc: "Animation library",
+                      },
+                      {
+                        name: "Matter.js",
+                        icon: "/tech/matter.svg",
+                        desc: "Physics engine",
+                      },
+                      {
+                        name: "Canvas API",
+                        icon: "/tech/canvas.svg",
+                        desc: "Graphics rendering",
+                      },
+                      {
+                        name: "WebGL",
+                        icon: "/tech/webgl.svg",
+                        desc: "3D graphics",
+                      },
+                      {
+                        name: "i18next",
+                        icon: "/tech/i18n.svg",
+                        desc: "Internationalization",
+                      },
                     ].map((tech, index) => (
                       <motion.div
                         key={tech.name}
@@ -408,7 +481,9 @@ export default function About() {
                             loading="lazy"
                           />
                         </div>
-                        <h3 className="font-medium text-gray-900">{tech.name}</h3>
+                        <h3 className="font-medium text-gray-900">
+                          {tech.name}
+                        </h3>
                         <p className="text-sm text-gray-500">{tech.desc}</p>
                       </motion.div>
                     ))}
@@ -421,7 +496,7 @@ export default function About() {
             {activeTab === "team" && (
               <div className="p-8">
                 <h2 className="text-2xl font-bold text-primary-500 mb-8 text-center">
-                  {t("MEET_OUR_TEAM", "Meet Our Team")}
+                  {t("meet-our-team", "Meet Our Team")}
                 </h2>
                 <div className="grid md:grid-cols-3 gap-8">
                   {teamMembers.map((member, index) => (
@@ -437,14 +512,20 @@ export default function About() {
                           src={member.image}
                           alt={`${member.name}, ${member.role} at Visual Right`}
                           fill
-                          style={{ objectFit: "cover"}}
+                          style={{ objectFit: "cover" }}
                           loading="lazy"
                         />
                       </div>
                       <div className="p-6">
-                        <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
-                        <p className="text-primary-500 font-medium mb-3">{member.role}</p>
-                        <p className="text-gray-600 text-sm mb-4">{member.bio}</p>
+                        <h3 className="text-xl font-bold text-gray-900">
+                          {member.name}
+                        </h3>
+                        <p className="text-primary-500 font-medium mb-3">
+                          {member.role}
+                        </p>
+                        <p className="text-gray-600 text-sm mb-4">
+                          {member.bio}
+                        </p>
                         <div className="flex space-x-3">
                           {member.links.github && (
                             <a
@@ -519,44 +600,80 @@ export default function About() {
               <div className="p-8">
                 <div className="max-w-3xl mx-auto">
                   <h2 className="text-2xl font-bold text-primary-500 mb-6 text-center">
-                    {t("OUR_MISSION_VISION", "Our Mission & Vision")}
+                    {t("mission-vision-tite", "Our Mission & Vision")}
                   </h2>
                   <div className="prose prose-lg max-w-none text-gray-700 mb-12">
-                    <h3 className="text-xl font-bold text-primary-500 mb-1 mt-4">{t("MISSION", "Mission")}</h3>
+                    <h3 className="text-xl font-bold text-primary-500 mb-1 mt-4">
+                      {t("mission-title", "Mission")}
+                    </h3>
                     <p>
                       {t(
-                        "MISSION_TEXT",
+                        "mission-sub",
                         "Our mission is to democratize access to AI and computer science education through interactive, visual learning experiences. We believe that complex concepts become intuitive when you can see them in action and interact with them directly."
                       )}
                     </p>
-                    <h3 className="text-xl font-bold text-primary-500 mb-1 mt-4">{t("VISION", "Vision")}</h3>
+                    <h3 className="text-xl font-bold text-primary-500 mb-1 mt-4">
+                      {t("vision-title", "Vision")}
+                    </h3>
                     <p>
                       {t(
-                        "VISION_TEXT",
+                        "vision-sub",
                         "We envision a world where anyone, regardless of their background or prior knowledge, can understand and engage with the fundamental concepts that power modern technology. By making these concepts accessible and enjoyable to learn, we aim to inspire the next generation of innovators and problem-solvers."
                       )}
                     </p>
-                    <h3 className="text-xl font-bold text-primary-500 mb-1 mt-4">{t("VALUES", "Values")}</h3>
+                    <h3 className="text-xl font-bold text-primary-500 mb-1 mt-4">
+                      {t("values-title", "Values")}
+                    </h3>
                     <ul>
                       <li>
-                        <strong className="text-primary text-lg">{t("ACCESSIBILITY", "Accessibility")}</strong>:{" "}
-                        {t("ACCESSIBILITY_TEXT", "Making complex concepts understandable to everyone")}
+                        <strong className="text-primary text-lg">
+                          {t("accessibility", "Accessibility")}
+                        </strong>
+                        :{" "}
+                        {t(
+                          "accesibility-sub",
+                          "Making complex concepts understandable to everyone"
+                        )}
                       </li>
                       <li>
-                        <strong className="text-primary text-lg">{t("INTERACTIVITY", "Interactivity")}</strong>:{" "}
-                        {t("INTERACTIVITY_TEXT", "Learning through hands-on exploration and experimentation")}
+                        <strong className="text-primary text-lg">
+                          {t("interactivity", "Interactivity")}
+                        </strong>
+                        :{" "}
+                        {t(
+                          "interactivity-sub",
+                          "Learning through hands-on exploration and experimentation"
+                        )}
                       </li>
                       <li>
-                        <strong className="text-primary text-lg">{t("INNOVATION", "Innovation")}</strong>:{" "}
-                        {t("INNOVATION_TEXT", "Continuously improving our visualizations and simulations")}
+                        <strong className="text-primary text-lg">
+                          {t("innovation", "Innovation")}
+                        </strong>
+                        :{" "}
+                        {t(
+                          "innovation-sub",
+                          "Continuously improving our visualizations and simulations"
+                        )}
                       </li>
                       <li>
-                        <strong className="text-primary text-lg">{t("COMMUNITY", "Community")}</strong>:{" "}
-                        {t("COMMUNITY_TEXT", "Building a supportive environment for learners and contributors")}
+                        <strong className="text-primary text-lg">
+                          {t("community", "Community")}
+                        </strong>
+                        :{" "}
+                        {t(
+                          "community-sub",
+                          "Building a supportive environment for learners and contributors"
+                        )}
                       </li>
                       <li>
-                        <strong className="text-primary text-lg">{t("OPEN_SOURCE", "Open Source")}</strong>:{" "}
-                        {t("OPEN_SOURCE_TEXT", "Sharing knowledge and code with the world")}
+                        <strong className="text-primary text-lg">
+                          {t("open-source", "Open Source")}
+                        </strong>
+                        :{" "}
+                        {t(
+                          "open-source-sub",
+                          "Sharing knowledge and code with the world"
+                        )}
                       </li>
                     </ul>
                   </div>
@@ -566,13 +683,27 @@ export default function About() {
                     </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                       {[
-                        { metric: "0K+", label: t("MONTHLY_USERS", "Monthly Users") },
-                        { metric: "0+", label: t("INTERACTIVE_DEMOS", "Interactive Demos") },
-                        { metric: "0+", label: t("EDUCATIONAL_INSTITUTIONS", "Educational Institutions") },
-                        { metric: "0+", label: t("COUNTRIES", "Countries") },
+                        {
+                          metric: "0K+",
+                          label: t("monthly-users", "Monthly Users"),
+                        },
+                        {
+                          metric: "0+",
+                          label: t("interactive-demos", "Interactive Demos"),
+                        },
+                        {
+                          metric: "0+",
+                          label: t(
+                            "educational-institutions",
+                            "Educational Institutions"
+                          ),
+                        },
+                        { metric: "0+", label: t("countries", "Countries") },
                       ].map((stat) => (
                         <div key={stat.label}>
-                          <p className="text-3xl font-bold text-primary-500">{stat.metric}</p>
+                          <p className="text-3xl font-bold text-primary-500">
+                            {stat.metric}
+                          </p>
                           <p className="text-gray-600">{stat.label}</p>
                         </div>
                       ))}
