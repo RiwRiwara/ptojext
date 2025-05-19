@@ -1,16 +1,27 @@
 "use client";
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import { FiArrowRight, FiInfo } from 'react-icons/fi';
-import Link from 'next/link';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { FiArrowRight, FiInfo } from "react-icons/fi";
+import Link from "next/link";
 
 export const LinearStructuresInfo = () => {
-  const [activeStructure, setActiveStructure] = useState('arrays');
+  const [activeStructure, setActiveStructure] = useState("arrays");
 
   return (
     <div className="space-y-6">
@@ -18,14 +29,17 @@ export const LinearStructuresInfo = () => {
         <CardHeader>
           <CardTitle>Linear Data Structures</CardTitle>
           <CardDescription>
-            Data elements arranged sequentially where each element has at most two adjacent elements
+            Data elements arranged sequentially where each element has at most
+            two adjacent elements
           </CardDescription>
         </CardHeader>
         <CardContent>
           <p className="mb-4 text-gray-700">
-            Linear data structures arrange elements in a sequential manner. Each element is connected 
-            to its previous and next element (except for the first and last elements). This linear arrangement 
-            makes them suitable for tasks requiring sequential access but may limit efficiency for certain operations.
+            Linear data structures arrange elements in a sequential manner. Each
+            element is connected to its previous and next element (except for
+            the first and last elements). This linear arrangement makes them
+            suitable for tasks requiring sequential access but may limit
+            efficiency for certain operations.
           </p>
 
           <div className="flex items-center justify-center my-6">
@@ -46,7 +60,9 @@ export const LinearStructuresInfo = () => {
                   ))}
                 </div>
                 <div className="text-center md:text-left md:ml-6">
-                  <h3 className="text-lg font-medium mb-2">Key Characteristics</h3>
+                  <h3 className="text-lg font-medium mb-2">
+                    Key Characteristics
+                  </h3>
                   <ul className="list-disc pl-5 space-y-1 text-sm text-gray-700">
                     <li>Elements are arranged in sequence</li>
                     <li>Each element has at most two neighbors</li>
@@ -75,10 +91,18 @@ export const LinearStructuresInfo = () => {
                 className="w-full"
               >
                 <TabsList className="flex flex-col h-auto w-full rounded-none">
-                  <TabsTrigger value="arrays" className="justify-start">Arrays</TabsTrigger>
-                  <TabsTrigger value="linkedLists" className="justify-start">Linked Lists</TabsTrigger>
-                  <TabsTrigger value="stacks" className="justify-start">Stacks</TabsTrigger>
-                  <TabsTrigger value="queues" className="justify-start">Queues</TabsTrigger>
+                  <TabsTrigger value="arrays" className="justify-start">
+                    Arrays
+                  </TabsTrigger>
+                  <TabsTrigger value="linkedLists" className="justify-start">
+                    Linked Lists
+                  </TabsTrigger>
+                  <TabsTrigger value="stacks" className="justify-start">
+                    Stacks
+                  </TabsTrigger>
+                  <TabsTrigger value="queues" className="justify-start">
+                    Queues
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </CardContent>
@@ -89,25 +113,30 @@ export const LinearStructuresInfo = () => {
           <Card>
             <CardHeader>
               <CardTitle>
-                {activeStructure === 'arrays' && 'Arrays'}
-                {activeStructure === 'linkedLists' && 'Linked Lists'}
-                {activeStructure === 'stacks' && 'Stacks'}
-                {activeStructure === 'queues' && 'Queues'}
+                {activeStructure === "arrays" && "Arrays"}
+                {activeStructure === "linkedLists" && "Linked Lists"}
+                {activeStructure === "stacks" && "Stacks"}
+                {activeStructure === "queues" && "Queues"}
               </CardTitle>
               <CardDescription>
-                {activeStructure === 'arrays' && 'Fixed-size sequential collection of elements'}
-                {activeStructure === 'linkedLists' && 'Sequence of elements where each points to the next'}
-                {activeStructure === 'stacks' && 'Last-In-First-Out (LIFO) data structure'}
-                {activeStructure === 'queues' && 'First-In-First-Out (FIFO) data structure'}
+                {activeStructure === "arrays" &&
+                  "Fixed-size sequential collection of elements"}
+                {activeStructure === "linkedLists" &&
+                  "Sequence of elements where each points to the next"}
+                {activeStructure === "stacks" &&
+                  "Last-In-First-Out (LIFO) data structure"}
+                {activeStructure === "queues" &&
+                  "First-In-First-Out (FIFO) data structure"}
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {activeStructure === 'arrays' && (
+              {activeStructure === "arrays" && (
                 <div className="space-y-4">
                   <p>
-                    Arrays store elements in contiguous memory locations, enabling random access through indexing.
-                    They have a fixed size defined at creation, making them efficient for storage but less flexible 
-                    for dynamic data.
+                    Arrays store elements in contiguous memory locations,
+                    enabling random access through indexing. They have a fixed
+                    size defined at creation, making them efficient for storage
+                    but less flexible for dynamic data.
                   </p>
 
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-start gap-3">
@@ -118,7 +147,9 @@ export const LinearStructuresInfo = () => {
                         <li>Fixed size determined at creation</li>
                         <li>Elements stored in contiguous memory locations</li>
                         <li>Random access in O(1) time</li>
-                        <li>Insertion and deletion operations are expensive (O(n))</li>
+                        <li>
+                          Insertion and deletion operations are expensive (O(n))
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -131,7 +162,9 @@ export const LinearStructuresInfo = () => {
                           <thead>
                             <tr>
                               <th className="text-left py-2">Operation</th>
-                              <th className="text-left py-2">Time Complexity</th>
+                              <th className="text-left py-2">
+                                Time Complexity
+                              </th>
                               <th className="text-left py-2">Description</th>
                             </tr>
                           </thead>
@@ -144,28 +177,36 @@ export const LinearStructuresInfo = () => {
                             <tr>
                               <td className="py-2">Search</td>
                               <td className="py-2">O(n)</td>
-                              <td className="py-2">Linear search through elements</td>
+                              <td className="py-2">
+                                Linear search through elements
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">Insertion</td>
                               <td className="py-2">O(n)</td>
-                              <td className="py-2">Requires shifting elements</td>
+                              <td className="py-2">
+                                Requires shifting elements
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">Deletion</td>
                               <td className="py-2">O(n)</td>
-                              <td className="py-2">Requires shifting elements</td>
+                              <td className="py-2">
+                                Requires shifting elements
+                              </td>
                             </tr>
                           </tbody>
                         </table>
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="code">
-                      <AccordionTrigger>Example Implementation</AccordionTrigger>
+                      <AccordionTrigger>
+                        Example Implementation
+                      </AccordionTrigger>
                       <AccordionContent>
                         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
                           <code className="text-sm">
-{`// TypeScript example
+                            {`// TypeScript example
 // Declaring an array
 const numbers: number[] = [1, 2, 3, 4, 5];
 
@@ -191,14 +232,18 @@ numbers.splice(2, 1);  // Remove at index: [1, 2, 4, 5]`}
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="applications">
-                      <AccordionTrigger>Real-world Applications</AccordionTrigger>
+                      <AccordionTrigger>
+                        Real-world Applications
+                      </AccordionTrigger>
                       <AccordionContent>
                         <ul className="list-disc pl-5 space-y-1">
                           <li>Image processing (pixel arrays)</li>
                           <li>Matrix operations in scientific computing</li>
                           <li>Database indexing</li>
                           <li>Lookup tables for fast access</li>
-                          <li>Implementing other data structures (stacks, queues)</li>
+                          <li>
+                            Implementing other data structures (stacks, queues)
+                          </li>
                         </ul>
                       </AccordionContent>
                     </AccordionItem>
@@ -214,12 +259,14 @@ numbers.splice(2, 1);  // Remove at index: [1, 2, 4, 5]`}
                 </div>
               )}
 
-              {activeStructure === 'linkedLists' && (
+              {activeStructure === "linkedLists" && (
                 <div className="space-y-4">
                   <p>
-                    Linked Lists consist of nodes where each node contains data and a reference to the next node.
-                    Unlike arrays, linked lists can grow or shrink dynamically during execution, making them 
-                    ideal for applications with frequent insertions and deletions.
+                    Linked Lists consist of nodes where each node contains data
+                    and a reference to the next node. Unlike arrays, linked
+                    lists can grow or shrink dynamically during execution,
+                    making them ideal for applications with frequent insertions
+                    and deletions.
                   </p>
 
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-start gap-3">
@@ -229,8 +276,13 @@ numbers.splice(2, 1);  // Remove at index: [1, 2, 4, 5]`}
                       <ul className="list-disc pl-5 mt-1 space-y-1 text-sm">
                         <li>Dynamic size that can grow or shrink</li>
                         <li>Nodes are connected through references/pointers</li>
-                        <li>Sequential access only (O(n) to find an element)</li>
-                        <li>Efficient insertions and deletions (O(1) if position known)</li>
+                        <li>
+                          Sequential access only (O(n) to find an element)
+                        </li>
+                        <li>
+                          Efficient insertions and deletions (O(1) if position
+                          known)
+                        </li>
                         <li>Types: Singly linked, Doubly linked, Circular</li>
                       </ul>
                     </div>
@@ -244,7 +296,9 @@ numbers.splice(2, 1);  // Remove at index: [1, 2, 4, 5]`}
                           <thead>
                             <tr>
                               <th className="text-left py-2">Operation</th>
-                              <th className="text-left py-2">Time Complexity</th>
+                              <th className="text-left py-2">
+                                Time Complexity
+                              </th>
                               <th className="text-left py-2">Description</th>
                             </tr>
                           </thead>
@@ -252,38 +306,50 @@ numbers.splice(2, 1);  // Remove at index: [1, 2, 4, 5]`}
                             <tr>
                               <td className="py-2">Access</td>
                               <td className="py-2">O(n)</td>
-                              <td className="py-2">Traverse from head to target node</td>
+                              <td className="py-2">
+                                Traverse from head to target node
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">Search</td>
                               <td className="py-2">O(n)</td>
-                              <td className="py-2">Linear search through nodes</td>
+                              <td className="py-2">
+                                Linear search through nodes
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">Insert at beginning</td>
                               <td className="py-2">O(1)</td>
-                              <td className="py-2">Constant time insertion at head</td>
+                              <td className="py-2">
+                                Constant time insertion at head
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">Insert at end</td>
                               <td className="py-2">O(1) or O(n)</td>
-                              <td className="py-2">O(1) with tail pointer, O(n) without</td>
+                              <td className="py-2">
+                                O(1) with tail pointer, O(n) without
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">Delete</td>
                               <td className="py-2">O(1)</td>
-                              <td className="py-2">If node reference is available</td>
+                              <td className="py-2">
+                                If node reference is available
+                              </td>
                             </tr>
                           </tbody>
                         </table>
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="code">
-                      <AccordionTrigger>Example Implementation</AccordionTrigger>
+                      <AccordionTrigger>
+                        Example Implementation
+                      </AccordionTrigger>
                       <AccordionContent>
                         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
                           <code className="text-sm">
-{`// TypeScript example - Singly Linked List
+                            {`// TypeScript example - Singly Linked List
 class Node<T> {
   value: T;
   next: Node<T> | null;
@@ -340,11 +406,15 @@ class LinkedList<T> {
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="applications">
-                      <AccordionTrigger>Real-world Applications</AccordionTrigger>
+                      <AccordionTrigger>
+                        Real-world Applications
+                      </AccordionTrigger>
                       <AccordionContent>
                         <ul className="list-disc pl-5 space-y-1">
                           <li>Implementing dynamic memory allocation</li>
-                          <li>Creating other data structures (stacks, queues)</li>
+                          <li>
+                            Creating other data structures (stacks, queues)
+                          </li>
                           <li>Music playlist implementation</li>
                           <li>Browser history functionality</li>
                           <li>Undo functionality in applications</li>
@@ -364,12 +434,13 @@ class LinkedList<T> {
                 </div>
               )}
 
-              {activeStructure === 'stacks' && (
+              {activeStructure === "stacks" && (
                 <div className="space-y-4">
                   <p>
-                    A Stack is a Last-In-First-Out (LIFO) data structure where elements are added and 
-                    removed from the same end, called the top. Think of it like a stack of plates - you can 
-                    only take the top plate, and you can only add a new plate to the top.
+                    A Stack is a Last-In-First-Out (LIFO) data structure where
+                    elements are added and removed from the same end, called the
+                    top. Think of it like a stack of plates - you can only take
+                    the top plate, and you can only add a new plate to the top.
                   </p>
 
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-start gap-3">
@@ -378,7 +449,9 @@ class LinkedList<T> {
                       <h4 className="font-medium text-blue-700">Key Points</h4>
                       <ul className="list-disc pl-5 mt-1 space-y-1 text-sm">
                         <li>Follows Last-In-First-Out (LIFO) principle</li>
-                        <li>Elements are added/removed only from one end (top)</li>
+                        <li>
+                          Elements are added/removed only from one end (top)
+                        </li>
                         <li>Main operations: push (add) and pop (remove)</li>
                         <li>Can be implemented using arrays or linked lists</li>
                         <li>Only the top element is accessible at any time</li>
@@ -394,7 +467,9 @@ class LinkedList<T> {
                           <thead>
                             <tr>
                               <th className="text-left py-2">Operation</th>
-                              <th className="text-left py-2">Time Complexity</th>
+                              <th className="text-left py-2">
+                                Time Complexity
+                              </th>
                               <th className="text-left py-2">Description</th>
                             </tr>
                           </thead>
@@ -402,7 +477,9 @@ class LinkedList<T> {
                             <tr>
                               <td className="py-2">Push</td>
                               <td className="py-2">O(1)</td>
-                              <td className="py-2">Add an element to the top</td>
+                              <td className="py-2">
+                                Add an element to the top
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">Pop</td>
@@ -412,7 +489,9 @@ class LinkedList<T> {
                             <tr>
                               <td className="py-2">Peek</td>
                               <td className="py-2">O(1)</td>
-                              <td className="py-2">View the top element without removing</td>
+                              <td className="py-2">
+                                View the top element without removing
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">isEmpty</td>
@@ -424,11 +503,13 @@ class LinkedList<T> {
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="code">
-                      <AccordionTrigger>Example Implementation</AccordionTrigger>
+                      <AccordionTrigger>
+                        Example Implementation
+                      </AccordionTrigger>
                       <AccordionContent>
                         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
                           <code className="text-sm">
-{`// TypeScript example
+                            {`// TypeScript example
 class Stack<T> {
   private items: T[];
   
@@ -480,7 +561,9 @@ console.log(stack.size());  // 2`}
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="applications">
-                      <AccordionTrigger>Real-world Applications</AccordionTrigger>
+                      <AccordionTrigger>
+                        Real-world Applications
+                      </AccordionTrigger>
                       <AccordionContent>
                         <ul className="list-disc pl-5 space-y-1">
                           <li>Function call stack in programming languages</li>
@@ -505,12 +588,13 @@ console.log(stack.size());  // 2`}
                 </div>
               )}
 
-              {activeStructure === 'queues' && (
+              {activeStructure === "queues" && (
                 <div className="space-y-4">
                   <p>
-                    A Queue is a First-In-First-Out (FIFO) data structure where elements are added at one end (rear) 
-                    and removed from the other end (front). Think of it like a line of people waiting - the first 
-                    person to join is the first to leave.
+                    A Queue is a First-In-First-Out (FIFO) data structure where
+                    elements are added at one end (rear) and removed from the
+                    other end (front). Think of it like a line of people waiting
+                    - the first person to join is the first to leave.
                   </p>
 
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-start gap-3">
@@ -519,10 +603,16 @@ console.log(stack.size());  // 2`}
                       <h4 className="font-medium text-blue-700">Key Points</h4>
                       <ul className="list-disc pl-5 mt-1 space-y-1 text-sm">
                         <li>Follows First-In-First-Out (FIFO) principle</li>
-                        <li>Elements added at the rear and removed from the front</li>
-                        <li>Main operations: enqueue (add) and dequeue (remove)</li>
+                        <li>
+                          Elements added at the rear and removed from the front
+                        </li>
+                        <li>
+                          Main operations: enqueue (add) and dequeue (remove)
+                        </li>
                         <li>Can be implemented using arrays or linked lists</li>
-                        <li>Variations: Circular Queue, Priority Queue, Deque</li>
+                        <li>
+                          Variations: Circular Queue, Priority Queue, Deque
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -535,7 +625,9 @@ console.log(stack.size());  // 2`}
                           <thead>
                             <tr>
                               <th className="text-left py-2">Operation</th>
-                              <th className="text-left py-2">Time Complexity</th>
+                              <th className="text-left py-2">
+                                Time Complexity
+                              </th>
                               <th className="text-left py-2">Description</th>
                             </tr>
                           </thead>
@@ -543,7 +635,9 @@ console.log(stack.size());  // 2`}
                             <tr>
                               <td className="py-2">Enqueue</td>
                               <td className="py-2">O(1)</td>
-                              <td className="py-2">Add an element to the rear</td>
+                              <td className="py-2">
+                                Add an element to the rear
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">Dequeue</td>
@@ -553,7 +647,9 @@ console.log(stack.size());  // 2`}
                             <tr>
                               <td className="py-2">Peek/Front</td>
                               <td className="py-2">O(1)</td>
-                              <td className="py-2">View the front element without removing</td>
+                              <td className="py-2">
+                                View the front element without removing
+                              </td>
                             </tr>
                             <tr>
                               <td className="py-2">isEmpty</td>
@@ -565,11 +661,13 @@ console.log(stack.size());  // 2`}
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="code">
-                      <AccordionTrigger>Example Implementation</AccordionTrigger>
+                      <AccordionTrigger>
+                        Example Implementation
+                      </AccordionTrigger>
                       <AccordionContent>
                         <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
                           <code className="text-sm">
-{`// TypeScript example
+                            {`// TypeScript example
 class Queue<T> {
   private items: T[];
   
@@ -621,7 +719,9 @@ console.log(queue.size());    // 2`}
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="applications">
-                      <AccordionTrigger>Real-world Applications</AccordionTrigger>
+                      <AccordionTrigger>
+                        Real-world Applications
+                      </AccordionTrigger>
                       <AccordionContent>
                         <ul className="list-disc pl-5 space-y-1">
                           <li>CPU task scheduling</li>
