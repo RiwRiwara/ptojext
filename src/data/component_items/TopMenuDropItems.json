@@ -127,7 +127,7 @@
         "children": [
           {
             "name": "Beta features",
-            "link": "/beta-features",
+            "link": "/beta",
             "className": "information-beta"
           },
           {

@@ -184,113 +184,170 @@ export const ReinforcementLearningVisualizer = () => {
         </div>
         
         <div className="lg:w-1/3">
-          <Card className="bg-white dark:bg-gray-800 shadow-sm h-full">
-            <CardContent className="p-4">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-lg">Simulation Controls</h3>
+          <Card className="bg-white dark:bg-gray-800 shadow-sm h-full overflow-hidden border border-gray-200 dark:border-gray-700">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-750 p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-lg font-semibold text-blue-700 dark:text-blue-400 flex items-center gap-2">
+                  <FiZap className="h-5 w-5 text-amber-500" />
+                  Simulation Controls
+                </CardTitle>
                 <Button 
                   size="sm" 
-                  variant="ghost" 
+                  variant="outline"
                   onClick={() => setShowSettings(!showSettings)}
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200"
                 >
                   <FiSettings className="h-4 w-4" />
-                  {showSettings ? "Hide Settings" : "Show Settings"}
+                  <span className="text-sm">{showSettings ? "Hide" : "Show"} Advanced</span>
                 </Button>
               </div>
-              
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="environment">Environment</Label>
-                  <Select onValueChange={handleEnvironmentChange} value={environmentType}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select environment" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="gridworld">Grid World</SelectItem>
-                        <SelectItem value="cartpole">Cart Pole</SelectItem>
-                        <SelectItem value="mountaincar">Mountain Car</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+            </CardHeader>
+            
+            <CardContent className="p-5">
+              <div className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="environment" className="text-sm font-medium flex items-center gap-1">
+                      <span className="h-2 w-2 rounded-full bg-blue-500"></span>
+                      Environment
+                    </Label>
+                    <Select onValueChange={handleEnvironmentChange} value={environmentType}>
+                      <SelectTrigger className="bg-white dark:bg-gray-850 border-gray-200 dark:border-gray-700 h-10 transition-all hover:border-blue-400 dark:hover:border-blue-500">
+                        <SelectValue placeholder="Select environment" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="gridworld" className="hover:bg-blue-50 dark:hover:bg-gray-700">Grid World</SelectItem>
+                          <SelectItem value="cartpole" className="hover:bg-blue-50 dark:hover:bg-gray-700">Cart Pole</SelectItem>
+                          <SelectItem value="mountaincar" className="hover:bg-blue-50 dark:hover:bg-gray-700">Mountain Car</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="algorithm" className="text-sm font-medium flex items-center gap-1">
+                      <span className="h-2 w-2 rounded-full bg-indigo-500"></span>
+                      Algorithm
+                    </Label>
+                    <Select onValueChange={handleAlgorithmChange} value={algorithm}>
+                      <SelectTrigger className="bg-white dark:bg-gray-850 border-gray-200 dark:border-gray-700 h-10 transition-all hover:border-indigo-400 dark:hover:border-indigo-500">
+                        <SelectValue placeholder="Select algorithm" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="qlearning" className="hover:bg-blue-50 dark:hover:bg-gray-700">Q-Learning</SelectItem>
+                          <SelectItem value="sarsa" className="hover:bg-blue-50 dark:hover:bg-gray-700">SARSA</SelectItem>
+                          <SelectItem value="dqn" className="hover:bg-blue-50 dark:hover:bg-gray-700">Deep Q-Network</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
                 
-                <div>
-                  <Label htmlFor="algorithm">Algorithm</Label>
-                  <Select onValueChange={handleAlgorithmChange} value={algorithm}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select algorithm" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="qlearning">Q-Learning</SelectItem>
-                        <SelectItem value="sarsa">SARSA</SelectItem>
-                        <SelectItem value="dqn">Deep Q-Network</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                <div className="bg-blue-50 dark:bg-gray-750 rounded-lg p-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Switch 
+                      id="show-values" 
+                      checked={showValues} 
+                      onCheckedChange={setShowValues}
+                      className="data-[state=checked]:bg-blue-600" 
+                    />
+                    <Label htmlFor="show-values" className="text-sm font-medium cursor-pointer">
+                      Show Q-Values
+                    </Label>
+                  </div>
+                  
+                  <Badge variant="outline" className="bg-white dark:bg-gray-800">
+                    {showValues ? "Visible" : "Hidden"}
+                  </Badge>
                 </div>
                 
-                <div className="flex items-center space-x-2">
-                  <Switch 
-                    id="show-values" 
-                    checked={showValues} 
-                    onCheckedChange={setShowValues} 
-                  />
-                  <Label htmlFor="show-values">Show Q-Values</Label>
-                </div>
-                
-                {showSettings && (
-                  <motion.div 
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="space-y-4 pt-2"
-                  >
-                    <div>
-                      <div className="flex justify-between">
-                        <Label htmlFor="exploration">Exploration Rate (ε): {explorationRate.toFixed(2)}</Label>
+                <AnimatePresence>
+                  {showSettings && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="space-y-5 overflow-hidden"
+                    >
+                      <div className="h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent my-2" />
+                      
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-750 rounded-xl p-4 border border-blue-100 dark:border-gray-700 shadow-sm">
+                        <h4 className="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-3">Algorithm Parameters</h4>
+                        
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <Label htmlFor="exploration" className="text-sm font-medium">Exploration Rate (ε)</Label>
+                              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
+                                {explorationRate.toFixed(2)}
+                              </Badge>
+                            </div>
+                            <Slider
+                              id="exploration"
+                              value={[explorationRate]}
+                              min={0}
+                              max={1}
+                              step={0.05}
+                              onValueChange={(values) => setExplorationRate(values[0])}
+                              className="slider-blue"
+                            />
+                            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              <span>Exploit (0)</span>
+                              <span>Explore (1)</span>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <Label htmlFor="learning" className="text-sm font-medium">Learning Rate (α)</Label>
+                              <Badge variant="secondary" className="bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300">
+                                {learningRate.toFixed(2)}
+                              </Badge>
+                            </div>
+                            <Slider
+                              id="learning"
+                              value={[learningRate]}
+                              min={0.01}
+                              max={1}
+                              step={0.01}
+                              onValueChange={(values) => setLearningRate(values[0])}
+                              className="slider-indigo"
+                            />
+                            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              <span>Slow (0.01)</span>
+                              <span>Fast (1)</span>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <Label htmlFor="discount" className="text-sm font-medium">Discount Factor (γ)</Label>
+                              <Badge variant="secondary" className="bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300">
+                                {discountFactor.toFixed(2)}
+                              </Badge>
+                            </div>
+                            <Slider
+                              id="discount"
+                              value={[discountFactor]}
+                              min={0}
+                              max={0.99}
+                              step={0.01}
+                              onValueChange={(values) => setDiscountFactor(values[0])}
+                              className="slider-violet"
+                            />
+                            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              <span>Immediate (0)</span>
+                              <span>Future (0.99)</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <Slider
-                        id="exploration"
-                        value={[explorationRate]}
-                        min={0}
-                        max={1}
-                        step={0.05}
-                        onValueChange={(values) => setExplorationRate(values[0])}
-                      />
-                    </div>
-                    
-                    <div>
-                      <div className="flex justify-between">
-                        <Label htmlFor="learning">Learning Rate (α): {learningRate.toFixed(2)}</Label>
-                      </div>
-                      <Slider
-                        id="learning"
-                        value={[learningRate]}
-                        min={0.01}
-                        max={1}
-                        step={0.01}
-                        onValueChange={(values) => setLearningRate(values[0])}
-                      />
-                    </div>
-                    
-                    <div>
-                      <div className="flex justify-between">
-                        <Label htmlFor="discount">Discount Factor (γ): {discountFactor.toFixed(2)}</Label>
-                      </div>
-                      <Slider
-                        id="discount"
-                        value={[discountFactor]}
-                        min={0}
-                        max={0.99}
-                        step={0.01}
-                        onValueChange={(values) => setDiscountFactor(values[0])}
-                      />
-                    </div>
-                  </motion.div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </CardContent>
           </Card>
