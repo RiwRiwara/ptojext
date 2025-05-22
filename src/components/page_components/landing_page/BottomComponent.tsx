@@ -46,9 +46,9 @@ export default function BottomComponent() {
                                 <FaGithub size={20} />
                             </a>
 
-                            <a href="https://discord.gg/yourinvite" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-sky-400 transition-colors">
+                            {/* <a href="https://discord.gg/yourinvite" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-sky-400 transition-colors">
                                 <FaDiscord size={20} />
-                            </a>
+                            </a> */}
                         </div>
                     </div>
 
@@ -59,8 +59,8 @@ export default function BottomComponent() {
                             <li><Link href="/" className="text-gray-600 hover:text-sky-600 transition-colors">Home</Link></li>
                             <li><Link href="/visualizations" className="text-gray-600 hover:text-sky-600 transition-colors">Visualizations</Link></li>
                             <li><Link href="/simulations" className="text-gray-600 hover:text-sky-600 transition-colors">Simulations</Link></li>
-                            <li><Link href="/about" className="text-gray-600 hover:text-sky-600 transition-colors">About</Link></li>
-                            <li><Link href="/contact" className="text-gray-600 hover:text-sky-600 transition-colors">Contact</Link></li>
+                            {/* <li><Link href="/about" className="text-gray-600 hover:text-sky-600 transition-colors">About</Link></li> */}
+                            {/* <li><Link href="/contact" className="text-gray-600 hover:text-sky-600 transition-colors">Contact</Link></li> */}
                         </ul>
                     </div>
 

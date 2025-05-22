@@ -51,27 +51,6 @@
             ]
           },
           {
-            "name": "Image processing",
-            "className": "image-processing",
-            "children": [
-              {
-                "name": "Image Convolution",
-                "link": "/playground/image-processing/image-convolution",
-                "className": "image-convolution"
-              },
-              {
-                "name": "Image Enhancement",
-                "link": "/simu/image_enhancement",
-                "className": "image-enhancement"
-              },
-              {
-                "name": "Image Processing Quiz",
-                "link": "/simu/image_enhancement/quiz",
-                "className": "image-processing-quiz"
-              }
-            ]
-          },
-          {
             "name": "Reinforcement Learning",
             "className": "reinforcement-learning",
             "children": [
@@ -107,43 +86,6 @@
                 "className": "pathfinding"
               }
             ]
-          }
-        ]
-      },
-      {
-        "name": "Playground",
-        "className": "playground",
-        "children": [
-          {
-            "name": "Image Processing Pipeline",
-            "link": "/simulations/image-processing",
-            "className": "playground-algorithms"
-          }
-        ]
-      },
-      {
-        "name": "information",
-        "className": "information",
-        "children": [
-          {
-            "name": "Beta features",
-            "link": "/beta",
-            "className": "information-beta"
-          },
-          {
-            "name": "Changelog",
-            "link": "/roadmap",
-            "className": "information-changelog"
-          },
-          {
-            "name": "About Us",
-            "link": "/about",
-            "className": "information-about"
-          },
-          {
-            "name": "Support",
-            "link": "/supportus",
-            "className": "information-support"
           }
         ]
       }
